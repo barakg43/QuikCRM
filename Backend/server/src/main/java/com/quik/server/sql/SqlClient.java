@@ -1,27 +1,20 @@
 package com.quik.server.sql;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource;
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.quik.server.ServerConstants;
-import org.springframework.context.annotation.Bean;
-import org.apache.logging.log4j.Level;
+import com.quik.server.sql.function.SqlFunctionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
-import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
-import java.sql.Types;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class SqlClient {
 
     private final SqlConnectionManger sqlConnectionManger;
     private final Logger sqlClientLogger;
     private Connection sqlConnection;
-
+    private SqlFunctionManager sqlFunctionManager;
     private final String sqlConfigurationYamlFilePath;
 
 //    public SqlClient(SqlConfiguration sqlServerConfiguration){
@@ -36,16 +29,24 @@ public class SqlClient {
     public void createSqlConnection() {
         sqlClientLogger.debug(String.format("Opening sql yaml file configuration at [%s]",sqlConfigurationYamlFilePath));
         try {
-            sqlConnectionManger.startSqlConnection();
-            sqlClientLogger.info("Connection to sql server: "+sqlConnectionManger.getServerConfigDetails());
-            sqlConnection=sqlConnectionManger.getSqlConnection();
+            sqlConnectionManger.initializeSqlConnectionConfig();
+            sqlClientLogger.info("open connection to sql server: "+sqlConnectionManger.getServerConfigDetails());
+            sqlConnectionManger.getSqlConnectionConfig().getConnection().close();//test connection to sql server and close it
+            sqlFunctionManager=new SqlFunctionManager(sqlConnectionManger.getSqlConnectionConfig());
             sqlClientLogger.info("Connection to sql server successfully.");
         } catch (SQLException e) {
+            sqlClientLogger.error(e.getMessage());
             throw new RuntimeException(e);
         } catch (IOException e) {
+            sqlClientLogger.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+    public String getCostumerNameByID(int id){
+     return sqlFunctionManager.getCostumerNameByID(id);
+    }
 
-
+    public String getSupplierNameByID(int id){
+        return sqlFunctionManager.getSupplierNameByID(id);
     }
 }

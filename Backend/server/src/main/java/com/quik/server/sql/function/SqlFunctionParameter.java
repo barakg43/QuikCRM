@@ -1,4 +1,4 @@
-package com.quik.server.sql;
+package com.quik.server.sql.function;
 
 import java.lang.reflect.Type;
 

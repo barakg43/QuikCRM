@@ -2,10 +2,8 @@ package com.quik.server.sql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
@@ -24,13 +22,11 @@ public class SqlConnectionManger {
     public SqlConnectionManger(String sqlConfigurationYamlFilePath) {
         this.sqlConfigurationYamlFilePath=sqlConfigurationYamlFilePath;
     }
-    public void startSqlConnection() throws SQLException, IOException {
+    public void initializeSqlConnectionConfig() throws SQLException, IOException {
         sqlConnectionConfiguration=createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
         dataSourceConfig=createDataSource(sqlConnectionConfiguration);
-        simpleJdbcCall=new SimpleJdbcCall(dataSourceConfig);
+//        simpleJdbcCall=new SimpleJdbcCall(dataSourceConfig);
 //        simpleJdbcCall.withFunctionName();
-        simpleJdbcCall.
-        sqlConnection=dataSourceConfig.getConnection();
     }
     @Bean
     private SqlConfiguration createSqlConfigurationFromFile(String filePath) throws IOException {
@@ -59,7 +55,7 @@ public class SqlConnectionManger {
     public String getServerConfigDetails(){
         return sqlConnectionConfiguration.getServerConfigDetails();
     }
-    public Connection getSqlConnection() {
-        return sqlConnection;
+    public DataSource getSqlConnectionConfig() {
+        return dataSourceConfig;
     }
 }
