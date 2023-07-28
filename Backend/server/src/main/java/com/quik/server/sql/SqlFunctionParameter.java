@@ -6,7 +6,6 @@ public class SqlFunctionParameter<T> {
     private String parameterName;
     private Type parameterType;
     private Object value;
-    private String valueString;
 
     public SqlFunctionParameter(String parameterName, Type parameterType) {
         this.parameterName = parameterName;
