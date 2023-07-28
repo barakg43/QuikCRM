@@ -1,0 +1,6 @@
+---
+serverName: "server-name\\instance" 
+port: 1433
+databaseName: "scehma-name"
+username: "username"
+password: "password"
