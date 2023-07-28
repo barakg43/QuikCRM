@@ -1,6 +1,7 @@
 package com.quik.server.sql;
 
 import com.quik.server.ServerConstants;
+import com.quik.server.http.TaskRecord;
 import com.quik.server.sql.function.SqlFunctionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlClient {
 
@@ -48,5 +51,9 @@ public class SqlClient {
 
     public String getSupplierNameByID(int id){
         return sqlFunctionManager.getSupplierNameByID(id);
+    }
+
+    public List<TaskRecord> getClosedTaskForCustomer(int id){
+      return  sqlFunctionManager.getClosedTaskForCustomer(id);
     }
 }

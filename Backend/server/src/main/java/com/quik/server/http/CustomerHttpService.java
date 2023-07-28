@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static com.quik.server.ServerConstants.SQL_YAML_CONFIG_LOCATION;
 
 @RestController
@@ -24,6 +26,10 @@ public class CustomerHttpService {
     @GetMapping("/customer/name")
     public String getCostumerNameByID(@RequestParam int id){
         return sqlClient.getCostumerNameByID(id);
+    }
+    @GetMapping("/customer/closed-tasks")
+    public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id){
+        return sqlClient.getClosedTaskForCustomer(id);
     }
     @GetMapping("/supplier/name")
     public String getSupplierNameByID(@RequestParam int id){
