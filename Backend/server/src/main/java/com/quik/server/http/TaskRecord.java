@@ -3,98 +3,66 @@ package com.quik.server.http;
 import java.sql.Date;
 
 public class TaskRecord {
-   private int TaskID;
-    private int CustomerID;
+   private int taskID;
+    private int customerID;
+
+    public TaskRecord() {
+    }
 
     public TaskRecord(int taskID, int customerID, String taskShortDescription, Date dateOfTaskOpen, int performanceStatusID, Date dateOfTaskClose, String taskOpenRemarks, String performancesStatus, boolean checked) {
-        TaskID = taskID;
-        CustomerID = customerID;
-        TaskShortDescription = taskShortDescription;
-        DateOfTaskOpen = dateOfTaskOpen;
-        PerformanceStatusID = performanceStatusID;
-        DateOfTaskClose = dateOfTaskClose;
-        TaskOpenRemarks = taskOpenRemarks;
-        PerformancesStatus = performancesStatus;
-        Checked = checked;
+        this.taskID = taskID;
+        this.customerID = customerID;
+        this.taskShortDescription = taskShortDescription;
+        this.dateOfTaskOpen = dateOfTaskOpen;
+        this.performanceStatusID = performanceStatusID;
+        this.dateOfTaskClose = dateOfTaskClose;
+        this.taskOpenRemarks = taskOpenRemarks;
+        this.performancesStatus = performancesStatus;
+        this.checked = checked;
     }
 
-    private String TaskShortDescription;
-    private Date DateOfTaskOpen;
-    private int PerformanceStatusID;
-    private Date DateOfTaskClose;
-    private String TaskOpenRemarks;
-    private String PerformancesStatus;
-    private boolean Checked;
+    private String taskShortDescription;
+    private Date dateOfTaskOpen;
+    private int performanceStatusID;
+    private Date dateOfTaskClose;
+    private String taskOpenRemarks;
+    private String performancesStatus;
+    private boolean checked;
 
-    public int getTaskID() {
-        return TaskID;
-    }
 
     public void setTaskID(int taskID) {
-        TaskID = taskID;
-    }
-
-    public int getCustomerID() {
-        return CustomerID;
+        this.taskID = taskID;
     }
 
     public void setCustomerID(int customerID) {
-        CustomerID = customerID;
-    }
-
-    public String getTaskShortDescription() {
-        return TaskShortDescription;
+        this.customerID = customerID;
     }
 
     public void setTaskShortDescription(String taskShortDescription) {
-        TaskShortDescription = taskShortDescription;
-    }
-
-    public Date getDateOfTaskOpen() {
-        return DateOfTaskOpen;
+        this.taskShortDescription = taskShortDescription;
     }
 
     public void setDateOfTaskOpen(Date dateOfTaskOpen) {
-        DateOfTaskOpen = dateOfTaskOpen;
-    }
-
-    public int getPerformanceStatusID() {
-        return PerformanceStatusID;
+        this.dateOfTaskOpen = dateOfTaskOpen;
     }
 
     public void setPerformanceStatusID(int performanceStatusID) {
-        PerformanceStatusID = performanceStatusID;
-    }
-
-    public Date getDateOfTaskClose() {
-        return DateOfTaskClose;
+        this.performanceStatusID = performanceStatusID;
     }
 
     public void setDateOfTaskClose(Date dateOfTaskClose) {
-        DateOfTaskClose = dateOfTaskClose;
-    }
-
-    public String getTaskOpenRemarks() {
-        return TaskOpenRemarks;
+        this.dateOfTaskClose = dateOfTaskClose;
     }
 
     public void setTaskOpenRemarks(String taskOpenRemarks) {
-        TaskOpenRemarks = taskOpenRemarks;
-    }
-
-    public String getPerformancesStatus() {
-        return PerformancesStatus;
+        this.taskOpenRemarks = taskOpenRemarks;
     }
 
     public void setPerformancesStatus(String performancesStatus) {
-        PerformancesStatus = performancesStatus;
-    }
-
-    public boolean isChecked() {
-        return Checked;
+        this.performancesStatus = performancesStatus;
     }
 
     public void setChecked(boolean checked) {
-        Checked = checked;
+        this.checked = checked;
     }
 }

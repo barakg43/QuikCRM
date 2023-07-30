@@ -18,7 +18,7 @@ public class ServerApplication {
     private  static void testFunction(){
         SqlClient sqlClient=new SqlClient(SQL_YAML_CONFIG_LOCATION);
         sqlClient.createSqlConnection();
-        System.out.format("customer name:%s\n",sqlClient.getClosedTaskForCustomer(10));
+        System.out.format("customer name:%d\n",sqlClient.getClosedTaskForCustomer(10).size());
 
     }
     private static void printPWD() throws IOException{

@@ -4,7 +4,9 @@ import com.quik.server.ServerConstants;
 import com.quik.server.http.TaskRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
@@ -66,23 +68,20 @@ public class SqlFunctionManager {
 
     public List<TaskRecord> getClosedTaskForCustomer(int id) {
         String functionName=GET_CLOSED_TASK_FOR_CUSTOMER.toString();
-        SimpleJdbcCall simpleJdbcCall =new SimpleJdbcCall(sqlDatabaseConfig).withFunctionName(functionName) // Replace with the name of your SQL function
-                .returningResultSet("result", new RowMapper<TaskRecord>() {
-                    @Override
-                    public TaskRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        return new TaskRecord(
-                        rs.getInt("TaskID"),
-                        rs.getInt("CustomerID"),
-                        rs.getString("TaskShortDescription"),
-                        rs.getDate("DateOfTaskOpen"),
-                        rs.getInt("PerformanceStatusID"),
-                        rs.getDate("DateOfTaskClose"),
-                        rs.getString("TaskOpenRemarks"),
-                        rs.getString("PerformancesStatus"),
-                        rs.getBoolean("Checked"));
+        SimpleJdbcCall simpleJdbcCall  =new SimpleJdbcCall(sqlDatabaseConfig)
+                .withFunctionName("fncCustomersCloseTasksForID") // Replace with the name of your SQL function
+                .returningResultSet("closed-task", new SingleColumnRowMapper<TaskRecord>());
+//                        (RowMapper<TaskRecord>) (rs, rowNum) -> new TaskRecord(
+//                rs.getInt("TaskID"),
+//                rs.getInt("CustomerID"),
+//                rs.getString("TaskShortDescription"),
+//                rs.getDate("DateOfTaskOpen"),
+//                rs.getInt("PerformanceStatusID"),
+//                rs.getDate("DateOfTaskClose"),
+//                rs.getString("TaskOpenRemarks"),
+//                rs.getString("PerformancesStatus"),
+//                rs.getBoolean("Checked")),.returningResultSet("actors",
 
-                    }
-                });
         SqlFunctionExecutor<List<TaskRecord>> functionExtractor;
 //        sqlClientLogger.info(String.format("%s:find closed task for customer [%d]",functionName,id));
 //        if(!functionExecutorMap.containsKey(functionName)){
@@ -91,8 +90,46 @@ public class SqlFunctionManager {
 //        }else{
 //            functionExtractor = (SqlFunctionExecutor<List<TaskRecord>>) functionExecutorMap.get(functionName);
 //        }
+        Map m =simpleJdbcCall.executeFunction(Map.class,id);
+        List<TaskRecord> list =(List) m.get("closed-task");
+        return list;
+//        return (List<TaskRecord>)simpleJdbcCall.executeObject(RowMapper.class, id);
 
-        return (List<TaskRecord>)simpleJdbcCall.executeFunction(List.class, id);
+    }
+    public List<TaskRecord> getClosedTaskForCustomer2(Object id) {
 
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate=new NamedParameterJdbcTemplate(sqlDatabaseConfig);
+
+        List<TaskRecord> ts=namedParameterJdbcTemplate.query("SELECT * FROM fncCustomersCloseTasksForID(:cust_id)",
+                new MapSqlParameterSource().addValue("cust_id",id),
+                new BeanPropertyRowMapper(TaskRecord.class));
+//        String functionName=GET_CLOSED_TASK_FOR_CUSTOMER.toString();
+//        SimpleJdbcCall simpleJdbcCall  =new SimpleJdbcCall(sqlDatabaseConfig)
+//                .withFunctionName("fncCustomersCloseTasksForID") // Replace with the name of your SQL function
+//                .returningResultSet("closed-task", new SingleColumnRowMapper<TaskRecord>());
+////                        (RowMapper<TaskRecord>) (rs, rowNum) -> new TaskRecord(
+////                rs.getInt("TaskID"),
+////                rs.getInt("CustomerID"),
+////                rs.getString("TaskShortDescription"),
+////                rs.getDate("DateOfTaskOpen"),
+////                rs.getInt("PerformanceStatusID"),
+////                rs.getDate("DateOfTaskClose"),
+////                rs.getString("TaskOpenRemarks"),
+////                rs.getString("PerformancesStatus"),
+////                rs.getBoolean("Checked")),.returningResultSet("actors",
+//
+//        SqlFunctionExecutor<List<TaskRecord>> functionExtractor;
+////        sqlClientLogger.info(String.format("%s:find closed task for customer [%d]",functionName,id));
+////        if(!functionExecutorMap.containsKey(functionName)){
+////            functionExtractor=createNewFunctionExecutor(functionName);
+////            functionExecutorMap.put(functionName,functionExtractor);
+////        }else{
+////            functionExtractor = (SqlFunctionExecutor<List<TaskRecord>>) functionExecutorMap.get(functionName);
+////        }
+//        Map m =simpleJdbcCall.executeFunction(Map.class,id);
+//        List<TaskRecord> list =(List) m.get("closed-task");
+//        return list;
+////        return (List<TaskRecord>)simpleJdbcCall.executeObject(RowMapper.class, id);
+            return ts;
     }
 }

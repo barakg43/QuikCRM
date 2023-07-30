@@ -54,6 +54,6 @@ public class SqlClient {
     }
 
     public List<TaskRecord> getClosedTaskForCustomer(int id){
-      return  sqlFunctionManager.getClosedTaskForCustomer(id);
+      return  sqlFunctionManager.getClosedTaskForCustomer2(id);
     }
 }
