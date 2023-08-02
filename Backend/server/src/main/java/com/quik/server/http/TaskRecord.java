@@ -1,7 +1,9 @@
 package com.quik.server.http;
 
-import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+import java.sql.Date;
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class TaskRecord {
    private int taskID;
     private int customerID;

@@ -2,9 +2,11 @@ package com.quik.server.sql;
 
 import com.quik.server.ServerConstants;
 import com.quik.server.http.TaskRecord;
+import com.quik.server.logger.ServerLogManager;
 import com.quik.server.sql.function.SqlFunctionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -19,14 +21,16 @@ public class SqlClient {
     private Connection sqlConnection;
     private SqlFunctionManager sqlFunctionManager;
     private final String sqlConfigurationYamlFilePath;
+    private final ServerLogManager logManager;
 
-//    public SqlClient(SqlConfiguration sqlServerConfiguration){
+    //    public SqlClient(SqlConfiguration sqlServerConfiguration){
 //        sqlConnectionManger=new SqlConnectionManger(sqlServerConfiguration);
 //        sqlClientLogger=LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
 //    }
-    public SqlClient(String sqlConfigurationYamlFilePath) {
+    public SqlClient(String sqlConfigurationYamlFilePath, ServerLogManager logManager) {
         sqlConnectionManger=new SqlConnectionManger(sqlConfigurationYamlFilePath);
         this.sqlConfigurationYamlFilePath=sqlConfigurationYamlFilePath;
+        this.logManager = logManager;
         sqlClientLogger=LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
     }
     public void createSqlConnection() {
@@ -52,8 +56,8 @@ public class SqlClient {
     public String getSupplierNameByID(int id){
         return sqlFunctionManager.getSupplierNameByID(id);
     }
-
     public List<TaskRecord> getClosedTaskForCustomer(int id){
-      return  sqlFunctionManager.getClosedTaskForCustomer2(id);
+      return  sqlFunctionManager.getClosedTaskForCustomer(id);
     }
+
 }

@@ -4,19 +4,24 @@
         <Property name="PID">????</Property>
         <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
         <Property name="LOG_LEVEL_PATTERN">%5p</Property>
-        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+        <Property name="LOG_DATEFORMAT_PATTERN">dd-MM-yyyy HH:mm:ss.SSS</Property>
         <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
         <Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
     </Properties>
     <Appenders>
         <File name="sqlClientFileAppender" fileName="logs/sql-client.log" append="false">
             <PatternLayout>
-                <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %p: %msg%n</Pattern>
+                <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]: %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="jdbcDriverFileAppender" fileName="logs/jdbc-driver.log" append="false">
+            <PatternLayout>
+                <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]: %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Pattern>
             </PatternLayout>
         </File>
         <Console name="customConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %p: %msg%n</Pattern>
+                <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} %clr{${LOG_LEVEL_PATTERN}} --- [%15.15t]: %msg%n</Pattern>
             </PatternLayout>
         </Console>
         <File name="requestsFileAppender" fileName="logs/requests.log" append="false">
@@ -34,7 +39,9 @@
     </Appenders>
 
     <Loggers>
-
+        <Logger name="org.springframework.jdbc.core" level="trace" additivity="false">
+            <appender-ref ref="jdbcDriverFileAppender" />
+        </Logger>
         <logger name="sql-client-logger" level="INFO" additivity="false">
             <AppenderRef ref="sqlClientFileAppender"/>
             <AppenderRef ref="customConsoleAppender"/>
