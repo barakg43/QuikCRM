@@ -3,10 +3,18 @@ package com.quik.server.http;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.sql.Date;
+
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class TaskRecord {
-   private int taskID;
+    private int taskID;
     private int customerID;
+    private String taskShortDescription;
+    private Date dateOfTaskOpen;
+    private int performanceStatusID;
+    private Date dateOfTaskClose;
+    private String taskOpenRemarks;
+    private String performancesStatus;
+    private boolean checked;
 
     public TaskRecord() {
     }
@@ -22,14 +30,6 @@ public class TaskRecord {
         this.performancesStatus = performancesStatus;
         this.checked = checked;
     }
-
-    private String taskShortDescription;
-    private Date dateOfTaskOpen;
-    private int performanceStatusID;
-    private Date dateOfTaskClose;
-    private String taskOpenRemarks;
-    private String performancesStatus;
-    private boolean checked;
 
 
     public void setTaskID(int taskID) {

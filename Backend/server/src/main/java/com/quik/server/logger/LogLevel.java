@@ -1,7 +1,6 @@
 package com.quik.server.logger;
 
-public enum LogLevel
-{
+public enum LogLevel {
     DEBUG("DEBUG"),
     INFO("INFO"),
     ERROR("ERROR");

@@ -1,10 +1,7 @@
 package com.quik.server.sql.function;
 
-import com.quik.server.http.TaskRecord;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -17,36 +14,33 @@ public class SqlFunctionExecutor {
 
 
     public SqlFunctionExecutor(DataSource dataSource) {
-        jdbcTemplate=new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public <T> T executeScalarValueFunction(SqlFunction<T> functionObject,Object... functionArguments){
-        String sqlQuery=preparedSqlQueryString(functionObject,false,functionArguments.length);
-        return jdbcTemplate.queryForObject(sqlQuery,functionObject.getReturnType(),functionArguments);
-//        return JdbcDriverCaller.executeFunction(returnType,functionArguments);
-
+    public <T> T executeScalarValueFunction(SqlFunction<T> functionObject, Object... functionArguments) {
+        String sqlQuery = preparedSqlQueryString(functionObject, false, functionArguments.length);
+        return jdbcTemplate.queryForObject(sqlQuery, functionObject.getReturnType(), functionArguments);
     }
-    public <T> List<T> executeTableValueFunction(SqlFunction<T> functionObject, Object... functionArguments){
-        String sqlQuery=preparedSqlQueryString(functionObject,true,functionArguments.length);
+
+    public <T> List<T> executeTableValueFunction(SqlFunction<T> functionObject, Object... functionArguments) {
+        String sqlQuery = preparedSqlQueryString(functionObject, true, functionArguments.length);
         return jdbcTemplate.query(sqlQuery,
                 new BeanPropertyRowMapper<>(functionObject.getReturnType()),
                 functionArguments);
-//        return JdbcDriverCaller.executeFunction(returnType,functionArguments);
-
     }
 
 
-    private <T> String preparedSqlQueryString(SqlFunction<T> functionObject,boolean isTableValueFunction, int argumentAmount) {
-        StringBuilder argumentString=new StringBuilder("");
+    private <T> String preparedSqlQueryString(SqlFunction<T> functionObject, boolean isTableValueFunction, int argumentAmount) {
+        StringBuilder argumentString = new StringBuilder();
         String query;
-        if(argumentAmount>0){
-            argumentString.append("?,".repeat( argumentAmount-1));
+        if (argumentAmount > 0) {
+            argumentString.append("?,".repeat(argumentAmount - 1));
             argumentString.append('?');
         }
-        if(isTableValueFunction){
-            query=String.format(TABLE_VALUE_SQL_QUERY_FORMAT,functionObject.getSqlFunctionQuery(),argumentString);
-        }else {
-            query=String.format(SCALAR_VALUE_SQL_QUERY_FORMAT,functionObject.getSqlFunctionQuery(),argumentString);
+        if (isTableValueFunction) {
+            query = String.format(TABLE_VALUE_SQL_QUERY_FORMAT, functionObject.getSqlFunctionQuery(), argumentString);
+        } else {
+            query = String.format(SCALAR_VALUE_SQL_QUERY_FORMAT, functionObject.getSqlFunctionQuery(), argumentString);
         }
 
         return query;

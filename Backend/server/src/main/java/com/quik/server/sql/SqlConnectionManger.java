@@ -7,29 +7,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SqlConnectionManger {
+    private final String sqlConfigurationYamlFilePath;
     private DataSource dataSourceConfig;
     private SqlConfiguration sqlConnectionConfiguration;
     private Connection sqlConnection;
-    private final String sqlConfigurationYamlFilePath;
     private SimpleJdbcCall simpleJdbcCall;
 
     public SqlConnectionManger(String sqlConfigurationYamlFilePath) {
-        this.sqlConfigurationYamlFilePath=sqlConfigurationYamlFilePath;
+        this.sqlConfigurationYamlFilePath = sqlConfigurationYamlFilePath;
     }
+
     public void initializeSqlConnectionConfig() throws SQLException, IOException {
-        sqlConnectionConfiguration=createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
-        dataSourceConfig=createDataSource(sqlConnectionConfiguration);
+        sqlConnectionConfiguration = createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
+        dataSourceConfig = createDataSource(sqlConnectionConfiguration);
 //        simpleJdbcCall=new SimpleJdbcCall(dataSourceConfig);
 //        simpleJdbcCall.withFunctionName();
     }
+
     @Bean
     private SqlConfiguration createSqlConfigurationFromFile(String filePath) throws IOException {
         ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
@@ -41,9 +41,10 @@ public class SqlConnectionManger {
 
         return sqlConfiguration;
     }
+
     @Bean
     private DataSource createDataSource(SqlConfiguration sqlServerConfiguration) {
-        SQLServerDataSource msSqlDataSource=new SQLServerDataSource();
+        SQLServerDataSource msSqlDataSource = new SQLServerDataSource();
 //        SQLServerConnectionPoolDataSource msSqlDataSource=new SQLServerConnectionPoolDataSource();
         msSqlDataSource.setServerName(sqlServerConfiguration.getServerName());
         msSqlDataSource.setPortNumber(sqlServerConfiguration.getPort());
@@ -54,9 +55,11 @@ public class SqlConnectionManger {
         msSqlDataSource.setTrustServerCertificate(true);
         return msSqlDataSource;
     }
-    public String getServerConfigDetails(){
+
+    public String getServerConfigDetails() {
         return sqlConnectionConfiguration.getServerConfigDetails();
     }
+
     public DataSource getSqlConnectionConfig() {
         return dataSourceConfig;
     }

@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
 public class SqlConfiguration {
     private final String serverName;
     private final int port;
-    private final String databaseName ;
-    private final String username ;
+    private final String databaseName;
+    private final String username;
 
-    private final String password ;
+    private final String password;
 
-    public SqlConfiguration(){
+    public SqlConfiguration() {
         this.serverName = null;
         this.port = 0;
         this.databaseName = null;
@@ -42,14 +42,16 @@ public class SqlConfiguration {
     public String getServerName() {
         return serverName;
     }
+
     public int getPort() {
         return port;
     }
+
     public String getDatabaseName() {
         return databaseName;
     }
 
-    public String getServerConfigDetails(){
-        return String.format("Server name: %s | Port: %d | Database name: %s",serverName,port,databaseName);
+    public String getServerConfigDetails() {
+        return String.format("Server name: %s | Port: %d | Database name: %s", serverName, port, databaseName);
     }
 }
