@@ -39,9 +39,9 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="org.springframework.jdbc.core" level="trace" additivity="false">
-            <appender-ref ref="jdbcDriverFileAppender" />
-        </Logger>
+<!--        <Logger name="org.springframework.jdbc.core" level="trace" additivity="false">-->
+<!--            <appender-ref ref="jdbcDriverFileAppender" />-->
+<!--        </Logger>-->
         <logger name="sql-client-logger" level="INFO" additivity="false">
             <AppenderRef ref="sqlClientFileAppender"/>
             <AppenderRef ref="customConsoleAppender"/>
