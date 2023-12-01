@@ -12,9 +12,10 @@
 	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>server</name>
+	<name>QuikHttpServer</name>
 	<description>server</description>
 	<properties>
+		<start-class>main.server.ServerApplication</start-class>
 		<java.version>17</java.version>
 		<jackson.version>2.15.2</jackson.version>
 		<ms-sql.version>12.2.0.jre11</ms-sql.version>
@@ -101,6 +102,7 @@
 		<!-- Json parser -->
 	</dependencies>
 	<build>
+		<sourceDirectory>Backend/src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -181,6 +183,34 @@
 					</execution>
 				</executions>
 			</plugin>
+<!--				<plugin>-->
+<!--					<groupId>org.apache.maven.plugins</groupId>-->
+<!--					<artifactId>maven-war-plugin</artifactId>-->
+<!--					<version>3.4.0</version>-->
+<!--					<configuration>-->
+<!--&lt;!&ndash;						<webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory>&ndash;&gt;-->
+<!--					</configuration>-->
+<!--				</plugin>-->
+
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-dependency-plugin</artifactId>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>copy-dependencies</id>-->
+<!--						<phase>prepare-package</phase>-->
+<!--						<goals>-->
+<!--							<goal>copy-dependencies</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--							<overWriteReleases>false</overWriteReleases>-->
+<!--							<overWriteSnapshots>false</overWriteSnapshots>-->
+<!--							<overWriteIfNewer>true</overWriteIfNewer>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 
