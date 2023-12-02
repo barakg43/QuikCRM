@@ -26,7 +26,11 @@ public class CustomerHttpService {
     private void startSqlConnection() {
         sqlClient.createSqlConnection();
     }
-
+    @GetMapping("/test")
+    public String getTest(){
+        System.out.println("test!!!");
+        return "test";
+    }
     @GetMapping("/customer/name")
     public String getCostumerNameByID(@RequestParam int id) {
         return sqlClient.getCostumerNameByID(id);
