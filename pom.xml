@@ -8,8 +8,8 @@
 		<version>3.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.litos</groupId>
-	<artifactId>server</artifactId>
+	<groupId>com.quikCRM</groupId>
+	<artifactId>quik</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>QuikHttpServer</name>
@@ -52,11 +52,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<!--         Exclude Spring Boot's Default Logging-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -164,16 +160,34 @@
 				<version>${maven-resources-plugin.version}</version>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copy-resources-backend-files</id>
 						<phase>process-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/classes/main/resources/static</outputDirectory>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
 							<resources>
 								<resource>
-<!--									<directory>${basedir}/Backend/resources</directory>-->
+									<directory>${basedir}/Backend/resources</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-resources-frontend-files</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+							<resources>
+								<resource>
 									<directory>${basedir}/Frontend/dist</directory>
 									<includes>
 										<include>**/*.*</include>
