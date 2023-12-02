@@ -173,6 +173,7 @@
 							<outputDirectory>${basedir}/target/classes/main/resources/static</outputDirectory>
 							<resources>
 								<resource>
+<!--									<directory>${basedir}/Backend/resources</directory>-->
 									<directory>${basedir}/Frontend/dist</directory>
 									<includes>
 										<include>**/*.*</include>
