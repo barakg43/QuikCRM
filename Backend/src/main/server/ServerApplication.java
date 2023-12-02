@@ -4,6 +4,7 @@ import main.server.logger.ServerLogManager;
 import main.server.sql.SqlClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -12,8 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static main.server.ServerConstants.SQL_YAML_CONFIG_LOCATION;
 
-@SpringBootApplication()
-public class ServerApplication {
+@SpringBootApplication
+public class ServerApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
 //        testFunction();
         SpringApplication.run(ServerApplication.class, args);
