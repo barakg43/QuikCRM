@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { Toaster } from "react-hot-toast";
-
+import GlobalStyle from "./../styles/GlobalStyle.js";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -16,6 +16,7 @@ function AppProviders({ children }: AppProvidersType) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
+      <GlobalStyle />
       <Toaster
         position='top-center'
         gutter={12}

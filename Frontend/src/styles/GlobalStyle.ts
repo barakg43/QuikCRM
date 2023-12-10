@@ -5,8 +5,6 @@ const GlobalStyle = createGlobalStyle`
 
     &, &.light-mode{
 
-
-
     }
 
 
@@ -38,10 +36,15 @@ html {
   color-scheme: dark light;
 }
 
-/* min body height */
-
-body {
-  min-height: 100dvh;
+body,html {
+  font-family: "Poppins", sans-serif;
+  color: var(--color-grey-700);
+  margin: 0;
+  transition: color 0.3s, background-color 0.3s;
+  width: 100%;
+  height: 100%;
+  line-height: 1.5;
+  font-size: 1.6rem;
 }
 
 /* responsive images/videos */
