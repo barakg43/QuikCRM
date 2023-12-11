@@ -1,12 +1,20 @@
 import { createGlobalStyle } from "styled-components";
-import "./pollen.css";
+
 const GlobalStyle = createGlobalStyle`
 :root{
-
     &, &.light-mode{
-
+        --color-primary-100:var(--color-teal-100)
+        --color-primary-200:var(--color-teal-200)
+        --color-primary-300:var(--color-teal-300)
+        --color-primary-400:var(--color-teal-400)
+        --color-primary-500:var(--color-teal-500)
+        --color-primary-600:var(--color-teal-600)
+        --color-primary-700:var(--color-teal-700)
+        --color-primary-800:var(--color-teal-800)
+        --color-primary-900:var(--color-teal-900)
+        --color-primary-950:var(--color-teal-950)
     }
-
+  
 
 *,
 *::before,
@@ -35,7 +43,13 @@ const GlobalStyle = createGlobalStyle`
 html {
   color-scheme: dark light;
 }
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
 body,html {
   font-family: "Poppins", sans-serif;
   color: var(--color-grey-700);
@@ -46,6 +60,8 @@ body,html {
   line-height: 1.5;
   font-size: 1.6rem;
 }
+
+
 
 /* responsive images/videos */
 img,
