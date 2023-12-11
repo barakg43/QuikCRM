@@ -116,10 +116,6 @@ const Content = styled.div`
   padding: 17% 5% 10% 5%;
 `;
 
-const Logo = styled.img`
-  width: 80px;
-`;
-
 const NavLink = styled.a`
   color: #fff;
   text-decoration: none;
@@ -208,7 +204,7 @@ const Earth = styled.img`
   top: 20%;
   left: 15%;
   z-index: 90;
-  animation: spin-earth 100s infinite linear both;
+  animation: ${spinEarth} 100s infinite linear both;
 `;
 
 const Moon = styled.img`
