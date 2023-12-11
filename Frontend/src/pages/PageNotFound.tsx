@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import styled, { keyframes } from "styled-components";
 
 const glowStar = keyframes`
@@ -38,12 +39,6 @@ const rotateAstronaut = keyframes`
 `;
 
 const Container = styled.div`
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background-color: #29243e; */
   background: url(/quik/404Page/img/bg_purple.png);
   background-repeat: repeat-x;
   background-size: cover;
@@ -107,14 +102,18 @@ const Star = styled.div`
 `;
 
 const Content = styled.div`
+  min-height: 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
   /* z-index: 1;*/
   /* position: relative;  */
   text-align: center;
   padding: 17% 5% 10% 5%;
-`;
-
-const Logo = styled.img`
-  width: 80px;
 `;
 
 const NavLink = styled.a`
@@ -128,23 +127,26 @@ const NavLink = styled.a`
     color: #ffcb39;
   }
 `;
-const RequestButton = styled.button`
-  padding: 10px 25px;
-  border: 1px solid #ffcb39;
-  border-radius: 100px;
-  font-weight: 400;
-  background-color: #29243e;
-  color: #fff;
-  transition: all 0.3s ease-in;
+// const RequestButton = styled.button`
+//   padding: 10px 25px;
+//   border: 1px solid #ffcb39;
+//   border-radius: 100px;
+//   font-weight: 400;
+//   background-color: #29243e;
+//   color: #fff;
+//   transition: all 0.3s ease-in;
 
-  &:hover {
-    background-color: #ffcb39;
-    transform: scale(1.05);
-    box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.1);
-  }
-`;
+//   &:hover {
+//     background-color: #ffcb39;
+//     transform: scale(1.05);
+//     box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.1);
+//   }
+// `;
 
-const StyledNavLink = styled(NavLink)`
+type StyledNavLinkProps = {
+  to: string;
+};
+const StyledNavLink = styled(NavLink)<StyledNavLinkProps>`
   position: relative;
   z-index: 200;
   margin: 15px auto;
@@ -202,7 +204,7 @@ const Earth = styled.img`
   top: 20%;
   left: 15%;
   z-index: 90;
-  /* animation: spin-earth 100s infinite linear both; */
+  animation: ${spinEarth} 100s infinite linear both;
 `;
 
 const Moon = styled.img`
@@ -230,22 +232,27 @@ const Astronaut = styled.img`
 `;
 
 function PageNotFound() {
+  const { t } = useTranslation("pageNotFound");
+
   return createPortal(
     <Container>
-      page not found!
-      {/* <Stars>
+      <Stars>
         <Content>
-          <Image404 src='/quik/404Page/img/404.svg' />
-          <StyledNavLink to='/'>GO BACK HOME</StyledNavLink>
+          <Image404 src='/quik/404Page/img/404.svg' alt='404 image' />
+          <p>
+            {t("errorMessageFirstPart")}
+            <strong> {t("errorMessageSecondPart")}</strong>
+          </p>
+          <StyledNavLink to='/'>{t("button")}</StyledNavLink>
         </Content>
         <Objects>
-          <Rocket src='/quik/404Page/img/rocket.svg' />
+          <Rocket src='/quik/404Page/img/rocket.svg' alt='Rocket' />
           <EarthMoon>
-            <Earth src='/quik/404Page/img/earth.svg' />
-            <Moon src='/quik/404Page/img/moon.svg' />
+            <Earth src='/quik/404Page/img/earth.svg' alt='Earth' />
+            <Moon src='/quik/404Page/img/moon.svg' alt='Moon' />
           </EarthMoon>
           <AstronautBox>
-            <Astronaut src='/quik/404Page/img/astronaut.svg' />
+            <Astronaut src='/quik/404Page/img/astronaut.svg' alt='Astronaut' />
           </AstronautBox>
         </Objects>
         <GlowingStars>
@@ -255,7 +262,7 @@ function PageNotFound() {
           <Star />
           <Star />
         </GlowingStars>
-      </Stars> */}
+      </Stars>
     </Container>,
     document.body
   );
