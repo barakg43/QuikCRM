@@ -25,7 +25,6 @@
 		<npm.version>10.2.3</npm.version>
 		<node.version>v20.10.0</node.version>
 		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-		<artifactId>quik</artifactId>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -100,13 +99,11 @@
 	</dependencies>
 	<build>
 		<sourceDirectory>Backend/src</sourceDirectory>
-		<finalName>${artifactId}</finalName>
-
 		<plugins>
-<!--			<plugin>-->
-<!--				<groupId>org.springframework.boot</groupId>-->
-<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -201,51 +198,286 @@
 					</execution>
 				</executions>
 			</plugin>
-<!--				<plugin>-->
-<!--					<groupId>org.apache.maven.plugins</groupId>-->
-<!--					<artifactId>maven-war-plugin</artifactId>-->
-<!--					<version>3.4.0</version>-->
-<!--					<configuration>-->
-<!--&lt;!&ndash;						<webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory>&ndash;&gt;-->
-<!--					</configuration>-->
-<!--				</plugin>-->
+			<!--				<plugin>-->
+			<!--					<groupId>org.apache.maven.plugins</groupId>-->
+			<!--					<artifactId>maven-war-plugin</artifactId>-->
+			<!--					<version>3.4.0</version>-->
+			<!--					<configuration>-->
+			<!--&lt;!&ndash;						<webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory>&ndash;&gt;-->
+			<!--					</configuration>-->
+			<!--				</plugin>-->
 
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-dependency-plugin</artifactId>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>copy-dependencies</id>-->
-<!--						<phase>prepare-package</phase>-->
-<!--						<goals>-->
-<!--							<goal>copy-dependencies</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-<!--							<overWriteReleases>false</overWriteReleases>-->
-<!--							<overWriteSnapshots>false</overWriteSnapshots>-->
-<!--							<overWriteIfNewer>true</overWriteIfNewer>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
-
-<!--			<plugin>-->
-<!--				<groupId>org.apache.tomcat.maven</groupId>-->
-<!--				<artifactId>tomcat6-maven-plugin</artifactId>-->
-<!--				<version>2.2</version>-->
-<!--			</plugin>-->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<path>/war-plugin</path>
-					<warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>
-				</configuration>
-			</plugin>
-
+			<!--			<plugin>-->
+			<!--				<groupId>org.apache.maven.plugins</groupId>-->
+			<!--				<artifactId>maven-dependency-plugin</artifactId>-->
+			<!--				<executions>-->
+			<!--					<execution>-->
+			<!--						<id>copy-dependencies</id>-->
+			<!--						<phase>prepare-package</phase>-->
+			<!--						<goals>-->
+			<!--							<goal>copy-dependencies</goal>-->
+			<!--						</goals>-->
+			<!--						<configuration>-->
+			<!--							<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+			<!--							<overWriteReleases>false</overWriteReleases>-->
+			<!--							<overWriteSnapshots>false</overWriteSnapshots>-->
+			<!--							<overWriteIfNewer>true</overWriteIfNewer>-->
+			<!--						</configuration>-->
+			<!--					</execution>-->
+			<!--				</executions>-->
+			<!--			</plugin>-->
 		</plugins>
 	</build>
 
 </project>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
+<!--	<modelVersion>4.0.0</modelVersion>-->
+<!--	<parent>-->
+<!--		<groupId>org.springframework.boot</groupId>-->
+<!--		<artifactId>spring-boot-starter-parent</artifactId>-->
+<!--		<version>3.1.1</version>-->
+<!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--	</parent>-->
+<!--	<groupId>com.quikCRM</groupId>-->
+<!--	<artifactId>quik</artifactId>-->
+<!--	<version>0.0.1-SNAPSHOT</version>-->
+<!--	<packaging>war</packaging>-->
+<!--	<name>QuikHttpServer</name>-->
+<!--	<description>server</description>-->
+<!--	<properties>-->
+<!--		<start-class>main.server.ServerApplication</start-class>-->
+<!--		<java.version>17</java.version>-->
+<!--		<jackson.version>2.15.2</jackson.version>-->
+<!--		<ms-sql.version>12.2.0.jre11</ms-sql.version>-->
+<!--		<spring-boot-starter-jdbc.version>3.1.2</spring-boot-starter-jdbc.version>-->
+<!--		<spring-jdbc.version>6.0.11</spring-jdbc.version>-->
+<!--		<frontend-maven-plugin.version>1.14.2</frontend-maven-plugin.version>-->
+<!--		<npm.version>10.2.3</npm.version>-->
+<!--		<node.version>v20.10.0</node.version>-->
+<!--		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>-->
+<!--		<artifactId>quik</artifactId>-->
+<!--	</properties>-->
+<!--	<dependencies>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>com.microsoft.sqlserver</groupId>-->
+<!--			<artifactId>mssql-jdbc</artifactId>-->
+<!--			<version>${ms-sql.version}</version>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-jdbc &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework</groupId>-->
+<!--			<artifactId>spring-jdbc</artifactId>-->
+<!--			<version>${spring-jdbc.version}</version>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-test</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+
+<!--		&lt;!&ndash;         Exclude Spring Boot's Default Logging&ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter</artifactId>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework.boot</groupId>-->
+<!--					<artifactId>spring-boot-starter-logging</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; Add Log4j2 Dependency &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-log4j2</artifactId>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>com.fasterxml.jackson.dataformat</groupId>-->
+<!--			<artifactId>jackson-dataformat-yaml</artifactId>-->
+<!--			<version>${jackson.version}</version>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; Yaml additional parser &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.fasterxml.jackson.core</groupId>-->
+<!--			<artifactId>jackson-databind</artifactId>-->
+<!--			<version>${jackson.version}</version>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc &ndash;&gt;-->
+<!--		&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--		&lt;!&ndash;            <groupId>org.springframework.boot</groupId>&ndash;&gt;-->
+<!--		&lt;!&ndash;            <artifactId>spring-boot-starter-jdbc</artifactId>&ndash;&gt;-->
+<!--		&lt;!&ndash;&lt;!&ndash;            <version>${spring-boot-starter-jdbc.version}</version>&ndash;&gt;&ndash;&gt;-->
+<!--		&lt;!&ndash;        </dependency>&ndash;&gt;-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc &ndash;&gt;-->
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.yaml/snakeyaml &ndash;&gt;-->
+<!--		&lt;!&ndash;        <dependency>&ndash;&gt;-->
+<!--		&lt;!&ndash;            <groupId>org.yaml</groupId>&ndash;&gt;-->
+<!--		&lt;!&ndash;            <artifactId>snakeyaml</artifactId>&ndash;&gt;-->
+<!--		&lt;!&ndash;            <version>2.0</version>&ndash;&gt;-->
+<!--		&lt;!&ndash;        </dependency>&ndash;&gt;-->
+<!--		&lt;!&ndash; Json parser &ndash;&gt;-->
+<!--	</dependencies>-->
+<!--	<build>-->
+<!--		<sourceDirectory>Backend/src</sourceDirectory>-->
+<!--		<finalName>${artifactId}</finalName>-->
+
+<!--		<plugins>-->
+<!--&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				<groupId>org.springframework.boot</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<artifactId>spring-boot-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;			</plugin>&ndash;&gt;-->
+<!--			<plugin>-->
+<!--				<groupId>com.github.eirslett</groupId>-->
+<!--				<artifactId>frontend-maven-plugin</artifactId>-->
+<!--				<version>${frontend-maven-plugin.version}</version>-->
+
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						&lt;!&ndash; optional: you don't really need execution ids, but it looks nice in your build log. &ndash;&gt;-->
+<!--						<id>install node and npm</id>-->
+<!--						<goals>-->
+<!--							<goal>install-node-and-npm</goal>-->
+<!--						</goals>-->
+<!--						&lt;!&ndash; optional: default phase is "generate-resources" &ndash;&gt;-->
+<!--						<phase>generate-resources</phase>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>npm install</id>-->
+<!--						<goals>-->
+<!--							<goal>npm</goal>-->
+<!--						</goals>-->
+
+<!--						&lt;!&ndash; optional: default phase is "generate-resources" &ndash;&gt;-->
+<!--						<phase>generate-resources</phase>-->
+
+<!--						<configuration>-->
+<!--							&lt;!&ndash; optional: The default argument is actually-->
+<!--                            "install", so unless you need to run some other npm command,-->
+<!--                            you can remove this whole <configuration> section.-->
+<!--                            &ndash;&gt;-->
+<!--							<arguments>install</arguments>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>npm run build</id>-->
+<!--						<phase>generate-resources</phase>-->
+<!--						<goals>-->
+<!--							<goal>npm</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<arguments>run build</arguments>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+
+<!--				&lt;!&ndash; optional &ndash;&gt;-->
+<!--				<configuration>-->
+<!--					<nodeVersion>${node.version}</nodeVersion>-->
+<!--					<npmVersion>${npm.version}</npmVersion>-->
+<!--					<workingDirectory>Frontend</workingDirectory>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+<!--			<plugin>-->
+<!--				<artifactId>maven-resources-plugin</artifactId>-->
+<!--				<version>${maven-resources-plugin.version}</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>copy-resources-backend-files</id>-->
+<!--						<phase>process-resources</phase>-->
+<!--						<goals>-->
+<!--							<goal>copy-resources</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<outputDirectory>${basedir}/target/classes</outputDirectory>-->
+<!--							<resources>-->
+<!--								<resource>-->
+<!--									<directory>${basedir}/Backend/resources</directory>-->
+<!--									<includes>-->
+<!--										<include>**/*.*</include>-->
+<!--									</includes>-->
+<!--								</resource>-->
+<!--							</resources>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>copy-resources-frontend-files</id>-->
+<!--						<phase>process-resources</phase>-->
+<!--						<goals>-->
+<!--							<goal>copy-resources</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<overwrite>true</overwrite>-->
+<!--							<outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
+<!--							<resources>-->
+<!--								<resource>-->
+<!--									<directory>${basedir}/Frontend/dist</directory>-->
+<!--									<includes>-->
+<!--										<include>**/*.*</include>-->
+<!--									</includes>-->
+<!--								</resource>-->
+<!--							</resources>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+<!--&lt;!&ndash;				<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;					<groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;					<artifactId>maven-war-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;					<version>3.4.0</version>&ndash;&gt;-->
+<!--&lt;!&ndash;					<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;						<webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;					</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;				</plugin>&ndash;&gt;-->
+
+<!--&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				<groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<artifactId>maven-dependency-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<executions>&ndash;&gt;-->
+<!--&lt;!&ndash;					<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;						<id>copy-dependencies</id>&ndash;&gt;-->
+<!--&lt;!&ndash;						<phase>prepare-package</phase>&ndash;&gt;-->
+<!--&lt;!&ndash;						<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>copy-dependencies</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;						</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;						<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							<outputDirectory>${project.build.directory}/lib</outputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;							<overWriteReleases>false</overWriteReleases>&ndash;&gt;-->
+<!--&lt;!&ndash;							<overWriteSnapshots>false</overWriteSnapshots>&ndash;&gt;-->
+<!--&lt;!&ndash;							<overWriteIfNewer>true</overWriteIfNewer>&ndash;&gt;-->
+<!--&lt;!&ndash;						</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;					</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;				</executions>&ndash;&gt;-->
+<!--&lt;!&ndash;			</plugin>&ndash;&gt;-->
+
+<!--&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				<groupId>org.apache.tomcat.maven</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<artifactId>tomcat6-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<version>2.2</version>&ndash;&gt;-->
+<!--&lt;!&ndash;			</plugin>&ndash;&gt;-->
+<!--			<plugin>-->
+<!--				<groupId>org.apache.tomcat.maven</groupId>-->
+<!--				<artifactId>tomcat7-maven-plugin</artifactId>-->
+<!--				<version>2.2</version>-->
+<!--				<configuration>-->
+<!--					<path>/war-plugin</path>-->
+<!--					<warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+
+<!--		</plugins>-->
+<!--	</build>-->
+
+<!--</project>-->
