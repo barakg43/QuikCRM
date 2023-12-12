@@ -19,8 +19,9 @@ const StyledNavLink = styled(NavLink)`
   font-weight: var(--weight-medium);
   align-items: center;
   overflow-x: hidden;
-  gap: var(--size-1);
-
+  /* gap: var(--size-px); */
+  /* padding-inline-start: var(--scale-000); */
+  margin-block-start: var(--size-1);
   /* transition-delay: 300ms; */
   padding: var(--scale-000) var(--scale-00);
   & svg {
