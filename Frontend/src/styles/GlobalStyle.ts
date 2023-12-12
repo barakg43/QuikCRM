@@ -47,7 +47,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
-ul {
+ul ,menu{
   list-style: none;
 }
 body,html {
