@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
-  background-color: var(--color-amber-700);
+  display: flex;
 `;
 
 function Header() {

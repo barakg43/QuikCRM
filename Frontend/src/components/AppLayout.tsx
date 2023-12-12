@@ -4,21 +4,25 @@ import Header from "./Header";
 import { Outlet } from "react-router-dom";
 
 const StyledAppLayout = styled.div`
-  display: grid;
+  display: flex;
   height: 100vh;
-  grid-template-rows: auto 1fr;
-  grid-template-columns: 10rem 1fr;
+
+  /* grid-template-rows: auto 1fr;
+  grid-template-columns: 10rem 1fr; */
 `;
 const Main = styled.main`
-  /* background-color: red; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  max-width: 120rem;
+  flex: 1 1 0%;
 `;
 
 function AppLayout() {
   return (
     <StyledAppLayout>
-      <Header />
       <SideBar />
       <Main>
+        <Header />
         <Outlet />
       </Main>
     </StyledAppLayout>

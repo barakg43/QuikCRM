@@ -3,28 +3,53 @@ import styled from "styled-components";
 import { HiArchive } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
 
-const StyledMainNav = styled.ul`
-  font-size: var(--size-5);
+const StyledMainNav = styled.menu`
+  font-size: var(--size-4);
   justify-content: center;
   /* padding: 1rem 2rem; */
   display: flex;
   flex-direction: column;
   gap: var(--scale-000);
 `;
-const StyledNavLink = styled(NavLink)`
-  display: block;
-  background-color: var(--color-primary-500);
 
+const StyledNavLink = styled(NavLink)`
+  display: flex;
+  background-color: var(--color-primary-500);
   border-radius: var(--radius-sm);
   font-weight: var(--weight-medium);
-  /* display: flex; */
-  /* justify-content: center; */
-  transition: all 0.3s;
+  align-items: center;
+  overflow-x: hidden;
+  gap: var(--size-1);
+
+  /* transition-delay: 300ms; */
   padding: var(--scale-000) var(--scale-00);
   & svg {
     //for the icon
-    width: var(--scale-1);
-    height: var(--scale-1);
+    min-width: var(--scale-1);
+    min-height: var(--scale-1);
+  }
+  & span {
+    font-size: var(--scale-1);
+    opacity: 0;
+    color: var(--color-emerald-800);
+    transition: opacity 300ms ease-in-out;
+    overflow-x: hidden;
+    font-weight: var(--weight-medium);
+  }
+  @keyframes showHide {
+    /* Chrome, Safari */
+    0% {
+      width: 100%;
+    }
+    40% {
+      width: 0%;
+    }
+    60% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
   }
   &:hover {
     background-color: var(--color-primary-500);
@@ -34,6 +59,7 @@ type NavLinkItemProps = {
   path: string;
   label: string;
 };
+
 function NavLinkItem({ path, label }: NavLinkItemProps) {
   return (
     <li>
