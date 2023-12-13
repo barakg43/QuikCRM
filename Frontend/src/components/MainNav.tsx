@@ -1,12 +1,19 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { HiArchive } from "react-icons/hi";
+import {
+  TbAlarm,
+  TbClipboardList,
+  TbFileText,
+  TbSettings,
+  TbUsers,
+} from "react-icons/tb";
 import { useTranslation } from "react-i18next";
+import { ReactElement, ReactNode } from "react";
 
 const StyledMainNav = styled.menu`
   font-size: var(--size-4);
   justify-content: center;
-  /* padding: 1rem 2rem; */
+  padding: 1px 2px;
   display: flex;
   flex-direction: column;
   gap: var(--scale-000);
@@ -19,7 +26,7 @@ const StyledNavLink = styled(NavLink)`
   font-weight: var(--weight-medium);
   align-items: center;
   overflow-x: hidden;
-  /* gap: var(--size-px); */
+  gap: 0.5rem;
   /* padding-inline-start: var(--scale-000); */
   margin-block-start: var(--size-1);
   /* transition-delay: 300ms; */
@@ -59,13 +66,14 @@ const StyledNavLink = styled(NavLink)`
 type NavLinkItemProps = {
   path: string;
   label: string;
+  icon?: ReactElement | null | undefined;
 };
 
-function NavLinkItem({ path, label }: NavLinkItemProps) {
+function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
   return (
     <li>
       <StyledNavLink to={path}>
-        <HiArchive />
+        {icon}
         <span>{label}</span>
       </StyledNavLink>
     </li>
@@ -75,12 +83,23 @@ function MainNav() {
   const { t } = useTranslation("appLayout", { keyPrefix: "sidebar" });
   return (
     <StyledMainNav>
-      <NavLinkItem path='/clients' label={t("clients")} />
-      <NavLinkItem path='/settings' label={t("settings")} />
-      <NavLinkItem path='/account' label={t("account")} />
-      <NavLinkItem path='/reminders' label={t("reminders")} />
-      <NavLinkItem path='/activities' label={t("activities")} />
-      <NavLinkItem path='/reports' label={t("reports")} />
+      <NavLinkItem icon={<TbUsers />} path='/clients' label={t("clients")} />
+      <NavLinkItem
+        icon={<TbAlarm />}
+        path='/reminders'
+        label={t("reminders")}
+      />
+      <NavLinkItem
+        icon={<TbClipboardList />}
+        path='/activities'
+        label={t("activities")}
+      />
+      <NavLinkItem icon={<TbFileText />} path='/reports' label={t("reports")} />
+      <NavLinkItem
+        icon={<TbSettings />}
+        path='/settings'
+        label={t("settings")}
+      />
     </StyledMainNav>
   );
 }
