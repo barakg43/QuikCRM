@@ -33,7 +33,7 @@ public class SqlConnectionManger {
     @Bean
     private SqlConfiguration createSqlConfigurationFromFile(String filePath) throws IOException {
         ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-        SqlConfiguration sqlConfiguration = null;
+        SqlConfiguration sqlConfiguration;
         FileReader fileReader;
 
         fileReader = new FileReader(filePath);
