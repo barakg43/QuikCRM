@@ -1,4 +1,4 @@
-package main.server.http;
+package main.server.http.json.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

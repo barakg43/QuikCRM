@@ -1,5 +1,6 @@
-package main.server.http;
+package main.server.http.controlles;
 
+import main.server.http.json.dto.TaskRecord;
 import main.server.logger.ServerLogManager;
 import main.server.sql.SqlClient;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.List;
 
+import static main.server.ServerConstants.SQL_YAML_CONFIG_LOCATION;
+
 @RestController
 public class CustomerHttpService {
 
@@ -17,8 +20,7 @@ public class CustomerHttpService {
     private final ServerLogManager logManager;
 
     public CustomerHttpService(ServerLogManager logManager) {
-        sqlClient = null;
-//        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
+        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
         this.logManager = logManager;
     }
 
