@@ -1,7 +1,7 @@
 package main.server.sql.function;
 
 import main.server.ServerConstants;
-import main.server.http.TaskRecord;
+import main.server.http.json.dto.TaskRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
