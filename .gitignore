@@ -157,3 +157,4 @@ buildNumber.properties
 
 # "temporary" build files
 /target
+Frontend/src/components/side.html
