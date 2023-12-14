@@ -5,11 +5,8 @@ import main.server.ServerConstants;
 import main.server.http.json.dto.TaskRecord;
 import main.server.logger.ServerLogManager;
 import main.server.sql.function.SqlFunctionExecutor;
-import main.server.sql.function.SqlFunctionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,12 +31,15 @@ public class SqlClient {
 //        sqlConnectionManger=new SqlConnectionManger(sqlServerConfiguration);
 //        sqlClientLogger=LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
 //    }
-    public SqlClient( ServerLogManager logManager) {
+
+    public SqlClient(SqlFunctionExecutor sqlFunctionExecutor ,ServerLogManager logManager) {
         System.out.println("SqlClient ctor");
         sqlConnectionManger = new SqlConnectionManger(sqlConfigurationYamlFilePath);
+        this.sqlFunctionExecutor = sqlFunctionExecutor;
         this.logManager = logManager;
         sqlClientLogger = LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
     }
+
     @PostConstruct
     public void createSqlConnection() {
         System.out.println("createSqlConnection");
@@ -48,7 +48,7 @@ public class SqlClient {
             sqlConnectionManger.initializeSqlConnectionConfig();
             sqlClientLogger.info("Opening connection to sql server: " + sqlConnectionManger.getServerConfigDetails());
             sqlConnectionManger.getSqlConnectionConfig().getConnection().close();//test connection to sql server and close it
-            sqlFunctionExecutor = new SqlFunctionExecutor(sqlConnectionManger.getSqlConnectionConfig());
+            sqlFunctionExecutor.initializeJdbcTemplate(sqlConnectionManger.getSqlConnectionConfig());
             sqlClientLogger.info("Connection to sql server successfully.");
         } catch (SQLException | IOException e) {
             sqlClientLogger.error(e.getMessage());
@@ -56,16 +56,16 @@ public class SqlClient {
         }
     }
 
-    public String getCostumerNameByID(int id) {
-        return sqlFunctionManager.getCostumerNameByID(id);
-    }
-
-    public String getSupplierNameByID(int id) {
-        return sqlFunctionManager.getSupplierNameByID(id);
-    }
-
-    public List<TaskRecord> getClosedTaskForCustomer(int id) {
-        return sqlFunctionManager.getClosedTaskForCustomer(id);
-    }
+//    public String getCostumerNameByID(int id) {
+//        return sqlFunctionManager.getCostumerNameByID(id);
+//    }
+//
+//    public String getSupplierNameByID(int id) {
+//        return sqlFunctionManager.getSupplierNameByID(id);
+//    }
+//
+//    public List<TaskRecord> getClosedTaskForCustomer(int id) {
+//        return sqlFunctionManager.getClosedTaskForCustomer(id);
+//    }
 
 }
