@@ -1,7 +1,7 @@
 package main.server.sql.function;
 
 import main.server.ServerConstants;
-import main.server.http.TaskRecord;
+import main.server.http.json.dto.TaskRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,23 +29,16 @@ public class SqlFunctionManager {
         this.sqlDatabaseConfig = sqlDatabaseConfig;
         this.functionExecutorMap = new HashMap<>();
         sqlClientLogger = LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
-        sqlFunctionExecutor = new SqlFunctionExecutor(sqlDatabaseConfig);
+        sqlFunctionExecutor =null;
     }
 
 
-    public String getCostumerNameByID(int id) {
-        return sqlFunctionExecutor.executeScalarValueFunction(GET_CUSTOMER_SHORTNAME_BY_ID, id);
-    }
+//    public String getSupplierNameByID(int id) {
+//        return sqlFunctionExecutor.executeScalarValueFunction(GET_SUPPLIER_NAME_BY_ID, id);
+//    }
 
-
-    public String getSupplierNameByID(int id) {
-        return sqlFunctionExecutor.executeScalarValueFunction(GET_SUPPLIER_NAME_BY_ID, id);
-    }
-
-    public List<TaskRecord> getClosedTaskForCustomer(int id) {
-        return sqlFunctionExecutor.executeTableValueFunction(GET_CLOSED_TASK_FOR_CUSTOMER, id);
-
-    }
-
-
+//    public List<TaskRecord> getClosedTaskForCustomer(int id) {
+//        return sqlFunctionExecutor.executeTableValueFunction(GET_CLOSED_TASK_FOR_CUSTOMER, id);
+//
+//    }
 }

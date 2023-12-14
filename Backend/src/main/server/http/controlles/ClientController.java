@@ -1,7 +1,9 @@
-package main.server.http;
+package main.server.http.controlles;
 
+import main.server.http.HttpRequestExecutor;
+import main.server.http.json.dto.TaskRecord;
 import main.server.logger.ServerLogManager;
-import main.server.sql.SqlClient;
+import main.server.sql.executor.ClientSqlExecutor;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,20 +13,20 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-public class CustomerHttpService {
+public class ClientController {
 
-    final SqlClient sqlClient;
-    private final ServerLogManager logManager;
+   private final HttpRequestExecutor httpRequestExecutor;
+    final private ClientSqlExecutor clientSqlExecutor;
 
-    public CustomerHttpService(ServerLogManager logManager) {
-        sqlClient = null;
+    public ClientController(HttpRequestExecutor httpRequestExecutor, ClientSqlExecutor clientSqlExecutor) {
+        this.httpRequestExecutor = httpRequestExecutor;
 //        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
-        this.logManager = logManager;
+        this.clientSqlExecutor = clientSqlExecutor;
     }
 
     //    @PostConstruct //start sql connection after CustomerHttpService ctor
     private void startSqlConnection() {
-        sqlClient.createSqlConnection();
+//        sqlClient.createSqlConnection();
     }
     @GetMapping("/test")
     public String getTest(){
@@ -33,21 +35,22 @@ public class CustomerHttpService {
     }
     @GetMapping("/customer/name")
     public String getCostumerNameByID(@RequestParam int id) {
-        return sqlClient.getCostumerNameByID(id);
+        return httpRequestExecutor.executeHttpRequest(()->clientSqlExecutor.getClientNameByID(id),"/customer/name",HttpMethod.GET);
+//        return clientSqlExecutor.getClientNameByID(id);
     }
 
     @GetMapping("/customer/closed-tasks")
     public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {
-        return sqlClient.getClosedTaskForCustomer(id);
+//        return sqlClient.getClosedTaskForCustomer(id);
+        return null;
     }
 
     @GetMapping("/supplier/name")
     public String getSupplierNameByID(@RequestParam int id) {
-        String result;
+        String result="";
         Instant startTime = Instant.now();
-        result = sqlClient.getSupplierNameByID(id);
+//        result = sqlClient.getSupplierNameByID(id);
         Instant endTime = Instant.now();
-        logManager.addLogRecordToRequestLoggerInfoLevel("/supplier/name", HttpMethod.GET);
         return result;
     }
 }

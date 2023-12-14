@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 @RestController
 @RequestMapping("/logs")
 @Component("logManager")
 public class ServerLogManager {
-    static private long requestCounter = 1L;
+    static private AtomicLong requestCounter = new AtomicLong(1L);
     private final Logger requestLogger;
     private final Logger sqlLogger;
     private final String requestLoggerInfoLevelFormat = "Incoming request | #%d | resource: %s | HTTP Verb %s";
@@ -33,29 +34,27 @@ public class ServerLogManager {
     }
 
     public static long getRequestCounter() {
-        return requestCounter;
+        return requestCounter.longValue();
     }
 
     public void incrementRequestCounter() {
-        ++requestCounter;
+        requestCounter.getAndIncrement();
     }
 
 
     public void addLogRecordToRequestLoggerInfoLevel(String resourceName, HttpMethod method) {
-        String record = String.format(requestLoggerInfoLevelFormat, requestCounter, resourceName, method);
+        String record = String.format(requestLoggerInfoLevelFormat, requestCounter.get(), resourceName, method);
         requestLogger.info(getFormattedLogRecord(record));
-
-
     }
 
     public void addLogRecordToRequestLoggerDebugLevel(Duration durationTime) {
-        String record = String.format(requestLoggerDebugLevelFormat, requestCounter, durationTime.toMillis());
+        String record = String.format(requestLoggerDebugLevelFormat, requestCounter.get(), durationTime.toMillis());
         requestLogger.debug(getFormattedLogRecord(record));
     }
 
     private String getFormattedLogRecord(String logMassage) {
 
-        return String.format(LOG_RECORD_FORMAT, logMassage, requestCounter);
+        return String.format(LOG_RECORD_FORMAT, logMassage, requestCounter.get());
     }
 
     public void addLogRecordToTodoLogger(LogLevel logLevel, String logMassage) {

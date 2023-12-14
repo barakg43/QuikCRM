@@ -21,8 +21,8 @@ public class ServerApplication extends SpringBootServletInitializer {
     }
 
     private static void testFunction() {
-        SqlClient sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, new ServerLogManager());
-        sqlClient.createSqlConnection();
+//        SqlClient sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, new ServerLogManager());
+//        sqlClient.createSqlConnection();
         int loopAmount = 50;
         Instant start, end;
 
@@ -30,7 +30,7 @@ public class ServerApplication extends SpringBootServletInitializer {
         for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
             Instant start1 = Instant.now();
-            sqlClient.getSupplierNameByID(10);
+//            sqlClient.getSupplierNameByID(10);
             Instant end1 = Instant.now();
             supplierTotal1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
@@ -39,7 +39,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 //            }).start();
 //            new Thread(()->{
             Instant start3 = Instant.now();
-            sqlClient.getClosedTaskForCustomer(10);
+//            sqlClient.getClosedTaskForCustomer(10);
             Instant end3 = Instant.now();
             closedTaskTotalTime.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
