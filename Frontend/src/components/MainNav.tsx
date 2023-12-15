@@ -25,12 +25,11 @@ const StyledNavLink = styled(NavLink)`
   border-radius: var(--radius-sm);
   font-weight: var(--weight-medium);
   align-items: center;
-  overflow-x: hidden;
+
   gap: 0.5rem;
-  /* padding-inline-start: var(--scale-000); */
-  margin-block-start: var(--size-1);
+  padding-inline-start: var(--scale-000);
   /* transition-delay: 300ms; */
-  padding: var(--scale-000) var(--scale-00);
+  /* padding: var(--scale-000) var(--scale-00); */
   & svg {
     //for the icon
     min-width: var(--scale-1);
@@ -41,24 +40,9 @@ const StyledNavLink = styled(NavLink)`
     opacity: 0;
     color: var(--color-emerald-800);
     transition: opacity 300ms ease-in-out;
-    overflow-x: hidden;
     font-weight: var(--weight-medium);
   }
-  @keyframes showHide {
-    /* Chrome, Safari */
-    0% {
-      width: 100%;
-    }
-    40% {
-      width: 0%;
-    }
-    60% {
-      width: 0%;
-    }
-    100% {
-      width: 100%;
-    }
-  }
+
   &:hover {
     background-color: var(--color-primary-500);
   }
