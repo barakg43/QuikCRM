@@ -1,14 +1,13 @@
 package main.server.sql.function;
 
 import main.server.ServerConstants;
-import main.server.http.json.dto.TaskRecord;
+import main.server.sql.dto.TaskRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
