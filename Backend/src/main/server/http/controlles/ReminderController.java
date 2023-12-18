@@ -1,18 +1,15 @@
 package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
-import main.server.http.json.dto.reminder.InvoiceReminderRecord;
-import main.server.http.json.dto.reminder.ReminderRecord;
-import main.server.http.json.dto.reminder.RenewReminderRecord;
-import main.server.sql.executor.ClientSqlExecutor;
+import main.server.sql.dto.reminder.InvoiceReminderRecord;
+import main.server.sql.dto.reminder.ServiceRenewReminderRecord;
+import main.server.sql.dto.reminder.RenewReminderRecord;
 import main.server.sql.executor.ReminderSqlExecutor;
-import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,14 +24,14 @@ public class ReminderController {
     }
 
     @GetMapping("/renews")
-    public List<RenewReminderRecord> getRenewsForTheNext2Month(){
-        return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getRenewsForTheNext2Month,"/api/reminders/renews", HttpMethod.GET);
+    public List<RenewReminderRecord> getRenews(){
+        return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getRenews,"/api/reminders/renews", HttpMethod.GET);
 
 
     }
-    @GetMapping("/")
-    public List<ReminderRecord> getReminders(){
-        return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getReminders,"/api/reminders", HttpMethod.GET);
+    @GetMapping("/service-renews")
+    public List<ServiceRenewReminderRecord> getServiceRenewReminders(){
+        return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getServiceRenewReminders,"/api/reminders/service-renews", HttpMethod.GET);
 
     }
     @GetMapping("/invoices")
