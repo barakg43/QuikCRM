@@ -2,7 +2,6 @@ package main.server.sql;
 
 import jakarta.annotation.PostConstruct;
 import main.server.ServerConstants;
-import main.server.http.json.dto.TaskRecord;
 import main.server.logger.ServerLogManager;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 import static main.server.ServerConstants.SQL_YAML_CONFIG_LOCATION;
 
