@@ -1,8 +1,8 @@
 package main.server.sql.executor;
 
-import main.server.http.json.dto.reminder.InvoiceReminderRecord;
-import main.server.http.json.dto.reminder.ReminderRecord;
-import main.server.http.json.dto.reminder.RenewReminderRecord;
+import main.server.sql.dto.reminder.InvoiceReminderRecord;
+import main.server.sql.dto.reminder.ServiceRenewReminderRecord;
+import main.server.sql.dto.reminder.RenewReminderRecord;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.stereotype.Repository;
 
@@ -18,17 +18,17 @@ public class ReminderSqlExecutor {
         this.sqlFunctionExecutor = sqlFunctionExecutor;
     }
 
-    public List<RenewReminderRecord> getRenewsForTheNext2Month(){
+    public List<RenewReminderRecord> getRenews(){
         return sqlFunctionExecutor.executeTableValueFunction("fncSystemsDetailsForDate", RenewReminderRecord.class, LocalDateTime.now());
 
     }
-    public List<ReminderRecord> getReminders(){
-        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ReminderRecord.class, LocalDateTime.now());
+    public List<ServiceRenewReminderRecord>  getServiceRenewReminders(){
+        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class, LocalDateTime.now());
 
     }
     public List<InvoiceReminderRecord> getInvoiceReminders()
     {
-        return sqlFunctionExecutor.executeTableValueFunction("fncInvoicesForContracts_New", InvoiceReminderRecord.class, LocalDateTime.now());
+        return sqlFunctionExecutor.executeTableValueFunction("fncInvoicesForContracts", InvoiceReminderRecord.class, LocalDateTime.now());
 
     }
 }
