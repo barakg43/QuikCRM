@@ -1,6 +1,10 @@
 {
   "sidebar": {
     "account": "חשבון",
-    "settings": "הגדרות"
+    "settings": "הגדרות",
+    "reminders": "תזכורות",
+    "activities": "פעילויות",
+    "clients": "לקוחות",
+    "reports": "דוחות"
   }
 }

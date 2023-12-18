@@ -1,5 +1,11 @@
+import RemindersTable from "../features/reminders/RemindersTable";
+
 function Reminders() {
-  return <div>Reminders</div>;
+  return (
+    <div>
+      <RemindersTable />
+    </div>
+  );
 }
 
 export default Reminders;

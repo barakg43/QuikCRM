@@ -3,17 +3,19 @@ import Logo from "./Logo";
 import MainNav from "./MainNav";
 
 const StyledSideBar = styled.aside`
-  display: flex;
+  display: grid;
   /* grid-row: 1/-1; */
+  grid-template-rows: var(--size-44) 1fr;
   flex-direction: column;
   align-items: start;
-  background-color: var(--color-emerald-500);
+  color: var(--color-emerald-100);
+  background-color: var(--color-emerald-900);
   border-right: 1px solid var(--color-emerald-200);
   transition: width 300ms ease-in-out;
   overflow-x: clip;
-  width: var(--size-20);
+  width: 3.25rem;
   &:hover {
-    width: var(--size-64);
+    width: 9rem;
   }
 
   &:hover span {
@@ -24,7 +26,7 @@ const StyledSideBar = styled.aside`
 function Sidebar() {
   return (
     <StyledSideBar>
-      {/* <Logo /> */}
+      <Logo />
       <MainNav />
     </StyledSideBar>
   );

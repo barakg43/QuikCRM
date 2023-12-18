@@ -10,11 +10,21 @@ const StyledAppLayout = styled.div`
   /* grid-template-rows: auto 1fr;
   grid-template-columns: 10rem 1fr; */
 `;
-const Main = styled.main`
+const Main = styled.div`
   /* display: flex; */
   /* flex-direction: column; */
   max-width: 120rem;
   flex: 1 1 0%;
+  background-color: var(--color-emerald-200);
+`;
+const Container = styled.main`
+  display: flex;
+  justify-content: center;
+  flex: 1 1 0;
+  max-width: 120rem;
+  margin: 0 auto;
+  flex-direction: column;
+  padding: 1rem 1.5rem 0;
 `;
 
 function AppLayout() {
@@ -23,7 +33,9 @@ function AppLayout() {
       <SideBar />
       <Main>
         <Header />
-        <Outlet />
+        <Container>
+          <Outlet />
+        </Container>
       </Main>
     </StyledAppLayout>
   );

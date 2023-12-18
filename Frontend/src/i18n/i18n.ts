@@ -18,7 +18,7 @@ i18n
       // Adjust the path based on your folder structure
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
-    fallbackLng: "en",
+    fallbackLng: "he",
     debug: true,
 
     interpolation: {

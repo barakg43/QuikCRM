@@ -4,6 +4,7 @@ import {
   TbAlarm,
   TbClipboardList,
   TbFileText,
+  TbReportAnalytics,
   TbSettings,
   TbUsers,
 } from "react-icons/tb";
@@ -13,7 +14,7 @@ import { ReactElement, ReactNode } from "react";
 const StyledMainNav = styled.menu`
   font-size: var(--size-4);
   justify-content: center;
-  padding: 1px 2px;
+  padding: 0 var(--scale-0) var(--scale-0) var(--scale-0) !important;
   display: flex;
   flex-direction: column;
   gap: var(--scale-000);
@@ -27,7 +28,7 @@ const StyledNavLink = styled(NavLink)`
   align-items: center;
 
   gap: 0.5rem;
-  padding-inline-start: var(--scale-000);
+  /* padding-inline-start: var(--scale-000); */
   /* transition-delay: 300ms; */
   /* padding: var(--scale-000) var(--scale-00); */
   & svg {
@@ -38,7 +39,6 @@ const StyledNavLink = styled(NavLink)`
   & span {
     font-size: var(--scale-1);
     opacity: 0;
-    color: var(--color-emerald-800);
     transition: opacity 300ms ease-in-out;
     font-weight: var(--weight-medium);
   }
@@ -78,7 +78,11 @@ function MainNav() {
         path='/activities'
         label={t("activities")}
       />
-      <NavLinkItem icon={<TbFileText />} path='/reports' label={t("reports")} />
+      <NavLinkItem
+        icon={<TbReportAnalytics />}
+        path='/reports'
+        label={t("reports")}
+      />
       <NavLinkItem
         icon={<TbSettings />}
         path='/settings'
