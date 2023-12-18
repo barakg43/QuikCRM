@@ -1,8 +1,7 @@
 package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
-import main.server.http.json.dto.TaskRecord;
-import main.server.logger.ServerLogManager;
+import main.server.sql.dto.TaskRecord;
 import main.server.sql.executor.ClientSqlExecutor;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;

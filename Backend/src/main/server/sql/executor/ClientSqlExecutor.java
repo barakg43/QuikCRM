@@ -1,6 +1,6 @@
 package main.server.sql.executor;
 
-import main.server.http.json.dto.TaskRecord;
+import main.server.sql.dto.TaskRecord;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.stereotype.Repository;
 
