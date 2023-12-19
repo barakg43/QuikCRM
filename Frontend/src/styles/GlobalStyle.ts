@@ -3,17 +3,27 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
 :root{
     &, &.light-mode{
-        --color-primary-100:var(--color-teal-100)
-        --color-primary-200:var(--color-teal-200)
-        --color-primary-300:var(--color-teal-300)
-        --color-primary-400:var(--color-teal-400)
-        --color-primary-500:var(--color-teal-500)
-        --color-primary-600:var(--color-teal-600)
-        --color-primary-700:var(--color-teal-700)
-        --color-primary-800:var(--color-teal-800)
-        --color-primary-900:var(--color-teal-900)
-        --color-primary-950:var(--color-teal-950)
+        --color-primary-100:var(--color-gray-100);
+        --color-primary-200:var(--color-gray-200);
+        --color-primary-300:var(--color-gray-300);
+        --color-primary-400:var(--color-gray-400);
+        --color-primary-500:var(--color-gray-500);
+        --color-primary-600:var(--color-gray-600);
+        --color-primary-700:var(--color-gray-700);
+        --color-primary-800:var(--color-gray-800);
+        --color-primary-900:var(--color-gray-900);
+        --color-primary-950:var(--color-gray-950);
     }
+    --color-brand-100:var(--color-teal-100);
+    --color-brand-200:var(--color-teal-200);
+    --color-brand-300:var(--color-teal-300);
+    --color-brand-400:var(--color-teal-400);
+    --color-brand-500:var(--color-teal-500);
+    --color-brand-600:var(--color-teal-600);
+    --color-brand-700:var(--color-teal-700);
+    --color-brand-800:var(--color-teal-800);
+    --color-brand-900:var(--color-teal-900);
+    --color-brand-950:var(--color-teal-950);
 }
   //     CSS RESET
 
