@@ -3,15 +3,19 @@ import styled from "styled-components";
 const StyledLogo = styled.div`
   text-align: center;
   width: inherit;
-  background-color: var(--color-emerald-950);
-  padding-bottom: var(--scale-00);
+  min-height: 5.25rem;
+
+  background-color: var(--color-primary-950);
+  /* padding-bottom: var(--scale-00); */
+  /* margin-bottom: var(--scale-5); */
 `;
 
 const Img = styled.img`
   padding: var(--size-2) var(--size-2) 0 var(--size-2);
-  max-width: 5rem;
+  /* max-width: 5rem; */
   height: auto;
-  width: inherit;
+  max-height: 5.25rem;
+  width: auto;
 `;
 
 function Logo() {
