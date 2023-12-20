@@ -1,6 +1,9 @@
 {
   "invoice": {
     "dateOfDebit": "תאריך חיוב",
-    "renew": "חידוש"
+    "renew": "חידוש",
+    "month": "חודש",
+    "quarter": "רבעון",
+    "year": "שנה"
   }
 }
