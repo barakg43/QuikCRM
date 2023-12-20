@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { getAllReminders } from "../../services/apiReminders";
-import { useReminders } from "./useReminders";
+import { useReminders } from "./hooks/useReminders";
 import InvoiceList from "./InvoiceList";
 
 const StyledRemindersTable = styled.div``;
