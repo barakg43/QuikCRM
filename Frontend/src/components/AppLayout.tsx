@@ -6,16 +6,11 @@ import { Outlet } from "react-router-dom";
 const StyledAppLayout = styled.div`
   display: flex;
   height: 100vh;
-
-  /* grid-template-rows: auto 1fr;
-  grid-template-columns: 10rem 1fr; */
 `;
 const Main = styled.div`
-  /* display: flex; */
-  /* flex-direction: column; */
   max-width: 120rem;
   flex: 1 1 0%;
-  background-color: var(--color-emerald-200);
+  background-color: var(--color-primary-100);
 `;
 const Container = styled.main`
   display: flex;
