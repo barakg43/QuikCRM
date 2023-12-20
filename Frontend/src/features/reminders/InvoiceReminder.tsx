@@ -1,28 +1,49 @@
 import styled from "styled-components";
+import Row from "../../components/Row";
+import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
+import Heading from "../../components/Heading";
+import i18n from "i18next";
+import Select from "../../components/Select";
+import { useState } from "react";
 
 const StyledInvoiceReminder = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex: 1 1 0;
-  font-size: var(--scale-00);
-  border: 1px var(--color-emerald-950) solid;
+  box-sizing: border-box;
+  gap: 1rem;
+  font-size: var(--scale-000);
+  border: 1px var(--color-primary-600) solid;
   border-radius: var(--radius-sm);
-  justify-content: center;
+  justify-content: space-between;
   padding: 0.1rem var(--scale-1);
+  /* margin: 4px; */
+  &:hover {
+    border: 2px var(--color-primary-950) solid;
+    width: calc(100% - 1px);
+    height: calc(100% - 10px);
+  }
+
+  &:hover button {
+    opacity: 1;
+  }
+  & button {
+    /* padding: 10px; */
+    /* max-height: max-content; */
+    opacity: 0.5;
+  }
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
 const H3 = styled.h3`
-  font-size: var(--scale-1);
+  font-size: var(--scale-000);
+  margin-inline-start: var(--scale-000);
 `;
 
 const Date = styled.span`
-  font-size: var(--scale-000);
+  font-size: var(--scale-0000);
 `;
+
 const ContractID = styled.span``;
 // {
 //     "CustName": null,
@@ -37,6 +58,7 @@ type InvoiceReminderProps = {
   InvoiceNum: string | null;
   ContractID: string;
   DateOfDebit: string;
+  reminderRemark?: number;
   Renewal: number;
 };
 
@@ -44,16 +66,50 @@ function InvoiceReminder({
   CustName,
   InvoiceNum,
   ContractID,
+  reminderRemark,
   DateOfDebit,
   Renewal,
 }: InvoiceReminderProps) {
+  const { t } = useTranslation("reminders", { keyPrefix: "invoice" });
+  const dateString = `${t("dateOfDebit")} : ${DateOfDebit}`;
+  const [renewPeriod, setRenewPeriod] = useState(12);
+  const renewOptions = [
+    {
+      label: t("month"),
+      value: 1,
+    },
+    {
+      label: t("quarter"),
+      value: 3,
+    },
+    {
+      label: t("year"),
+      value: 12,
+    },
+  ];
+  function handleOnChangeRenewPeriod(e: React.ChangeEvent<HTMLSelectElement>) {
+    setRenewPeriod(+e.target.value);
+  }
+  function renewReminder() {}
   return (
     <StyledInvoiceReminder>
-      <Header>
-        <span>{ContractID}</span>
-        <H3>{CustName}</H3>
-        <Date>{DateOfDebit}</Date>
-      </Header>
+      <Row>
+        <Row type='horizontal' gap={0.5}>
+          <span>{ContractID}</span>
+          <Heading as='h3'>{CustName}</Heading>
+        </Row>
+        <Row type='horizontal' gap={0.7}>
+          <Date>{dateString}</Date>
+          <Select
+            options={renewOptions}
+            value={renewPeriod}
+            onChange={handleOnChangeRenewPeriod}
+          />
+          <Button size='small' variation='secondary' onClick={renewReminder}>
+            {t("renew")}
+          </Button>
+        </Row>
+      </Row>
     </StyledInvoiceReminder>
   );
 }

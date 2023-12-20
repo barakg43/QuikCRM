@@ -14,7 +14,7 @@ import { ReactElement, ReactNode } from "react";
 const StyledMainNav = styled.menu`
   font-size: var(--size-4);
   justify-content: center;
-  padding: 0 var(--scale-0) var(--scale-0) var(--scale-0) !important;
+  padding: 0 var(--scale-00) var(--scale-00) var(--scale-00) !important;
   display: flex;
   flex-direction: column;
   gap: var(--scale-000);
@@ -26,9 +26,10 @@ const StyledNavLink = styled(NavLink)`
   border-radius: var(--radius-sm);
   font-weight: var(--weight-medium);
   align-items: center;
+  text-align: center;
 
   gap: 0.5rem;
-  /* padding-inline-start: var(--scale-000); */
+  padding: 0 0.15rem;
   /* transition-delay: 300ms; */
   /* padding: var(--scale-000) var(--scale-00); */
   & svg {
@@ -37,16 +38,19 @@ const StyledNavLink = styled(NavLink)`
     min-height: var(--scale-1);
   }
   & span {
+    display: block;
     font-size: var(--scale-1);
     opacity: 0;
     transition: opacity 300ms ease-in-out;
     font-weight: var(--weight-medium);
+    margin: 2px;
   }
 
   &:hover {
     background-color: var(--color-primary-500);
   }
 `;
+const Span = styled.span``;
 type NavLinkItemProps = {
   path: string;
   label: string;
@@ -58,7 +62,7 @@ function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
     <li>
       <StyledNavLink to={path}>
         {icon}
-        <span>{label}</span>
+        <Span>{label}</Span>
       </StyledNavLink>
     </li>
   );
