@@ -14,6 +14,7 @@
   --scale-8: 4.5rem;
   --scale-9: 6rem;
   --scale-10: 8rem;
+  --scale-0000: 0.5rem;
   --scale-000: 0.75rem;
   --scale-00: 0.875rem;
   --scale-fluid-0: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
@@ -311,6 +312,7 @@
   --color-emerald-800: #065f46;
   --color-emerald-900: #064e3b;
   --color-emerald-950: #022c22;
+
   --color-emerald: var(--color-emerald-500);
   --color-teal-50: #f0fdfa;
   --color-teal-100: #ccfbf1;

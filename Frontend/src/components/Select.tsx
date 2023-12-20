@@ -6,14 +6,15 @@ export type Option = {
   label: string | number | undefined;
 };
 
-const StyledSelect = styled.select<{ type: "white" | "dark" }>`
+const StyledSelect = styled.select<{ type?: "white" | "dark" }>`
   font-size: var(--scale-00);
   padding: var(--size-1);
+  border-radius: var(--radius-sm);
   border: 1px solid
     ${(props) =>
       props.type === "white"
-        ? "var(--color-grey-100)"
-        : "var(--color-grey-300)"};
+        ? "var(--color-primary-100)"
+        : "var(--color-primary-300)"};
 `;
 
 type SelectProps = {

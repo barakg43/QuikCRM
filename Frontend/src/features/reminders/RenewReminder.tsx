@@ -13,7 +13,7 @@ import styled from "styled-components";
 const StyledRenewReminder = styled.div``;
 
 function RenewReminder() {
-  return <StyledRenewReminder>RenewReminder</StyledRenewReminder>;
+  return <StyledRenewReminder></StyledRenewReminder>;
 }
 
 export default RenewReminder;

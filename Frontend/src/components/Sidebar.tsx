@@ -3,14 +3,16 @@ import Logo from "./Logo";
 import MainNav from "./MainNav";
 
 const StyledSideBar = styled.aside`
-  display: grid;
+  display: flex;
   /* grid-row: 1/-1; */
-  grid-template-rows: var(--size-44) 1fr;
+  /* grid-template-columns: auto; */
+  /* grid-template-rows: var(--size-44) 1fr; */
   flex-direction: column;
-  align-items: start;
-  color: var(--color-emerald-100);
-  background-color: var(--color-emerald-900);
-  border-right: 1px solid var(--color-emerald-200);
+  /* align-items: start; */
+  gap: var(--scale-5);
+  color: var(--color-primary-100);
+  background-color: var(--color-primary-950);
+  border-right: 1px solid var(--color-primary-200);
   transition: width 300ms ease-in-out;
   overflow-x: clip;
   width: 3.25rem;
