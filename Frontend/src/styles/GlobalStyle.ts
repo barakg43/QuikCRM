@@ -3,6 +3,7 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
 :root{
     &, &.light-mode{
+        --color-primary-0:var(--color-white);
         --color-primary-100:var(--color-gray-100);
         --color-primary-200:var(--color-gray-200);
         --color-primary-300:var(--color-gray-300);
