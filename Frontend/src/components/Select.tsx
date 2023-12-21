@@ -7,7 +7,7 @@ export type Option = {
 };
 
 const StyledSelect = styled.select<{ type?: "white" | "dark" }>`
-  font-size: var(--scale-00);
+  font-size: var(--scale-000);
   padding: var(--size-1);
   border-radius: var(--radius-sm);
   border: 1px solid
