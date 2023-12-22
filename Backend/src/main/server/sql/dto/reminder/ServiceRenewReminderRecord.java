@@ -3,12 +3,11 @@ package main.server.sql.dto.reminder;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.sql.Date;
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ServiceRenewReminderRecord {
 
     private Date dateOfReminder, timeOfReminder;
     private String reminderID,reminderRemark, responsibleUserName;
-    private int closed;
+    private Integer closed;
 
     public void setDateOfReminder(Date dateOfReminder) {
         this.dateOfReminder = dateOfReminder;
@@ -26,7 +25,7 @@ public class ServiceRenewReminderRecord {
         this.reminderRemark = reminderRemark;
     }
 
-    public void setClosed(int closed) {
+    public void setClosed(Integer closed) {
         this.closed = closed;
     }
 

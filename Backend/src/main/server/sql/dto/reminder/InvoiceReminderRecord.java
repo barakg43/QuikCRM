@@ -1,33 +1,33 @@
 package main.server.sql.dto.reminder;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import java.sql.Date;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+
 public class InvoiceReminderRecord {
 
-   private String CustName, InvoiceNum,ContractID;
-   private Date DateOfDebit;
-   private int Renewal;
+   private String custShortName, invoiceNum,contractID;
+   private Date dateOfDebit;
+   private Integer renewal;
 
-   public void setCustName(String custName) {
-      CustName = custName;
+
+      public void setCustShortName(String custShortName) {
+      custShortName = custShortName;
    }
 
    public void setInvoiceNum(String invoiceNum) {
-      InvoiceNum = invoiceNum;
+      invoiceNum = invoiceNum;
    }
 
    public void setContractID(String contractID) {
-      ContractID = contractID;
+      contractID = contractID;
    }
 
    public void setDateOfDebit(Date dateOfDebit) {
-      DateOfDebit = dateOfDebit;
+      dateOfDebit = dateOfDebit;
    }
 
-   public void setRenewal(int renewal) {
-      Renewal = renewal;
+   public void setRenewal(Integer renewal) {
+      renewal = renewal;
    }
+
 }

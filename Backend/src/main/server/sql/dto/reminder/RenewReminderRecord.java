@@ -2,10 +2,9 @@ package main.server.sql.dto.reminder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RenewReminderRecord {
    private String CustShortName,SystemDetailDescription,InternalIP, ExternalIP, UserName, Password, ValidityTill;
-   private int SystemDetailID,CustomerID;
+   private Integer SystemDetailID,CustomerID;
    public void setCustShortName(String custShortName) {
       CustShortName = custShortName;
    }
@@ -34,11 +33,11 @@ public class RenewReminderRecord {
       ValidityTill = validityTill;
    }
 
-   public void setSystemDetailID(int systemDetailID) {
+   public void setSystemDetailID(Integer systemDetailID) {
       SystemDetailID = systemDetailID;
    }
 
-   public void setCustomerID(int customerID) {
+   public void setCustomerID(Integer customerID) {
       CustomerID = customerID;
    }
 
