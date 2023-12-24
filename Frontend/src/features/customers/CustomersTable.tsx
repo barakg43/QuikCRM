@@ -2,16 +2,14 @@ import Table from "../../components/Table";
 import { useCustomers } from "./useCustomers";
 import CustomerRow from "./CustomerRow";
 
-
-const CustomerStatuses =[
-  | "in-service"
-  | "out-of-service"
-  | "bank-hours"
-  | "cloud-server"
-  | "cloud-mail"
-  | "charge"
-  | undefined;
-]
+const CustomerStatuses = [
+  "in-service",
+  "out-of-service",
+  "bank-hours",
+  "cloud-server",
+  "cloud-mail",
+  "charge",
+];
 
 function CustomersTable() {
   const { customers, isLoading, error } = useCustomers();
