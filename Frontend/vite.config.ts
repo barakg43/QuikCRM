@@ -8,8 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       // string shorthand: http://localhost:5173/foo -> http://localhost:4567/foo
-      "/quik": {
-        target: "http://127.0.0.1:8081",
+      "/assets": {
+        target: "http://127.0.0.1:8080",
         changeOrigin: true,
         secure: false,
         configure: (proxy, _options) => {
