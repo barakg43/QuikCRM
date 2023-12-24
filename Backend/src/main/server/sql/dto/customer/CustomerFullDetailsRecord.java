@@ -9,50 +9,29 @@ import org.springframework.boot.jackson.JsonComponent;
 public class CustomerFullDetailsRecord {
     Integer customerID,activeContractID;
 
-    private String customerShortName,
-            customerName,
-            customerIdentificationNumber,
-            customerMainPhone,
-            customerMainFax,
-            customerMainEMail,
-            customerWebSite,
-            remarks,
-            address,
-            city,
-            postalCode,
-            addressRemarks,
-            contactPersonName,
-            contactPersonPost,
-            contactPersonPhone,
-            contactPersonMobilePhone,
-            contactPersonFax,
-            contactPersonEMail;
+    private String customerShortName;
+    private String customerName;
+    private String customerStatus;
 
-    @Override
-    public String toString() {
-        return "CustomerFullDetailsRecord{" +
-                "customerID=" + customerID +
-                ", activeContractID=" + activeContractID +
-                ", customerShortName='" + customerShortName + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", customerIdentificationNumber='" + customerIdentificationNumber + '\'' +
-                ", customerMainPhone='" + customerMainPhone + '\'' +
-                ", customerMainFax='" + customerMainFax + '\'' +
-                ", customerMainEMail='" + customerMainEMail + '\'' +
-                ", customerWebSite='" + customerWebSite + '\'' +
-                ", remarks='" + remarks + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", addressRemarks='" + addressRemarks + '\'' +
-                ", contactPersonName='" + contactPersonName + '\'' +
-                ", contactPersonPost='" + contactPersonPost + '\'' +
-                ", contactPersonPhone='" + contactPersonPhone + '\'' +
-                ", contactPersonMobilePhone='" + contactPersonMobilePhone + '\'' +
-                ", contactPersonFax='" + contactPersonFax + '\'' +
-                ", contactPersonEMail='" + contactPersonEMail + '\'' +
-                '}';
-    }
+
+
+    private String customerIdentificationNumber;
+    private String customerMainPhone;
+    private String customerMainFax;
+    private String customerMainEMail;
+    private String customerWebSite;
+    private String remarks;
+    private String address;
+    private String city;
+    private String postalCode;
+    private String addressRemarks;
+    private String contactPersonName;
+    private String contactPersonPost;
+    private String contactPersonPhone;
+    private String contactPersonMobilePhone;
+    private String contactPersonFax;
+    private String contactPersonEMail;
+
 
     public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
@@ -61,7 +40,9 @@ public class CustomerFullDetailsRecord {
     public void setActiveContractID(Integer activeContractID) {
         this.activeContractID = activeContractID;
     }
-
+    public void setCustomerStatus(String customerStatus) {
+        this.customerStatus = customerStatus;
+    }
     public void setCustomerShortName(String customerShortName) {
         this.customerShortName = customerShortName;
     }
