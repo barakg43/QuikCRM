@@ -71,7 +71,11 @@ function MainNav() {
   const { t } = useTranslation("appLayout", { keyPrefix: "sidebar" });
   return (
     <StyledMainNav>
-      <NavLinkItem icon={<TbUsers />} path='/clients' label={t("clients")} />
+      <NavLinkItem
+        icon={<TbUsers />}
+        path='/customers'
+        label={t("customers")}
+      />
       <NavLinkItem
         icon={<TbAlarm />}
         path='/reminders'
