@@ -1,0 +1,17 @@
+{
+  "table": {
+    "customerId": "מספר הלקוח",
+    "customerName": "שם הלקוח",
+    "address": "כתובת",
+    "city": "עיר",
+    "status": "סטטוס"
+  },
+  "status": {
+    "in-service": "שירות",
+    "out-of-service": "הפסקת שירות",
+    "bank-hours": "בנק שעות",
+    "cloud-server": "שרת בענן",
+    "cloud-mail": "מיילים בענן",
+    "charge": "חיוב"
+  }
+}
