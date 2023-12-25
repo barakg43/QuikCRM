@@ -24,15 +24,15 @@ type BodyProps<T> = {
 };
 function Body<T>({ data, render }: BodyProps<T>) {
   if (data == undefined || data == null) return <EmptyTable />;
-
+  console.log(data);
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
 const StyledTable = styled.div`
-  font-size: var(--scale-000);
+  font-size: var(--scale-0000);
   border: 1px solid var(--color-primary-500);
   background-color: var(--color-primary-0);
-  border-radius: 7px;
+  border-radius: var(--radius-sm);
 `;
 type TableProps = {
   columns: string;
@@ -48,7 +48,6 @@ function Table({ columns, children }: TableProps) {
 
 const StyledHeader = styled(CommonRow)`
   padding: var(--scale-0);
-  
 `;
 type ValueType = {
   columns: string;
@@ -62,7 +61,9 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-const StyledRow = styled(CommonRow)``;
+const StyledRow = styled(CommonRow)`
+  padding: 0.2rem var(--scale-0000);
+`;
 function Row({ children }: { children: ReactNode }) {
   const { columns } = useContext(TableContext);
   return (
