@@ -6,6 +6,7 @@ const CommonRow = styled.div<{ columns: string }>`
   display: grid;
   grid-template-columns: ${(props) => props.columns};
   column-gap: var(--scale-00);
+  align-items: center;
 `;
 
 const Footer = styled.footer``;
@@ -33,6 +34,7 @@ const StyledTable = styled.div`
   border: 1px solid var(--color-primary-500);
   background-color: var(--color-primary-0);
   border-radius: var(--radius-sm);
+  text-align: center;
 `;
 type TableProps = {
   columns: string;
