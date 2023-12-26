@@ -10,14 +10,12 @@ const StyledAppLayout = styled.div`
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 120rem;
   /* flex: 1 1 0%; */
   background-color: var(--color-primary-0);
 `;
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  max-width: 120rem;
   gap: 3.2rem;
   margin: 0 auto;
   flex-direction: column;
