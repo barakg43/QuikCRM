@@ -1,27 +1,37 @@
+import { useTranslation } from "react-i18next";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Table from "../../components/Table";
-import { useCustomers } from "./useCustomers";
 import CustomerRow from "./CustomerRow";
+import { useCustomers } from "./useCustomers";
 
-const CustomerStatuses = [
+export const customerStatuses = [
   "in-service",
   "out-of-service",
   "bank-hours",
   "cloud-server",
   "cloud-mail",
   "charge",
-];
-
+] as const;
+export type CustomerStatus = (typeof customerStatuses)[number] | null;
+export type CustomerRowProps = {
+  customerID: number;
+  customerName: string;
+  address: string;
+  city: string;
+  status: CustomerStatus;
+};
 function CustomersTable() {
   const { customers, isLoading, error } = useCustomers();
-
+  const { t } = useTranslation("customers", { keyPrefix: "table" });
+  if (isLoading) return <LoadingSpinner />;
   return (
     <Table columns={"1fr ".repeat(5)}>
       <Table.Header>
-        <span>Customer Id</span>
-        <span>Customer Name</span>
-        <span>Address</span>
-        <span>city</span>
-        <span>Status</span>
+        <span>{t("customerId")}</span>
+        <span>{t("customerName")}</span>
+        <span>{t("address")}</span>
+        <span>{t("city")}</span>
+        <span>{t("status")}</span>
       </Table.Header>
       <Table.Body
         data={customers}
@@ -31,7 +41,8 @@ function CustomersTable() {
             customerName={customer.customerShortName}
             address={customer.address}
             city={customer.city}
-            status={customer.status}
+            status={customer.customerStatus}
+            key={customer.customerID}
           />
         )}
       />
