@@ -61,7 +61,7 @@ const GlobalStyle = createGlobalStyle`
   cursor: not-allowed;
 }
 
-  body,html {
+  body {
     font-family: "Poppins", sans-serif;
     color: var(--color-grey-700);
     margin: 0;
