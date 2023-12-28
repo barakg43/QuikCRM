@@ -45,7 +45,6 @@ function Pagination({ totalItemsAmount }: { totalItemsAmount: number }) {
   const currentPage = Number(searchParams.get("page")) || 1;
   const pagesCount = getPagesAmount(totalItemsAmount);
   if (pagesCount <= 1) return null;
-  console.log(pagesCount);
   const isRTL = document.dir === "rtl";
   const updatePageQuery = (pageNumber: number) => {
     searchParams.set("page", pageNumber.toString());
@@ -73,19 +72,19 @@ function Pagination({ totalItemsAmount }: { totalItemsAmount: number }) {
     <StyledPagination>
       <PaginationButton onClick={previousPage} disabled={currentPage === 1}>
         {isRTL ? <TbChevronsRight /> : <TbChevronsLeft />}
-        Prev
+        {t("button.previous")}
       </PaginationButton>
 
       <P>
-        {t("showing")} <span>{currentFrom}</span> {t("to")}
-        <span> {currentTo}</span> {t("of")} <span>{totalItemsAmount}</span>{" "}
-        {t("results")}
+        {t("summary.showing")} <span>{currentFrom}</span> {t("summary.to")}
+        <span> {currentTo}</span> {t("summary.of")}
+        <span> {totalItemsAmount}</span> {t("summary.results")}
       </P>
       <PaginationButton
         onClick={nextPage}
         disabled={currentPage === pagesCount}
       >
-        Next {isRTL ? <TbChevronsLeft /> : <TbChevronsRight />}
+        {t("button.next")} {isRTL ? <TbChevronsLeft /> : <TbChevronsRight />}
       </PaginationButton>
     </StyledPagination>
   );
