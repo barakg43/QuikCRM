@@ -1,38 +1,38 @@
-import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import {
+  UseQueryResult,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import { getPagesAmount } from "../../components/Pagination";
 import { getAllCustomers } from "../../services/apiCustomers";
-import { CustomerStatus } from "./CustomersTable";
+import { CustomerDataType } from "./customers";
 
-type CustomerType = {
-  customerID: number;
-  activeContractID: number;
-  customerShortName: string;
-  customerName: string;
-  customerStatus: CustomerStatus;
-  customerIdentificationNumber: string;
-  customerMainPhone: string;
-  customerMainFax: string;
-  customerMainEMail: string;
-  customerWebSite: string;
-  remarks: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  addressRemarks: string;
-  contactPersonName: string;
-  contactPersonPost: string;
-  contactPersonPhone: string;
-  contactPersonMobilePhone: string;
-  contactPersonFax: string;
-  contactPersonEMail: string;
-};
 export function useCustomers() {
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const queryClient = useQueryClient();
   const {
-    data: customers,
+    data: { customers, totalItems } = { customers: [], totalItems: 0 },
     isLoading,
     error,
-  }: UseQueryResult<CustomerType[]> = useQuery({
-    queryKey: ["customers"],
-    queryFn: getAllCustomers,
+  }: UseQueryResult<CustomerDataType> = useQuery({
+    queryKey: ["customers", page],
+    queryFn: () => getAllCustomers({ page }),
   });
-  return { customers, isLoading, error };
+  const pageCount = getPagesAmount(totalItems);
+  if (page < pageCount)
+    queryClient.prefetchQuery({
+      queryKey: ["customers", page + 1],
+      queryFn: () => getAllCustomers({ page: page + 1 }),
+    });
+
+  if (page > 1)
+    queryClient.prefetchQuery({
+      queryKey: ["customers", page - 1],
+      queryFn: () => getAllCustomers({ page: page - 1 }),
+    });
+
+  return { customers, totalItems, isLoading, error };
 }
