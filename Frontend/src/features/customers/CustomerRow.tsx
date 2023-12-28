@@ -1,8 +1,7 @@
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import Table from "../../components/Table";
-import { CustomerRowProps, customerStatuses } from "./CustomersTable";
-import { useTranslation } from "react-i18next";
-import { Key } from "react";
+import { CustomerRowProps } from "./customers";
 
 // const test = {
 //   customerID: 11,
@@ -37,10 +36,12 @@ const statusToTagName: { [index: string]: string } = {
   none: "white",
 };
 const Tag = styled.span<{ type: string }>`
-  border-radius: var(--radius-lg);
+  font-size: var(--scale-1);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-full);
   color: var(--color-${(props) => props.type}-100);
   background-color: var(--color-${(props) => props.type}-700);
-  padding: var(--scale-0);
+  padding: var(--scale-0000);
 `;
 
 function CustomerRow({
