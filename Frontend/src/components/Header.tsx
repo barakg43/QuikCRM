@@ -9,8 +9,8 @@ const StyledHeader = styled.header`
   align-items: center;
   gap: 2.4rem;
   justify-content: flex-end;
-  border-bottom: 2px solid var(--color-primary-200);
-  box-shadow: var(--shadow-sm);
+  border-bottom: 2px solid var(--color-primary-300);
+  box-shadow: var(--shadow-xl);
 `;
 
 function Header() {
