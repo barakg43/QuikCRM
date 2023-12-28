@@ -19,22 +19,26 @@ const EmptyTable = styled.p`
   margin: 2.4rem;
 `;
 
-const StyledBody = styled.section``;
+const StyledBody = styled.section`
+  margin: 0.4rem 0;
+  min-height: 70vh;
+`;
 type BodyProps<T> = {
   data: T[] | null | undefined;
   render: (item: T, index: number) => JSX.Element;
 };
 function Body<T>({ data, render }: BodyProps<T>) {
-  if (data == undefined || data == null) return <EmptyTable />;
-  console.log(data);
+  if (data == undefined || data == null || data.length == 0)
+    return <EmptyTable />;
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
 const StyledTable = styled.div`
-  font-size: var(--scale-0000);
-  border: 1px solid var(--color-primary-500);
-  background-color: var(--color-primary-0);
-  border-radius: var(--radius-sm);
+  font-size: var(--scale-3);
+  width: 95%;
+  /* border: 1px solid var(--color-primary-500); */
+  /* background-color: var(--color-primary-0); */
+  padding-top: var(--scale-3);
   text-align: center;
 `;
 type TableProps = {
@@ -51,6 +55,8 @@ function Table({ columns, children }: TableProps) {
 
 const StyledHeader = styled(CommonRow)`
   padding: var(--scale-0);
+  background-color: var(--color-primary-300);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 `;
 type ValueType = {
   columns: string;
@@ -65,7 +71,10 @@ function Header({ children }: { children: ReactNode }) {
 }
 
 const StyledRow = styled(CommonRow)`
-  padding: 0.2rem var(--scale-0000);
+  padding: var(--scale-2) var(--scale-1);
+  &:not(:last-child) {
+    border-bottom: 1px var(--color-primary-300) solid;
+  }
 `;
 function Row({ children }: { children: ReactNode }) {
   const { columns } = useContext(TableContext);
