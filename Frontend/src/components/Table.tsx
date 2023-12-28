@@ -4,8 +4,9 @@ import styled from "styled-components";
 const TableContext = createContext<ValueType>({ columns: "" });
 const CommonRow = styled.div<{ columns: string }>`
   display: grid;
+  font-size: 1.6rem;
   grid-template-columns: ${(props) => props.columns};
-  column-gap: var(--scale-00);
+  column-gap: var(--scale-000);
   align-items: center;
 `;
 
