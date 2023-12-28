@@ -9,7 +9,7 @@ export default defineConfig({
     proxy: {
       // string shorthand: http://localhost:5173/foo -> http://localhost:4567/foo
       "/assets": {
-        target: "http://barak-pc:8080",
+        target: "http://localhost:8080",
         changeOrigin: true,
         secure: false,
         configure: (proxy, _options) => {
