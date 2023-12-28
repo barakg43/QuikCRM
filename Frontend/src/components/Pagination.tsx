@@ -77,8 +77,9 @@ function Pagination({ totalItemsAmount }: { totalItemsAmount: number }) {
       </PaginationButton>
 
       <P>
-        Showing <span>{currentFrom}</span> to
-        <span> {currentTo}</span> of <span>{totalItemsAmount}</span> results
+        {t("showing")} <span>{currentFrom}</span> {t("to")}
+        <span> {currentTo}</span> {t("of")} <span>{totalItemsAmount}</span>{" "}
+        {t("results")}
       </P>
       <PaginationButton
         onClick={nextPage}

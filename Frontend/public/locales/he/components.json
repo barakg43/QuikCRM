@@ -1,3 +1,15 @@
 {
-  "empty": "{{resource}} לא קיים מידע על"
+  "empty": "{{resource}} לא קיים מידע על",
+  "pagination": {
+    "button": {
+      "next": "הבא",
+      "previous": "הקודם"
+    },
+    "Text": {
+      "showing": "מראה",
+      "to": "עד",
+      "of": "מתוך",
+      "results": "תוצאות"
+    }
+  }
 }
