@@ -3,6 +3,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import Table from "../../components/Table";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./useCustomers";
+import Pagination from "../../components/Pagination";
 
 export const customerStatuses = [
   "in-service",
@@ -12,16 +13,9 @@ export const customerStatuses = [
   "cloud-mail",
   "charge",
 ] as const;
-export type CustomerStatus = (typeof customerStatuses)[number] | null;
-export type CustomerRowProps = {
-  customerID: number;
-  customerName: string;
-  address: string;
-  city: string;
-  status: CustomerStatus;
-};
+
 function CustomersTable() {
-  const { customers, isLoading, error } = useCustomers();
+  const { customers, isLoading, totalItems, error } = useCustomers();
   const { t } = useTranslation("customers", { keyPrefix: "table" });
   if (isLoading) return <LoadingSpinner />;
   return (
@@ -46,6 +40,9 @@ function CustomersTable() {
           />
         )}
       />
+      <Table.Footer>
+        <Pagination totalItemsAmount={totalItems} />
+      </Table.Footer>
     </Table>
   );
 }
