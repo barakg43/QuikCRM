@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import Table from "../../components/Table";
 import CustomerRow from "./CustomerRow";
-import { useCustomers } from "./useCustomers";
+import { useCustomers } from "./hooks/useCustomers";
 import Pagination from "../../components/Pagination";
 
 export const customerStatuses = [

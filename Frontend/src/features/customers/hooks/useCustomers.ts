@@ -4,9 +4,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { getPagesAmount } from "../../components/Pagination";
-import { getAllCustomers } from "../../services/apiCustomers";
-import { CustomerDataType } from "./customers";
+import { getPagesAmount } from "../../../components/Pagination";
+import { getAllCustomers } from "../../../services/apiCustomers";
+import { CustomerDataType } from "../customers";
 
 export function useCustomers() {
   const [searchParams] = useSearchParams();
