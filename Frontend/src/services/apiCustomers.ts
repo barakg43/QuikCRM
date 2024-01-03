@@ -1,5 +1,8 @@
 import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
-import { CustomerDataType } from "../features/customers/customers";
+import {
+  CustomerDataType,
+  CustomerType,
+} from "../features/customers/customers";
 import { httpClient } from "./axios";
 
 type allCustomerParams = {
@@ -14,4 +17,10 @@ export async function getAllCustomers({
   const { data } = await httpClient.get("/customers");
 
   return { customers: data.slice(fromItem, toItem), totalItems: data.length };
+}
+export async function getCustomerDataByID(
+  customerId: number
+): Promise<CustomerType> {
+  const { data } = await httpClient.get(`/customers/${customerId}`);
+  return data;
 }
