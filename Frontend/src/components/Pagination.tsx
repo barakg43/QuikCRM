@@ -38,9 +38,10 @@ const P = styled.p`
 export const getPagesAmount = (totalItemsAmount: number) =>
   Math.ceil(totalItemsAmount / ITEMS_AMOUNT_PER_PAGE);
 export const ITEMS_AMOUNT_PER_PAGE = 10;
-function Pagination({ totalItemsAmount }: { totalItemsAmount: number }) {
+function Pagination({ totalItemsAmount = 0 }: { totalItemsAmount: number }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("components", { keyPrefix: "pagination" });
+  console.log("totalItemsAmount");
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const pagesCount = getPagesAmount(totalItemsAmount);
@@ -67,7 +68,6 @@ function Pagination({ totalItemsAmount }: { totalItemsAmount: number }) {
     currentPage < pagesCount
       ? currentPage * ITEMS_AMOUNT_PER_PAGE
       : totalItemsAmount;
-
   return (
     <StyledPagination>
       <PaginationButton onClick={previousPage} disabled={currentPage === 1}>
