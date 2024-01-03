@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import Table from "../../components/Table";
 import { CustomerRowProps } from "./customers";
+import { useNavigate } from "react-router-dom";
 
 // const test = {
 //   customerID: 11,
@@ -52,9 +53,10 @@ function CustomerRow({
   status,
 }: CustomerRowProps) {
   const { t } = useTranslation("customers", { keyPrefix: "status" });
+  const navigate = useNavigate();
   const statusString = (status || "none").trim(); //TODO: fix the trim
   return (
-    <Table.Row>
+    <Table.Row onClick={() => navigate(`${customerID}`)}>
       <span>{customerID}</span>
       <span>{customerName}</span>
       <span>{address}</span>
