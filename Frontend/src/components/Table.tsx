@@ -1,5 +1,6 @@
-import { ReactNode, createContext, useContext } from "react";
+import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import styled from "styled-components";
+import { Option } from "./Select";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 const CommonRow = styled.div<{ columns: string }>`
@@ -76,10 +77,14 @@ const StyledRow = styled(CommonRow)`
     border-bottom: 1px var(--color-primary-300) solid;
   }
 `;
-function Row({ children }: { children: ReactNode }) {
+type RowType = {
+  children: ReactNode;
+  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+};
+function Row({ onClick, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
-    <StyledRow columns={columns} role='row'>
+    <StyledRow columns={columns} role='row' onClick={onClick}>
       {children}
     </StyledRow>
   );
