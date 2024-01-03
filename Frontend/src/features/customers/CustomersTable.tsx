@@ -16,6 +16,7 @@ export const customerStatuses = [
 
 function CustomersTable() {
   const { customers, isLoading, totalItems, error } = useCustomers();
+
   const { t } = useTranslation("customers", { keyPrefix: "table" });
   if (isLoading) return <LoadingSpinner />;
   return (
@@ -41,7 +42,7 @@ function CustomersTable() {
         )}
       />
       <Table.Footer>
-        <Pagination totalItemsAmount={totalItems} />
+        {/* <Pagination totalItemsAmount={totalItems} /> */}
       </Table.Footer>
     </Table>
   );
