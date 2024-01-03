@@ -8,7 +8,7 @@ import Reports from "../pages/Reports";
 import Settings from "../pages/Settings";
 import SignUp from "../pages/Signup";
 import Login from "./../pages/Login.tsx";
-import AppLayout from "../components/AppLayout.tsx";
+import AppLayout from "./AppLayout.tsx";
 import Customer from "../pages/Customer.tsx";
 ``;
 function AppRoutes() {
