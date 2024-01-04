@@ -45,7 +45,6 @@ function CustomerDetails() {
       customerMainPhone,
       customerMainFax,
       customerMainEMail,
-      customerWebSite,
       remarks,
 
       address,
@@ -54,11 +53,8 @@ function CustomerDetails() {
       addressRemarks,
 
       contactPersonName,
-      contactPersonPost,
       contactPersonPhone,
       contactPersonMobilePhone,
-      contactPersonFax,
-      contactPersonEMail,
 
       activeContractID,
     },
@@ -75,38 +71,25 @@ function CustomerDetails() {
         toggleEditing={() => setIsEditing((toEdit) => !toEdit)}
         isEditing={isEditing}
         submitChanges={handleSubmit}
-      ></Header>
-      <Address type='horizontal' gap={1}>
-        <Row>
-          <EditableFormField
-            id='address'
-            label='address'
-            isEditing={isEditing}
-            value={address}
-          />
-          <EditableFormField
-            id='city'
-            label='city'
-            isEditing={isEditing}
-            value={city}
-          />
-          <EditableFormField
-            id='postalCode'
-            label='postalCode'
-            isEditing={isEditing}
-            value={postalCode}
-          />
-        </Row>
+      />
+      <Address {...{ city, address, postalCode, addressRemarks, isEditing }} />
+      <Contact
+        {...{
+          contactPersonName,
+          contactPersonPhone,
+          contactPersonMobilePhone,
+          isEditing,
+        }}
+      />
+      <Notes>
         <EditableFormField
-          id='addressRemarks'
-          label='addressRemarks'
+          id='remarks'
+          label='remarks'
           isEditing={isEditing}
-          value={addressRemarks}
+          value={remarks}
           as='textarea'
         />
-      </Address>
-      <Contact>contact</Contact>
-      <Notes>notes</Notes>
+      </Notes>
       <Service>service</Service>
       <Child>child</Child>
     </StyledCustomerDetails>
@@ -133,10 +116,6 @@ type GridItemProps = {
   area: string;
   backgroundColor: string;
 };
-const GridItem = styled.div<GridItemProps>`
-  grid-area: ${({ area }) => (area ? area : "child")};
-  background-color: ${(props) => props.backgroundColor};
-`;
 
 type HeaderProps = {
   customerID: number;
@@ -175,14 +154,96 @@ function Header({
     </StyledHeader>
   );
 }
-const Address = styled(Row)`
+const StyledAddress = styled(Row)`
   /* background: green; */
   grid-area: address;
 `;
-const Contact = styled.div`
+type AddressProps = {
+  address: string;
+  city: string;
+  postalCode: string | null;
+  addressRemarks: string | null;
+  isEditing: boolean;
+};
+function Address({
+  address,
+  city,
+  postalCode,
+  addressRemarks,
+  isEditing,
+}: AddressProps) {
+  return (
+    <StyledAddress type='horizontal' gap={1}>
+      <Row>
+        <EditableFormField
+          id='address'
+          label='address'
+          isEditing={isEditing}
+          value={address}
+        />
+        <EditableFormField
+          id='city'
+          label='city'
+          isEditing={isEditing}
+          value={city}
+        />
+        <EditableFormField
+          id='postalCode'
+          label='postalCode'
+          isEditing={isEditing}
+          value={postalCode}
+        />
+      </Row>
+      <EditableFormField
+        id='addressRemarks'
+        label='addressRemarks'
+        isEditing={isEditing}
+        value={addressRemarks}
+        as='textarea'
+      />
+    </StyledAddress>
+  );
+}
+const StyledContact = styled.div`
   background: yellow;
   grid-area: contact;
 `;
+type ContactProps = {
+  contactPersonName: string | null;
+  contactPersonPhone: string | null;
+  contactPersonMobilePhone: string | null;
+  isEditing: boolean;
+};
+function Contact({
+  contactPersonName,
+  contactPersonPhone,
+  contactPersonMobilePhone,
+  isEditing,
+}: ContactProps) {
+  return (
+    <StyledContact>
+      <EditableFormField
+        id='contactPersonName'
+        label='contactPersonName'
+        isEditing={isEditing}
+        value={contactPersonName}
+      />
+
+      <EditableFormField
+        id='contactPersonPhone'
+        label='contactPersonPhone'
+        isEditing={isEditing}
+        value={contactPersonPhone}
+      />
+      <EditableFormField
+        id='contactPersonMobilePhone'
+        label='contactPersonMobilePhone'
+        isEditing={isEditing}
+        value={contactPersonMobilePhone}
+      />
+    </StyledContact>
+  );
+}
 const Service = styled.div`
   background: pink;
   grid-area: service;
