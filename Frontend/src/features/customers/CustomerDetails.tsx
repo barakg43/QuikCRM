@@ -7,6 +7,7 @@ import Row from "../../components/Row";
 import { Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
 import EditableFormField from "../../components/EditableFormField";
 import Button from "../../components/Button";
+import ButtonGroup from "../../components/ButtonGroup";
 
 const test = {
   customerID: 129,
@@ -65,6 +66,14 @@ function CustomerDetails() {
   function handleSubmit() {}
   return (
     <StyledCustomerDetails>
+      <ButtonGroup padding='0 2rem 1rem 2rem' style={{ gridArea: "buttons" }}>
+        <Button size='small' variation='secondary'>
+          edit
+        </Button>
+        <Button size='small' variation='danger'>
+          delete
+        </Button>
+      </ButtonGroup>
       <Header
         customerID={customerID}
         customerShortName={customerShortName}
@@ -98,8 +107,9 @@ function CustomerDetails() {
 const StyledCustomerDetails = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 0.7fr 3fr 3fr 7fr;
+  grid-template-rows: 0.3fr 0.5fr 3fr 3fr 7fr;
   grid-template-areas:
+    "buttons buttons"
     "header header"
     "address contact"
     "service notes"
@@ -141,15 +151,6 @@ function Header({
           isEditing={isEditing}
           value={customerShortName}
         />
-      </Row>
-      <Row type='horizontal' gap={0.5}>
-        {isEditing && <Button onClick={submitChanges}>Save</Button>}
-        <Button
-          variation={isEditing ? "danger" : "secondary"}
-          onClick={toggleEditing}
-        >
-          {isEditing ? "cancel" : "edit"}
-        </Button>
       </Row>
     </StyledHeader>
   );
@@ -255,6 +256,11 @@ const Notes = styled.div`
 const Child = styled.div`
   background: orange;
   grid-area: child;
+`;
+const ButtonsPanel = styled(Row)`
+  /* background: orange; */
+  grid-area: buttons;
+  padding: var(--scale-2);
 `;
 const StyledHeader = styled.div`
   background: red;
