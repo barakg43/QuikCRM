@@ -36,14 +36,14 @@ function CustomerRow({
   status,
 }: CustomerRowProps) {
   const navigate = useNavigate();
-  const statusString = (status || "none").trim(); //TODO: fix the trim
+
   return (
     <Table.Row onClick={() => navigate(`${customerID}`)}>
       <span>{customerID}</span>
       <span>{customerName}</span>
       <span>{address}</span>
       <span>{city}</span>
-      <StatusTag statusString={statusString} />
+      <StatusTag status={status} />
     </Table.Row>
   );
 }

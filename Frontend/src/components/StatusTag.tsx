@@ -18,8 +18,9 @@ const StyledTag = styled.span<{ type: string }>`
   background-color: var(--color-${(props) => props.type}-700);
   padding: var(--scale-0000);
 `;
-function StatusTag({ statusString }: { statusString: string }) {
+function StatusTag({ status }: { status: string }) {
   const { t } = useTranslation("customers", { keyPrefix: "status" });
+  const statusString = (status || "none").trim(); //TODO: fix the trim
   return (
     <StyledTag type={statusToTagName[statusString]}>
       {statusString !== "none" && t(statusString)}
