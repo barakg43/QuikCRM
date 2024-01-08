@@ -1,4 +1,4 @@
-package main.server.sql.bulider;
+package main.server.sql.bulider.component;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -12,6 +12,5 @@ public class SqlQueryDirector {
 
     public String build(){
         return queryBuilder != null ? queryBuilder.get() : "";
-
     }
 }
