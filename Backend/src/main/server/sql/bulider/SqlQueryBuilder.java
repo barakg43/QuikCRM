@@ -13,14 +13,25 @@ public class SqlQueryBuilder {
 
 	public SqlQueryBuilder() {
 		sqlFilterClausesBuilder = new SqlFilterClausesBuilder(this::buildQuery);
-		;
+
 		sqlBaseClausesBuilder = new SqlBaseClausesBuilder(sqlFilterClausesBuilder);
+	}
+
+	public static SqlQueryBuilder getNewBuilder() {
+		return new SqlQueryBuilder();
+	}
+
+	public SqlBaseClauses from(String tableName, String as) {
+
+		return from(String.format("%s AS %s", tableName, as));
 	}
 
 	public SqlBaseClauses from(String tableName) {
 		this.tableName = tableName;
+
 		return sqlBaseClausesBuilder;
 	}
+
 
 	//callable only from last step
 	private String buildQuery() {
