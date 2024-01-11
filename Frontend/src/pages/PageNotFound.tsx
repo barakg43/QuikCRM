@@ -43,7 +43,7 @@ const Container = styled.div`
   background-repeat: repeat-x;
   background-size: cover;
   background-position: left top;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
 `;
 
@@ -110,6 +110,7 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  color: lightskyblue;
   /* z-index: 1;*/
   /* position: relative;  */
   text-align: center;
@@ -238,9 +239,9 @@ function PageNotFound() {
     <Container>
       <Stars>
         <Content>
-          <Image404 src={'/assets/404Page/img/404.svg'} alt='404 image' />
+          <Image404 src={"/assets/404Page/img/404.svg"} alt='404 image' />
           <p>
-            {t("errorMessageFirstPart")}
+            {t("errorMessageFirstPart")} <br />
             <strong> {t("errorMessageSecondPart")}</strong>
           </p>
           <StyledNavLink to='/'>{t("button")}</StyledNavLink>

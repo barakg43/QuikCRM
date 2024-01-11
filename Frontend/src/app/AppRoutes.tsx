@@ -8,7 +8,8 @@ import Reports from "../pages/Reports";
 import Settings from "../pages/Settings";
 import SignUp from "../pages/Signup";
 import Login from "./../pages/Login.tsx";
-import AppLayout from "../components/AppLayout.tsx";
+import AppLayout from "./AppLayout.tsx";
+import Customer from "../pages/Customer.tsx";
 ``;
 function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ function AppRoutes() {
         <Route path='/reminders' element={<Reminders />} />
         <Route path='/activities' element={<Activities />} />
         <Route path='/customers' element={<Customers />} />
+        <Route path='/customers/:customerId' element={<Customer />} />
         <Route path='/reports' element={<Reports />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/account' element={<Account />} />
