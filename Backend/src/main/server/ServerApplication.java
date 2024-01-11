@@ -2,6 +2,10 @@ package main.server;
 
 import main.server.logger.ServerLogManager;
 import main.server.sql.SqlClient;
+import main.server.sql.bulider.SqlQueryBuilder;
+import main.server.sql.bulider.component.eJoinType;
+import main.server.sql.executor.CustomerSqlExecutor;
+import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -9,54 +13,139 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-
-import static main.server.ServerConstants.SQL_YAML_CONFIG_LOCATION;
 
 @SpringBootApplication
 public class ServerApplication extends SpringBootServletInitializer {
-    public static void main(String[] args) {
-//        testFunction();
-        SpringApplication.run(ServerApplication.class, args);
-    }
+	public static void main(String[] args) {
+//		testFunction();
+//		testSqlBuilder();
+		SpringApplication.run(ServerApplication.class, args);
+	}
 
-    private static void testFunction() {
-//        SqlClient sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, new ServerLogManager());
-//        sqlClient.createSqlConnection();
-        int loopAmount = 50;
-        Instant start, end;
+	private static void testSqlBuilder() {
+		SqlQueryBuilder sqlQueryBuilder = new SqlQueryBuilder();
+		String select = sqlQueryBuilder.from("tb1", "Tb1")
+				.join(eJoinType.INNER, "tb2", "Tb2", "tb2.moshe", "tb1.yossi")
+				.select("1", "2", "5", "4")
+				.where().greaterThan("id", 1)
+				.having().equal("customerName", "moshe1")
+				.orderBy(new String[]{"t1", "te"})
+				.limit(5)
+				.build();
+//		BEGIN TRANSACTION
+//
+//		DELETE
+//		FROM tbConnectionPQCWithOrderDetails
+//		WHERE OrderDetailsID = @OrderDetailsID
+//				AND PQCDetailsID = @PQCDetailsID
+//
+//				IF @@error <> 0
+//		BEGIN
+//		ROLLBACK TRAN
+//		RETURN
+//				END
+//
+//		COMMIT TRANSACTION
+//		SqlQueryBuilder sqlQueryBuilder2 = new SqlQueryBuilder();
+		String delete = SqlQueryBuilder.getNewBuilder()
+				.from("tbConnectionPQCWithOrderDetails")
+				.delete()
+				.where().equal("OrderDetailsID", 2)
+				.and().equal("PQCDetailsID", 3)
+				.build();
+//		BEGIN TRANSACTION
+//		INSERT tbConnectionPriceQuotesDetails (
+//				PQSDetailsID,
+//				PQCDetailsID)
+//		VALUES (
+//		@PQSDetailsID,
+//		@PQCDetailsID)
+//		IF @@error <> 0
+//		BEGIN
+//		ROLLBACK TRAN
+//		RETURN
+//				END
+//
+//		COMMIT TRANSACTION
+//		System.out.println(query1);
+		String insert = SqlQueryBuilder.getNewBuilder()
+				.from("tbConnectionPriceQuotesDetails")
+				.insert(Map.ofEntries(
+						Map.entry("PQSDetailsID", 3),
+						Map.entry("PQCDetailsID", 7)))
+				.build();
 
-        final AtomicLong closedTaskTotalTime = new AtomicLong(0), supplierTotal1 = new AtomicLong(0), supplierTotal2 = new AtomicLong(0);
-        for (int i = 0; i < loopAmount; i++) {
+//		BEGIN TRANSACTION
+//
+//		UPDATE tbInvoicesForContracts
+//		SET dateOfDebit = DATEADD(MONTH, @MonthAmount, dateOfDebit)
+//		WHERE id = @ID
+//
+//				IF @@error <> 0
+//		BEGIN
+//		ROLLBACK TRAN
+//		RETURN
+//				END
+//
+//		COMMIT TRANSACTION
+		String update = SqlQueryBuilder.getNewBuilder()
+				.from("tbConnectionPriceQuotesDetails")
+				.update(Map.ofEntries(
+						Map.entry("PQSDetailsID", 1),
+						Map.entry("PQCDetailsID", 2)
+				)).where().equal("id", 3).build();
+		System.out.println(select);
+		System.out.println("==========");
+		System.out.println(delete);
+		System.out.println("==========");
+		System.out.println(insert);
+		System.out.println("==========");
+		System.out.println(update);
+	}
+
+	private static void testFunction() {
+		SqlFunctionExecutor sqlFunctionExecutor = new SqlFunctionExecutor();
+
+		SqlClient sqlClient = new SqlClient(sqlFunctionExecutor, new ServerLogManager());
+		sqlClient.createSqlConnection();
+		CustomerSqlExecutor customerSqlExecutor = new CustomerSqlExecutor(sqlFunctionExecutor);
+		int loopAmount = 200;
+		Instant start, end;
+
+		final AtomicLong time1 = new AtomicLong(0), time2 = new AtomicLong(0);
+		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
-            Instant start1 = Instant.now();
-//            sqlClient.getSupplierNameByID(10);
-            Instant end1 = Instant.now();
-            supplierTotal1.addAndGet(Duration.between(start1, end1).toMillis());
+			Instant start1 = Instant.now();
+			customerSqlExecutor.getAllCustomers();
+			Instant end1 = Instant.now();
+			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
 //            new Thread(()->{
 
 //            }).start();
 //            new Thread(()->{
-            Instant start3 = Instant.now();
-//            sqlClient.getClosedTaskForCustomer(10);
-            Instant end3 = Instant.now();
-            closedTaskTotalTime.addAndGet(Duration.between(start1, end1).toMillis());
+			Instant start2 = Instant.now();
+			customerSqlExecutor.getAllCustomers2();
+			Instant end2 = Instant.now();
+			time2.addAndGet(Duration.between(start2, end2).toMillis());
 //            }).start();
-        }
+		}
 //        try {
 //            Thread.sleep(20000);
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
 
-        System.out.format("avg closed: %dms ## avg supplier1: %dms avg supplier2: %dms  loop amount:%d", closedTaskTotalTime.get() / loopAmount, supplierTotal1.get() / loopAmount, supplierTotal2.get() / loopAmount, loopAmount);
+		System.out.format("time1 closed: %dms ## avg time2: %dmss  loop amount:%d",
+				time1.get() / loopAmount, time2.get() / loopAmount, loopAmount);
 //        System.out.format("customer name:%d\n",sqlClient.getClosedTaskForCustomer(10).size());
 
-    }
+	}
 
-    private static void printPWD() throws IOException {
-        String currentPath = new java.io.File(".").getCanonicalPath();
-        System.out.println("Current dir:" + currentPath);
-    }
+	private static void printPWD() throws IOException {
+		String currentPath = new java.io.File(".").getCanonicalPath();
+		System.out.println("Current dir:" + currentPath);
+	}
 }
