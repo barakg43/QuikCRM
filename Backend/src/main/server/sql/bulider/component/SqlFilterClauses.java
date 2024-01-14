@@ -90,42 +90,42 @@ public class SqlFilterClauses extends SqlQueryDirector {
 		return this;
 	}
 
-	public SqlFilterClauses equal(String columnName, Object value) {
-		appendConditionToClause(columnName, value, "=");
+	public SqlFilterClauses equal(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, "=", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses notEqual(String columnName, Object value) {
-		appendConditionToClause(columnName, value, "<>");
+	public SqlFilterClauses notEqual(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, "<>", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses greaterThan(String columnName, Object value) {
-		appendConditionToClause(columnName, value, ">");
+	public SqlFilterClauses greaterThan(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, ">", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses greaterOrEqualThan(String columnName, Object value) {
-		appendConditionToClause(columnName, value, ">=");
+	public SqlFilterClauses greaterOrEqualThan(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, ">=", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses lessThan(String columnName, Object value) {
-		appendConditionToClause(columnName, value, "<");
+	public SqlFilterClauses lessThan(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, "<", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses lessOrEqualThan(String columnName, Object value) {
-		appendConditionToClause(columnName, value, "<=");
+	public SqlFilterClauses lessOrEqualThan(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, "<=", isStringValue);
 		return this;
 	}
 
-	public SqlFilterClauses lessOrEqualThan(String columnName, Object leftValue, Object rightValue) {
-		String leftValueFormatted = String.format(leftValue.getClass() == String.class ? "'%s'" : "%s", leftValue);
-		String rightValueValueFormatted = String.format(leftValue.getClass() == String.class ? "'%s'" : "%s",
-                rightValue);
+	public SqlFilterClauses between(String columnName, Object leftValue, Object rightValue, boolean isStringValues) {
+		String leftValueFormatted = String.format(isStringValues ? "'%s'" : "%s", leftValue);
+		String rightValueValueFormatted = String.format(isStringValues ? "'%s'" : "%s",
+				rightValue);
 		appendStatementToCurrentClauseBuilder(String.format("%s %s BETWEEN %s", columnName, leftValueFormatted,
-                rightValueValueFormatted));
+				rightValueValueFormatted));
 		return this;
 	}
 
@@ -152,8 +152,8 @@ public class SqlFilterClauses extends SqlQueryDirector {
 			clauseBuilder.delete(clauseBuilder.length() - parameterDelimiter.length(), clauseBuilder.length());
 	}
 
-	private void appendConditionToClause(String columnName, Object value, String operator) {
-		String valueFormat = value.getClass() == String.class ? "'%s'" : "%s";
+	private void appendConditionToClause(String columnName, Object value, String operator, boolean isStringValue) {
+		String valueFormat = isStringValue ? "'%s'" : "%s";
 		appendStatementToCurrentClauseBuilder(String.format("%s %s " + valueFormat, columnName, operator, value));
 	}
 
@@ -170,7 +170,7 @@ public class SqlFilterClauses extends SqlQueryDirector {
 	private void checkSingleClauseInQuery(StringBuilder clauseBuilder, String clauseName) {
 		if (clauseBuilder != null)
 			throw new RuntimeException(String.format("cannot use %s clause more then 1 time in same query",
-                    clauseName));
+					clauseName));
 	}
 
 	private enum FilterClause {
