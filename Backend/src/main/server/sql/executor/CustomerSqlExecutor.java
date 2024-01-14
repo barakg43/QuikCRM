@@ -1,8 +1,11 @@
 package main.server.sql.executor;
 
 import main.server.sql.bulider.SqlQueryBuilder;
+import main.server.sql.bulider.component.SqlInnerQueryBuilder;
+import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.bulider.component.eJoinType;
 import main.server.sql.dto.TaskRecord;
+import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.stereotype.Repository;
@@ -20,9 +23,8 @@ public class CustomerSqlExecutor {
 	}
 
 	public List<CustomerFullDetailsRecord> getAllCustomers2() {
-		List<CustomerFullDetailsRecord> list = sqlFunctionExecutor.executeTableValueFunction(
+		return sqlFunctionExecutor.executeTableValueFunction(
 				"fncCustomersWithContactAndMainAddress", CustomerFullDetailsRecord.class);
-		return list;
 	}
 
 	//    SELECT TOP 100 PERCENT
@@ -31,17 +33,45 @@ public class CustomerSqlExecutor {
 //    JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
 //    JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
 //    ORDER BY cust.customerShortName
-	public List<CustomerFullDetailsRecord> getAllCustomers() {
-		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("dbo.tbCustomers", "cust")
+	public List<CustomerFlatDetailsRecord> getAllCustomers() {
+
+		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomersStatuses")
+				.select("CustomersStatusDescription")
+				.where()
+				.equal("CustomersStatusID", "cust.customerStatusID", false);
+
+		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomers", "cust")
+				.join(eJoinType.INNER, "tbCustomersAddresses",
+						"ca", "cust.mainAddress", "ca.customersAddressID")
+				.select("cust.customerID",
+						"cust.customerShortName",
+						SqlInnerQueryBuilder.build(statusQuery, "customerStatus"),
+						"cust.customerMainPhone",
+						"ca.address",
+						"ca.city")
+				.build();
+
+		return sqlFunctionExecutor.executeTableValueQuery(
+				sqlQuery, CustomerFlatDetailsRecord.class);
+
+	}
+
+	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
+		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomersStatuses")
+				.select("CustomersStatusDescription")
+				.where()
+				.equal("CustomersStatusID", id, false);
+		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+				.from("dbo.tbCustomers", "cust")
 				.join(eJoinType.INNER, "dbo.tbCustomersAddresses",
 						"ca", "cust.mainAddress", "ca.customersAddressID")
 				.join(eJoinType.INNER, "dbo.tbCustomersContactPersons", "cp", "cust.mainContactPerson", "cp" +
 						".customersContactPersonID")
 				.select("cust.customerID",
 						"cust.customerShortName",
-						"cust.customerName",
-						"dbo.fncCustomerStatusDescriptionForStatusID(cust.customerStatusID) as customerStatus",
-						"cust.customerIdentificationNumber",
+						SqlInnerQueryBuilder.build(statusQuery, "customerStatus"),
 						"cust.customerMainPhone",
 						"cust.customerMainFax",
 						"cust.customerMainEMail",
@@ -58,13 +88,11 @@ public class CustomerSqlExecutor {
 						"cp.contactPersonMobilePhone",
 						"cp.contactPersonFax",
 						"cp.contactPersonEMail")
+				.where().equal("cust.customerID", id, false)
 				.build();
-
-
-		List<CustomerFullDetailsRecord> list = sqlFunctionExecutor.executeTableValueQuery(
-				sqlQuery, CustomerFullDetailsRecord.class);
-		System.out.println("getAllCustomers:" + list.size());
-		return list;
+		System.out.println(sqlQuery);
+		return sqlFunctionExecutor.executeTableValueQuery(
+				sqlQuery, CustomerFullDetailsRecord.class).get(0);
 	}
 
 	public String getCustomerNameByID(int id) {
