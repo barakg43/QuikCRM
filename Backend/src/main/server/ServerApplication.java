@@ -29,8 +29,8 @@ public class ServerApplication extends SpringBootServletInitializer {
 		String select = sqlQueryBuilder.from("tb1", "Tb1")
 				.join(eJoinType.INNER, "tb2", "Tb2", "tb2.moshe", "tb1.yossi")
 				.select("1", "2", "5", "4")
-				.where().greaterThan("id", 1)
-				.having().equal("customerName", "moshe1")
+				.where().greaterThan("id", 1, false)
+				.having().equal("customerName", "moshe1", true)
 				.orderBy(new String[]{"t1", "te"})
 				.limit(5)
 				.build();
@@ -52,8 +52,8 @@ public class ServerApplication extends SpringBootServletInitializer {
 		String delete = SqlQueryBuilder.getNewBuilder()
 				.from("tbConnectionPQCWithOrderDetails")
 				.delete()
-				.where().equal("OrderDetailsID", 2)
-				.and().equal("PQCDetailsID", 3)
+				.where().equal("OrderDetailsID", 2, false)
+				.and().equal("PQCDetailsID", 3, false)
 				.build();
 //		BEGIN TRANSACTION
 //		INSERT tbConnectionPriceQuotesDetails (
@@ -95,7 +95,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 				.update(Map.ofEntries(
 						Map.entry("PQSDetailsID", 1),
 						Map.entry("PQCDetailsID", 2)
-				)).where().equal("id", 3).build();
+				)).where().equal("id", 3, false).build();
 		System.out.println(select);
 		System.out.println("==========");
 		System.out.println(delete);
@@ -118,7 +118,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
 			Instant start1 = Instant.now();
-			customerSqlExecutor.getAllCustomers();
+			customerSqlExecutor.getFullCustomerDetailsForId(1);
 			Instant end1 = Instant.now();
 			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
@@ -126,10 +126,10 @@ public class ServerApplication extends SpringBootServletInitializer {
 
 //            }).start();
 //            new Thread(()->{
-			Instant start2 = Instant.now();
-			customerSqlExecutor.getAllCustomers2();
-			Instant end2 = Instant.now();
-			time2.addAndGet(Duration.between(start2, end2).toMillis());
+//			Instant start2 = Instant.now();
+//			customerSqlExecutor.getCustomerNameByID(1);
+//			Instant end2 = Instant.now();
+//			time2.addAndGet(Duration.between(start2, end2).toMillis());
 //            }).start();
 		}
 //        try {
