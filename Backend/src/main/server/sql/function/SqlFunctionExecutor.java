@@ -23,14 +23,16 @@ public class SqlFunctionExecutor {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	@Deprecated
 	public <T> T executeScalarValueFunction(String storedFunctionQuery, Class<T> returnType,
-                                            Object... functionArguments) {
+											Object... functionArguments) {
 		String sqlQuery = preparedSqlQueryString(storedFunctionQuery, false, functionArguments.length);
 		return jdbcTemplate.queryForObject(sqlQuery, returnType, functionArguments);
 	}
 
+	@Deprecated
 	public <T> List<T> executeTableValueFunction(String storedFunctionQuery, Class<T> returnType,
-                                                 Object... functionArguments) {
+												 Object... functionArguments) {
 		String sqlQuery = preparedSqlQueryString(storedFunctionQuery, true, functionArguments.length);
 		return jdbcTemplate.query(sqlQuery,
 				new BeanPropertyRowMapper<>(returnType),
@@ -48,7 +50,7 @@ public class SqlFunctionExecutor {
 
 
 	private String preparedSqlQueryString(String storedFunctionQuery, boolean isTableValueFunction,
-                                          int argumentAmount) {
+										  int argumentAmount) {
 		StringBuilder argumentString = new StringBuilder();
 		String query;
 		if (argumentAmount > 0) {
