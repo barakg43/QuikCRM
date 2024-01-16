@@ -1,16 +1,20 @@
 package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.executor.CustomerSqlExecutor;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -36,11 +40,18 @@ public class CustomerController {
 	}
 
 	@GetMapping("")
-	public List<CustomerFlatDetailsRecord> getAllCustomers() {
-		return httpRequestExecutor.executeHttpRequest(customerSqlExecutor::getAllCustomers, "/customers",
-				HttpMethod.GET);
+	public ListSubset<CustomerFlatDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
+																		@RequestParam(required = false) Integer toItem) {
+		System.out.println("customer all");
+		ListSubset<CustomerFlatDetailsRecord> test =
+				httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getSubsetOfCustomers(fromItem, toItem)
+						, "api/customers",
+						HttpMethod.GET);
+		System.out.println(test.getListSubset());
+		return test;
 
 	}
+
 
 	@GetMapping("/customer/name")
 	public String getCostumerNameByID(@RequestParam int id) {
@@ -49,11 +60,20 @@ public class CustomerController {
 //        return clientSqlExecutor.getClientNameByID(id);
 	}
 
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(@PathVariable("id") int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getFullCustomerDetailsForId(id),
-				"/customer/" + id
-				, HttpMethod.GET);
+		try {
+			CustomerFullDetailsRecord test =
+					httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getFullCustomerDetailsForId(id),
+							"/customer/" + id
+							, HttpMethod.GET);
+			System.out.println(test);
+			return test;
+		} catch (IndexOutOfBoundsException exception) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Cant find customer with id of " + id, exception);
+		}
+
 	}
 
 	@GetMapping("/customer/closed-tasks")
