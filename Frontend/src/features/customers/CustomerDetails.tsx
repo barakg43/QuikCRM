@@ -1,8 +1,10 @@
+import { MouseEventHandler, useState } from "react";
 import { useParams } from "react-router-dom";
-import styled, { css } from "styled-components";
-import { useCustomer } from "./hooks/useCustomer";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import styled from "styled-components";
+import Button from "../../components/Button";
+import EditableFormField from "../../components/EditableFormField";
 import Heading from "../../components/Heading";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Row from "../../components/Row";
 import { Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
 import EditableFormField from "../../components/EditableFormField";
@@ -56,11 +58,14 @@ function CustomerDetails() {
       contactPersonName,
       contactPersonPhone,
       contactPersonMobilePhone,
+      contactPersonFax,
+      contactPersonEMail,
 
       activeContractID,
-    },
+    } = {},
     isLoading,
-  } = { customer: test, isLoading: false };
+  } = useCustomer(Number(customerId));
+
   const [isEditing, setIsEditing] = useState(false);
   if (isLoading) return <LoadingSpinner />;
   function handleSubmit() {}
@@ -128,8 +133,8 @@ type GridItemProps = {
 };
 
 type HeaderProps = {
-  customerID: number;
-  customerShortName: string;
+  customerID: number | undefined;
+  customerShortName: string | undefined;
   isEditing: boolean;
   toggleEditing: MouseEventHandler<HTMLButtonElement> | undefined;
   submitChanges: MouseEventHandler<HTMLButtonElement> | undefined;
