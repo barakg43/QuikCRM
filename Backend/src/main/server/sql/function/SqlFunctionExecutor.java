@@ -15,7 +15,6 @@ public class SqlFunctionExecutor {
 	private JdbcTemplate jdbcTemplate;
 
 	public SqlFunctionExecutor() {
-		System.out.println("SqlFunctionExecutor ctor");
 	}
 
 	public void initializeJdbcTemplate(DataSource dataSource) {

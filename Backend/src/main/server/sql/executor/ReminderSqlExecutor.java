@@ -16,7 +16,6 @@ public class ReminderSqlExecutor {
 	private final SqlFunctionExecutor sqlFunctionExecutor;
 
 	public ReminderSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
-		System.out.println("ReminderSqlExecutor ctor");
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 	}
 
@@ -57,10 +56,11 @@ public class ReminderSqlExecutor {
 				.select("dbo.fncCustNameForActiveContractID(contractID) AS custShortName, contractID, dateOfDebit, " +
 						"invoiceNum, renewal")
 				.where()
-				.equal("invoiceNum", null, false)
-				.and().lessOrEqualThan("dateOfDebit", LocalDate.now(), false)
+				.is("invoiceNum", "NULL", false)
+				.and().lessOrEqualThan("dateOfDebit", LocalDate.now(), true)
 				.build();
-		return sqlFunctionExecutor.executeTableValueQuery("sqlQuery", InvoiceReminderRecord.class);
+		System.out.println(sqlQuery);
+		return sqlFunctionExecutor.executeTableValueQuery(sqlQuery, InvoiceReminderRecord.class);
 
 	}
 }
