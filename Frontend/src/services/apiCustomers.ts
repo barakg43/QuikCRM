@@ -14,8 +14,8 @@ export async function getAllCustomers({
 }: allCustomerParams): Promise<CustomerDataType> {
   const fromItem = (page - 1) * ITEMS_AMOUNT_PER_PAGE;
   const toItem = fromItem + ITEMS_AMOUNT_PER_PAGE;
-  const { data } = await httpClient.get("/customers");
-
+  const { data }: { data: CustomerType[] } = await httpClient.get("/customers");
+  console.log("customers", data);
   return { customers: data.slice(fromItem, toItem), totalItems: data.length };
 }
 export async function getCustomerDataByID(
