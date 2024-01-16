@@ -22,7 +22,7 @@ const StyledEditableFormField = styled.div<{ as: string }>`
 type EditableFormFieldProps = {
   isEditing: boolean;
   label: string;
-  value: string | null;
+  value: string | null | undefined;
   id: string;
   as?: string;
 };
