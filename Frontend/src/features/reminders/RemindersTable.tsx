@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import { getAllReminders } from "../../services/apiReminders";
-import { useReminders } from "./hooks/useReminders";
 import InvoiceList from "./InvoiceList";
+import { useReminders } from "./hooks/useReminders";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const StyledRemindersTable = styled.div``;
 
 function RemindersTable() {
   const { reminders, isLoading } = useReminders();
-  console.log(reminders);
-
+  if (isLoading) return <LoadingSpinner />;
   return (
     <StyledRemindersTable>
       <InvoiceList />
