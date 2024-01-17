@@ -100,6 +100,11 @@ public class SqlFilterClauses extends SqlQueryDirector {
 		return this;
 	}
 
+	public SqlFilterClauses is(String columnName, Object value, boolean isStringValue) {
+		appendConditionToClause(columnName, value, "IS", isStringValue);
+		return this;
+	}
+
 	public SqlFilterClauses greaterThan(String columnName, Object value, boolean isStringValue) {
 		appendConditionToClause(columnName, value, ">", isStringValue);
 		return this;

@@ -4,6 +4,7 @@ import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.SqlInnerQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.bulider.component.eJoinType;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
@@ -18,7 +19,6 @@ public class CustomerSqlExecutor {
 
 	public CustomerSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
-		System.out.println("CustomerSqlExecutor ctor");
 
 	}
 
@@ -33,7 +33,8 @@ public class CustomerSqlExecutor {
 //    JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
 //    JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
 //    ORDER BY cust.customerShortName
-	public List<CustomerFlatDetailsRecord> getAllCustomers() {
+	public ListSubset<CustomerFlatDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
+
 
 		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
 				.from("tbCustomersStatuses")
@@ -51,13 +52,15 @@ public class CustomerSqlExecutor {
 						"ca.address",
 						"ca.city")
 				.build();
-
-		return sqlFunctionExecutor.executeTableValueQuery(
+		List<CustomerFlatDetailsRecord> customerList = sqlFunctionExecutor.executeTableValueQuery(
 				sqlQuery, CustomerFlatDetailsRecord.class);
+		int totalItemInDb = getCustomersAmount();
+		return new ListSubset<>(customerList, totalItemInDb);
 
 	}
 
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
+
 		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
 				.from("tbCustomersStatuses")
 				.select("CustomersStatusDescription")
@@ -91,8 +94,17 @@ public class CustomerSqlExecutor {
 				.where().equal("cust.customerID", id, false)
 				.build();
 		System.out.println(sqlQuery);
+
 		return sqlFunctionExecutor.executeTableValueQuery(
 				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+	}
+
+	private int getCustomersAmount() {
+		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomers")
+				.select("COUNT(customerID)").build();
+
+		return sqlFunctionExecutor.executeScalarValueQuery(sqlQuery, int.class);
 	}
 
 	public String getCustomerNameByID(int id) {
