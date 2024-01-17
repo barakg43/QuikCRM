@@ -1,4 +1,4 @@
-import CustomerDetails from "../features/customers/CustomerDetails";
+import CustomerDetails from "../features/customers/customer/CustomerDetails";
 
 function Customer() {
   return <CustomerDetails />;
