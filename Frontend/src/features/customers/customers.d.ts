@@ -28,8 +28,8 @@ export type CustomersListType = {
 export type CustomerStatus = (typeof customerStatuses)[number] | null;
 export type CustomerSlimDetailsProps = {
   customerID: number;
-  customerName: string;
+  customerShortName: string;
   address: string;
   city: string;
-  status: CustomerStatus;
+  customerStatus: CustomerStatus;
 };
