@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import Table from "../../components/Table";
-import { CustomerRowProps } from "./customers";
 import { useNavigate } from "react-router-dom";
 import StatusTag from "../../components/StatusTag";
+import { CustomerSlimDetailsProps } from "./customers";
 
 // const test = {
 //   customerID: 11,
@@ -30,20 +30,20 @@ import StatusTag from "../../components/StatusTag";
 
 function CustomerRow({
   customerID,
-  customerName,
+  customerShortName,
   address,
   city,
-  status,
-}: CustomerRowProps) {
+  customerStatus,
+}: CustomerSlimDetailsProps) {
   const navigate = useNavigate();
 
   return (
     <Table.Row onClick={() => navigate(`${customerID}`)}>
       <span>{customerID}</span>
-      <span>{customerName}</span>
+      <span>{customerShortName}</span>
       <span>{address}</span>
       <span>{city}</span>
-      <StatusTag status={status} />
+      <StatusTag status={customerStatus} />
     </Table.Row>
   );
 }
