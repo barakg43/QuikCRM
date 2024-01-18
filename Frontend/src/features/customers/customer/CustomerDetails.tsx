@@ -1,14 +1,22 @@
-import { MouseEventHandler, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import Button from "../../../components/Button";
-import ButtonGroup from "../../../components/ButtonGroup";
-import EditableFormField from "../../../components/EditableFormField";
-import Heading from "../../../components/Heading";
+import { useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import Row from "../../../components/Row";
 import { useCustomer } from "./useCustomer";
-import { Grid } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Tag,
+  Text,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
+import StatusTag from "../../../components/StatusTag";
+export default CustomerDetails;
+
 const test = {
   customerID: 129,
   activeContractID: 564,
@@ -44,42 +52,190 @@ function CustomerDetails() {
       customerName,
       customerIdentificationNumber,
       customerMainPhone,
-      customerMainFax,
       customerMainEMail,
       remarks,
-
       address,
       city,
       postalCode,
       addressRemarks,
-
       contactPersonName,
-      contactPersonPhone,
       contactPersonMobilePhone,
-      contactPersonFax,
-      contactPersonEMail,
-
-      activeContractID,
     } = {},
     isLoading,
   } = useCustomer(Number(customerId));
 
   const [isEditing, setIsEditing] = useState(false);
   if (isLoading) return <LoadingSpinner />;
-  function handleSubmit() {}
+
   return (
     <Grid
-      gridTemplateAreas={`"buttons buttons"
-                          "header header"
-                        "address contact"
-                        "service notes"
-                        "child child"`}
-    ></Grid>
+      gridTemplateAreas={`"buttons buttons buttons"
+                          "header header header"
+                        "address contact notes"
+                        "child child child"`}
+      width='90%'
+      height='89dvh'
+      templateRows='0.5fr 0.5fr 4fr 7fr'
+      gap={2}
+    >
+      <Buttons />
+      <Header
+        customerStatus={customerStatus}
+        customerName={customerName}
+        customerIdentificationNumber={customerIdentificationNumber}
+      />
+      <Address
+        address={address}
+        city={city}
+        postalCode={postalCode}
+        addressRemarks={addressRemarks}
+      />
+      <Notes remakes={remarks} />
+      <Contact
+        contactPersonMobilePhone={contactPersonMobilePhone}
+        customerMainEMail={customerMainEMail}
+        contactPersonName={contactPersonName}
+        customerMainPhone={customerMainPhone}
+      />
+      <Child />
+    </Grid>
   );
 }
 
 function Buttons() {
-  return;
+  return (
+    <GridItem
+      bg='green'
+      area='buttons'
+      borderTopEndRadius='5px'
+      padding={3}
+      alignItems='center'
+    >
+      <Flex
+        flexDirection={"row"}
+        justifyContent={"flex-end"}
+        gap={2}
+        alignItems='center'
+      >
+        <Button colorScheme='red'>Delete</Button>
+        <Button colorScheme='teal'>Edit</Button>
+      </Flex>
+    </GridItem>
+  );
+}
+type HeaderProps = {
+  customerStatus: string;
+  customerName: string | undefined;
+  customerIdentificationNumber: string | undefined;
+};
+function Header({
+  customerStatus,
+  customerName,
+  customerIdentificationNumber,
+}: HeaderProps) {
+  console.log("customerStatus", customerStatus);
+
+  return (
+    <GridItem
+      area='header'
+      // borderTopRadius='5px'
+      padding={2}
+      textAlign='center'
+      bgColor='teal'
+    >
+      <Flex
+        flexDirection='row'
+        gap={2}
+        justifyContent='space-around'
+        height='100%'
+        alignItems='center'
+      >
+        <Text>customerName: {customerName}</Text>
+        {/* <Divider orientation='horizontal' colorScheme='red' size='3rem' /> */}
+        <Text>
+          customerIdentificationNumber: {customerIdentificationNumber}
+        </Text>
+        {/* <StatusTag status={customerStatus} /> */}
+      </Flex>
+    </GridItem>
+  );
+}
+type AddressProps = {
+  address: string | undefined;
+  city: string | undefined;
+  postalCode: string | undefined;
+  addressRemarks: string | undefined;
+};
+function Address({ address, city, postalCode, addressRemarks }: AddressProps) {
+  return (
+    <GridItem bg='pink' area='address'>
+      <Flex
+        flexDirection='row'
+        gap={2}
+        height='100%'
+        width='100%'
+        alignItems='center'
+      >
+        <VStack textAlign='start'>
+          <Text>address {address}</Text>
+          <Text>city {city}</Text>
+          <Text>postalCode {postalCode}</Text>
+        </VStack>
+
+        <Text>
+          addressRemarks <br /> {addressRemarks}{" "}
+        </Text>
+      </Flex>
+    </GridItem>
+  );
+}
+function Notes({ remakes }: { remakes: string | undefined }) {
+  return (
+    <GridItem bg='blue' area='notes' gap={3}>
+      <Flex>
+        remakes <br /> {remakes}
+      </Flex>
+    </GridItem>
+  );
+}
+type ContactProps = {
+  customerMainPhone: string | undefined;
+  customerMainEMail: string | undefined;
+  contactPersonName: string | undefined;
+  contactPersonMobilePhone: string | undefined;
+};
+function Contact({
+  customerMainPhone,
+  customerMainEMail,
+  contactPersonName,
+  contactPersonMobilePhone,
+}: ContactProps) {
+  return (
+    <GridItem bg='brown' area='contact'>
+      <Flex
+        flexDirection='column'
+        gap={2}
+        height='100%'
+        width='100%'
+        alignItems='center'
+        textAlign='start'
+      >
+        <Text>customerMainPhone {customerMainPhone}</Text>
+        <Text>customerMainEMail {customerMainEMail}</Text>
+        <Text>contactPersonName {contactPersonName}</Text>
+        <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text>
+      </Flex>
+    </GridItem>
+  );
+}
+function Child() {
+  return (
+    <GridItem bg='red' area='child'>
+      <Flex>
+        <Button colorScheme='teal'>Edit</Button>
+      </Flex>
+    </GridItem>
+  );
 }
 //     <StyledCustomerDetails>
 //       <ButtonGroup padding='0 2rem 1rem 2rem' style={{ gridArea: "buttons" }}>
@@ -289,4 +445,3 @@ function Buttons() {
 //   }
 //   justify-content: space-between;
 // `;
-export default CustomerDetails;
