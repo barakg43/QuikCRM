@@ -6,7 +6,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 import { getPagesAmount } from "../../../components/Pagination";
 import { getAllCustomers } from "../../../services/apiCustomers";
-import { CustomerDataType } from "../customers";
+import { CustomersListType } from "../customers";
 
 export function useCustomers() {
   const [searchParams] = useSearchParams();
@@ -17,7 +17,7 @@ export function useCustomers() {
     data: { customers, totalItems } = { customers: [], totalItems: 0 },
     isLoading,
     error,
-  }: UseQueryResult<CustomerDataType> = useQuery({
+  }: UseQueryResult<CustomersListType> = useQuery({
     queryKey: ["customers", page],
     queryFn: () => getAllCustomers({ page }),
   });
