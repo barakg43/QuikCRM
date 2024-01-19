@@ -186,9 +186,9 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
+                        <!--                        <configuration>-->
+                        <!--                            <arguments>run build</arguments>-->
+                        <!--                        </configuration>-->
                     </execution>
                 </executions>
 
