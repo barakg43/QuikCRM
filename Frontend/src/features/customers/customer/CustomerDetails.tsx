@@ -12,9 +12,14 @@ import {
   Text,
   Textarea,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import StatusTag from "../../../components/StatusTag";
+import { useTranslation } from "react-i18next";
+import { customerStatuses } from "../CustomersTable";
+import CustomerFormModal from "./CustomerFormModal";
+import { CustomerFullDataType } from "../customers";
 export default CustomerDetails;
 
 const test = {
@@ -69,17 +74,18 @@ function CustomerDetails() {
 
   return (
     <Grid
-      gridTemplateAreas={`"buttons buttons buttons"
-                          "header header header"
+      gridTemplateAreas={`"header header header"
+                          "general general general"
                         "address contact notes"
                         "child child child"`}
       width='90%'
       height='89dvh'
       templateRows='0.5fr 0.5fr 4fr 7fr'
+      templateColumns='1fr 1fr 2.5fr'
       gap={2}
     >
-      <Buttons />
-      <Header
+      <Header customerID={customerID} customerShortName={customerShortName} />
+      <General
         customerStatus={customerStatus}
         customerName={customerName}
         customerIdentificationNumber={customerIdentificationNumber}
@@ -102,25 +108,41 @@ function CustomerDetails() {
   );
 }
 
-function Buttons() {
+function Header({
+  customerID,
+  customerShortName,
+}: {
+  customerID: number | undefined;
+  customerShortName: string | undefined;
+}) {
+  const { t } = useTranslation("components", { keyPrefix: "buttons" });
+
   return (
-    <GridItem
-      bg='green'
-      area='buttons'
-      borderTopEndRadius='5px'
-      padding={3}
-      alignItems='center'
-    >
-      <Flex
-        flexDirection={"row"}
-        justifyContent={"flex-end"}
-        gap={2}
+    <>
+      <GridItem
+        // bg='green'
+        area='header'
+        borderTopEndRadius='5px'
+        padding={3}
         alignItems='center'
       >
-        <Button colorScheme='red'>Delete</Button>
-        <Button colorScheme='teal'>Edit</Button>
-      </Flex>
-    </GridItem>
+        <Flex
+          flexDirection='row'
+          justifyContent='space-between'
+          gap={2}
+          alignItems='center'
+        >
+          <Text fontSize='4xl' fontWeight={600}>
+            {customerID} - {customerShortName}
+          </Text>
+
+          <HStack>
+            <Button colorScheme='red'>{t("delete")}</Button> */
+            <CustomerFormModal />
+          </HStack>
+        </Flex>
+      </GridItem>
+    </>
   );
 }
 type HeaderProps = {
@@ -128,17 +150,18 @@ type HeaderProps = {
   customerName: string | undefined;
   customerIdentificationNumber: string | undefined;
 };
-function Header({
+function General({
   customerStatus,
   customerName,
   customerIdentificationNumber,
 }: HeaderProps) {
   console.log("customerStatus", customerStatus);
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
 
   return (
     <GridItem
-      area='header'
-      // borderTopRadius='5px'
+      area='general'
+      borderTopRadius='8px'
       padding={2}
       textAlign='center'
       bgColor='teal'
@@ -150,12 +173,19 @@ function Header({
         height='100%'
         alignItems='center'
       >
-        <Text>customerName: {customerName}</Text>
-        {/* <Divider orientation='horizontal' colorScheme='red' size='3rem' /> */}
-        <Text>
-          customerIdentificationNumber: {customerIdentificationNumber}
-        </Text>
-        {/* <StatusTag status={customerStatus} /> */}
+        <DetailRow
+          label={t("customerName")}
+          value={customerName}
+          useDivider={false}
+        />
+        <Divider orientation='vertical' colorScheme='red' size='3rem' />
+        <DetailRow
+          label={t("customerIdentificationNumber")}
+          value={customerIdentificationNumber}
+          useDivider={false}
+        />
+        {/* 
+          <Divider orientation='vertical' colorScheme='red' size='3rem' /><StatusTag status={customerStatus} /> */}
       </Flex>
     </GridItem>
   );
@@ -167,33 +197,35 @@ type AddressProps = {
   addressRemarks: string | undefined;
 };
 function Address({ address, city, postalCode, addressRemarks }: AddressProps) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
   return (
-    <GridItem bg='pink' area='address'>
+    <GridItem bg='pink' area='address' padding='1rem'>
       <Flex
-        flexDirection='row'
+        flexDirection='column'
         gap={2}
         height='100%'
         width='100%'
-        alignItems='center'
+        alignItems='start'
       >
-        <VStack textAlign='start'>
-          <Text>address {address}</Text>
-          <Text>city {city}</Text>
-          <Text>postalCode {postalCode}</Text>
-        </VStack>
+        <DetailRow label={t("address")} value={address} />
+        <DetailRow label={t("city")} value={city} />
+        <DetailRow label={t("postalCode")} value={postalCode} />
 
         <Text>
-          addressRemarks <br /> {addressRemarks}{" "}
+          {t("addressRemarks")}: <br /> {addressRemarks}
         </Text>
       </Flex>
     </GridItem>
   );
 }
 function Notes({ remakes }: { remakes: string | undefined }) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
   return (
-    <GridItem bg='blue' area='notes' gap={3}>
+    <GridItem bg='blue' area='notes' gap={3} padding='1rem'>
       <Flex>
-        remakes <br /> {remakes}
+        {t("remarks")} <br /> {remakes}
       </Flex>
     </GridItem>
   );
@@ -210,31 +242,61 @@ function Contact({
   contactPersonName,
   contactPersonMobilePhone,
 }: ContactProps) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
   return (
-    <GridItem bg='brown' area='contact'>
+    <GridItem bg='brown' area='contact' padding='1rem'>
       <Flex
         flexDirection='column'
         gap={2}
         height='100%'
         width='100%'
-        alignItems='center'
-        textAlign='start'
+        alignItems='start'
       >
-        <Text>customerMainPhone {customerMainPhone}</Text>
+        <DetailRow label={t("customerMainPhone")} value={customerMainPhone} />
+        <DetailRow label={t("customerMainEMail")} value={customerMainEMail} />
+        <DetailRow label={t("contactPersonName")} value={contactPersonName} />
+        <DetailRow
+          label={t("contactPersonMobilePhone")}
+          value={contactPersonMobilePhone}
+          useDivider={false}
+        />
+        {/* <Text>customerMainPhone {customerMainPhone}</Text>
         <Text>customerMainEMail {customerMainEMail}</Text>
         <Text>contactPersonName {contactPersonName}</Text>
-        <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text>
+        <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
       </Flex>
     </GridItem>
   );
 }
 function Child() {
   return (
-    <GridItem bg='red' area='child'>
+    <GridItem bg='red' area='child' padding='1rem'>
       <Flex>
         <Button colorScheme='teal'>Edit</Button>
       </Flex>
     </GridItem>
+  );
+}
+function DetailRow<T>({
+  label,
+  value,
+  useDivider = true,
+}: {
+  label: string;
+  value: T;
+  useDivider?: boolean;
+}) {
+  return (
+    <>
+      <HStack>
+        <Text as='span' fontWeight={500}>
+          {label}:
+        </Text>
+        <Text> {value}</Text>
+      </HStack>
+      {useDivider && <Divider />}
+    </>
   );
 }
 //     <StyledCustomerDetails>
