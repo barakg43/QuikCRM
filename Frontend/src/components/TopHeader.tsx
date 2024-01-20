@@ -13,7 +13,7 @@ const StyledHeader = styled.header`
   box-shadow: var(--shadow-xl);
 `;
 
-function Header() {
+function TopHeader() {
   return (
     <StyledHeader>
       <LanguageSelector />
@@ -21,4 +21,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default TopHeader;
