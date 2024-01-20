@@ -4,9 +4,8 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 
 export function useCustomer(customerId: number) {
-  const toast = useToast();
   const {
-    data: customer,
+    data: customer = {},
     isLoading,
     error,
   } = useQuery({
@@ -19,5 +18,7 @@ export function useCustomer(customerId: number) {
       console.error(error.response);
     }
   }
+  console.log("useCustomer");
+
   return { customer, isLoading, error };
 }
