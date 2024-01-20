@@ -21,7 +21,6 @@ const StyledTag = styled.span<{ type: string }>`
 `;
 function StatusTag({ status }: { status: string }) {
   const { t } = useTranslation("customers", { keyPrefix: "status" });
-  console.log(status);
 
   const statusString = status || "none"; //TODO: fix the trim
   return statusString !== "none" ? (
