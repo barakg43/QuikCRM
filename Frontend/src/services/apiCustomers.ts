@@ -27,5 +27,6 @@ export async function getCustomerDataByID(
   const { data }: { data: CustomerFullDataType } = await httpClient.get(
     `/customers/${customerId}`
   );
+  console.log("data", data);
   return data;
 }
