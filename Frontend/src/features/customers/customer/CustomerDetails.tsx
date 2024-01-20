@@ -11,10 +11,12 @@ import {
   Tag,
   Text,
   Textarea,
+  Toast,
   VStack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StatusTag from "../../../components/StatusTag";
 import { useTranslation } from "react-i18next";
 import { customerStatuses } from "../CustomersTable";
@@ -48,7 +50,9 @@ const test = {
 
 function CustomerDetails() {
   const { customerId } = useParams();
-  // console.log("customerId", customerId);
+  // console.log("customerId", customerId);\
+  const toast = useToast();
+
   const {
     customer: {
       customerID,
@@ -65,11 +69,23 @@ function CustomerDetails() {
       addressRemarks,
       contactPersonName,
       contactPersonMobilePhone,
-    } = {},
+    },
     isLoading,
+    error,
   } = useCustomer(Number(customerId));
+  const navigate = useNavigate();
+  if (error) {
+    console.error("Error cust", error);
 
-  const [isEditing, setIsEditing] = useState(false);
+    toast({
+      title: "Error occurred",
+      description: "there are error fetch",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    navigate(-1);
+  }
   if (isLoading) return <LoadingSpinner />;
 
   return (
@@ -118,31 +134,29 @@ function Header({
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
 
   return (
-    <>
-      <GridItem
-        // bg='green'
-        area='header'
-        borderTopEndRadius='5px'
-        padding={3}
+    <GridItem
+      // bg='green'
+      area='header'
+      borderTopEndRadius='5px'
+      padding={3}
+      alignItems='center'
+    >
+      <Flex
+        flexDirection='row'
+        justifyContent='space-between'
+        gap={2}
         alignItems='center'
       >
-        <Flex
-          flexDirection='row'
-          justifyContent='space-between'
-          gap={2}
-          alignItems='center'
-        >
-          <Text fontSize='4xl' fontWeight={600}>
-            {customerID} - {customerShortName}
-          </Text>
+        <Text fontSize='4xl' fontWeight={600}>
+          {customerID} - {customerShortName}
+        </Text>
 
-          <HStack>
-            <Button colorScheme='red'>{t("delete")}</Button> */
-            <CustomerFormModal />
-          </HStack>
-        </Flex>
-      </GridItem>
-    </>
+        <HStack>
+          <Button colorScheme='red'>{t("delete")}</Button>
+          <CustomerFormModal />
+        </HStack>
+      </Flex>
+    </GridItem>
   );
 }
 type HeaderProps = {
