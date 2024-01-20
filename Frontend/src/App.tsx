@@ -7,13 +7,11 @@ import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
-    <StandardErrorBoundary>
-      <AppProviders>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </AppProviders>
-    </StandardErrorBoundary>
+    <AppProviders>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AppProviders>
   );
 }
 
