@@ -1,7 +1,8 @@
+import { Tag } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-const statusToTagName: { [index: string]: string } = {
+const statusToColor: { [index: string]: string } = {
   "in-service": "blue",
   "out-of-service": "red",
   "bank-hours": "pink",
@@ -20,12 +21,19 @@ const StyledTag = styled.span<{ type: string }>`
 `;
 function StatusTag({ status }: { status: string }) {
   const { t } = useTranslation("customers", { keyPrefix: "status" });
-  const statusString = (status || "none").trim(); //TODO: fix the trim
-  return (
-    <StyledTag type={statusToTagName[statusString]}>
-      {statusString !== "none" && t(statusString)}
-    </StyledTag>
-  );
+
+  const statusString = status || "none"; //TODO: fix the trim
+  return statusString !== "none" ? (
+    <Tag
+      backgroundColor={statusToColor[statusString]}
+      justifyContent='center'
+      size={"lg"}
+      borderRadius='10px'
+      padding='0 2rem 0 2rem'
+    >
+      {t(statusString)}
+    </Tag>
+  ) : null;
 }
 
 export default StatusTag;

@@ -1,14 +1,29 @@
-import { MouseEventHandler, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import Button from "../../../components/Button";
-import ButtonGroup from "../../../components/ButtonGroup";
-import EditableFormField from "../../../components/EditableFormField";
-import Heading from "../../../components/Heading";
+import { useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import Row from "../../../components/Row";
 import { useCustomer } from "./useCustomer";
-import { Grid } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Tag,
+  Text,
+  Textarea,
+  Toast,
+  VStack,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import StatusTag from "../../../components/StatusTag";
+import { useTranslation } from "react-i18next";
+import { customerStatuses } from "../CustomersTable";
+import CustomerFormModal from "./CustomerFormModal";
+import { CustomerFullDataType } from "../customers";
+export default CustomerDetails;
+
 const test = {
   customerID: 129,
   activeContractID: 564,
@@ -35,7 +50,9 @@ const test = {
 
 function CustomerDetails() {
   const { customerId } = useParams();
-  // console.log("customerId", customerId);
+  // console.log("customerId", customerId);\
+  const toast = useToast();
+
   const {
     customer: {
       customerID,
@@ -44,42 +61,257 @@ function CustomerDetails() {
       customerName,
       customerIdentificationNumber,
       customerMainPhone,
-      customerMainFax,
       customerMainEMail,
       remarks,
-
       address,
       city,
       postalCode,
       addressRemarks,
-
       contactPersonName,
-      contactPersonPhone,
       contactPersonMobilePhone,
-      contactPersonFax,
-      contactPersonEMail,
-
-      activeContractID,
-    } = {},
+    },
     isLoading,
+    error,
   } = useCustomer(Number(customerId));
+  const navigate = useNavigate();
+  if (error) {
+    console.error("Error cust", error);
 
-  const [isEditing, setIsEditing] = useState(false);
+    toast({
+      title: "Error occurred",
+      description: "there are error fetch",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    navigate(-1);
+  }
   if (isLoading) return <LoadingSpinner />;
-  function handleSubmit() {}
+
   return (
     <Grid
-      gridTemplateAreas={`"buttons buttons"
-                          "header header"
-                        "address contact"
-                        "service notes"
-                        "child child"`}
-    ></Grid>
+      gridTemplateAreas={`"header header header"
+                          "general general general"
+                        "address contact notes"
+                        "child child child"`}
+      width='90%'
+      height='89dvh'
+      templateRows='0.5fr 0.5fr 4fr 7fr'
+      templateColumns='1fr 1fr 2.5fr'
+      gap={2}
+    >
+      <Header customerID={customerID} customerShortName={customerShortName} />
+      <General
+        customerStatus={customerStatus}
+        customerName={customerName}
+        customerIdentificationNumber={customerIdentificationNumber}
+      />
+      <Address
+        address={address}
+        city={city}
+        postalCode={postalCode}
+        addressRemarks={addressRemarks}
+      />
+      <Notes remakes={remarks} />
+      <Contact
+        contactPersonMobilePhone={contactPersonMobilePhone}
+        customerMainEMail={customerMainEMail}
+        contactPersonName={contactPersonName}
+        customerMainPhone={customerMainPhone}
+      />
+      <Child />
+    </Grid>
   );
 }
 
-function Buttons() {
-  return;
+function Header({
+  customerID,
+  customerShortName,
+}: {
+  customerID: number | undefined;
+  customerShortName: string | undefined;
+}) {
+  const { t } = useTranslation("components", { keyPrefix: "buttons" });
+
+  return (
+    <GridItem
+      // bg='green'
+      area='header'
+      borderTopEndRadius='5px'
+      padding={3}
+      alignItems='center'
+    >
+      <Flex
+        flexDirection='row'
+        justifyContent='space-between'
+        gap={2}
+        alignItems='center'
+      >
+        <Text fontSize='4xl' fontWeight={600}>
+          {customerID} - {customerShortName}
+        </Text>
+
+        <HStack>
+          <Button colorScheme='red'>{t("delete")}</Button>
+          <CustomerFormModal />
+        </HStack>
+      </Flex>
+    </GridItem>
+  );
+}
+type HeaderProps = {
+  customerStatus: string;
+  customerName: string | undefined;
+  customerIdentificationNumber: string | undefined;
+};
+function General({
+  customerStatus,
+  customerName,
+  customerIdentificationNumber,
+}: HeaderProps) {
+  console.log("customerStatus", customerStatus);
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
+  return (
+    <GridItem
+      area='general'
+      borderTopRadius='8px'
+      padding={2}
+      textAlign='center'
+      bgColor='teal'
+    >
+      <Flex
+        flexDirection='row'
+        gap={2}
+        justifyContent='space-around'
+        height='100%'
+        alignItems='center'
+      >
+        <DetailRow
+          label={t("customerName")}
+          value={customerName}
+          useDivider={false}
+        />
+        <Divider orientation='vertical' colorScheme='red' size='3rem' />
+        <DetailRow
+          label={t("customerIdentificationNumber")}
+          value={customerIdentificationNumber}
+          useDivider={false}
+        />
+        {/* 
+          <Divider orientation='vertical' colorScheme='red' size='3rem' /><StatusTag status={customerStatus} /> */}
+      </Flex>
+    </GridItem>
+  );
+}
+type AddressProps = {
+  address: string | undefined;
+  city: string | undefined;
+  postalCode: string | undefined;
+  addressRemarks: string | undefined;
+};
+function Address({ address, city, postalCode, addressRemarks }: AddressProps) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
+  return (
+    <GridItem bg='pink' area='address' padding='1rem'>
+      <Flex
+        flexDirection='column'
+        gap={2}
+        height='100%'
+        width='100%'
+        alignItems='start'
+      >
+        <DetailRow label={t("address")} value={address} />
+        <DetailRow label={t("city")} value={city} />
+        <DetailRow label={t("postalCode")} value={postalCode} />
+
+        <Text>
+          {t("addressRemarks")}: <br /> {addressRemarks}
+        </Text>
+      </Flex>
+    </GridItem>
+  );
+}
+function Notes({ remakes }: { remakes: string | undefined }) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
+  return (
+    <GridItem bg='blue' area='notes' gap={3} padding='1rem'>
+      <Flex>
+        {t("remarks")} <br /> {remakes}
+      </Flex>
+    </GridItem>
+  );
+}
+type ContactProps = {
+  customerMainPhone: string | undefined;
+  customerMainEMail: string | undefined;
+  contactPersonName: string | undefined;
+  contactPersonMobilePhone: string | undefined;
+};
+function Contact({
+  customerMainPhone,
+  customerMainEMail,
+  contactPersonName,
+  contactPersonMobilePhone,
+}: ContactProps) {
+  const { t } = useTranslation("customers", { keyPrefix: "details" });
+
+  return (
+    <GridItem bg='brown' area='contact' padding='1rem'>
+      <Flex
+        flexDirection='column'
+        gap={2}
+        height='100%'
+        width='100%'
+        alignItems='start'
+      >
+        <DetailRow label={t("customerMainPhone")} value={customerMainPhone} />
+        <DetailRow label={t("customerMainEMail")} value={customerMainEMail} />
+        <DetailRow label={t("contactPersonName")} value={contactPersonName} />
+        <DetailRow
+          label={t("contactPersonMobilePhone")}
+          value={contactPersonMobilePhone}
+          useDivider={false}
+        />
+        {/* <Text>customerMainPhone {customerMainPhone}</Text>
+        <Text>customerMainEMail {customerMainEMail}</Text>
+        <Text>contactPersonName {contactPersonName}</Text>
+        <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
+      </Flex>
+    </GridItem>
+  );
+}
+function Child() {
+  return (
+    <GridItem bg='red' area='child' padding='1rem'>
+      <Flex>
+        <Button colorScheme='teal'>Edit</Button>
+      </Flex>
+    </GridItem>
+  );
+}
+function DetailRow<T>({
+  label,
+  value,
+  useDivider = true,
+}: {
+  label: string;
+  value: T;
+  useDivider?: boolean;
+}) {
+  return (
+    <>
+      <HStack>
+        <Text as='span' fontWeight={500}>
+          {label}:
+        </Text>
+        <Text> {value}</Text>
+      </HStack>
+      {useDivider && <Divider />}
+    </>
+  );
 }
 //     <StyledCustomerDetails>
 //       <ButtonGroup padding='0 2rem 1rem 2rem' style={{ gridArea: "buttons" }}>
@@ -289,4 +521,3 @@ function Buttons() {
 //   }
 //   justify-content: space-between;
 // `;
-export default CustomerDetails;

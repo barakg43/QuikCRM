@@ -32,10 +32,10 @@ function CustomersTable() {
         render={(customer) => (
           <CustomerRow
             customerID={customer.customerID}
-            customerName={customer.customerShortName}
+            customerShortName={customer.customerShortName}
             address={customer.address}
             city={customer.city}
-            status={customer.customerStatus}
+            customerStatus={customer.customerStatus}
             key={customer.customerID}
           />
         )}

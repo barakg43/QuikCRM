@@ -1,4 +1,4 @@
-export type CustomerType = {
+export type CustomerFullDataType = {
   customerID: number;
   activeContractID: number;
   customerShortName: string;
@@ -21,15 +21,15 @@ export type CustomerType = {
   contactPersonFax: string;
   contactPersonEMail: string;
 };
-export type CustomerDataType = {
-  customers: CustomerType[];
+export type CustomersListType = {
+  customers: CustomerSlimDetailsProps[];
   totalItems: number;
 };
 export type CustomerStatus = (typeof customerStatuses)[number] | null;
-export type CustomerRowProps = {
+export type CustomerSlimDetailsProps = {
   customerID: number;
-  customerName: string;
+  customerShortName: string;
   address: string;
   city: string;
-  status: CustomerStatus;
+  customerStatus: CustomerStatus;
 };

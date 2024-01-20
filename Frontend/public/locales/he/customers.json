@@ -13,5 +13,21 @@
     "cloud-server": "שרת בענן",
     "cloud-mail": "מיילים בענן",
     "charge": "חיוב"
+  },
+  "details": {
+    "customerID": "מספר לקוח",
+    "customerShortName": "שם מקוצר",
+    "customerStatus": "סטטוס לקוח",
+    "customerName": "שם מלא",
+    "customerIdentificationNumber": "ח.פ.",
+    "customerMainPhone": "טלפון ראשי",
+    "customerMainEMail": "מייל ראשי",
+    "remarks": "הערות",
+    "address": "כתובת",
+    "city": "עיר",
+    "postalCode": "מיקוד",
+    "addressRemarks": "הערות לכתובת",
+    "contactPersonName": "איש קשר",
+    "contactPersonMobilePhone": "נייד איש קשר"
   }
 }

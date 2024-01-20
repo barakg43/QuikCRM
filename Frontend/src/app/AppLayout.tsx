@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import SideBar from "../components/Sidebar";
-import Header from "../components/Header";
+import TopHeader from "../components/TopHeader";
 import { Outlet } from "react-router-dom";
 
 const StyledAppLayout = styled.div`
@@ -36,7 +36,7 @@ function AppLayout() {
     <StyledAppLayout>
       <SideBar />
       <MainContainer>
-        <Header />
+        <TopHeader />
         <Main>
           <Container>
             <Outlet />
