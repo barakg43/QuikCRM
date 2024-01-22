@@ -1,5 +1,11 @@
 package main.server.sql.bulider.component;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SqlBaseClauses {
@@ -45,9 +51,14 @@ public class SqlBaseClauses {
 		baseClause = eBaseClause.INSERT;
 		StringBuilder columnNamesParameters = new StringBuilder();
 		StringBuilder valuesParameters = new StringBuilder();
+		String value;
 		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-			columnNamesParameters.append(columnEntry.getKey()).append(parameterDelimiter);
-			valuesParameters.append(columnEntry.getValue()).append(parameterDelimiter);
+			if (columnEntry.getValue() != null) {
+				columnNamesParameters.append(columnEntry.getKey()).append(parameterDelimiter);
+				value = String.format(columnEntry.getValue().getClass().equals(String.class) ? "N'%s'" : "%s",
+						columnEntry.getValue());
+				valuesParameters.append(value).append(parameterDelimiter);
+			}
 		}
 		removeLastDelimiterFromStringBuilder(columnNamesParameters);
 		removeLastDelimiterFromStringBuilder(valuesParameters);
@@ -75,12 +86,41 @@ public class SqlBaseClauses {
 COMMIT TRANSACTION
 
 */
-	public SqlFilterClauses update(Map<String, Object> columnValues) {
+	public SqlFilterClauses update(Object updatedObject, String... selectedFieldNames) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.UPDATE;
-		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-			additionalParameters.append(columnEntry.getKey()).append(" = ").append(columnEntry.getValue()).append(parameterDelimiter);
+		String value;
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(updatedObject);
+				if (currentValue != null) {
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+
 		}
+
+//
+//		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
+//			System.out.print(columnEntry);
+//			if (columnEntry.getValue() != null) {
+//				System.out.println(" :entered!");
+//				value = String.format(columnEntry.getValue().getClass().equals(String.class) ? "'%s'" : "%s",
+//						columnEntry.getValue());
+//				additionalParameters.append(columnEntry.getKey()).append(" = ").append(value).append
+//				(parameterDelimiter);
+//			}
+//
+//		}
+		System.out.println(additionalParameters);
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
@@ -132,6 +172,18 @@ COMMIT TRANSACTION
 	private void removeLastDelimiterFromStringBuilder(StringBuilder clauseBuilder) {
 		if (clauseBuilder.length() >= parameterDelimiter.length())
 			clauseBuilder.delete(clauseBuilder.length() - parameterDelimiter.length(), clauseBuilder.length());
+	}
+
+	private Map<String, Object> convertUsingReflection(Object object) throws IllegalAccessException {
+		Map<String, Object> map = new HashMap<>();
+		Field[] fields = object.getClass().getDeclaredFields();
+
+		for (Field field : fields) {
+			field.setAccessible(true);
+			map.put(field.getName(), field.get(object));
+		}
+
+		return map;
 	}
 
 	private void baseClauseDuplicateValidation() {
