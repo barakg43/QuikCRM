@@ -25,7 +25,7 @@ public class SqlBaseClausesBuilder extends SqlBaseClauses {
 					       %%s\s
 					    IF @@error <> 0
 					    BEGIN
-					    ROLLBACK TRAN
+					    ROLLBACK TRANSACTION
 					    RETURN
 					            END
 
