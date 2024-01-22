@@ -1,9 +1,12 @@
 package main.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import main.server.logger.ServerLogManager;
 import main.server.sql.SqlClient;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.eJoinType;
+import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.executor.CustomerSqlExecutor;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.boot.SpringApplication;
@@ -111,14 +114,42 @@ public class ServerApplication extends SpringBootServletInitializer {
 		SqlClient sqlClient = new SqlClient(sqlFunctionExecutor, new ServerLogManager());
 		sqlClient.createSqlConnection();
 		CustomerSqlExecutor customerSqlExecutor = new CustomerSqlExecutor(sqlFunctionExecutor);
-		int loopAmount = 200;
+		int loopAmount = 1;
 		Instant start, end;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = "  {\"customerID\": 38,\n" +
+				"    \"activeContractID\": 148,\n" +
+				"    \"customerShortName\": \"לוי אברהם\",\n" +
+				"    \"customerName\": \"לוי אברהם11\",\n" +
+				"    \"customerStatus\": null,\n" +
+				"    \"customerIdentificationNumber\": \"5511648  \",\n" +
+				"    \"customerMainPhone\": \"03-5758047\",\n" +
+				"    \"customerMainFax\": null,\n" +
+				"    \"customerMainEMail\": \"#mailto:levycpa@netvision.net.il#\",\n" +
+				"    \"customerWebSite\": null,\n" +
+				"    \"remarks\": \"in-service\",\n" +
+				"    \"address\": \"הנחושגכככקכרקכרת 16 \\r\\nקומה 4\",\n" +
+				"    \"city\": \"תל אביב\",\n" +
+				"    \"postalCode\": null,\n" +
+				"    \"addressRemarks\": null,\n" +
+				"    \"contactPersonName\": \"אברהם                         \",\n" +
+				"    \"contactPersonPost\": null,\n" +
+				"    \"contactPersonPhone\": null,\n" +
+				"    \"contactPersonMobilePhone\": \"054-4518289\",\n" +
+				"    \"contactPersonFax\": null,\n" +
+				"    \"contactPersonEMail\": null}";
+		CustomerFullDetailsRecord customerFullDetailsRecord;
+		try {
+			customerFullDetailsRecord = objectMapper.readValue(json, CustomerFullDetailsRecord.class);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 
 		final AtomicLong time1 = new AtomicLong(0), time2 = new AtomicLong(0);
 		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
 			Instant start1 = Instant.now();
-			customerSqlExecutor.getFullCustomerDetailsForId(1);
+			customerSqlExecutor.updateCustomerDetails(customerFullDetailsRecord);
 			Instant end1 = Instant.now();
 			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
