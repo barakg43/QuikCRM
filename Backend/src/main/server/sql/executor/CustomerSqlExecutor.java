@@ -6,6 +6,7 @@ import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.bulider.component.eJoinType;
 import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
+import main.server.sql.dto.customer.CustomerAddressIdContactId;
 import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
@@ -59,6 +60,52 @@ public class CustomerSqlExecutor {
 
 	}
 
+	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
+//		System.out.println(customerDetailsUpdated);
+		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomers")
+				.select("mainAddress", "mainContactPerson")
+				.where().equal("customerID", customerDetailsUpdated.getCustomerID(), false)
+				.build();
+		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.executeTableValueQuery(
+				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
+		System.out.println(customerAddressIdContactId);
+		String sqlUpdateQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomers").update(customerDetailsUpdated, "customerShortName", "customerName",
+						"customerIdentificationNumber", "customerMainPhone", "remarks",
+						"customerMainEMail")
+				.where()
+				.equal("customerID", customerDetailsUpdated.getCustomerID(), false)
+				.build();
+		String sqlUpdateQueryContactTable = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomersContactPersons").update(customerDetailsUpdated, "contactPersonName",
+						"contactPersonMobilePhone").where()
+				.equal("customersContactPersonID", customerAddressIdContactId.getMainContactPerson(), false)
+				.build();
+		String sqlUpdateQueryAddressTable = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomersAddresses").update(customerDetailsUpdated,
+						"address", "postalCode", "city", "addressRemarks")
+				.where()
+				.equal("customersAddressID", customerAddressIdContactId.getMainAddress(), false)
+				.build();
+
+		sqlFunctionExecutor.update(sqlUpdateQueryCustomerTable);
+		sqlFunctionExecutor.update(sqlUpdateQueryContactTable);
+		sqlFunctionExecutor.update(sqlUpdateQueryAddressTable);
+//		"cust.customerID",
+//				"cust.activeContractID",
+//
+//				"cust.activeContractID",
+//				SqlInnerQueryBuilder.build(statusQuery, "customerStatus"),
+//				"ca.address",
+//				"ca.city",
+//				"ca.postalCode",
+//				"ca.addressRemarks",
+//				"cp.contactPersonName",
+//				"cp.contactPersonMobilePhone")
+
+	}
+
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
 
 		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
@@ -74,23 +121,20 @@ public class CustomerSqlExecutor {
 						".customersContactPersonID")
 				.select("cust.customerID",
 						"cust.customerShortName",
+						"cust.activeContractID",
+						"cust.customerName",
+						"cust.activeContractID",
+						"customerIdentificationNumber",
 						SqlInnerQueryBuilder.build(statusQuery, "customerStatus"),
 						"cust.customerMainPhone",
-						"cust.customerMainFax",
 						"cust.customerMainEMail",
-						"cust.customerWebSite",
 						"cust.remarks",
-						"cust.activeContractID",
 						"ca.address",
 						"ca.city",
 						"ca.postalCode",
 						"ca.addressRemarks",
 						"cp.contactPersonName",
-						"cp.contactPersonPost",
-						"cp.contactPersonPhone",
-						"cp.contactPersonMobilePhone",
-						"cp.contactPersonFax",
-						"cp.contactPersonEMail")
+						"cp.contactPersonMobilePhone")
 				.where().equal("cust.customerID", id, false)
 				.build();
 		System.out.println(sqlQuery);
