@@ -17,9 +17,12 @@ public class SqlFunctionExecutor {
 	public SqlFunctionExecutor() {
 	}
 
+
 	public void initializeJdbcTemplate(DataSource dataSource) {
 		System.out.println("initializeJdbcTemplate");
+	
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+
 	}
 
 	@Deprecated
@@ -38,6 +41,11 @@ public class SqlFunctionExecutor {
 				functionArguments);
 	}
 
+	public void update(String sqlUpdateQuery) {
+
+		jdbcTemplate.update(sqlUpdateQuery);
+	}
+
 	public <T> T executeScalarValueQuery(String sqlQuery, Class<T> returnType) {
 		return jdbcTemplate.queryForObject(sqlQuery, returnType);
 	}
@@ -46,7 +54,6 @@ public class SqlFunctionExecutor {
 		return jdbcTemplate.query(sqlQuery,
 				new BeanPropertyRowMapper<>(returnType));
 	}
-
 
 	private String preparedSqlQueryString(String storedFunctionQuery, boolean isTableValueFunction,
 										  int argumentAmount) {
