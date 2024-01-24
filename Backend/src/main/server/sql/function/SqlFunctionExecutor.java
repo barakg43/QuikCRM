@@ -20,7 +20,7 @@ public class SqlFunctionExecutor {
 
 	public void initializeJdbcTemplate(DataSource dataSource) {
 		System.out.println("initializeJdbcTemplate");
-	
+
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 
 	}
@@ -41,16 +41,16 @@ public class SqlFunctionExecutor {
 				functionArguments);
 	}
 
-	public void update(String sqlUpdateQuery) {
+	public void runQuery(String sqlUpdateQuery) {
 
 		jdbcTemplate.update(sqlUpdateQuery);
 	}
 
-	public <T> T executeScalarValueQuery(String sqlQuery, Class<T> returnType) {
+	public <T> T supplyScalarValueQuery(String sqlQuery, Class<T> returnType) {
 		return jdbcTemplate.queryForObject(sqlQuery, returnType);
 	}
 
-	public <T> List<T> executeTableValueQuery(String sqlQuery, Class<T> returnType) {
+	public <T> List<T> supplyTableValueQuery(String sqlQuery, Class<T> returnType) {
 		return jdbcTemplate.query(sqlQuery,
 				new BeanPropertyRowMapper<>(returnType));
 	}
