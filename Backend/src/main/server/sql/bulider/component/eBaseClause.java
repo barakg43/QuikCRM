@@ -23,7 +23,7 @@ public enum eBaseClause {
 ////            @PQCDetailsID)
 
 	INSERT("""
-			INSERT %%s (\s
+			INSERT INTO %%s (\s
 			\t\t%s\s"""),
 
 

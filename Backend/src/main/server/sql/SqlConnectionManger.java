@@ -13,54 +13,57 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SqlConnectionManger {
-    private final String sqlConfigurationYamlFilePath;
-    private DataSource dataSourceConfig;
-    private SqlConfiguration sqlConnectionConfiguration;
-    private Connection sqlConnection;
-    private SimpleJdbcCall simpleJdbcCall;
+	private final String sqlConfigurationYamlFilePath;
+	private DataSource dataSourceConfig;
+	private SqlConfiguration sqlConnectionConfiguration;
+	private Connection sqlConnection;
+	private SimpleJdbcCall simpleJdbcCall;
 
-    public SqlConnectionManger(String sqlConfigurationYamlFilePath) {
-        this.sqlConfigurationYamlFilePath = sqlConfigurationYamlFilePath;
-    }
+	public SqlConnectionManger(String sqlConfigurationYamlFilePath) {
+		this.sqlConfigurationYamlFilePath = sqlConfigurationYamlFilePath;
+	}
 
-    public void initializeSqlConnectionConfig() throws SQLException, IOException {
-        sqlConnectionConfiguration = createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
-        dataSourceConfig = createDataSource(sqlConnectionConfiguration);
+	public void initializeSqlConnectionConfig() throws SQLException, IOException {
+		sqlConnectionConfiguration = createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
+		dataSourceConfig = createDataSource(sqlConnectionConfiguration);
+
+
 //        simpleJdbcCall=new SimpleJdbcCall(dataSourceConfig);
 //        simpleJdbcCall.withFunctionName();
-    }
+	}
 
-    @Bean
-    private SqlConfiguration createSqlConfigurationFromFile(String filePath) throws IOException {
-        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-        SqlConfiguration sqlConfiguration;
-        FileReader fileReader;
+	@Bean
+	private SqlConfiguration createSqlConfigurationFromFile(String filePath) throws IOException {
+		ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+		SqlConfiguration sqlConfiguration;
+		FileReader fileReader;
 
-        fileReader = new FileReader(filePath);
-        sqlConfiguration = yamlMapper.readValue(fileReader, SqlConfiguration.class);
+		fileReader = new FileReader(filePath);
+		sqlConfiguration = yamlMapper.readValue(fileReader, SqlConfiguration.class);
 
-        return sqlConfiguration;
-    }
+		return sqlConfiguration;
+	}
 
-    @Bean
-    private DataSource createDataSource(SqlConfiguration sqlServerConfiguration) {
-        SQLServerDataSource msSqlDataSource = new SQLServerDataSource();
-//        SQLServerConnectionPoolDataSource msSqlDataSource=new SQLServerConnectionPoolDataSource();
-        msSqlDataSource.setServerName(sqlServerConfiguration.getServerName());
-        msSqlDataSource.setPortNumber(sqlServerConfiguration.getPort());
-        msSqlDataSource.setUser(sqlServerConfiguration.getUsername());
-        msSqlDataSource.setPassword(sqlServerConfiguration.getPassword());
-        msSqlDataSource.setDatabaseName(sqlServerConfiguration.getDatabaseName());
-        msSqlDataSource.setEncrypt("true");
-        msSqlDataSource.setTrustServerCertificate(true);
-        return msSqlDataSource;
-    }
+	@Bean
+	private DataSource createDataSource(SqlConfiguration sqlServerConfiguration) {
+		SQLServerDataSource msSqlDataSource = new SQLServerDataSource();
 
-    public String getServerConfigDetails() {
-        return sqlConnectionConfiguration.getServerConfigDetails();
-    }
+		msSqlDataSource.setServerName(sqlServerConfiguration.getServerName());
+		msSqlDataSource.setPortNumber(sqlServerConfiguration.getPort());
+		msSqlDataSource.setUser(sqlServerConfiguration.getUsername());
+		msSqlDataSource.setPassword(sqlServerConfiguration.getPassword());
+		msSqlDataSource.setDatabaseName(sqlServerConfiguration.getDatabaseName());
+		msSqlDataSource.setEncrypt("true");
+		msSqlDataSource.setTrustServerCertificate(true);
 
-    public DataSource getSqlConnectionConfig() {
-        return dataSourceConfig;
-    }
+		return msSqlDataSource;
+	}
+
+	public String getServerConfigDetails() {
+		return sqlConnectionConfiguration.getServerConfigDetails();
+	}
+
+	public DataSource getSqlConnectionConfig() {
+		return dataSourceConfig;
+	}
 }

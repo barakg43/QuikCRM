@@ -1,9 +1,12 @@
 package main.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import main.server.logger.ServerLogManager;
 import main.server.sql.SqlClient;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.eJoinType;
+import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.executor.CustomerSqlExecutor;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.boot.SpringApplication;
@@ -70,12 +73,12 @@ public class ServerApplication extends SpringBootServletInitializer {
 //
 //		COMMIT TRANSACTION
 //		System.out.println(query1);
-		String insert = SqlQueryBuilder.getNewBuilder()
-				.from("tbConnectionPriceQuotesDetails")
-				.insert(Map.ofEntries(
-						Map.entry("PQSDetailsID", 3),
-						Map.entry("PQCDetailsID", 7)))
-				.build();
+//		String insert = SqlQueryBuilder.getNewBuilder()
+//				.from("tbConnectionPriceQuotesDetails")
+//				.insert(Map.ofEntries(
+//						Map.entry("PQSDetailsID", 3),
+//						Map.entry("PQCDetailsID", 7)))
+//				.build();
 
 //		BEGIN TRANSACTION
 //
@@ -100,7 +103,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 		System.out.println("==========");
 		System.out.println(delete);
 		System.out.println("==========");
-		System.out.println(insert);
+//		System.out.println(insert);
 		System.out.println("==========");
 		System.out.println(update);
 	}
@@ -111,14 +114,42 @@ public class ServerApplication extends SpringBootServletInitializer {
 		SqlClient sqlClient = new SqlClient(sqlFunctionExecutor, new ServerLogManager());
 		sqlClient.createSqlConnection();
 		CustomerSqlExecutor customerSqlExecutor = new CustomerSqlExecutor(sqlFunctionExecutor);
-		int loopAmount = 200;
+		int loopAmount = 1;
 		Instant start, end;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = "  {\"customerID\": 88,\n" +
+				"    \"activeContractID\": 11,\n" +
+				"    \"customerShortName\": \"ברק גולן\",\n" +
+				"    \"customerName\": \"מברק גולן בע\",\n" +
+				"    \"customerStatus\": null,\n" +
+				"    \"customerIdentificationNumber\": \"55116554\",\n" +
+				"    \"customerMainPhone\": \"03-5758047\",\n" +
+				"    \"customerMainFax\": null,\n" +
+				"    \"customerMainEMail\": \"#mailto:barak@litos.co.il#\",\n" +
+				"    \"customerWebSite\": null,\n" +
+				"    \"remarks\": \"in-service\",\n" +
+				"    \"address\": \"תובל 22 \\r\\nקומה 4\",\n" +
+				"    \"city\": \"רמת גן\",\n" +
+				"    \"postalCode\": 554764,\n" +
+				"    \"addressRemarks\": \"אין\",\n" +
+				"    \"contactPersonName\": \"אברהם                         \",\n" +
+				"    \"contactPersonPost\": null,\n" +
+				"    \"contactPersonPhone\": null,\n" +
+				"    \"contactPersonMobilePhone\": \"054-1234567\",\n" +
+				"    \"contactPersonFax\": null,\n" +
+				"    \"contactPersonEMail\": null}";
+		CustomerFullDetailsRecord customerFullDetailsRecord;
+		try {
+			customerFullDetailsRecord = objectMapper.readValue(json, CustomerFullDetailsRecord.class);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 
 		final AtomicLong time1 = new AtomicLong(0), time2 = new AtomicLong(0);
 		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
 			Instant start1 = Instant.now();
-			customerSqlExecutor.getFullCustomerDetailsForId(1);
+			customerSqlExecutor.addNewCustomer(customerFullDetailsRecord);
 			Instant end1 = Instant.now();
 			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();

@@ -55,7 +55,8 @@ public class CustomerController {
 
 	@GetMapping("/customer/name")
 	public String getCostumerNameByID(@RequestParam int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getCustomerNameByID(id), "/customer" +
+		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getCustomerNameByID(id), "api" +
+				"/customers" +
 				"/name", HttpMethod.GET);
 //        return clientSqlExecutor.getClientNameByID(id);
 	}
@@ -65,15 +66,52 @@ public class CustomerController {
 		try {
 			CustomerFullDetailsRecord test =
 					httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getFullCustomerDetailsForId(id),
-							"/customer/" + id
+							"api/customers/" + id
 							, HttpMethod.GET);
-			System.out.println(test);
+			System.out.println("getFullCustomerDetailsForId" + test);
 			return test;
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant find customer with id of " + id, exception);
 		}
+	}
 
+	@PostMapping("")
+	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
+
+		httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.addNewCustomer(customerDetails),
+				"api/customers/"
+				, HttpMethod.POST);
+
+
+	}
+
+	@PatchMapping("/{id}")
+	public void updateCustomerDetails(@PathVariable("id") int id,
+									  @RequestBody CustomerFullDetailsRecord customerDetails) {
+		try {
+			customerDetails.setCustomerID(id);
+			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.updateCustomerDetails(customerDetails),
+					"api/customers/" + id
+					, HttpMethod.PATCH);
+
+		} catch (IndexOutOfBoundsException exception) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Cant update customer with id of " + id, exception);
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public void deleteCustomer(@PathVariable("id") int id) {
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.deleteCustomer(id),
+					"api/customers/" + id
+					, HttpMethod.DELETE);
+
+		} catch (IndexOutOfBoundsException exception) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Cant delete customer with id of " + id, exception);
+		}
 	}
 
 	@GetMapping("/customer/closed-tasks")

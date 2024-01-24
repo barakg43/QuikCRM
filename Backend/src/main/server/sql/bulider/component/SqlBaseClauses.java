@@ -1,5 +1,11 @@
 package main.server.sql.bulider.component;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SqlBaseClauses {
@@ -8,7 +14,7 @@ public class SqlBaseClauses {
 	private final String parameterDelimiter = ", ";
 	private final SqlFilterClauses sqlFilterClauses;
 	protected eBaseClause baseClause = null;
-
+	private String outputClause = null;
 
 	public SqlBaseClauses(SqlFilterClauses sqlFilterClauses) {
 		this.sqlFilterClauses = sqlFilterClauses;
@@ -40,21 +46,41 @@ public class SqlBaseClauses {
 //    COMMIT TRANSACTION
 
 
-	public SqlFilterClauses insert(Map<String, Object> columnValues) {
+	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.INSERT;
 		StringBuilder columnNamesParameters = new StringBuilder();
 		StringBuilder valuesParameters = new StringBuilder();
-		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-			columnNamesParameters.append(columnEntry.getKey()).append(parameterDelimiter);
-			valuesParameters.append(columnEntry.getValue()).append(parameterDelimiter);
+		String value;
+
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(newObject);
+				if (currentValue != null) {
+					columnNamesParameters.append(field).append(parameterDelimiter);
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					valuesParameters.append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+
 		}
 		removeLastDelimiterFromStringBuilder(columnNamesParameters);
 		removeLastDelimiterFromStringBuilder(valuesParameters);
 		columnNamesParameters.append(")");
 		valuesParameters.append(")");
-
-		additionalParameters.append(columnNamesParameters).append("\n\t\t VALUES (").append(valuesParameters);
+		outputClause = outputColumn;
+		additionalParameters.append(columnNamesParameters);
+		if (outputColumn != null) {
+			additionalParameters.append(String.format("\n\t\tOUTPUT INSERTED.%s", outputColumn));
+		}
+		additionalParameters.append("\n\t\tVALUES (").append(valuesParameters);
 		return sqlFilterClauses;
 	}
 
@@ -75,12 +101,41 @@ public class SqlBaseClauses {
 COMMIT TRANSACTION
 
 */
-	public SqlFilterClauses update(Map<String, Object> columnValues) {
+	public SqlFilterClauses update(Object updatedObject, String... selectedFieldNames) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.UPDATE;
-		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-			additionalParameters.append(columnEntry.getKey()).append(" = ").append(columnEntry.getValue()).append(parameterDelimiter);
+		String value;
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(updatedObject);
+				if (currentValue != null) {
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+
 		}
+
+//
+//		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
+//			System.out.print(columnEntry);
+//			if (columnEntry.getValue() != null) {
+//				System.out.println(" :entered!");
+//				value = String.format(columnEntry.getValue().getClass().equals(String.class) ? "'%s'" : "%s",
+//						columnEntry.getValue());
+//				additionalParameters.append(columnEntry.getKey()).append(" = ").append(value).append
+//				(parameterDelimiter);
+//			}
+//
+//		}
+		System.out.println(additionalParameters);
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
@@ -132,6 +187,18 @@ COMMIT TRANSACTION
 	private void removeLastDelimiterFromStringBuilder(StringBuilder clauseBuilder) {
 		if (clauseBuilder.length() >= parameterDelimiter.length())
 			clauseBuilder.delete(clauseBuilder.length() - parameterDelimiter.length(), clauseBuilder.length());
+	}
+
+	private Map<String, Object> convertUsingReflection(Object object) throws IllegalAccessException {
+		Map<String, Object> map = new HashMap<>();
+		Field[] fields = object.getClass().getDeclaredFields();
+
+		for (Field field : fields) {
+			field.setAccessible(true);
+			map.put(field.getName(), field.get(object));
+		}
+
+		return map;
 	}
 
 	private void baseClauseDuplicateValidation() {
