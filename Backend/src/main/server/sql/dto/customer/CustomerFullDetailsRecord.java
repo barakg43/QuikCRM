@@ -1,17 +1,17 @@
 package main.server.sql.dto.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(value = {"customerStatusID"})
 public class CustomerFullDetailsRecord {
 
-	Integer customerID, activeContractID;
-
+	private Integer customerID, activeContractID;
 	private String customerShortName;
 	private String customerName;
 	private String customerStatus;
-
-
+	private Integer customerStatusID;
 	private String customerIdentificationNumber;
 	private String customerMainPhone;
 	private String customerMainFax;
