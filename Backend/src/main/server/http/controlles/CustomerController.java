@@ -101,6 +101,19 @@ public class CustomerController {
 		}
 	}
 
+	@DeleteMapping("/{id}")
+	public void deleteCustomer(@PathVariable("id") int id) {
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.deleteCustomer(id),
+					"api/customers/" + id
+					, HttpMethod.DELETE);
+
+		} catch (IndexOutOfBoundsException exception) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Cant delete customer with id of " + id, exception);
+		}
+	}
+
 	@GetMapping("/customer/closed-tasks")
 	public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {
 //        return sqlClient.getClosedTaskForCustomer(id);
