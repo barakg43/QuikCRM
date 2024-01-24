@@ -73,12 +73,12 @@ public class ServerApplication extends SpringBootServletInitializer {
 //
 //		COMMIT TRANSACTION
 //		System.out.println(query1);
-		String insert = SqlQueryBuilder.getNewBuilder()
-				.from("tbConnectionPriceQuotesDetails")
-				.insert(Map.ofEntries(
-						Map.entry("PQSDetailsID", 3),
-						Map.entry("PQCDetailsID", 7)))
-				.build();
+//		String insert = SqlQueryBuilder.getNewBuilder()
+//				.from("tbConnectionPriceQuotesDetails")
+//				.insert(Map.ofEntries(
+//						Map.entry("PQSDetailsID", 3),
+//						Map.entry("PQCDetailsID", 7)))
+//				.build();
 
 //		BEGIN TRANSACTION
 //
@@ -103,7 +103,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 		System.out.println("==========");
 		System.out.println(delete);
 		System.out.println("==========");
-		System.out.println(insert);
+//		System.out.println(insert);
 		System.out.println("==========");
 		System.out.println(update);
 	}
@@ -117,25 +117,25 @@ public class ServerApplication extends SpringBootServletInitializer {
 		int loopAmount = 1;
 		Instant start, end;
 		ObjectMapper objectMapper = new ObjectMapper();
-		String json = "  {\"customerID\": 38,\n" +
-				"    \"activeContractID\": 148,\n" +
-				"    \"customerShortName\": \"לוי אברהם\",\n" +
-				"    \"customerName\": \"לוי אברהם11\",\n" +
+		String json = "  {\"customerID\": 88,\n" +
+				"    \"activeContractID\": 11,\n" +
+				"    \"customerShortName\": \"ברק גולן\",\n" +
+				"    \"customerName\": \"מברק גולן בע\",\n" +
 				"    \"customerStatus\": null,\n" +
-				"    \"customerIdentificationNumber\": \"5511648  \",\n" +
+				"    \"customerIdentificationNumber\": \"55116554\",\n" +
 				"    \"customerMainPhone\": \"03-5758047\",\n" +
 				"    \"customerMainFax\": null,\n" +
-				"    \"customerMainEMail\": \"#mailto:levycpa@netvision.net.il#\",\n" +
+				"    \"customerMainEMail\": \"#mailto:barak@litos.co.il#\",\n" +
 				"    \"customerWebSite\": null,\n" +
 				"    \"remarks\": \"in-service\",\n" +
-				"    \"address\": \"הנחושגכככקכרקכרת 16 \\r\\nקומה 4\",\n" +
-				"    \"city\": \"תל אביב\",\n" +
-				"    \"postalCode\": null,\n" +
-				"    \"addressRemarks\": null,\n" +
+				"    \"address\": \"תובל 22 \\r\\nקומה 4\",\n" +
+				"    \"city\": \"רמת גן\",\n" +
+				"    \"postalCode\": 554764,\n" +
+				"    \"addressRemarks\": \"אין\",\n" +
 				"    \"contactPersonName\": \"אברהם                         \",\n" +
 				"    \"contactPersonPost\": null,\n" +
 				"    \"contactPersonPhone\": null,\n" +
-				"    \"contactPersonMobilePhone\": \"054-4518289\",\n" +
+				"    \"contactPersonMobilePhone\": \"054-1234567\",\n" +
 				"    \"contactPersonFax\": null,\n" +
 				"    \"contactPersonEMail\": null}";
 		CustomerFullDetailsRecord customerFullDetailsRecord;
@@ -149,7 +149,7 @@ public class ServerApplication extends SpringBootServletInitializer {
 		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
 			Instant start1 = Instant.now();
-			customerSqlExecutor.updateCustomerDetails(customerFullDetailsRecord);
+			customerSqlExecutor.addNewCustomer(customerFullDetailsRecord);
 			Instant end1 = Instant.now();
 			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();
