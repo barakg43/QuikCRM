@@ -46,24 +46,24 @@ public class SqlFilterClauses extends SqlQueryDirector {
 	//    ORDER BY Price
 //    OFFSET 5 ROWS FETCH NEXT 6 ROWS ONLY
 	public SqlFilterClauses orderBy(String[] columnNames) {
-		return orderBy(columnNames, -0, -1);
+		return orderBy(columnNames, -1, -1);
 	}
 
 	public SqlFilterClauses orderBy(String[] columnNames, int fromRow) {
 		return orderBy(columnNames, fromRow, -1);
 	}
 
-	public SqlFilterClauses orderBy(String[] columnNames, int fromRow, int toRow) {
+	public SqlFilterClauses orderBy(String[] columnNames, int fromRow, int rowsAmount) {
 		checkSingleClauseInQuery(orderByClause, "ORDER BY");
 		orderByClause = new StringBuilder("ORDER BY ");
 		for (String column : columnNames) {
 			orderByClause.append(column).append(parameterDelimiter);
 		}
 		removeLastDelimiterFromStringBuilder(orderByClause);
-		if (fromRow > 0)
-			orderByClause.append(String.format("OFFSET %d ROWS ", fromRow));
-		if (fromRow > 0)
-			orderByClause.append(String.format("OFFSET %d ROWS ", fromRow));
+		if (fromRow >= 0)
+			orderByClause.append(String.format("\nOFFSET %d ROWS ", fromRow));
+		if (rowsAmount > 0)
+			orderByClause.append(String.format("\nFETCH NEXT %d ROWS ONLY", rowsAmount));
 
 		return this;
 	}
