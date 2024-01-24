@@ -131,6 +131,7 @@ public class CustomerSqlExecutor {
 				.from("tbCustomersStatuses").select("CustomersStatusID")
 				.where()
 				.equal("CustomersStatusDescription", customerStatus, true)
+				.orderBy(new String[]{"CustomersStatusID"}, 0, 1)
 				.build();
 		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
 	}
@@ -213,6 +214,16 @@ public class CustomerSqlExecutor {
 
 		return sqlFunctionExecutor.supplyTableValueQuery(
 				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+	}
+
+	public void deleteCustomer(int id) {
+		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
+				.from("dbo.tbCustomersDetails")
+				.delete()
+				.where().equal("customerID", id, false)
+				.build();
+		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
+
 	}
 
 	private int getCustomersAmount() {
