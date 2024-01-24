@@ -100,7 +100,7 @@ function CustomerDetails() {
       templateColumns='1fr 1fr 2.5fr'
       gap={2}
     >
-      <Header customerID={customerID} customerShortName={customerShortName} />
+      {/* <Header customerID={customerID} customerShortName={customerShortName} /> */}
       <General
         customerStatus={customerStatus}
         customerName={customerName}
