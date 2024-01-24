@@ -87,9 +87,10 @@ public class CustomerController {
 	}
 
 	@PatchMapping("/{id}")
-	public void update(@PathVariable("id") int id,
-					   @RequestBody CustomerFullDetailsRecord customerDetails) {
+	public void updateCustomerDetails(@PathVariable("id") int id,
+									  @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
+			customerDetails.setCustomerID(id);
 			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.updateCustomerDetails(customerDetails),
 					"api/customers/" + id
 					, HttpMethod.PATCH);
