@@ -55,7 +55,8 @@ public class CustomerController {
 
 	@GetMapping("/customer/name")
 	public String getCostumerNameByID(@RequestParam int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getCustomerNameByID(id), "/customer" +
+		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getCustomerNameByID(id), "api" +
+				"/customers" +
 				"/name", HttpMethod.GET);
 //        return clientSqlExecutor.getClientNameByID(id);
 	}
@@ -65,7 +66,7 @@ public class CustomerController {
 		try {
 			CustomerFullDetailsRecord test =
 					httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getFullCustomerDetailsForId(id),
-							"/customer/" + id
+							"api/customers/" + id
 							, HttpMethod.GET);
 			System.out.println("getFullCustomerDetailsForId" + test);
 			return test;
