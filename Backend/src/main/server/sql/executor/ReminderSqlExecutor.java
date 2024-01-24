@@ -40,7 +40,7 @@ public class ReminderSqlExecutor {
 						true)
 				.orderBy(new String[]{"DateOfReminder", "TimeOfReminder"})
 				.build();
-		return sqlFunctionExecutor.executeTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
+		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
 //        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class,
 //        LocalDateTime.now());
 
@@ -60,7 +60,7 @@ public class ReminderSqlExecutor {
 				.and().lessOrEqualThan("dateOfDebit", LocalDate.now(), true)
 				.build();
 		System.out.println(sqlQuery);
-		return sqlFunctionExecutor.executeTableValueQuery(sqlQuery, InvoiceReminderRecord.class);
+		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, InvoiceReminderRecord.class);
 
 	}
 }
