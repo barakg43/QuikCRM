@@ -76,20 +76,27 @@ public class CustomerController {
 		}
 	}
 
+	@PostMapping("")
+	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
+
+		httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.addNewCustomer(customerDetails),
+				"api/customers/"
+				, HttpMethod.POST);
+
+
+	}
+
 	@PatchMapping("/{id}")
 	public void update(@PathVariable("id") int id,
 					   @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> {
-						customerSqlExecutor.updateCustomerDetails(customerDetails);
-						return null;
-					},
-					"/customer/" + id
+			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.updateCustomerDetails(customerDetails),
+					"api/customers/" + id
 					, HttpMethod.PATCH);
 
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"Cant find customer with id of " + id, exception);
+					"Cant update customer with id of " + id, exception);
 		}
 	}
 
