@@ -14,7 +14,7 @@ public class SqlBaseClauses {
 	private final String parameterDelimiter = ", ";
 	private final SqlFilterClauses sqlFilterClauses;
 	protected eBaseClause baseClause = null;
-
+	private String outputClause = null;
 
 	public SqlBaseClauses(SqlFilterClauses sqlFilterClauses) {
 		this.sqlFilterClauses = sqlFilterClauses;
@@ -46,26 +46,41 @@ public class SqlBaseClauses {
 //    COMMIT TRANSACTION
 
 
-	public SqlFilterClauses insert(Map<String, Object> columnValues) {
+	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.INSERT;
 		StringBuilder columnNamesParameters = new StringBuilder();
 		StringBuilder valuesParameters = new StringBuilder();
 		String value;
-		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-			if (columnEntry.getValue() != null) {
-				columnNamesParameters.append(columnEntry.getKey()).append(parameterDelimiter);
-				value = String.format(columnEntry.getValue().getClass().equals(String.class) ? "N'%s'" : "%s",
-						columnEntry.getValue());
-				valuesParameters.append(value).append(parameterDelimiter);
+
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(newObject);
+				if (currentValue != null) {
+					columnNamesParameters.append(field).append(parameterDelimiter);
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					valuesParameters.append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
 			}
+
 		}
 		removeLastDelimiterFromStringBuilder(columnNamesParameters);
 		removeLastDelimiterFromStringBuilder(valuesParameters);
 		columnNamesParameters.append(")");
 		valuesParameters.append(")");
-
-		additionalParameters.append(columnNamesParameters).append("\n\t\t VALUES (").append(valuesParameters);
+		outputClause = outputColumn;
+		additionalParameters.append(columnNamesParameters);
+		if (outputColumn != null) {
+			additionalParameters.append(String.format("\n\t\tOUTPUT INSERTED.%s", outputColumn));
+		}
+		additionalParameters.append("\n\t\tVALUES (").append(valuesParameters);
 		return sqlFilterClauses;
 	}
 
