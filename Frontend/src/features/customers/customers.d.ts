@@ -6,20 +6,16 @@ export type CustomerFullDataType = {
   customerStatus: CustomerStatus;
   customerIdentificationNumber: string;
   customerMainPhone: string;
-  customerMainFax: string;
   customerMainEMail: string;
-  customerWebSite: string;
   remarks: string;
   address: string;
   city: string;
   postalCode: string;
   addressRemarks: string;
   contactPersonName: string;
-  contactPersonPost: string;
   contactPersonPhone: string;
+  contactPersonPost: string;
   contactPersonMobilePhone: string;
-  contactPersonFax: string;
-  contactPersonEMail: string;
 };
 export type CustomersListType = {
   customers: CustomerSlimDetailsProps[];
