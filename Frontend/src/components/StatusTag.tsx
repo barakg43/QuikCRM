@@ -27,9 +27,9 @@ function StatusTag({ status }: { status: string }) {
     <Tag
       backgroundColor={statusToColor[statusString]}
       justifyContent='center'
-      size={"lg"}
-      borderRadius='10px'
-      padding='0 2rem 0 2rem'
+      size='xl'
+      borderRadius='20px'
+      padding='0.5rem 2rem 0.5rem 2rem'
     >
       {t(statusString)}
     </Tag>
