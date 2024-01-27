@@ -15,6 +15,7 @@
     "charge": "חיוב"
   },
   "details": {
+    "activeContractID": "number",
     "customerID": "מספר לקוח",
     "customerShortName": "שם מקוצר",
     "customerStatus": "סטטוס לקוח",
@@ -28,6 +29,8 @@
     "postalCode": "מיקוד",
     "addressRemarks": "הערות לכתובת",
     "contactPersonName": "איש קשר",
-    "contactPersonMobilePhone": "נייד איש קשר"
+    "contactPersonMobilePhone": "נייד איש קשר",
+    "contactPersonPhone": "טלפון איש קשר",
+    "contactPersonPost": "תפקיד"
   }
 }
