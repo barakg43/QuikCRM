@@ -10,7 +10,7 @@
       "to": "עד",
       "of": "מתוך",
       "results": "תוצאות"
-    },
-    "buttons": { "edit": "ערוך", "delete": "מחק" }
-  }
+    }
+  },
+  "buttons": { "edit": "ערוך", "delete": "מחק" }
 }
