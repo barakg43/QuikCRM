@@ -1,11 +1,10 @@
-import styled from "styled-components";
-import Row from "../../components/Row";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
-import i18n from "i18next";
-import Select from "../../components/Select";
-import { useState } from "react";
+import Row from "../../components/Row";
+import Select from "../../components/StyledSelect";
 
 const StyledInvoiceReminder = styled.div`
   display: flex;

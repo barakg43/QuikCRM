@@ -22,7 +22,7 @@ const StyledTag = styled.span<{ type: string }>`
 function StatusTag({ status }: { status: string }) {
   const { t } = useTranslation("customers", { keyPrefix: "status" });
 
-  const statusString = status || "none"; //TODO: fix the trim
+  const statusString = status || "none";
   return statusString !== "none" ? (
     <Tag
       backgroundColor={statusToColor[statusString]}

@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import Table from "../../components/Table";
+import Table from "../../components/CustomTable";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
-
+import { useToast } from "@chakra-ui/react";
 export const customerStatuses = [
   "in-service",
   "out-of-service",

@@ -41,7 +41,6 @@ export const ITEMS_AMOUNT_PER_PAGE = 10;
 function Pagination({ totalItemsAmount = 0 }: { totalItemsAmount: number }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("components", { keyPrefix: "pagination" });
-  console.log("totalItemsAmount");
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const pagesCount = getPagesAmount(totalItemsAmount);
