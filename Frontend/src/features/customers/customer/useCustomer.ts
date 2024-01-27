@@ -2,8 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getCustomerDataByID } from "../../../services/apiCustomers";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
+import { CustomerFullDataType } from "../customers";
 
-export function useCustomer(customerId: number) {
+type useCustomerReturnType = {
+  customer: CustomerFullDataType | Record<string, never>;
+  isLoading: boolean;
+  error: Error | null;
+};
+export function useCustomer(customerId: number): useCustomerReturnType {
   const {
     data: customer = {},
     isLoading,
@@ -18,7 +24,7 @@ export function useCustomer(customerId: number) {
       console.error(error.response);
     }
   }
-  console.log("useCustomer");
+  // console.log("useCustomer");
 
   return { customer, isLoading, error };
 }
