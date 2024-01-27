@@ -1,6 +1,8 @@
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import styled from "styled-components";
-import { Option } from "./Select";
+import { Option } from "./StyledSelect";
+import LoadingSpinner from "./LoadingSpinner";
+import { ResponsiveValue, Table, TableContainer } from "@chakra-ui/react";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 const CommonRow = styled.div<{ columns: string }>`
@@ -27,29 +29,35 @@ const StyledBody = styled.section`
 type BodyProps<T> = {
   data: T[] | null | undefined;
   render: (item: T, index: number) => JSX.Element;
+  isLoading: boolean;
 };
 function Body<T>({ data, render }: BodyProps<T>) {
   if (data == undefined || data == null || data.length == 0)
     return <EmptyTable />;
+
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
-const StyledTable = styled.div`
-  font-size: var(--scale-3);
-  width: 95%;
-  /* border: 1px solid var(--color-primary-500); */
-  /* background-color: var(--color-primary-0); */
-  padding-top: var(--scale-3);
-  text-align: center;
-`;
+// const StyledTable = styled.div`
+//   font-size: var(--scale-3);
+//   width: 95%;
+//   /* border: 1px solid var(--color-primary-500); */
+//   /* background-color: var(--color-primary-0); */
+//   padding-top: var(--scale-3);
+//   text-align: center;
+// `;
 type TableProps = {
   columns: string;
   children: ReactNode;
+  props: React.ComponentPropsWithoutRef<"div">;
+  variant?: ResponsiveValue<string> | undefined;
 };
-function Table({ columns, children }: TableProps) {
+function StyledTable({ columns, children, variant }: TableProps) {
   return (
     <TableContext.Provider value={{ columns }}>
-      <StyledTable role='table'>{children}</StyledTable>
+      <Table fontSize='xl' w='95%' paddingTop='' variant={variant}>
+        {children}
+      </Table>
     </TableContext.Provider>
   );
 }
@@ -90,8 +98,8 @@ function Row({ onClick, children }: RowType) {
   );
 }
 
-Table.Header = Header;
-Table.Row = Row;
-Table.Footer = Footer;
-Table.Body = Body;
-export default Table;
+StyledTable.Header = Header;
+StyledTable.Row = Row;
+StyledTable.Footer = Footer;
+StyledTable.Body = Body;
+export default StyledTable;
