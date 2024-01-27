@@ -45,5 +45,5 @@ export function useCustomers() {
       queryFn: () => getAllCustomers({ page: page - 1 }),
     });
 
-  return { customers, totalItems, isLoading: true, error };
+  return { customers, totalItems, isLoading, error };
 }
