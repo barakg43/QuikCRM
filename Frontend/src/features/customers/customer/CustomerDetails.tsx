@@ -1,6 +1,3 @@
-import { useState } from "react";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import { useCustomer } from "./useCustomer";
 import {
   Button,
   Divider,
@@ -8,20 +5,15 @@ import {
   Grid,
   GridItem,
   HStack,
-  Tag,
   Text,
-  Textarea,
-  Toast,
-  VStack,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
-import StatusTag from "../../../components/StatusTag";
 import { useTranslation } from "react-i18next";
-import { customerStatuses } from "../CustomersTable";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 import CustomerFormModal from "./CustomerFormModal";
-import { CustomerFullDataType } from "../customers";
+import { useCustomer } from "./useCustomer";
+import StatusTag from "../../../components/StatusTag";
 export default CustomerDetails;
 
 const test = {
@@ -86,7 +78,10 @@ function CustomerDetails() {
     });
     navigate(-1);
   }
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return <LoadingSpinner />;
+    console.log("loading");
+  }
 
   return (
     <Grid
@@ -100,7 +95,6 @@ function CustomerDetails() {
       templateColumns='1fr 1fr 2.5fr'
       gap={2}
     >
-      {/* <Header customerID={customerID} customerShortName={customerShortName} /> */}
       <General
         customerStatus={customerStatus}
         customerName={customerName}
@@ -120,6 +114,7 @@ function CustomerDetails() {
         customerMainPhone={customerMainPhone}
       />
       <Child />
+      <Header customerID={customerID} customerShortName={customerShortName} />
     </Grid>
   );
 }
@@ -169,7 +164,6 @@ function General({
   customerName,
   customerIdentificationNumber,
 }: HeaderProps) {
-  console.log("customerStatus", customerStatus);
   const { t } = useTranslation("customers", { keyPrefix: "details" });
 
   return (
@@ -198,8 +192,9 @@ function General({
           value={customerIdentificationNumber}
           useDivider={false}
         />
-        {/* 
-          <Divider orientation='vertical' colorScheme='red' size='3rem' /><StatusTag status={customerStatus} /> */}
+
+        <Divider orientation='vertical' colorScheme='red' size='3rem' />
+        <StatusTag status={customerStatus} />
       </Flex>
     </GridItem>
   );
