@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 import Row from "../../components/Row";
-import Select from "../../components/StyledSelect";
+import StyledSelect from "../../components/StyledSelect";
 
 const StyledInvoiceReminder = styled.div`
   display: flex;
@@ -99,7 +99,7 @@ function InvoiceReminder({
         </Row>
         <Row type='horizontal' gap={0.7}>
           <Date>{dateString}</Date>
-          <Select
+          <StyledSelect
             options={renewOptions}
             value={renewPeriod}
             onChange={handleOnChangeRenewPeriod}
