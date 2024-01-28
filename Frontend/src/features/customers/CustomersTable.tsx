@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import Table from "../../components/CustomTable";
+import CustomTable from "../../components/CustomTable";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
 import { useToast } from "@chakra-ui/react";
@@ -18,18 +18,18 @@ function CustomersTable() {
   const { t } = useTranslation("customers", { keyPrefix: "table" });
 
   return (
-    <Table columns={"1fr ".repeat(5)} minHeight='100%' minWeight='100%'>
-      <Table.Header>
+    <CustomTable columns={"1fr ".repeat(5)}>
+      <CustomTable.Header>
         <span>{t("customerId")}</span>
         <span>{t("customerName")}</span>
         <span>{t("address")}</span>
         <span>{t("city")}</span>
         <span>{t("status")}</span>
-      </Table.Header>
+      </CustomTable.Header>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <Table.Body
+        <CustomTable.Body
           data={customers}
           isLoading={isLoading}
           render={(customer) => (
@@ -44,10 +44,10 @@ function CustomersTable() {
           )}
         />
       )}
-      <Table.Footer>
+      <CustomTable.Footer>
         {/* <Pagination totalItemsAmount={totalItems} /> */}
-      </Table.Footer>
-    </Table>
+      </CustomTable.Footer>
+    </CustomTable>
   );
 }
 
