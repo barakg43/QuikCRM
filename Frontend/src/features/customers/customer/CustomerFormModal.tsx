@@ -19,9 +19,9 @@ import { useForm } from "react-hook-form";
 import { CustomerFullDataType } from "../customers";
 
 function CustomerFormModal({
-  customerToEdit,
+  customerToEdit = {},
 }: {
-  customerToEdit?: CustomerFullDataType | undefined;
+  customerToEdit?: CustomerFullDataType | Record<string, never>;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
