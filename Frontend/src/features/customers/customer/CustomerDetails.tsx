@@ -14,6 +14,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import CustomerFormModal from "./CustomerFormModal";
 import { useCustomer } from "./useCustomer";
 import StatusTag from "../../../components/StatusTag";
+import { CustomerFullDataType } from "../customers";
 export default CustomerDetails;
 
 const test = {
@@ -45,26 +46,23 @@ function CustomerDetails() {
   // console.log("customerId", customerId);\
   const toast = useToast();
 
+  const { customer, isLoading, error } = useCustomer(Number(customerId));
   const {
-    customer: {
-      customerID,
-      customerShortName,
-      customerStatus,
-      customerName,
-      customerIdentificationNumber,
-      customerMainPhone,
-      customerMainEMail,
-      remarks,
-      address,
-      city,
-      postalCode,
-      addressRemarks,
-      contactPersonName,
-      contactPersonMobilePhone,
-    },
-    isLoading,
-    error,
-  } = useCustomer(Number(customerId));
+    customerID,
+    customerShortName,
+    customerStatus,
+    customerName,
+    customerIdentificationNumber,
+    customerMainPhone,
+    customerMainEMail,
+    remarks,
+    address,
+    city,
+    postalCode,
+    addressRemarks,
+    contactPersonName,
+    contactPersonMobilePhone,
+  } = customer;
   const navigate = useNavigate();
   if (error) {
     console.error("Error cust", error);
@@ -80,7 +78,6 @@ function CustomerDetails() {
   }
   if (isLoading) {
     return <LoadingSpinner />;
-    console.log("loading");
   }
 
   return (
@@ -114,7 +111,11 @@ function CustomerDetails() {
         customerMainPhone={customerMainPhone}
       />
       <Child />
-      <Header customerID={customerID} customerShortName={customerShortName} />
+      <Header
+        customerData={customer}
+        customerID={customerID}
+        customerShortName={customerShortName}
+      />
     </Grid>
   );
 }
@@ -122,9 +123,11 @@ function CustomerDetails() {
 function Header({
   customerID,
   customerShortName,
+  customerData,
 }: {
   customerID: number | undefined;
   customerShortName: string | undefined;
+  customerData: CustomerFullDataType | Record<string, never>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
 
@@ -148,7 +151,7 @@ function Header({
 
         <HStack>
           <Button colorScheme='red'>{t("delete")}</Button>
-          <CustomerFormModal />
+          <CustomerFormModal customerToEdit={customerData} />
         </HStack>
       </Flex>
     </GridItem>
