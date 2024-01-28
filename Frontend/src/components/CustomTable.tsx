@@ -49,7 +49,6 @@ function Body<T>({ data, render }: BodyProps<T>) {
 type TableProps = {
   columns: string;
   children: ReactNode;
-  props: React.ComponentPropsWithoutRef<"div">;
   variant?: ResponsiveValue<string> | undefined;
 };
 function StyledTable({ columns, children, variant }: TableProps) {
