@@ -64,8 +64,8 @@ function CustomerDetails() {
     contactPersonMobilePhone,
   } = customer;
   const navigate = useNavigate();
-  if (error) {
-    console.error("Error cust", error);
+    if (error) {
+      console.error("Error cust", error);
 
     toast({
       title: "Error occurred",
