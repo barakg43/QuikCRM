@@ -1,6 +1,6 @@
 {
-  "invoice": {
-    "dateOfDebit": "תאריך חיוב",
+  "serviceRenew": {
+    "dateOfReminder": "תאריך חיוב",
     "renew": "חידוש",
     "month": "חודש",
     "quarter": "רבעון",
