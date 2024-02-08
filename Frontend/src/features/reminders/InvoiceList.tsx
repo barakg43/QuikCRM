@@ -13,7 +13,7 @@ const test = {
   CustomerID: 38,
   StartDateOfContract: new Date(),
   ContractPrice: 170,
-  FinishDateOfContract: new Date(),
+  FinishDateOfContract: new Date("2/26/2024"),
   ReminderDate: new Date(),
   ContactDescription: " חידוש",
   PeriodKind: "רבעון",
