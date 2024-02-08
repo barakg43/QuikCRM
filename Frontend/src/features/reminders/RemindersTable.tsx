@@ -16,8 +16,8 @@ const test = {
   customerShortName: "אברהם",
 };
 function RemindersTable() {
-  const { reminders, isLoading } = useReminders();
-  if (isLoading) return <LoadingSpinner />;
+  // const { reminders, isLoading } = useReminders();
+  // if (isLoading) return <LoadingSpinner />;
   return (
     <div>
       <InvoiceList />
