@@ -1,5 +1,15 @@
 import styled from "styled-components";
-import { Heading, Stack, StackDivider } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Radio,
+  RadioGroup,
+  RangeSlider,
+  RangeSliderThumb,
+  RangeSliderTrack,
+  Stack,
+  StackDivider,
+} from "@chakra-ui/react";
 import { ContactProps } from "./reminder";
 import { Option } from "../../components/StyledSelect";
 import {
@@ -14,6 +24,8 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { DetailRow } from "../../components/DetailRow";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export type RenewContactProps = {
   ContractID: number;
@@ -38,7 +50,8 @@ function RenewContactReminder({
   PeriodKind,
 }: RenewContactProps) {
   return (
-    <Card _hover={{ backgroundColor: "teal.100" }}>
+    <Card>
+      {/* _hover={{ backgroundColor: "teal.100" }}*/}
       <CardHeader>
         <Heading as='h4' fontSize='x-large' fontFamily='inherit'>
           {ContractID} | {CustomerID}- {customerShortName}
@@ -73,9 +86,33 @@ function RenewContactReminder({
         </Stack>
       </CardBody>
       <CardFooter>
-        <Button>Renew</Button>
+        <RenewPanel />
       </CardFooter>
     </Card>
+  );
+}
+
+function RenewPanel() {
+  const [period, setPeriod] = useState("1");
+  const { t } = useTranslation("reminders", { keyPrefix: "serviceRenew" });
+  return (
+    <Flex grow={1} gap={6} fontSize='2xl'>
+      <Text>renew for:</Text>
+      <RadioGroup onChange={setPeriod} value={period} w={"50%"}>
+        <Stack direction='row'>
+          <Radio size='xl' value={"1"}>
+            {t("month")}
+          </Radio>
+          <Radio size='xl' value={"3"}>
+            {t("quarter")}
+          </Radio>
+          <Radio size='xl' value={"12"}>
+            {t("year")}
+          </Radio>
+        </Stack>
+      </RadioGroup>
+      <Button>Renew</Button>
+    </Flex>
   );
 }
 
