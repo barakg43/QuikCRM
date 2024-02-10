@@ -46,6 +46,7 @@ public class ReminderSqlExecutor {
 
 	}
 
+	@Deprecated
 	public List<InvoiceReminderRecord> getInvoiceReminders() {
 //		SELECT     dbo.fncCustNameForActiveContractID(contractID) AS custShortName, contractID, dateOfDebit,
 //		invoiceNum, renewal
