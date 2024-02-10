@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSwitchLanguage } from "./useSwitchLanguage";
-import Select, { Option } from "../components/Select";
+import StyledSelect, { Option } from "../components/StyledSelect";
 import { ChangeEvent, ChangeEventHandler } from "react";
 
 const langOption: Option[] = [
@@ -18,7 +18,11 @@ function LanguageSelector() {
   }
 
   return (
-    <Select options={langOption} value={lang} onChange={handleLangChange} />
+    <StyledSelect
+      options={langOption}
+      value={lang}
+      onChange={handleLangChange}
+    />
   );
 }
 

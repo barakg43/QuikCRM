@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import Table from "../../components/Table";
+import Table from "../../components/CustomTable";
 import { useNavigate } from "react-router-dom";
 import StatusTag from "../../components/StatusTag";
 import { CustomerSlimDetailsProps } from "./customers";

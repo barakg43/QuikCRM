@@ -1,9 +1,8 @@
-import { Toast } from "@chakra-ui/react";
 import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
 import {
-  CustomersListType,
-  CustomerSlimDetailsProps,
   CustomerFullDataType,
+  CustomerSlimDetailsProps,
+  CustomersListType,
 } from "../features/customers/customers";
 import { httpClient } from "./axios";
 import { SubsetListType } from "./globalTypes";
@@ -14,12 +13,19 @@ type allCustomerParams = {
 
 export async function getAllCustomers({
   page,
-}: allCustomerParams): Promise<CustomersListType> {
+}: allCustomerParams): Promise<CustomersListType | undefined> {
   const fromItem = (page - 1) * ITEMS_AMOUNT_PER_PAGE;
   const toItem = fromItem + ITEMS_AMOUNT_PER_PAGE;
-  const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
-    await httpClient.get(`/customers?fromItem=${fromItem}&toItem=${toItem}`);
-  return { customers: data.listSubset, totalItems: data.totalAmountInDataBase };
+  try {
+    const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
+      await httpClient.get(`/customers?fromItem=${fromItem}&toItem=${toItem}`);
+    return {
+      customers: data.listSubset,
+      totalItems: data.totalAmountInDataBase,
+    };
+  } catch (error) {
+    console.log(error.toJSON());
+  }
 }
 export async function getCustomerDataByID(
   customerId: number
@@ -27,6 +33,6 @@ export async function getCustomerDataByID(
   const { data }: { data: CustomerFullDataType } = await httpClient.get(
     `/customers/${customerId}`
   );
-  console.log("data", data);
+  // console.log("data", data);
   return data;
 }

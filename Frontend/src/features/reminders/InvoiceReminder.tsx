@@ -1,11 +1,10 @@
-import styled from "styled-components";
-import Row from "../../components/Row";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
-import i18n from "i18next";
-import Select from "../../components/Select";
-import { useState } from "react";
+import Row from "../../components/Row";
+import StyledSelect from "../../components/StyledSelect";
 
 const StyledInvoiceReminder = styled.div`
   display: flex;
@@ -100,7 +99,7 @@ function InvoiceReminder({
         </Row>
         <Row type='horizontal' gap={0.7}>
           <Date>{dateString}</Date>
-          <Select
+          <StyledSelect
             options={renewOptions}
             value={renewPeriod}
             onChange={handleOnChangeRenewPeriod}

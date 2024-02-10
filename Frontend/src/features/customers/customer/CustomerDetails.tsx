@@ -1,6 +1,3 @@
-import { useState } from "react";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import { useCustomer } from "./useCustomer";
 import {
   Button,
   Divider,
@@ -8,20 +5,17 @@ import {
   Grid,
   GridItem,
   HStack,
-  Tag,
   Text,
-  Textarea,
-  Toast,
-  VStack,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
-import StatusTag from "../../../components/StatusTag";
 import { useTranslation } from "react-i18next";
-import { customerStatuses } from "../CustomersTable";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 import CustomerFormModal from "./CustomerFormModal";
+import { useCustomer } from "./useCustomer";
+import StatusTag from "../../../components/StatusTag";
 import { CustomerFullDataType } from "../customers";
+import { DetailRow } from "../../../components/DetailRow";
 export default CustomerDetails;
 
 const test = {
@@ -53,26 +47,23 @@ function CustomerDetails() {
   // console.log("customerId", customerId);\
   const toast = useToast();
 
+  const { customer, isLoading, error } = useCustomer(Number(customerId));
   const {
-    customer: {
-      customerID,
-      customerShortName,
-      customerStatus,
-      customerName,
-      customerIdentificationNumber,
-      customerMainPhone,
-      customerMainEMail,
-      remarks,
-      address,
-      city,
-      postalCode,
-      addressRemarks,
-      contactPersonName,
-      contactPersonMobilePhone,
-    },
-    isLoading,
-    error,
-  } = useCustomer(Number(customerId));
+    customerID,
+    customerShortName,
+    customerStatus,
+    customerName,
+    customerIdentificationNumber,
+    customerMainPhone,
+    customerMainEMail,
+    remarks,
+    address,
+    city,
+    postalCode,
+    addressRemarks,
+    contactPersonName,
+    contactPersonMobilePhone,
+  } = customer;
   const navigate = useNavigate();
   if (error) {
     console.error("Error cust", error);
@@ -86,7 +77,9 @@ function CustomerDetails() {
     });
     navigate(-1);
   }
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Grid
@@ -100,7 +93,6 @@ function CustomerDetails() {
       templateColumns='1fr 1fr 2.5fr'
       gap={2}
     >
-      {/* <Header customerID={customerID} customerShortName={customerShortName} /> */}
       <General
         customerStatus={customerStatus}
         customerName={customerName}
@@ -120,6 +112,11 @@ function CustomerDetails() {
         customerMainPhone={customerMainPhone}
       />
       <Child />
+      <Header
+        customerData={customer}
+        customerID={customerID}
+        customerShortName={customerShortName}
+      />
     </Grid>
   );
 }
@@ -127,9 +124,11 @@ function CustomerDetails() {
 function Header({
   customerID,
   customerShortName,
+  customerData,
 }: {
   customerID: number | undefined;
   customerShortName: string | undefined;
+  customerData: CustomerFullDataType | Record<string, never>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
 
@@ -153,7 +152,7 @@ function Header({
 
         <HStack>
           <Button colorScheme='red'>{t("delete")}</Button>
-          <CustomerFormModal />
+          <CustomerFormModal customerToEdit={customerData} />
         </HStack>
       </Flex>
     </GridItem>
@@ -169,7 +168,6 @@ function General({
   customerName,
   customerIdentificationNumber,
 }: HeaderProps) {
-  console.log("customerStatus", customerStatus);
   const { t } = useTranslation("customers", { keyPrefix: "details" });
 
   return (
@@ -198,8 +196,9 @@ function General({
           value={customerIdentificationNumber}
           useDivider={false}
         />
-        {/* 
-          <Divider orientation='vertical' colorScheme='red' size='3rem' /><StatusTag status={customerStatus} /> */}
+
+        <Divider orientation='vertical' colorScheme='red' size='3rem' />
+        <StatusTag status={customerStatus} />
       </Flex>
     </GridItem>
   );
@@ -292,232 +291,3 @@ function Child() {
     </GridItem>
   );
 }
-function DetailRow<T>({
-  label,
-  value,
-  useDivider = true,
-}: {
-  label: string;
-  value: T;
-  useDivider?: boolean;
-}) {
-  return (
-    <>
-      <HStack>
-        <Text as='span' fontWeight={500}>
-          {label}:
-        </Text>
-        <Text> {value}</Text>
-      </HStack>
-      {useDivider && <Divider />}
-    </>
-  );
-}
-//     <StyledCustomerDetails>
-//       <ButtonGroup padding='0 2rem 1rem 2rem' style={{ gridArea: "buttons" }}>
-//         <Button size='small' variation='secondary'>
-//           edit
-//         </Button>
-//         <Button size='small' variation='danger'>
-//           delete
-//         </Button>
-//       </ButtonGroup>
-//       <Header
-//         customerID={customerID}
-//         customerShortName={customerShortName}
-//         toggleEditing={() => setIsEditing((toEdit) => !toEdit)}
-//         isEditing={isEditing}
-//         submitChanges={handleSubmit}
-//       />
-//       <Address {...{ city, address, postalCode, addressRemarks, isEditing }} />
-//       <Contact
-//         {...{
-//           contactPersonName,
-//           contactPersonPhone,
-//           contactPersonMobilePhone,
-//           isEditing,
-//         }}
-//       />
-//       <Notes>
-//         <EditableFormField
-//           id='remarks'
-//           label='remarks'
-//           isEditing={isEditing}
-//           value={remarks}
-//           as='textarea'
-//         />
-//       </Notes>
-//       <Service>service</Service>
-//       <Child>child</Child>
-//     </StyledCustomerDetails>
-//   );
-// }
-// const StyledCustomerDetails = styled.section`
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   grid-template-rows: 0.3fr 0.5fr 3fr 3fr 7fr;
-//   grid-template-areas:
-//     "buttons buttons"
-//     "header header"
-//     "address contact"
-//     "service notes"
-//     "child child";
-//   text-align: center;
-//   font-size: var(--scale-1);
-//   /* grid-auto-rows: 50px; */
-//   width: 100%;
-//   height: 100vh;
-//   padding: var(--scale-1);
-// `;
-
-// type GridItemProps = {
-//   area: string;
-//   backgroundColor: string;
-// };
-
-// type HeaderProps = {
-//   customerID: number | undefined;
-//   customerShortName: string | undefined;
-//   isEditing: boolean;
-//   toggleEditing: MouseEventHandler<HTMLButtonElement> | undefined;
-//   submitChanges: MouseEventHandler<HTMLButtonElement> | undefined;
-// };
-// function Header({
-//   customerID,
-//   customerShortName,
-//   isEditing,
-//   toggleEditing,
-//   submitChanges,
-// }: HeaderProps) {
-//   return (
-//     <StyledHeader>
-//       <Row type='horizontal' gap={0.5}>
-//         <Heading as='h2'>{`${customerID} - `}</Heading>
-//         <EditableFormField
-//           id='customerShortName'
-//           label=''
-//           isEditing={isEditing}
-//           value={customerShortName}
-//         />
-//       </Row>
-//     </StyledHeader>
-//   );
-// }
-// const StyledAddress = styled(Row)`
-//   /* background: green; */
-//   grid-area: address;
-// `;
-// type AddressProps = {
-//   address: string;
-//   city: string;
-//   postalCode: string | null;
-//   addressRemarks: string | null;
-//   isEditing: boolean;
-// };
-// function Address({
-//   address,
-//   city,
-//   postalCode,
-//   addressRemarks,
-//   isEditing,
-// }: AddressProps) {
-//   return (
-//     <StyledAddress type='horizontal' gap={1}>
-//       <Row>
-//         <EditableFormField
-//           id='address'
-//           label='address'
-//           isEditing={isEditing}
-//           value={address}
-//         />
-//         <EditableFormField
-//           id='city'
-//           label='city'
-//           isEditing={isEditing}
-//           value={city}
-//         />
-//         <EditableFormField
-//           id='postalCode'
-//           label='postalCode'
-//           isEditing={isEditing}
-//           value={postalCode}
-//         />
-//       </Row>
-//       <EditableFormField
-//         id='addressRemarks'
-//         label='addressRemarks'
-//         isEditing={isEditing}
-//         value={addressRemarks}
-//         as='textarea'
-//       />
-//     </StyledAddress>
-//   );
-// }
-// const StyledContact = styled.div`
-//   background: yellow;
-//   grid-area: contact;
-// `;
-// type ContactProps = {
-//   contactPersonName: string | null;
-//   contactPersonPhone: string | null;
-//   contactPersonMobilePhone: string | null;
-//   isEditing: boolean;
-// };
-// function Contact({
-//   contactPersonName,
-//   contactPersonPhone,
-//   contactPersonMobilePhone,
-//   isEditing,
-// }: ContactProps) {
-//   return (
-//     <StyledContact>
-//       <EditableFormField
-//         id='contactPersonName'
-//         label='contactPersonName'
-//         isEditing={isEditing}
-//         value={contactPersonName}
-//       />
-
-//       <EditableFormField
-//         id='contactPersonPhone'
-//         label='contactPersonPhone'
-//         isEditing={isEditing}
-//         value={contactPersonPhone}
-//       />
-//       <EditableFormField
-//         id='contactPersonMobilePhone'
-//         label='contactPersonMobilePhone'
-//         isEditing={isEditing}
-//         value={contactPersonMobilePhone}
-//       />
-//     </StyledContact>
-//   );
-// }
-// const Service = styled.div`
-//   background: pink;
-//   grid-area: service;
-// `;
-// const Notes = styled.div`
-//   background-color: blue;
-//   grid-area: notes;
-// `;
-// const Child = styled.div`
-//   background: orange;
-//   grid-area: child;
-// `;
-// const ButtonsPanel = styled(Row)`
-//   /* background: orange; */
-//   grid-area: buttons;
-//   padding: var(--scale-2);
-// `;
-// const StyledHeader = styled.div`
-//   background: red;
-//   grid-area: header;
-//   display: flex;
-//   padding: var(--scale-0);
-//   & span {
-//     font-size: var(--scale-4);
-//     font-weight: var(--weight-extrabold);
-//   }
-//   justify-content: space-between;
-// `;

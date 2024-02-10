@@ -6,6 +6,7 @@ import GlobalStyle from "./../styles/GlobalStyle.js";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n/i18n";
 import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./../styles/ChakraTheme.ts";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -22,8 +23,8 @@ function AppProviders({ children }: AppProvidersType) {
       <I18nextProvider i18n={i18n}>
         <ReactQueryDevtools initialIsOpen={false} />
         <GlobalStyle />
-        <ChakraProvider>
-          <Toaster
+        <ChakraProvider theme={theme}>
+          {/* <Toaster
             position='top-center'
             gutter={12}
             containerStyle={{ margin: "8px" }}
@@ -43,8 +44,8 @@ function AppProviders({ children }: AppProvidersType) {
                 //     color: "var(--color-grey-700) ",
                 //   },
               }
-            }
-          />
+            } */}
+          {/* /> */}
           {children}
         </ChakraProvider>
       </I18nextProvider>
