@@ -1,11 +1,14 @@
-package main.server.sql;
+package main.server.sql.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
+import main.server.sql.SqlConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
@@ -30,8 +33,8 @@ public class SqlConnectionManger {
 	}
 
 	public void initializeSqlConnectionConfig() throws SQLException, IOException {
-		sqlConnectionConfiguration = createSqlConfigurationFromFile(sqlConfigurationYamlFilePath);
-		dataSourceConfig = createDataSource(sqlConnectionConfiguration);
+		sqlConnectionConfiguration = createSqlConfigurationFromFile();
+		dataSourceConfig = getDataSource(sqlConnectionConfiguration);
 
 
 //        simpleJdbcCall=new SimpleJdbcCall(dataSourceConfig);
@@ -51,7 +54,9 @@ public class SqlConnectionManger {
 	}
 
 	@Bean
-	public DataSource createDataSource(@Qualifier("sqlConfig") SqlConfiguration sqlServerConfiguration) {
+	@Primary
+	@ConfigurationProperties(prefix = "spring.datasource")
+	public DataSource getDataSource(@Qualifier("sqlConfig") SqlConfiguration sqlServerConfiguration) {
 		SQLServerDataSource msSqlDataSource = new SQLServerDataSource();
 		msSqlDataSource.setServerName(sqlServerConfiguration.getServerName());
 		msSqlDataSource.setPortNumber(sqlServerConfiguration.getPort());
