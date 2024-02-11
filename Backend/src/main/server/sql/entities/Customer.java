@@ -37,8 +37,8 @@ public class Customer {
 	@Column
 	private String remarks;
 
-	@Column
-	private Long activeContractID;
+//	@Column
+////	private Long activeContractID;
 
 	@Column
 	private String address;
@@ -65,9 +65,9 @@ public class Customer {
 	@Column
 	private String contactPersonMobilePhone;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "activeContractID", referencedColumnName = "ContractID", insertable = false, updatable = false)
-//	private CustomerContracts customerContracts;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "activeContractID", referencedColumnName = "ContractID", insertable = false, updatable = false)
+	private CustomerContract customerContracts;
 
 	// Constructors, getters, and setters
 }
