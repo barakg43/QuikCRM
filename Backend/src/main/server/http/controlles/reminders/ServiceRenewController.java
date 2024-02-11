@@ -2,7 +2,7 @@ package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ServiceRenewReminderRecord;
-import main.server.sql.executor.ReminderSqlExecutor;
+import main.server.sql.executor.ReminderService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +16,16 @@ import java.util.List;
 @RequestMapping("/api/reminders/service-renews")
 public class ServiceRenewController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ReminderSqlExecutor reminderSqlExecutor;
+	private final ReminderService reminderService;
 
-	public ServiceRenewController(HttpRequestExecutor httpRequestExecutor, ReminderSqlExecutor reminderSqlExecutor) {
+	public ServiceRenewController(HttpRequestExecutor httpRequestExecutor, ReminderService reminderService) {
 		this.httpRequestExecutor = httpRequestExecutor;
-		this.reminderSqlExecutor = reminderSqlExecutor;
+		this.reminderService = reminderService;
 	}
 
 	@GetMapping("")
 	public List<ServiceRenewReminderRecord> getServiceRenewReminders() {
-		return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getServiceRenewReminders,
+		return httpRequestExecutor.executeHttpRequest(reminderService::getServiceRenewReminders,
 				"/api/reminders/service-renews", HttpMethod.GET);
 
 	}

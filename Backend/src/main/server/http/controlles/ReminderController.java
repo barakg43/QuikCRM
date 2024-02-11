@@ -3,7 +3,7 @@ package main.server.http.controlles;
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.RenewReminderRecord;
-import main.server.sql.executor.ReminderSqlExecutor;
+import main.server.sql.executor.ReminderService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +17,16 @@ import java.util.List;
 @RequestMapping("/api/reminders")
 public class ReminderController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ReminderSqlExecutor reminderSqlExecutor;
+	private final ReminderService reminderService;
 
-	public ReminderController(ReminderSqlExecutor reminderSqlExecutor, HttpRequestExecutor httpRequestExecutor) {
-		this.reminderSqlExecutor = reminderSqlExecutor;
+	public ReminderController(ReminderService reminderService, HttpRequestExecutor httpRequestExecutor) {
+		this.reminderService = reminderService;
 		this.httpRequestExecutor = httpRequestExecutor;
 	}
 
 	@GetMapping("/renews")
 	public List<RenewReminderRecord> getRenews() {
-		return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getRenews, "/api/reminders/renews",
+		return httpRequestExecutor.executeHttpRequest(reminderService::getRenews, "/api/reminders/renews",
 				HttpMethod.GET);
 
 
@@ -36,7 +36,7 @@ public class ReminderController {
 	//	@GetMapping("/invoices")
 	@Deprecated
 	public List<InvoiceReminderRecord> getInvoiceReminders() {
-		return httpRequestExecutor.executeHttpRequest(reminderSqlExecutor::getInvoiceReminders, "/api/reminders" +
+		return httpRequestExecutor.executeHttpRequest(reminderService::getInvoiceReminders, "/api/reminders" +
 				"/invoices", HttpMethod.GET);
 	}
 
