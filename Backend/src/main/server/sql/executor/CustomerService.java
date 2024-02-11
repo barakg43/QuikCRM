@@ -8,17 +8,20 @@ import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
-import org.springframework.stereotype.Repository;
+import main.server.sql.repositories.CustomerRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
-public class CustomerSqlExecutor {
+@Service
+public class CustomerService {
 	final SqlFunctionExecutor sqlFunctionExecutor;
+	private final CustomerRepository customerRepository;
 
-	public CustomerSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
+	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor, CustomerRepository customerRepository) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 
+		this.customerRepository = customerRepository;
 	}
 
 	public List<CustomerFullDetailsRecord> getAllCustomers2() {

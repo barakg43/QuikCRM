@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class ReminderSqlExecutor {
+public class ReminderService {
 	private final SqlFunctionExecutor sqlFunctionExecutor;
 
-	public ReminderSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
+	public ReminderService(SqlFunctionExecutor sqlFunctionExecutor) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 	}
 
