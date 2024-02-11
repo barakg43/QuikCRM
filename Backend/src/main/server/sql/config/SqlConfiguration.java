@@ -1,4 +1,4 @@
-package main.server.sql;
+package main.server.sql.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;

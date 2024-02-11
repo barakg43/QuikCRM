@@ -12,4 +12,5 @@ public class CustomerFlatDetailsRecord {
 	private String customerMainPhone;
 	private String address;
 	private String city;
+
 }

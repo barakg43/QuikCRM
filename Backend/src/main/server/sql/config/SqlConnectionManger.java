@@ -3,7 +3,6 @@ package main.server.sql.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import main.server.sql.SqlConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
