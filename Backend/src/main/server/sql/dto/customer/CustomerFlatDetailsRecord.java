@@ -1,15 +1,7 @@
 package main.server.sql.dto.customer;
 
-import lombok.Data;
+import main.server.sql.entities.eCustomerStatus;
 
-@Data
-public class CustomerFlatDetailsRecord {
-	private Integer customerID;
-
-	private String customerShortName;
-
-	private String customerStatus;
-	private String customerMainPhone;
-	private String address;
-	private String city;
+public record CustomerFlatDetailsRecord(Integer customerID, String customerShortName, eCustomerStatus customerStatus,
+										String customerMainPhone, String address, String city) {
 }
