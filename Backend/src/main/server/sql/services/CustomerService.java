@@ -1,10 +1,8 @@
-package main.server.sql.executor;
+package main.server.sql.services;
 
 import main.server.sql.bulider.SqlQueryBuilder;
-import main.server.sql.bulider.component.SqlInnerQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.dto.ListSubset;
-import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
@@ -13,18 +11,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CustomerSqlExecutor {
+public class CustomerService {
 	final SqlFunctionExecutor sqlFunctionExecutor;
 
-	public CustomerSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
+	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 
 	}
 
-	public List<CustomerFullDetailsRecord> getAllCustomers2() {
-		return sqlFunctionExecutor.executeTableValueFunction(
-				"fncCustomersWithContactAndMainAddress", CustomerFullDetailsRecord.class);
-	}
 
 	//    SELECT TOP 100 PERCENT
 
@@ -42,13 +36,9 @@ public class CustomerSqlExecutor {
 //				.equal("CustomersStatusID", "customerStatusID", false);
 
 		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomersDetails")
-				.select("customerID",
-						"customerShortName",
-						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
-						"customerMainPhone",
-						"address",
-						"city")
+				.select(CustomerFullDetailsRecord.class)
 				.build();
+		System.out.println(sqlQuery);
 		List<CustomerFlatDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 				sqlQuery, CustomerFlatDetailsRecord.class);
 		int totalItemInDb = getCustomersAmount();
@@ -86,30 +76,9 @@ public class CustomerSqlExecutor {
 //		System.out.println(contactId + " add: " + addressId);
 //		customerDetails.setMainAddress(addressId);
 //		customerDetails.setMainContactPerson(contactId);
-		customerDetails.setCustomerStatusID(
-				getCustomerStatusIdFromDescription(
-						customerDetails.getCustomerStatus()
-				));
-		System.out.println(getCustomerStatusIdFromDescription(
-				customerDetails.getCustomerStatus()));
+
 		String sqlInsertQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomersDetails").insert(customerDetails, null,
-						"customerName",
-						"customerShortName",
-						"customerIdentificationNumber",
-						"customerStatusID",
-						"customerMainPhone",
-						"customerMainEMail",
-						"remarks",
-						"activeContractID",
-						"address",
-						"city",
-						"postalCode",
-						"addressRemarks",
-						"contactPersonName",
-						"contactPersonPost",
-						"contactPersonPhone",
-						"contactPersonMobilePhone")
+				.from("tbCustomersDetails").insert(customerDetails, null)
 				.build();
 
 		System.out.println(sqlInsertQueryCustomerTable);
@@ -136,7 +105,7 @@ public class CustomerSqlExecutor {
 		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
 	}
 
-	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
+	public void updateCustomerDetails(int id, CustomerFullDetailsRecord customerDetailsUpdated) {
 //		System.out.println(customerDetailsUpdated);
 //		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
 //				.from("tbCustomers")
@@ -146,30 +115,12 @@ public class CustomerSqlExecutor {
 //		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
 //		System.out.println(customerAddressIdContactId);
-		customerDetailsUpdated.setCustomerStatusID(
-				getCustomerStatusIdFromDescription(
-						customerDetailsUpdated.getCustomerStatus()
-				));
+
 		String sqlUpdateQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomersDetails").update(customerDetailsUpdated,
-						"customerName",
-						"customerShortName",
-						"customerIdentificationNumber",
-						"customerStatusID",
-						"customerMainPhone",
-						"customerMainEMail",
-						"remarks",
-						"activeContractID",
-						"address",
-						"city",
-						"postalCode",
-						"addressRemarks",
-						"contactPersonName",
-						"contactPersonPost",
-						"contactPersonPhone",
-						"contactPersonMobilePhone")
+				.from("tbCustomersDetails")
+				.update(customerDetailsUpdated)
 				.where()
-				.equal("customerID", customerDetailsUpdated.getCustomerID(), false)
+				.equal("customerID", id, false)
 				.build();
 //		String sqlUpdateQueryContactTable = SqlQueryBuilder.getNewBuilder()
 //				.from("tbCustomersContactPersons").update(customerDetailsUpdated, "contactPersonName",
@@ -193,22 +144,9 @@ public class CustomerSqlExecutor {
 
 		String sqlQuery = SqlQueryBuilder.getNewBuilder()
 				.from("dbo.tbCustomersDetails")
-				.select("customerID",
-						"customerShortName",
-						"activeContractID",
-						"customerName",
-						"customerIdentificationNumber",
-						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
-						"customerMainPhone",
-						"customerMainEMail",
-						"remarks",
-						"address",
-						"city",
-						"postalCode",
-						"addressRemarks",
-						"contactPersonName",
-						"contactPersonMobilePhone")
-				.where().equal("customerID", id, false)
+				.select(CustomerFullDetailsRecord.class)
+				.where()
+				.equal("customerID", id, false)
 				.build();
 		System.out.println(sqlQuery);
 
@@ -220,7 +158,8 @@ public class CustomerSqlExecutor {
 		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
 				.from("dbo.tbCustomersDetails")
 				.delete()
-				.where().equal("customerID", id, false)
+				.where()
+				.equal("customerID", id, false)
 				.build();
 		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
 
@@ -234,13 +173,5 @@ public class CustomerSqlExecutor {
 		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, int.class);
 	}
 
-	public String getCustomerNameByID(int id) {
-		return sqlFunctionExecutor.executeScalarValueFunction("fncCustShortNameForCustID", String.class, id);
-	}
-
-	public List<TaskRecord> getClosedTaskForClient(int id) {
-		return sqlFunctionExecutor.executeTableValueFunction("fncCustomersCloseTasksForID", TaskRecord.class, id);
-
-	}
 
 }

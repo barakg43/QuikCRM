@@ -1,4 +1,4 @@
-package main.server.sql.executor;
+package main.server.sql.services;
 
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class ReminderSqlExecutor {
+public class ReminderService {
 	private final SqlFunctionExecutor sqlFunctionExecutor;
 
-	public ReminderSqlExecutor(SqlFunctionExecutor sqlFunctionExecutor) {
+	public ReminderService(SqlFunctionExecutor sqlFunctionExecutor) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 	}
 
