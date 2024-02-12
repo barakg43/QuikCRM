@@ -90,7 +90,6 @@ public class CustomerController {
 	public void updateCustomerDetails(@PathVariable("id") int id,
 									  @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			customerDetails.setCustomerID(id);
 			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerDetails),
 					"api/customers/" + id
 					, HttpMethod.PATCH);
