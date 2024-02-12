@@ -45,7 +45,7 @@ public class ProductReminder {
 	private String password;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CustomerID", columnDefinition = "decimal", insertable = false, updatable = false)
+	@JoinColumn(name = "CustomerID", referencedColumnName = "customerID", insertable = false, updatable = false)
 	private Customer customerID;
 
 	@Column(name = "ValidityTill")
