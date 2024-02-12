@@ -1,12 +1,16 @@
 package main.server.sql.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "tbCustomersContracts")
+@Getter
+@Setter
 public class CustomerContract {
 
 	@Id
