@@ -3,7 +3,7 @@ package main.server.http.controlles;
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.RenewReminderRecord;
-import main.server.sql.executor.ReminderSqlExecutor;
+import main.server.sql.services.ReminderService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +17,9 @@ import java.util.List;
 @RequestMapping("/api/reminders")
 public class ReminderController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ReminderSqlExecutor reminderSqlExecutor;
+	private final ReminderService reminderSqlExecutor;
 
-	public ReminderController(ReminderSqlExecutor reminderSqlExecutor, HttpRequestExecutor httpRequestExecutor) {
+	public ReminderController(ReminderService reminderSqlExecutor, HttpRequestExecutor httpRequestExecutor) {
 		this.reminderSqlExecutor = reminderSqlExecutor;
 		this.httpRequestExecutor = httpRequestExecutor;
 	}

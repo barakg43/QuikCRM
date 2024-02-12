@@ -2,7 +2,7 @@ package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ServiceRenewReminderRecord;
-import main.server.sql.executor.ReminderSqlExecutor;
+import main.server.sql.services.ReminderService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +16,9 @@ import java.util.List;
 @RequestMapping("/api/reminders/service-renews")
 public class ServiceRenewController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ReminderSqlExecutor reminderSqlExecutor;
+	private final ReminderService reminderSqlExecutor;
 
-	public ServiceRenewController(HttpRequestExecutor httpRequestExecutor, ReminderSqlExecutor reminderSqlExecutor) {
+	public ServiceRenewController(HttpRequestExecutor httpRequestExecutor, ReminderService reminderSqlExecutor) {
 		this.httpRequestExecutor = httpRequestExecutor;
 		this.reminderSqlExecutor = reminderSqlExecutor;
 	}
