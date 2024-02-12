@@ -3,17 +3,19 @@ package main.server.sql.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "tbCustomersDetails")
 @Getter
+@Setter
 public class Customer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private Short customerID;
+	private Integer customerID;
 
 	@Column(nullable = false)
 	private String customerShortName;
