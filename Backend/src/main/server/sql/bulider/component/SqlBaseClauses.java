@@ -20,57 +20,18 @@ public class SqlBaseClauses {
 		this.sqlFilterClauses = sqlFilterClauses;
 	}
 
-	public SqlFilterClauses select(String... columnNames) {
+
+	public <T> SqlFilterClauses select(Class<T> resultClass) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.SELECT;
-
-		for (String columnName : columnNames) {
-			additionalParameters.append(columnName).append(parameterDelimiter);
-		}
+		buildClauseParameters(resultClass,
+				(currentValue, columnName) -> additionalParameters.append(columnName).append(parameterDelimiter));
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
-//    BEGIN TRANSACTION
-//    INSERT tbConnectionPriceQuotesDetails (
-//            PQSDetailsID,
-//            PQCDetailsID)
-//    VALUES (
-//            @PQSDetailsID,
-//            @PQCDetailsID)
-//    IF @@error <> 0
-//    BEGIN
-//    ROLLBACK TRAN
-//    RETURN
-//            END
-//
-//    COMMIT TRANSACTION
 
-
-	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
-		baseClauseDuplicateValidation();
-		baseClause = eBaseClause.INSERT;
-		StringBuilder columnNamesParameters = new StringBuilder();
-		StringBuilder valuesParameters = new StringBuilder();
-		String value;
-
-		Object currentValue;
-		for (String field : selectedFieldNames) {
-
-			try {
-				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
-				Method getter = pd.getReadMethod();
-				currentValue = getter.invoke(newObject);
-				if (currentValue != null) {
-					columnNamesParameters.append(field).append(parameterDelimiter);
-					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
-							currentValue);
-					valuesParameters.append(value).append(parameterDelimiter);
-				}
-			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-
-		}
+	private void buildInsetClause(String outputColumn, StringBuilder columnNamesParameters,
+								  StringBuilder valuesParameters) {
 		removeLastDelimiterFromStringBuilder(columnNamesParameters);
 		removeLastDelimiterFromStringBuilder(valuesParameters);
 		columnNamesParameters.append(")");
@@ -81,78 +42,58 @@ public class SqlBaseClauses {
 			additionalParameters.append(String.format("\n\t\tOUTPUT INSERTED.%s", outputColumn));
 		}
 		additionalParameters.append("\n\t\tVALUES (").append(valuesParameters);
+
+	}
+
+	public SqlFilterClauses insert(Object newObjectRecord, String outputColumn) {
+		baseClauseDuplicateValidation();
+		baseClause = eBaseClause.INSERT;
+		StringBuilder columnNamesParameters = new StringBuilder();
+		StringBuilder valuesParameters = new StringBuilder();
+
+		buildClauseParameters(newObjectRecord, (currentValue, columnName) -> {
+					columnNamesParameters.append(columnName).append(parameterDelimiter);
+					String value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					valuesParameters.append(value).append(parameterDelimiter);
+				}
+		);
+
+		buildInsetClause(outputColumn, columnNamesParameters, valuesParameters);
 		return sqlFilterClauses;
 	}
 
-
-	/*
-	* BEGIN TRANSACTION
-
-	UPDATE tbInvoicesForContracts
-	SET dateOfDebit = DATEADD(MONTH, @MonthAmount, dateOfDebit)
-	WHERE id = @ID
-
-		IF @@error <> 0
-			BEGIN
-				ROLLBACK TRAN
-				RETURN
-			END
-
-COMMIT TRANSACTION
-
-*/
-	public SqlFilterClauses update(Object updatedObject, String... selectedFieldNames) {
+	public SqlFilterClauses update(Object updatedObjectRecord) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.UPDATE;
-		String value;
-		Object currentValue;
-		for (String field : selectedFieldNames) {
-
-			try {
-				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
-				Method getter = pd.getReadMethod();
-				currentValue = getter.invoke(updatedObject);
-				if (currentValue != null) {
-					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+		buildClauseParameters(updatedObjectRecord, (currentValue, columnName) -> {
+					String value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
 							currentValue);
-					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
+					additionalParameters.append(columnName).append(" = ").append(value).append(parameterDelimiter);
 				}
-			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-
-		}
-
-//
-//		for (Map.Entry<String, Object> columnEntry : columnValues.entrySet()) {
-//			System.out.print(columnEntry);
-//			if (columnEntry.getValue() != null) {
-//				System.out.println(" :entered!");
-//				value = String.format(columnEntry.getValue().getClass().equals(String.class) ? "'%s'" : "%s",
-//						columnEntry.getValue());
-//				additionalParameters.append(columnEntry.getKey()).append(" = ").append(value).append
-//				(parameterDelimiter);
-//			}
-//
-//		}
-		System.out.println(additionalParameters);
+		);
+//		System.out.println(additionalParameters);
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
-//    BEGIN TRANSACTION
-//
-//    DELETE
-//    FROM tbConnectionPriceQuotesDetails
-//    WHERE PQSDetailsID = @PQSDetailsID
-//            AND PQCDetailsID = @PQCDetailsID
-//
-//    IF @@error <> 0
-//    BEGIN
-//    ROLLBACK TRAN
-//    RETURN
-//            END
-//
-//    COMMIT TRANSACTION
+
+	private void buildClauseParameters(Object objectRecord, BiFunction<Object, String> columnParameterBuilder) {
+		Object currentValue;
+
+		Method[] methods = objectRecord.getClass().getDeclaredMethods();
+		for (Method method : methods) {
+			try {
+				if (!method.getName().equals("equals") && !method.getName().equals("hashCode") && !method.getName().equals("toString")) {
+					currentValue = method.invoke(objectRecord);
+					if (currentValue != null) {
+						columnParameterBuilder.apply(currentValue, method.getName());
+					}
+				}
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 
 	public SqlFilterClauses delete() {
 		baseClauseDuplicateValidation();
@@ -182,8 +123,11 @@ COMMIT TRANSACTION
 		return this;
 	}
 
-	//	JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
-//	JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
+	/**
+	 * Removes the last instance of the parameterDelimiter from the StringBuilder clauseBuilder.
+	 *
+	 * @param clauseBuilder the StringBuilder to modify
+	 */
 	private void removeLastDelimiterFromStringBuilder(StringBuilder clauseBuilder) {
 		if (clauseBuilder.length() >= parameterDelimiter.length())
 			clauseBuilder.delete(clauseBuilder.length() - parameterDelimiter.length(), clauseBuilder.length());
@@ -204,5 +148,74 @@ COMMIT TRANSACTION
 	private void baseClauseDuplicateValidation() {
 		if (baseClause != null)
 			throw new RuntimeException("Cant select 2 clauses for same query");
+	}
+
+
+	@Deprecated
+	public SqlFilterClauses update(Object updatedObject, String... selectedFieldNames) {
+		baseClauseDuplicateValidation();
+		baseClause = eBaseClause.UPDATE;
+		String value;
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(updatedObject);
+				if (currentValue != null) {
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+		return sqlFilterClauses;
+	}
+
+
+	@Deprecated
+	public SqlFilterClauses select(String... columnNames) {
+		baseClauseDuplicateValidation();
+		baseClause = eBaseClause.SELECT;
+
+		for (String columnName : columnNames) {
+			additionalParameters.append(columnName).append(parameterDelimiter);
+		}
+		removeLastDelimiterFromStringBuilder(additionalParameters);
+		return sqlFilterClauses;
+	}
+
+	@Deprecated
+	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
+		baseClauseDuplicateValidation();
+		baseClause = eBaseClause.INSERT;
+		StringBuilder columnNamesParameters = new StringBuilder();
+		StringBuilder valuesParameters = new StringBuilder();
+		String value;
+
+		Object currentValue;
+		for (String field : selectedFieldNames) {
+
+			try {
+				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
+				Method getter = pd.getReadMethod();
+				currentValue = getter.invoke(newObject);
+				if (currentValue != null) {
+					columnNamesParameters.append(field).append(parameterDelimiter);
+					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+							currentValue);
+					valuesParameters.append(value).append(parameterDelimiter);
+				}
+			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+		buildInsetClause(outputColumn, columnNamesParameters, valuesParameters);
+		return sqlFilterClauses;
 	}
 }
