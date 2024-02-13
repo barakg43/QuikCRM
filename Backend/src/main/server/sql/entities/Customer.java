@@ -41,7 +41,7 @@ public class Customer {
 	private String remarks;
 
 	@Column(columnDefinition = "decimal")
-	private Long activeContractID;
+	private Integer activeContractID;
 
 	@Column
 	private String address;
