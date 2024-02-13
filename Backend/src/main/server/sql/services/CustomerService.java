@@ -94,16 +94,16 @@ public class CustomerService {
 				.equal("CustomersStatusID", "customerStatusID", false);
 	}
 
-	private Integer getCustomerStatusIdFromDescription(String customerStatus) {
-
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomersStatuses").select("CustomersStatusID")
-				.where()
-				.equal("CustomersStatusDescription", customerStatus, true)
-				.orderBy(new String[]{"CustomersStatusID"}, 0, 1)
-				.build();
-		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
-	}
+//	private Integer getCustomerStatusIdFromDescription(String customerStatus) {
+//
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("tbCustomersStatuses").select("CustomersStatusID")
+//				.where()
+//				.equal("CustomersStatusDescription", customerStatus, true)
+//				.orderBy(new String[]{"CustomersStatusID"}, 0, 1)
+//				.build();
+//		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
+//	}
 
 	public void updateCustomerDetails(int id, CustomerFullDetailsRecord customerDetailsUpdated) {
 //		System.out.println(customerDetailsUpdated);
