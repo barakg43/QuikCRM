@@ -2,11 +2,12 @@ package main.server.sql.entities;
 
 
 public enum eCustomerStatus {
-	IN_SERVICE("in-service"),
-	OUT_OF_SERVICE("out-of-service"),
-	BANK_HOURS("bank-hours"),
-	CLOUD_SERVER("cloud-server"),
-	CLOUD_MAIL("cloud-mail");
+	IN_SERVICE("IN_SERVICE"),
+	OUT_OF_SERVICE("OUT_OF_SERVICE"),
+	BANK_HOURS("BANK_HOURS"),
+	CLOUD_SERVER("CLOUD_SERVER"),
+	CLOUD_MAIL("CLOUD_MAIL"),
+	;
 
 
 	private final String status;
