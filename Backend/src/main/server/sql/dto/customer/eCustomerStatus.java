@@ -1,4 +1,4 @@
-package main.server.sql.entities;
+package main.server.sql.dto.customer;
 
 public enum eCustomerStatus {
 	IN_SERVICE("in-service"),
@@ -13,6 +13,12 @@ public enum eCustomerStatus {
 	eCustomerStatus(String status) {
 		this.status = status;
 
+	}
+
+	public static eCustomerStatus fromStatus(String status) {
+		for (eCustomerStatus v : values())
+			if (v.getStatus().equalsIgnoreCase(status)) return v;
+		throw new IllegalArgumentException();
 	}
 
 	public String getStatus() {
