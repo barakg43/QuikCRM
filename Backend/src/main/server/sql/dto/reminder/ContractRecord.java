@@ -2,40 +2,29 @@ package main.server.sql.dto.reminder;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.util.Date;
 
-
+@Data
 public class ContractRecord {
 	@NotNull
 	private Integer ContractID;
 	@NotNull
 	private Integer CustomerID;
-	@Nullable
-	private Integer ContactPersonID;
 	@NotNull
-	private Integer ContractsKindID;
+	private String customerShortName;
+
 	@NotNull
 	private Date StartDateOfContract;
 	@NotNull
 	private Date FinishDateOfContract;
 	@NotNull
 	private Integer ContractPrice;
-	@NotNull
-	private Integer QuantityOfMonths;
-	@NotNull
-	private Float Coefficient;
 	@Nullable
-
 	private String PeriodKind;
-	@NotNull
-	private Integer Number;
 	@Nullable
-
 	private String ContactDescription;
-	@Nullable
-	private Integer Renewed = 0;
-	@Nullable
-
-	private Integer ReminderID;
+//	@Nullable
+//	private Integer Renewed = 0;
 }
