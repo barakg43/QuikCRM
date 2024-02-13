@@ -39,8 +39,8 @@ public class Customer {
 	@Column
 	private String remarks;
 
-//	@Column
-////	private Long activeContractID;
+	@Column
+	private Long activeContractID;
 
 	@Column
 	private String address;
