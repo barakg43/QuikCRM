@@ -1,7 +1,6 @@
 package main.server.sql.executor;
 
 import main.server.sql.bulider.SqlQueryBuilder;
-import main.server.sql.bulider.component.SqlInnerQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
@@ -44,20 +43,20 @@ public class CustomerService {
 //				.where()
 //				.equal("CustomersStatusID", "customerStatusID", false);
 
-		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomersDetails")
-				.select("customerID",
-						"customerShortName",
-						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
-						"customerMainPhone",
-						"address",
-						"city")
-				.build();
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomersDetails")
+//				.select("customerID",
+//						"customerShortName",
+//						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
+//						"customerMainPhone",
+//						"address",
+//						"city")
+//				.build();
 		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlCustomerDetails();
-
+//		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
 //		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQuery, CustomerSlimDetailsRecord.class);
 		int totalItemInDb = getCustomersAmount();
-		System.out.println(sqlQuery);
+//		System.out.println(sqlQuery);
 		return new ListSubset<>(customerList, totalItemInDb);
 
 	}
