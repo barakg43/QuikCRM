@@ -1,12 +1,9 @@
 package main.server.sql.bulider.component;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SqlBaseClauses {
 	protected final StringBuilder additionalParameters = new StringBuilder();
@@ -14,18 +11,30 @@ public class SqlBaseClauses {
 	private final String parameterDelimiter = ", ";
 	private final SqlFilterClauses sqlFilterClauses;
 	protected eBaseClause baseClause = null;
-	private String outputClause = null;
 
 	public SqlBaseClauses(SqlFilterClauses sqlFilterClauses) {
 		this.sqlFilterClauses = sqlFilterClauses;
 	}
 
 
-	public <T> SqlFilterClauses select(Class<T> resultClass) {
+	public <T> SqlFilterClauses select(Class<T> resultClass, String... columnNamesToExclude) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.SELECT;
-		buildClauseParameters(resultClass,
-				(currentValue, columnName) -> additionalParameters.append(columnName).append(parameterDelimiter));
+
+		buildClauseParameters(null, resultClass,
+				(currentValue, columnName) -> additionalParameters.append(columnName).append(parameterDelimiter),
+				columnNamesToExclude);
+		removeLastDelimiterFromStringBuilder(additionalParameters);
+		return sqlFilterClauses;
+	}
+
+	public SqlFilterClauses select(String... columnNames) {
+		baseClauseDuplicateValidation();
+		baseClause = eBaseClause.SELECT;
+
+		for (String columnName : columnNames) {
+			additionalParameters.append(columnName).append(parameterDelimiter);
+		}
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
@@ -36,7 +45,6 @@ public class SqlBaseClauses {
 		removeLastDelimiterFromStringBuilder(valuesParameters);
 		columnNamesParameters.append(")");
 		valuesParameters.append(")");
-		outputClause = outputColumn;
 		additionalParameters.append(columnNamesParameters);
 		if (outputColumn != null) {
 			additionalParameters.append(String.format("\n\t\tOUTPUT INSERTED.%s", outputColumn));
@@ -45,51 +53,60 @@ public class SqlBaseClauses {
 
 	}
 
-	public SqlFilterClauses insert(Object newObjectRecord, String outputColumn) {
+	public SqlFilterClauses insert(Object newObjectRecord, String outputColumn, String... columnNamesToExclude) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.INSERT;
 		StringBuilder columnNamesParameters = new StringBuilder();
 		StringBuilder valuesParameters = new StringBuilder();
 
-		buildClauseParameters(newObjectRecord, (currentValue, columnName) -> {
+		buildClauseParameters(newObjectRecord, newObjectRecord.getClass(), (currentValue, columnName) -> {
 					columnNamesParameters.append(columnName).append(parameterDelimiter);
 					String value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
 							currentValue);
 					valuesParameters.append(value).append(parameterDelimiter);
-				}
+				}, columnNamesToExclude
 		);
 
 		buildInsetClause(outputColumn, columnNamesParameters, valuesParameters);
 		return sqlFilterClauses;
 	}
 
-	public SqlFilterClauses update(Object updatedObjectRecord) {
+	public SqlFilterClauses update(Object updatedObjectRecord, String... columnNamesToExclude) {
 		baseClauseDuplicateValidation();
 		baseClause = eBaseClause.UPDATE;
-		buildClauseParameters(updatedObjectRecord, (currentValue, columnName) -> {
+		buildClauseParameters(updatedObjectRecord, updatedObjectRecord.getClass(), (currentValue, columnName) -> {
 					String value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
 							currentValue);
 					additionalParameters.append(columnName).append(" = ").append(value).append(parameterDelimiter);
-				}
+				}, columnNamesToExclude
 		);
 //		System.out.println(additionalParameters);
 		removeLastDelimiterFromStringBuilder(additionalParameters);
 		return sqlFilterClauses;
 	}
 
-	private void buildClauseParameters(Object objectRecord, BiFunction<Object, String> columnParameterBuilder) {
+	private <T> void buildClauseParameters(Object recordObject, Class<T> recordClass,
+										   BiFunction<Object, String> columnParameterBuilder,
+										   String... columnNamesToExclude) {
 		Object currentValue;
-
-		Method[] methods = objectRecord.getClass().getDeclaredMethods();
-		for (Method method : methods) {
+		Set<String> columnNamesToExcludeSet = new HashSet<>(List.of(columnNamesToExclude));
+		Field[] fields = recordClass.getDeclaredFields();
+		for (Field field : fields) {
+			String columnName = field.getName();
 			try {
-				if (!method.getName().equals("equals") && !method.getName().equals("hashCode") && !method.getName().equals("toString")) {
-					currentValue = method.invoke(objectRecord);
-					if (currentValue != null) {
-						columnParameterBuilder.apply(currentValue, method.getName());
+				if (!columnNamesToExcludeSet.contains(columnName)) {
+					if (recordObject == null) {
+						columnParameterBuilder.apply(null, columnName);
+					} else {
+						Method method =
+								recordClass.getMethod("get" + columnName.substring(0, 1).toUpperCase() + columnName.substring(1));
+						currentValue = method.invoke(recordObject);
+						if (currentValue != null) {
+							columnParameterBuilder.apply(currentValue, columnName);
+						}
 					}
 				}
-			} catch (IllegalAccessException | InvocationTargetException e) {
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -150,72 +167,62 @@ public class SqlBaseClauses {
 			throw new RuntimeException("Cant select 2 clauses for same query");
 	}
 
+//
+//	@Deprecated
+//	public SqlFilterClauses update(Object updatedObject, String selectedFieldNames) {
+//		baseClauseDuplicateValidation();
+//		baseClause = eBaseClause.UPDATE;
+//		String value;
+//		Object currentValue;
+//		for (String field : selectedFieldNames) {
+//
+//			try {
+//				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
+//				Method getter = pd.getReadMethod();
+//				currentValue = getter.invoke(updatedObject);
+//				if (currentValue != null) {
+//					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+//							currentValue);
+//					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
+//				}
+//			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+//				throw new RuntimeException(e);
+//			}
+//
+//		}
+//		return sqlFilterClauses;
+//	}
+//
+//
 
-	@Deprecated
-	public SqlFilterClauses update(Object updatedObject, String... selectedFieldNames) {
-		baseClauseDuplicateValidation();
-		baseClause = eBaseClause.UPDATE;
-		String value;
-		Object currentValue;
-		for (String field : selectedFieldNames) {
-
-			try {
-				PropertyDescriptor pd = new PropertyDescriptor(field, updatedObject.getClass());
-				Method getter = pd.getReadMethod();
-				currentValue = getter.invoke(updatedObject);
-				if (currentValue != null) {
-					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
-							currentValue);
-					additionalParameters.append(field).append(" = ").append(value).append(parameterDelimiter);
-				}
-			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-
-		}
-		return sqlFilterClauses;
-	}
-
-
-	@Deprecated
-	public SqlFilterClauses select(String... columnNames) {
-		baseClauseDuplicateValidation();
-		baseClause = eBaseClause.SELECT;
-
-		for (String columnName : columnNames) {
-			additionalParameters.append(columnName).append(parameterDelimiter);
-		}
-		removeLastDelimiterFromStringBuilder(additionalParameters);
-		return sqlFilterClauses;
-	}
-
-	@Deprecated
-	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
-		baseClauseDuplicateValidation();
-		baseClause = eBaseClause.INSERT;
-		StringBuilder columnNamesParameters = new StringBuilder();
-		StringBuilder valuesParameters = new StringBuilder();
-		String value;
-
-		Object currentValue;
-		for (String field : selectedFieldNames) {
-
-			try {
-				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
-				Method getter = pd.getReadMethod();
-				currentValue = getter.invoke(newObject);
-				if (currentValue != null) {
-					columnNamesParameters.append(field).append(parameterDelimiter);
-					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
-							currentValue);
-					valuesParameters.append(value).append(parameterDelimiter);
-				}
-			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-
-		}
-		buildInsetClause(outputColumn, columnNamesParameters, valuesParameters);
-		return sqlFilterClauses;
-	}
+//
+//	@Deprecated
+//	public SqlFilterClauses insert(Object newObject, String outputColumn, String... selectedFieldNames) {
+//		baseClauseDuplicateValidation();
+//		baseClause = eBaseClause.INSERT;
+//		StringBuilder columnNamesParameters = new StringBuilder();
+//		StringBuilder valuesParameters = new StringBuilder();
+//		String value;
+//
+//		Object currentValue;
+//		for (String field : selectedFieldNames) {
+//
+//			try {
+//				PropertyDescriptor pd = new PropertyDescriptor(field, newObject.getClass());
+//				Method getter = pd.getReadMethod();
+//				currentValue = getter.invoke(newObject);
+//				if (currentValue != null) {
+//					columnNamesParameters.append(field).append(parameterDelimiter);
+//					value = String.format(currentValue.getClass().equals(String.class) ? "N'%s'" : "%s",
+//							currentValue);
+//					valuesParameters.append(value).append(parameterDelimiter);
+//				}
+//			} catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+//				throw new RuntimeException(e);
+//			}
+//
+//		}
+//		buildInsetClause(outputColumn, columnNamesParameters, valuesParameters);
+//		return sqlFilterClauses;
+//	}
 }
