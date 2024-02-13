@@ -5,7 +5,7 @@ public enum eJoinType {
 	INNER("INNER JOIN"),
 	LEFT_OUTER("LEFT JOIN"),
 	RIGHT_OUTER("RIGHT JOIN"),
-	FULL_OUTER("LEFT JOIN");
+	FULL_OUTER("FULL JOIN");
 
 	final private String clauseString;
 
