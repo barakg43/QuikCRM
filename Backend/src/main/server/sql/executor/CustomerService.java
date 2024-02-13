@@ -63,34 +63,7 @@ public class CustomerService {
 	}
 
 	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) {
-//		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomers")
-//				.select("mainAddress", "mainContactPerson")
-//				.where().equal("customerID", customerDetails.getCustomerID(), false)
-//				.build();
-//		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.executeTableValueQuery(
-//				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
 
-
-//		String sqlInsertQueryContactTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersContactPersons").insert(customerDetails, "customersContactPersonID",
-//						"contactPersonName",
-//						"contactPersonMobilePhone")
-//				.build();
-//		String sqlUpdateQueryAddressTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersAddresses").insert(customerDetails, "customersAddressID",
-//						"address",
-//						"postalCode",
-//						"city",
-//						"addressRemarks")
-//				.build();
-//		System.out.println(sqlInsertQueryContactTable);
-//		System.out.println(sqlUpdateQueryAddressTable);
-//		Integer contactId = sqlFunctionExecutor.supplyScalarValueQuery(sqlInsertQueryContactTable, Integer.class);
-//		Integer addressId = sqlFunctionExecutor.supplyScalarValueQuery(sqlUpdateQueryAddressTable, Integer.class);
-//		System.out.println(contactId + " add: " + addressId);
-//		customerDetails.setMainAddress(addressId);
-////		customerDetails.setMainContactPerson(contactId);
 //		customerDetails.setCustomerStatusID(
 //				getCustomerStatusIdFromDescription(
 //						customerDetails.getCustomerStatus()

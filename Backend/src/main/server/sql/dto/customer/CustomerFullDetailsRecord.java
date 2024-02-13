@@ -11,9 +11,7 @@ public record CustomerFullDetailsRecord(
 		eCustomerStatus customerStatus,
 		String customerIdentificationNumber,
 		String customerMainPhone,
-		String customerMainFax,
 		String customerMainEMail,
-		String customerWebSite,
 		String remarks,
 		String address,
 		String city,
@@ -22,9 +20,7 @@ public record CustomerFullDetailsRecord(
 		String contactPersonName,
 		String contactPersonPost,
 		String contactPersonPhone,
-		String contactPersonMobilePhone,
-		String contactPersonFax,
-		String contactPersonEMail
+		String contactPersonMobilePhone
 ) {
 
 }
