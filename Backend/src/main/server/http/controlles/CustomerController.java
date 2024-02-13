@@ -3,8 +3,8 @@ package main.server.http.controlles;
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
-import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
+import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.executor.CustomerService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -40,10 +40,10 @@ public class CustomerController {
 	}
 
 	@GetMapping("")
-	public ListSubset<CustomerFlatDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
 																		@RequestParam(required = false) Integer toItem) {
 		System.out.println("customer all");
-		ListSubset<CustomerFlatDetailsRecord> test =
+		ListSubset<CustomerSlimDetailsRecord> test =
 				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(fromItem, toItem)
 						, "api/customers",
 						HttpMethod.GET);

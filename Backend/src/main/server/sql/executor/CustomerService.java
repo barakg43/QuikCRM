@@ -5,8 +5,8 @@ import main.server.sql.bulider.component.SqlInnerQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
-import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
+import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class CustomerService {
 //    JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
 //    JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
 //    ORDER BY cust.customerShortName
-	public ListSubset<CustomerFlatDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
 
 
 //		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
@@ -52,10 +52,10 @@ public class CustomerService {
 						"address",
 						"city")
 				.build();
-//		List<CustomerFlatDetailsProjection> customerList = customerRepository.findAllBy();
+		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlCustomerDetails();
 
-		List<CustomerFlatDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
-				sqlQuery, CustomerFlatDetailsRecord.class);
+//		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
+//				sqlQuery, CustomerSlimDetailsRecord.class);
 		int totalItemInDb = getCustomersAmount();
 		System.out.println(sqlQuery);
 		return new ListSubset<>(customerList, totalItemInDb);
@@ -196,29 +196,30 @@ public class CustomerService {
 
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
 
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("dbo.tbCustomersDetails")
-				.select("customerID",
-						"customerShortName",
-						"activeContractID",
-						"customerName",
-						"customerIdentificationNumber",
-						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
-						"customerMainPhone",
-						"customerMainEMail",
-						"remarks",
-						"address",
-						"city",
-						"postalCode",
-						"addressRemarks",
-						"contactPersonName",
-						"contactPersonMobilePhone")
-				.where().equal("customerID", id, false)
-				.build();
-		System.out.println(sqlQuery);
-
-		return sqlFunctionExecutor.supplyTableValueQuery(
-				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("dbo.tbCustomersDetails")
+//				.select("customerID",
+//						"customerShortName",
+//						"activeContractID",
+//						"customerName",
+//						"customerIdentificationNumber",
+//						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
+//						"customerMainPhone",
+//						"customerMainEMail",
+//						"remarks",
+//						"address",
+//						"city",
+//						"postalCode",
+//						"addressRemarks",
+//						"contactPersonName",
+//						"contactPersonMobilePhone")
+//				.where().equal("customerID", id, false)
+//				.build();
+//		System.out.println(sqlQuery);
+//
+//		return sqlFunctionExecutor.supplyTableValueQuery(
+//				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+		return customerRepository.getCustomerByCustomerID(id);
 	}
 
 	public void deleteCustomer(int id) {
