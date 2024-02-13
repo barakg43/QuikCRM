@@ -1,5 +1,6 @@
 package main.server.sql.entities;
 
+
 public enum eCustomerStatus {
 	IN_SERVICE("in-service"),
 	OUT_OF_SERVICE("out-of-service"),
@@ -13,6 +14,12 @@ public enum eCustomerStatus {
 	eCustomerStatus(String status) {
 		this.status = status;
 
+	}
+
+	public static eCustomerStatus fromStatus(String status) {
+		for (eCustomerStatus v : values())
+			if (v.getStatus().equalsIgnoreCase(status)) return v;
+		throw new IllegalArgumentException();
 	}
 
 	public String getStatus() {
