@@ -15,7 +15,7 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "smallint")
-	private Integer customerID;
+	private Short customerID;
 
 	@Column(nullable = false)
 	private String customerShortName;
@@ -23,48 +23,49 @@ public class Customer {
 	@Column(nullable = false)
 	private String customerName;
 
-	@Column
+	@Column(columnDefinition = "nchar", length = 9)
 	private String customerIdentificationNumber;
 
 	@Column
-	private Byte customerStatusID;
+	@Enumerated(EnumType.STRING)
+	private eCustomerStatus customerStatus;
 
-	@Column
+	@Column(columnDefinition = "char", length = 10)
 	private String customerMainPhone;
 
 	@Column
 	private String customerMainEMail;
 
 	@Lob
-	@Column
+	@Column(columnDefinition = "nvarchar")
 	private String remarks;
 
-	@Column
+	@Column(columnDefinition = "decimal")
 	private Long activeContractID;
 
 	@Column
 	private String address;
 
-	@Column
+	@Column(columnDefinition = "nchar", length = 50)
 	private String city;
 
-	@Column
+	@Column(columnDefinition = "char(7)", length = 7)
 	private String postalCode;
 
 	@Lob
-	@Column
+	@Column(columnDefinition = "ntext")
 	private String addressRemarks;
 
-	@Column
+	@Column(columnDefinition = "nchar", length = 30)
 	private String contactPersonName;
 
-	@Column
+	@Column(columnDefinition = "nchar", length = 50)
 	private String contactPersonPost;
 
-	@Column
+	@Column(columnDefinition = "char", length = 10)
 	private String contactPersonPhone;
 
-	@Column
+	@Column(columnDefinition = "char", length = 11)
 	private String contactPersonMobilePhone;
 
 	@ManyToOne(fetch = FetchType.LAZY)
