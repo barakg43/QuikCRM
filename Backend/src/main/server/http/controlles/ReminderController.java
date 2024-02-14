@@ -1,9 +1,9 @@
 package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
-import main.server.sql.dto.reminder.RenewReminderRecord;
-import main.server.sql.services.ReminderService;
+import main.server.sql.services.ServiceContractService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +17,17 @@ import java.util.List;
 @RequestMapping("/api/reminders")
 public class ReminderController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ReminderService reminderService;
+	private final ServiceContractService serviceContractService;
 
-	public ReminderController(ReminderService reminderService, HttpRequestExecutor httpRequestExecutor) {
-		this.reminderService = reminderService;
+	public ReminderController(ServiceContractService serviceContractService, HttpRequestExecutor httpRequestExecutor) {
+		this.serviceContractService = serviceContractService;
 		this.httpRequestExecutor = httpRequestExecutor;
 	}
 
-	@GetMapping("/renews")
-	public List<RenewReminderRecord> getRenews() {
-		return httpRequestExecutor.executeHttpRequest(reminderService::getRenews, "/api/reminders/renews",
+	@GetMapping("/service-renews")
+	public List<ContractRecord> getServiceRenewsReminders(int daysBeforeExpiration, int monthsAfterExpiration) {
+		return httpRequestExecutor.executeHttpRequest(() -> serviceContractService.getServiceRenewReminders(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
+						"/renews",
 				HttpMethod.GET);
 
 
@@ -36,7 +37,7 @@ public class ReminderController {
 	//	@GetMapping("/invoices")
 	@Deprecated
 	public List<InvoiceReminderRecord> getInvoiceReminders() {
-		return httpRequestExecutor.executeHttpRequest(reminderService::getInvoiceReminders, "/api/reminders" +
+		return httpRequestExecutor.executeHttpRequest(serviceContractService::getInvoiceReminders, "/api/reminders" +
 				"/invoices", HttpMethod.GET);
 	}
 
