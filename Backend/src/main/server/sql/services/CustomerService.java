@@ -57,7 +57,7 @@ public class CustomerService {
 //		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
 //		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQuery, CustomerSlimDetailsRecord.class);
-		int totalItemInDb = getCustomersAmount();
+		long totalItemInDb = getCustomersAmount();
 //		System.out.println(sqlQuery);
 		return new ListSubset<>(customerList, totalItemInDb);
 
@@ -65,6 +65,7 @@ public class CustomerService {
 
 	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) {
 
+		customerRepository.save(new Customer(customerDetails));
 //		customerDetails.setCustomerStatusID(
 //				getCustomerStatusIdFromDescription(
 //						customerDetails.getCustomerStatus()
