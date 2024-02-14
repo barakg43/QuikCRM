@@ -1,4 +1,4 @@
-package main.server.sql.executor;
+package main.server.sql.services;
 
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;

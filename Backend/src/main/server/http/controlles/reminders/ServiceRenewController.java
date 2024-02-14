@@ -2,7 +2,7 @@ package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ServiceRenewReminderRecord;
-import main.server.sql.executor.ReminderService;
+import main.server.sql.services.ReminderService;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

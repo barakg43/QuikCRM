@@ -1,4 +1,4 @@
-package main.server.sql.executor;
+package main.server.sql.services;
 
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
@@ -6,11 +6,13 @@ import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
+import main.server.sql.entities.Customer;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
