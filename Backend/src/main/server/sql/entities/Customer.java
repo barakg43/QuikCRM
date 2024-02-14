@@ -54,13 +54,12 @@ public class Customer {
 	private String contactPersonMobilePhone;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "activeContractID", referencedColumnName = "ContractID", insertable = false, updatable = false)
-	private CustomerContract customerContracts;
+	private ServiceContract contracts;
 
 	public Customer() {
 	}
 
 	public Customer(CustomerFullDetailsRecord customerFullDetailsRecord) {
-		this.customerID = customerFullDetailsRecord.customerID();
 		this.customerShortName = customerFullDetailsRecord.customerShortName();
 		this.customerName = customerFullDetailsRecord.customerName();
 		this.customerIdentificationNumber = customerFullDetailsRecord.customerIdentificationNumber();
