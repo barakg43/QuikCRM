@@ -117,6 +117,18 @@ public class CustomerService {
 	}
 
 	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
+
+		Optional<Customer> customerToUpdateOptional = customerRepository.findById(customerDetailsUpdated.customerID());
+
+		if (customerToUpdateOptional.isEmpty())
+			throw new IndexOutOfBoundsException("Customer with id " + customerDetailsUpdated.customerID() + " not " +
+					"exist!");
+
+		Customer customerToUpdated = customerToUpdateOptional.get();
+		customerToUpdated.setCustomerID(customerToUpdated.getCustomerID());
+
+
+		customerRepository.save(customerToUpdated);
 ////		System.out.println(customerDetailsUpdated);
 ////		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
 ////				.from("tbCustomers")
@@ -197,22 +209,23 @@ public class CustomerService {
 		return customerRepository.getCustomerByCustomerID(id);
 	}
 
-	public void deleteCustomer(int id) {
-		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
-				.from("dbo.tbCustomersDetails")
-				.delete()
-				.where().equal("customerID", id, false)
-				.build();
-		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
+	public void deleteCustomer(short id) {
+//		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("dbo.tbCustomersDetails")
+//				.delete()
+//				.where().equal("customerID", id, false)
+//				.build();
+//		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
+		customerRepository.deleteById(id);
 
 	}
 
-	private int getCustomersAmount() {
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomers")
-				.select("COUNT(customerID)").build();
+	private long getCustomersAmount() {
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("tbCustomers")
+//				.select("COUNT(customerID)").build();
 
-		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, int.class);
+		return customerRepository.count();
 	}
 
 	public String getCustomerNameByID(int id) {

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-	@Query("SELECT new main.server.sql.dto.customer.CustomerSlimDetailsRecord(c.customerID, c.customerShortName, c" +
-			".customerStatus, c.customerMainPhone, c.address, c.city) FROM Customer c")
+public interface CustomerRepository extends JpaRepository<Customer, Short> {
+	@Query("SELECT new main.server.sql.dto.customer.CustomerSlimDetailsRecord(c.customerID, c.customerShortName, " +
+			"c.customerStatus, c.customerMainPhone, c.address, c.city) FROM Customer c")
 	List<CustomerSlimDetailsRecord> findAlCustomerDetails();
 
 	CustomerFullDetailsRecord getCustomerByCustomerID(int customerID);

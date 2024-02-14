@@ -101,7 +101,7 @@ public class CustomerController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteCustomer(@PathVariable("id") int id) {
+	public void deleteCustomer(@PathVariable("id") short id) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> customerService.deleteCustomer(id),
 					"api/customers/" + id
