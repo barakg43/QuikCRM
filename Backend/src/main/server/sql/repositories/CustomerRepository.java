@@ -13,7 +13,7 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Short> {
 	@Query("SELECT new main.server.sql.dto.customer.CustomerSlimDetailsRecord(c.customerID, c.customerShortName, " +
 			"c.customerStatus, c.customerMainPhone, c.address, c.city) FROM Customer c")
-	List<CustomerSlimDetailsRecord> findAlCustomerDetails();
+	List<CustomerSlimDetailsRecord> findAlLCustomerDetails();
 
 	CustomerFullDetailsRecord getCustomerByCustomerID(int customerID);
 

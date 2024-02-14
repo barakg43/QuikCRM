@@ -53,7 +53,7 @@ public class CustomerService {
 //						"address",
 //						"city")
 //				.build();
-		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlCustomerDetails();
+		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlLCustomerDetails();
 //		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
 //		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQuery, CustomerSlimDetailsRecord.class);
