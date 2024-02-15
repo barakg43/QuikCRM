@@ -36,10 +36,10 @@ public class ReminderController {
 	}
 
 
-	//	@GetMapping("/invoices")
+	@GetMapping("/product-renews")
 	@Deprecated
-	public List<InvoiceReminderRecord> getInvoiceReminders() {
-		return httpRequestExecutor.executeHttpRequest(serviceContractService::getInvoiceReminders, "/api/reminders" +
+	public List<ProductReminderRecord> getInvoiceReminders() {
+		return httpRequestExecutor.executeHttpRequest(productRenewService::getRenewalReminders, "/api/reminders" +
 				"/invoices", HttpMethod.GET);
 	}
 
