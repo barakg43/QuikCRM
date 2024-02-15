@@ -53,7 +53,7 @@ public class Customer {
 	@Column(columnDefinition = "char", length = 11)
 	private String contactPersonMobilePhone;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "activeContractID", referencedColumnName = "ContractID", insertable = false, updatable = false)
+	@JoinColumn(name = "activeContractID", referencedColumnName = "contractID", insertable = false, updatable = false)
 	private ServiceContract contracts;
 
 	public Customer() {

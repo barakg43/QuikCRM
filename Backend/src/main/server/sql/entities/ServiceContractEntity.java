@@ -31,7 +31,7 @@ public class ServiceContract {
 	@Column(nullable = false)
 	private Timestamp startDateOfContract;
 
-	@Column(nullable = false)
+	@Column()
 	private Timestamp finishDateOfContract;
 
 	@Column(nullable = false)

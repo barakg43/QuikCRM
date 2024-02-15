@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.sql.Timestamp;
 
 
 @Setter
@@ -46,9 +46,9 @@ public class ProductReminder {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CustomerID", referencedColumnName = "customerID", insertable = false, updatable = false)
-	private Customer customerID;
+	private Customer customer;
 
 	@Column(name = "ValidityTill")
-	private Instant validityTill;
+	private Timestamp validityTill;
 
 }
