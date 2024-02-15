@@ -1,7 +1,7 @@
 package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
-import main.server.sql.services.ServiceContractService;
+import main.server.sql.services.ContractService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/reminders/service-renews")
 public class ServiceRenewController {
 	private final HttpRequestExecutor httpRequestExecutor;
-	private final ServiceContractService serviceContractService;
+	private final ContractService contractService;
 
 	public ServiceRenewController(HttpRequestExecutor httpRequestExecutor,
-								  ServiceContractService serviceContractService) {
+								  ContractService contractService) {
 		this.httpRequestExecutor = httpRequestExecutor;
-		this.serviceContractService = serviceContractService;
+		this.contractService = contractService;
 	}
 
 //	@GetMapping("")
