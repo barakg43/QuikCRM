@@ -3,30 +3,31 @@ package main.server.sql.services;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
-import main.server.sql.dto.reminder.RenewReminderRecord;
-import main.server.sql.entities.ServiceContract;
+import main.server.sql.dto.reminder.ProductReminderRecord;
+import main.server.sql.dto.reminder.ePeriodKind;
+import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.ServiceContractRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
-public class ServiceContractService {
+@Service
+public class ContractService {
 	private final SqlFunctionExecutor sqlFunctionExecutor;
 	private final ServiceContractRepository serviceContractRepository;
 
-	public ServiceContractService(SqlFunctionExecutor sqlFunctionExecutor,
-								  ServiceContractRepository serviceContractRepository) {
+	public ContractService(SqlFunctionExecutor sqlFunctionExecutor,
+						   ServiceContractRepository serviceContractRepository) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 		this.serviceContractRepository = serviceContractRepository;
 	}
 
-	public List<RenewReminderRecord> getRenews() {
-		return sqlFunctionExecutor.executeTableValueFunction("fncSystemsDetailsForDate", RenewReminderRecord.class,
+	public List<ProductReminderRecord> getRenews() {
+		return sqlFunctionExecutor.executeTableValueFunction("fncSystemsDetailsForDate", ProductReminderRecord.class,
 				LocalDateTime.now());
 
 	}
@@ -54,51 +55,71 @@ public class ServiceContractService {
 	}
 
 	public void updateContract(ContractRecord contractRecord) {
-		ServiceContract serviceContract = serviceContractRepository
+		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contractRecord.contractID());
-		serviceContract.setContractPrice(contractRecord.contractPrice());
-		serviceContract.setContactDescription(contractRecord.contactDescription());
-		serviceContract.setPeriodKind(contractRecord.periodKind());
-		serviceContract.setFinishDateOfContract(contractRecord.finishDateOfContract());
-		serviceContract.setStartDateOfContract(contractRecord.startDateOfContract());
-		serviceContractRepository.save(serviceContract);
+		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
+		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
+		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
+		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
+		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+		serviceContractRepository.save(serviceContractEntity);
 	}
 
 	public void addNewContract(ContractRecord contractRecord) {
-		ServiceContract serviceContract = new ServiceContract();
-		serviceContract.setCustomerID(contractRecord.customerID());
-		serviceContract.setContractPrice(contractRecord.contractPrice());
-		serviceContract.setContactDescription(contractRecord.contactDescription());
-		serviceContract.setPeriodKind(contractRecord.periodKind());
-//		serviceContract.setFinishDateOfContract(contractRecord.finishDateOfContract());
-		serviceContract.setStartDateOfContract(contractRecord.startDateOfContract());
-		serviceContractRepository.save(serviceContract);
+		ServiceContractEntity serviceContractEntity = new ServiceContractEntity();
+		serviceContractEntity.setCustomerID(contractRecord.customerID());
+		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
+		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
+		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
+//		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
+		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+		serviceContractEntity.getCustomer().setActiveContract(serviceContractEntity);
+		serviceContractRepository.save(serviceContractEntity);
 	}
 
-	public void deleteContract(Long contractID) {
+	public void deleteContractByID(Long contractID) {
 		serviceContractRepository.deleteByContractID(contractID);
+	}
+
+	public void setContactReminderState(Long contactID, boolean toEnable) {
+		ServiceContractEntity serviceContractEntity = serviceContractRepository
+				.getContractByContractID(contactID);
+		if (toEnable) {
+			setContactFinishDateBaseOnStartDayForContract(serviceContractEntity.getPeriodKind(), serviceContractEntity,
+					serviceContractEntity.getStartDateOfContract());
+		} else {
+			serviceContractEntity.setFinishDateOfContract(null);
+		}
+
 	}
 
 	public void renewContractForPeriod(ContractRecord contractRecord) {
 		//close the current contract
-		ServiceContract currentContract =
+		ServiceContractEntity currentContract =
 				serviceContractRepository.getContractByContractID(contractRecord.contractID());
 		currentContract.setRenewed(true);
 		currentContract.setContractPrice(contractRecord.contractPrice());
 		currentContract.setContactDescription(contractRecord.contactDescription());
 		//create new contract
-		int periodInMonths = contractRecord.periodKind().getMonthsPeriod();
-		ServiceContract newContract = new ServiceContract();
+		ServiceContractEntity newContract = new ServiceContractEntity();
 		newContract.setCustomerID(currentContract.getCustomerID());
 		Timestamp startDateForNewContract = Timestamp.valueOf(contractRecord.finishDateOfContract()
 				.toLocalDateTime()
 				.plusDays(1)
 				.toLocalDate().atStartOfDay());
 		newContract.setStartDateOfContract(startDateForNewContract);
-		newContract.setFinishDateOfContract(Timestamp.valueOf(startDateForNewContract.toLocalDateTime().
-				plusMonths(periodInMonths).toLocalDate().atStartOfDay()));
+		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), newContract,
+				startDateForNewContract);
 		newContract.setPeriodKind(contractRecord.periodKind());
 		serviceContractRepository.saveAll(List.of(currentContract, newContract));
+	}
+
+	private void setContactFinishDateBaseOnStartDayForContract(ePeriodKind periodKind,
+															   ServiceContractEntity newContract,
+															   Timestamp startDateForNewContract) {
+		int periodInMonths = periodKind.getMonthsPeriod();
+		newContract.setFinishDateOfContract(Timestamp.valueOf(startDateForNewContract.toLocalDateTime().
+				plusMonths(periodInMonths).toLocalDate().atStartOfDay()));
 	}
 
 
