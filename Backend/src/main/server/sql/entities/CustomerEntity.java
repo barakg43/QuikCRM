@@ -11,7 +11,7 @@ import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 @Table(name = "tbCustomersDetails")
 @Getter
 @Setter
-public class Customer {
+public class CustomerEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,14 +52,15 @@ public class Customer {
 	private String contactPersonPhone;
 	@Column(columnDefinition = "char", length = 11)
 	private String contactPersonMobilePhone;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "activeContractID", referencedColumnName = "contractID", insertable = false, updatable = false)
-	private ServiceContract contracts;
+	private ServiceContractEntity activeContract;
 
-	public Customer() {
+	public CustomerEntity() {
 	}
 
-	public Customer(CustomerFullDetailsRecord customerFullDetailsRecord) {
+	public CustomerEntity(CustomerFullDetailsRecord customerFullDetailsRecord) {
 		this.customerShortName = customerFullDetailsRecord.customerShortName();
 		this.customerName = customerFullDetailsRecord.customerName();
 		this.customerIdentificationNumber = customerFullDetailsRecord.customerIdentificationNumber();

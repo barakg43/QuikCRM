@@ -21,7 +21,7 @@ public record CustomerFullDetailsRecord(
 		String contactPersonPhone,
 		String contactPersonMobilePhone
 ) {
-//	public CustomerFullDetailsRecord(Customer customer) {
+//	public CustomerFullDetailsRecord(CustomerEntity customer) {
 //		this(customer.getCustomerID(),
 //				customer.getActiveContractID(),
 //				customer.getCustomerShortName(),

@@ -1,7 +1,7 @@
 package main.server.sql.repositories;
 
 import main.server.sql.dto.reminder.ContractRecord;
-import main.server.sql.entities.ServiceContract;
+import main.server.sql.entities.ServiceContractEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface ServiceContractRepository extends JpaRepository<ServiceContract, Long> {
+public interface ServiceContractRepository extends JpaRepository<ServiceContractEntity, Long> {
 
-	ServiceContract getContractByContractID(long contractID);
+	ServiceContractEntity getContractByContractID(long contractID);
 
 	@Query("SELECT new main.server.sql.dto.reminder.ContractRecord(c.contractID, c.customerID, c.customer" +
 			".customerShortName, " +
 			"c.startDateOfContract, c.finishDateOfContract, c.contractPrice, c.periodKind, c.contactDescription) " +
-			" FROM ServiceContract c WHERE c.renewed = false AND c.finishDateOfContract >= ?1 AND c" +
+			" FROM ServiceContractEntity c WHERE c.renewed = false AND c.finishDateOfContract >= ?1 AND c" +
 			".finishDateOfContract <= ?2")
 	List<ContractRecord> getAllContractsRenewReminder(Timestamp minimumDate, Timestamp expirationDate);
 

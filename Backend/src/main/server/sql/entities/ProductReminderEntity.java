@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "tbSystemsDetails")
-public class ProductReminder {
+public class ProductReminderEntity {
 	@Id
 	@Column(name = "SystemDetailID", nullable = false, precision = 18)
 	private BigDecimal id;
@@ -46,7 +46,7 @@ public class ProductReminder {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CustomerID", referencedColumnName = "customerID", insertable = false, updatable = false)
-	private Customer customer;
+	private CustomerEntity customer;
 
 	@Column(name = "ValidityTill")
 	private Timestamp validityTill;

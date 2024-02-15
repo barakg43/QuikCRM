@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "tbCustomersContracts")
 @Getter
 @Setter
-public class ServiceContract {
+public class ServiceContractEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +61,7 @@ public class ServiceContract {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customerID", referencedColumnName = "customerID", insertable = false, updatable = false)
-	private Customer customer;
+	private CustomerEntity customer;
 
 	// Constructors, getters, and setters
 }

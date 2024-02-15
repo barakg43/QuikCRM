@@ -6,7 +6,7 @@ import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
-import main.server.sql.entities.Customer;
+import main.server.sql.entities.CustomerEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -65,7 +65,7 @@ public class CustomerService {
 
 	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) {
 
-		customerRepository.save(new Customer(customerDetails));
+		customerRepository.save(new CustomerEntity(customerDetails));
 //		customerDetails.setCustomerStatusID(
 //				getCustomerStatusIdFromDescription(
 //						customerDetails.getCustomerStatus()
@@ -118,13 +118,15 @@ public class CustomerService {
 
 	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
 
-		Optional<Customer> customerToUpdateOptional = customerRepository.findById(customerDetailsUpdated.customerID());
+		Optional<CustomerEntity> customerToUpdateOptional =
+				customerRepository.findById(customerDetailsUpdated.customerID());
 
 		if (customerToUpdateOptional.isEmpty())
-			throw new IndexOutOfBoundsException("Customer with id " + customerDetailsUpdated.customerID() + " not " +
+			throw new IndexOutOfBoundsException("CustomerEntity with id " + customerDetailsUpdated.customerID() + " " +
+					"not " +
 					"exist!");
 
-		Customer customerToUpdated = customerToUpdateOptional.get();
+		CustomerEntity customerToUpdated = customerToUpdateOptional.get();
 		customerToUpdated.setCustomerID(customerToUpdated.getCustomerID());
 
 
