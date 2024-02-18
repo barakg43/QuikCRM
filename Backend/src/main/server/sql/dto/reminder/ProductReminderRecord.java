@@ -14,7 +14,7 @@ public record ProductReminderRecord(Short customerID,
 									String userName,
 									String password,
 									Timestamp validityTill) {
-	public static ProductReminderRecord convertFromEntityList(ProductReminderEntity productReminderEntity) {
+	public static ProductReminderRecord convertFromEntity(ProductReminderEntity productReminderEntity) {
 		return new ProductReminderRecord(productReminderEntity.getCustomer().getCustomerID(),
 				productReminderEntity.getCustomer().getCustomerShortName(),
 				productReminderEntity.getId(),
