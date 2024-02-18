@@ -44,6 +44,8 @@ public class ProductReminderEntity {
 	@Column(name = "Password", length = 50)
 	private String password;
 
+	@Column(name = "CustomerID", nullable = false)
+	private Short customerID;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CustomerID", referencedColumnName = "customerID", insertable = false, updatable = false)
 	private CustomerEntity customer;
