@@ -21,9 +21,11 @@ public class ReminderController {
 	private final ContractService contractService;
 	private final ProductRenewService productRenewService;
 
-	public ReminderController(ContractService contractService, HttpRequestExecutor httpRequestExecutor) {
+	public ReminderController(ContractService contractService, HttpRequestExecutor httpRequestExecutor,
+							  ProductRenewService productRenewService) {
 		this.contractService = contractService;
 		this.httpRequestExecutor = httpRequestExecutor;
+		this.productRenewService = productRenewService;
 	}
 
 	@GetMapping("/service-renews")
