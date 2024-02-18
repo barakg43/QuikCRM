@@ -113,6 +113,7 @@ public class CustomerController {
 		}
 	}
 
+
 	@GetMapping("/customer/closed-tasks")
 	public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {
 //        return sqlClient.getClosedTaskForCustomer(id);
