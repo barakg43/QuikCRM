@@ -1,7 +1,6 @@
 package main.server.sql.services;
 
 
-import jakarta.persistence.EntityNotFoundException;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.ProductReminderEntity;
@@ -49,6 +48,45 @@ public class ProductRenewService {
 			productReminderRepository.save(currentProductReminder);
 			productReminderRepository.save(newReminder);
 		} else
-			throw new EntityNotFoundException();
+			throw new IndexOutOfBoundsException("Cannot find product reminder to renew with id of " + reminderId);
+	}
+
+	public void addNewProductReminder(ProductReminderRecord productReminderRecord) {
+
+		ProductReminderEntity newReminderEntity = new ProductReminderEntity();
+		copyAllProductRecordPropertiesToEntity(productReminderRecord, newReminderEntity);
+		productReminderRepository.save(newReminderEntity);
+
+
+	}
+
+	public void removeProductReminder(BigDecimal id) {
+		productReminderRepository.deleteById(id);
+	}
+
+	public void updateProductReminderData(ProductReminderRecord productReminderRecord) {
+		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
+				productReminderRepository.findById(productReminderRecord.systemDetailID());
+
+		if (productReminderEntityToRenewOptional.isPresent()) {
+			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();
+			copyAllProductRecordPropertiesToEntity(productReminderRecord, currentProductReminder);
+			productReminderRepository.save(currentProductReminder);
+		} else
+			throw new IndexOutOfBoundsException("Cannot find product reminder to update with id of " + productReminderRecord.systemDetailID());
+
+	}
+
+	private void copyAllProductRecordPropertiesToEntity(ProductReminderRecord sourceRecord,
+														ProductReminderEntity targetEntity) {
+		targetEntity.setValidityTill(sourceRecord.validityTill());
+		targetEntity.setPassword(sourceRecord.password());
+		targetEntity.setInternalIP(sourceRecord.internalIP());
+		targetEntity.setExternalIP(sourceRecord.externalIP());
+		targetEntity.setSystemDetailDescription(sourceRecord.systemDetailDescription());
+		targetEntity.setUserName(sourceRecord.userName());
+		targetEntity.setCustomerID(sourceRecord.customerID());
+
+
 	}
 }
