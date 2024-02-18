@@ -1,17 +1,11 @@
 package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
-import main.server.sql.dto.reminder.ContractRecord;
-import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.services.ContractService;
 import main.server.sql.services.ProductRenewService;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
@@ -28,21 +22,5 @@ public class ReminderController {
 		this.productRenewService = productRenewService;
 	}
 
-	@GetMapping("/service-renews")
-	public List<ContractRecord> getServiceRenewsReminders(int daysBeforeExpiration, int monthsAfterExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewReminders(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
-						"/renews",
-				HttpMethod.GET);
-
-
-	}
-
-
-	@GetMapping("/product-renews")
-	@Deprecated
-	public List<ProductReminderRecord> getInvoiceReminders() {
-		return httpRequestExecutor.executeHttpRequest(productRenewService::getRenewalReminders, "/api/reminders" +
-				"/invoices", HttpMethod.GET);
-	}
 
 }
