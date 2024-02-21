@@ -3,6 +3,7 @@ package main.server.sql.repositories;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.entities.ProductReminderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -20,6 +21,15 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 
 	List<ProductReminderEntity> findAllByValidityTillBefore(Timestamp validityTill);
 
+	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
+			"p.customer.customerShortName ," +
+			"p.id " +
+			",p.systemDetailDescription, " +
+			"p.internalIP, " +
+			"p.externalIP," +
+			" p.userName," +
+			" p.password, " +
+			"p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
 	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID);
 
 
