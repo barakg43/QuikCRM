@@ -25,7 +25,7 @@ public class ServiceContractEntity {
 	@Column
 	private Integer contactPersonID;
 
-	@Column(nullable = false)
+	@Column
 	private Byte contractsKindID;
 
 	@Column(nullable = false)
@@ -37,13 +37,13 @@ public class ServiceContractEntity {
 	@Column(nullable = false)
 	private BigDecimal contractPrice;
 
-	@Column(nullable = false)
+	@Column
 	private Byte quantityOfMonths;
 
-	@Column(nullable = false)
+	@Column
 	private Float coefficient;
 
-	@Column
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ePeriodKind periodKind;
 
