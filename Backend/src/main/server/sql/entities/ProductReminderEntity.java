@@ -50,7 +50,7 @@ public class ProductReminderEntity {
 	@JoinColumn(name = "CustomerID", referencedColumnName = "customerID", insertable = false, updatable = false)
 	private CustomerEntity customer;
 
-	@Column(name = "ValidityTill")
+	@Column(name = "ValidityTill", columnDefinition = "datetimeoffset")
 	private Timestamp validityTill;
 
 }
