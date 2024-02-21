@@ -1,5 +1,6 @@
 package main.server.sql.services;
 
+import jakarta.transaction.Transactional;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
@@ -8,6 +9,7 @@ import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.ServiceContractRepository;
+import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -50,10 +52,13 @@ public class ContractService {
 //		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
 ////        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class,
 ////        LocalDateTime.now());
-		return serviceContractRepository.getAllContractsRenewReminder(Timestamp.valueOf(LocalDate.now().plusMonths(-monthsAfterExpiration).atStartOfDay()),
-				Timestamp.valueOf(LocalDate.now().plusDays(daysBeforeExpiration).atStartOfDay()));
+		return serviceContractRepository.getAllContractsRenewReminder(
+				UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration),
+				UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration)
+		);
 	}
 
+	@Transactional
 	public void updateContract(ContractRecord contractRecord) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contractRecord.contractID());
@@ -106,13 +111,12 @@ public class ContractService {
 		//create new contract
 		ServiceContractEntity newContract = new ServiceContractEntity();
 		newContract.setCustomerID(currentContract.getCustomerID());
-		Timestamp startDateForNewContract = Timestamp.valueOf(contractRecord.finishDateOfContract()
-				.toLocalDateTime()
-				.plusDays(1)
-				.toLocalDate().atStartOfDay());
+		Timestamp startDateForNewContract =
+				UtilityFunctions.postDateByDaysAmount(currentContract.getFinishDateOfContract(), 1);
 		newContract.setStartDateOfContract(startDateForNewContract);
 		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), newContract,
 				startDateForNewContract);
+		newContract.setContractPrice(contractRecord.contractPrice());
 		newContract.setPeriodKind(contractRecord.periodKind());
 		serviceContractRepository.saveAll(List.of(currentContract, newContract));
 	}
@@ -121,8 +125,8 @@ public class ContractService {
 															   ServiceContractEntity newContract,
 															   Timestamp startDateForNewContract) {
 		int periodInMonths = periodKind.getMonthsPeriod();
-		newContract.setFinishDateOfContract(Timestamp.valueOf(startDateForNewContract.toLocalDateTime().
-				plusMonths(periodInMonths).toLocalDate().atStartOfDay()));
+		newContract.setFinishDateOfContract(UtilityFunctions.postDateByMonthAmount(startDateForNewContract,
+				periodInMonths));
 	}
 
 
