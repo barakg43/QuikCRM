@@ -1,6 +1,7 @@
 package main.server.sql.services;
 
 
+import jakarta.transaction.Transactional;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.ProductReminderEntity;
@@ -30,6 +31,7 @@ public class ProductRenewService {
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
+	@Transactional
 	public void renewProductForPeriodTime(BigDecimal reminderId, ePeriodKind periodKind) {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(reminderId);
@@ -60,10 +62,12 @@ public class ProductRenewService {
 
 	}
 
+	@Transactional
 	public void removeProductReminder(BigDecimal id) {
 		productReminderRepository.deleteById(id);
 	}
 
+	@Transactional
 	public void updateProductReminderData(ProductReminderRecord productReminderRecord) {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(productReminderRecord.systemDetailID());

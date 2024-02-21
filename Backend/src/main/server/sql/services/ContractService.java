@@ -71,16 +71,18 @@ public class ContractService {
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-//		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
+		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 		serviceContractEntity.getCustomer().setActiveContract(serviceContractEntity);
 		serviceContractRepository.save(serviceContractEntity);
 	}
 
+	@Transactional
 	public void deleteContractByID(Long contractID) {
 		serviceContractRepository.deleteByContractID(contractID);
 	}
 
+	@Transactional
 	public void setContactReminderState(Long contactID, boolean toEnable) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contactID);
@@ -93,6 +95,7 @@ public class ContractService {
 
 	}
 
+	@Transactional
 	public void renewContractForPeriod(ContractRecord contractRecord) {
 		//close the current contract
 		ServiceContractEntity currentContract =

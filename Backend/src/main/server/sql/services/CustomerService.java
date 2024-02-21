@@ -1,5 +1,6 @@
 package main.server.sql.services;
 
+import jakarta.transaction.Transactional;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.dto.ListSubset;
@@ -116,6 +117,7 @@ public class CustomerService {
 		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
 	}
 
+	@Transactional
 	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
 
 		Optional<CustomerEntity> customerToUpdateOptional =
@@ -211,6 +213,7 @@ public class CustomerService {
 		return customerRepository.getCustomerByCustomerID(id);
 	}
 
+	@Transactional
 	public void deleteCustomer(short id) {
 //		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
 //				.from("dbo.tbCustomersDetails")
