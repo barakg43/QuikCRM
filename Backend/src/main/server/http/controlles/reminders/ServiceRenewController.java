@@ -65,8 +65,13 @@ public class ServiceRenewController {
 
 	@PatchMapping
 	public void updateContactData(@RequestBody ContractRecord contractRecord) {
-		httpRequestExecutor.executeHttpRequest(() -> contractService.updateContract(contractRecord),
-				"/api/reminders/service", HttpMethod.PATCH);
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> contractService.updateContract(contractRecord),
+					"/api/reminders/service", HttpMethod.PATCH);
+		} catch (IndexOutOfBoundsException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"cannot find contract to update with id of " + contractRecord.contractID());
+		}
 	}
 
 
