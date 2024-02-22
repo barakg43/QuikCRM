@@ -5,7 +5,9 @@ import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.services.ProductRenewService;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,8 +44,14 @@ public class ProductReminderController {
 
 	@DeleteMapping
 	public void removeProductReminder(@RequestParam BigDecimal reminderId) {
-		httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
-				"/api/reminders/product", HttpMethod.DELETE);
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
+					"/api/reminders/product", HttpMethod.DELETE);
+		} catch (IndexOutOfBoundsException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id of" +
+					" " + reminderId);
+		}
+
 	}
 
 	@PatchMapping
