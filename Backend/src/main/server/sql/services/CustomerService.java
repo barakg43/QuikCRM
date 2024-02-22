@@ -221,7 +221,10 @@ public class CustomerService {
 //				.where().equal("customerID", id, false)
 //				.build();
 //		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
-		customerRepository.deleteById(id);
+		if (customerRepository.existsById(id))
+			customerRepository.deleteById(id);
+		else
+			throw new IndexOutOfBoundsException();
 
 	}
 
