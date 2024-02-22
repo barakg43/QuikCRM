@@ -47,8 +47,7 @@ public class ProductRenewService {
 			newReminder.setUserName(currentProductReminder.getUserName());
 			newReminder.setValidityTill(UtilityFunctions.postDateByMonthAmount(currentProductReminder.getValidityTill(), periodKind));
 			currentProductReminder.setValidityTill(null);
-			productReminderRepository.save(currentProductReminder);
-			productReminderRepository.save(newReminder);
+			productReminderRepository.saveAll(List.of(currentProductReminder, newReminder));
 		} else
 			throw new IndexOutOfBoundsException("Cannot find product reminder to renew with id of " + reminderId);
 	}
