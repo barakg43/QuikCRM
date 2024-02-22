@@ -26,8 +26,8 @@ public class ProductReminderController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ProductReminderRecord> getInvoiceReminders() {
-		return httpRequestExecutor.executeHttpRequest(productRenewService::getRenewalReminders, "/api/reminders" +
+	public List<ProductReminderRecord> getInvoiceReminders(int daysBeforeExpiration) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
 
@@ -50,7 +50,8 @@ public class ProductReminderController {
 			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
 					"/api/reminders/product", HttpMethod.DELETE);
 		} catch (IndexOutOfBoundsException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id of" +
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id " +
+					"of" +
 					" " + reminderId);
 		}
 
