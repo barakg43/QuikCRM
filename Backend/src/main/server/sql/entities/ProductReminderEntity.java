@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 public class ProductReminderEntity {
 	@Id
 	@Column(name = "SystemDetailID", nullable = false, precision = 18)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private BigDecimal id;
 
 	@Size(max = 50)
