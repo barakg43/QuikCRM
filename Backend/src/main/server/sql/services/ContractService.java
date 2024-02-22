@@ -6,7 +6,6 @@ import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
-import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
@@ -67,6 +66,8 @@ public class ContractService {
 	public void updateContract(ContractRecord contractRecord) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contractRecord.contractID());
+		if (serviceContractEntity == null)
+			throw new IndexOutOfBoundsException();
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
@@ -100,6 +101,8 @@ public class ContractService {
 	public void setContactReminderState(Long contactID, boolean toEnable) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contactID);
+		if (serviceContractEntity == null)
+			throw new IndexOutOfBoundsException();
 		if (toEnable) {
 			setContactFinishDateBaseOnStartDayForContract(serviceContractEntity.getPeriodKind(), serviceContractEntity,
 					serviceContractEntity.getStartDateOfContract());
