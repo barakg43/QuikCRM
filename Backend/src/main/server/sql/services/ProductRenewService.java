@@ -10,8 +10,7 @@ import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +24,9 @@ public class ProductRenewService {
 		this.productReminderRepository = productReminderRepository;
 	}
 
-	public List<ProductReminderRecord> getRenewalReminders() {
+	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
 		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBefore(Timestamp.valueOf(LocalDateTime.now().plusMonths(2).toLocalDate().atStartOfDay()));
+				productReminderRepository.findAllByValidityTillBefore(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
