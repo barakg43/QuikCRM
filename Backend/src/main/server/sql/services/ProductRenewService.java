@@ -39,7 +39,7 @@ public class ProductRenewService {
 		if (productReminderEntityToRenewOptional.isPresent()) {
 			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();
 			ProductReminderEntity newReminder = new ProductReminderEntity();
-			newReminder.setCustomer(currentProductReminder.getCustomer());
+			newReminder.setCustomerID(currentProductReminder.getCustomerID());
 			newReminder.setPassword(currentProductReminder.getPassword());
 			newReminder.setExternalIP(currentProductReminder.getExternalIP());
 			newReminder.setSystemDetailDescription(currentProductReminder.getSystemDetailDescription());
