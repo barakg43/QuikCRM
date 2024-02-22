@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173"})
+@RestController
 @RequestMapping("/api/reminders/product")
 public class ProductReminderController {
 	private final HttpRequestExecutor httpRequestExecutor;
