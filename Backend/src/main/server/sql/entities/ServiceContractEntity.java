@@ -31,7 +31,7 @@ public class ServiceContractEntity {
 	@Column(nullable = false)
 	private Timestamp startDateOfContract;
 
-	@Column()
+	@Column(nullable = false)
 	private Timestamp finishDateOfContract;
 
 	@Column(nullable = false)
@@ -47,14 +47,14 @@ public class ServiceContractEntity {
 	@Enumerated(EnumType.STRING)
 	private ePeriodKind periodKind;
 
-	@Column(nullable = false)
+	@Column
 	private Byte number;
 
 	@Column
 	private String contactDescription;
 
 	@Column
-	private Boolean renewed;
+	private Boolean renewed = false;
 
 	@Column
 	private Long reminderID;
