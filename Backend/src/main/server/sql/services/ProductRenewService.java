@@ -63,7 +63,10 @@ public class ProductRenewService {
 
 	@Transactional
 	public void removeProductReminder(BigDecimal id) {
-		productReminderRepository.deleteById(id);
+		if (productReminderRepository.existsById(id))
+			productReminderRepository.deleteById(id);
+		else
+			throw new IndexOutOfBoundsException();
 	}
 
 	@Transactional
