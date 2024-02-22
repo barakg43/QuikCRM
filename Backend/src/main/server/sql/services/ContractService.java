@@ -83,8 +83,7 @@ public class ContractService {
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
 		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
-		serviceContractEntity.getCustomer().setActiveContract(serviceContractEntity);
-		serviceContractRepository.save(serviceContractEntity);
+		saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
 	}
 
 	@Transactional
@@ -131,11 +130,14 @@ public class ContractService {
 				startDateForNewContract);
 		newContract.setContractPrice(contractRecord.contractPrice());
 		newContract.setPeriodKind(contractRecord.periodKind());
-		ServiceContractEntity savedContract = serviceContractRepository.save(newContract);
 		serviceContractRepository.save(currentContract);
-		CustomerEntity customer = currentContract.getCustomer();
-		customer.setActiveContractID(savedContract.getContractID());
-		customerRepository.save(customer);
+		saveContractAndUpdateActiveContractInCustomer(newContract);
+	}
+
+	private void saveContractAndUpdateActiveContractInCustomer(ServiceContractEntity newContract) {
+		ServiceContractEntity savedContract = serviceContractRepository.save(newContract);
+		savedContract.getCustomer().setActiveContractID(savedContract.getContractID());
+		customerRepository.save(savedContract.getCustomer());
 	}
 
 	private void setContactFinishDateBaseOnStartDayForContract(ePeriodKind periodKind,
