@@ -4,7 +4,9 @@ import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.services.ContractService;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -39,14 +41,26 @@ public class ServiceRenewController {
 
 	@PatchMapping("/renew")
 	public void renewContractForPeriodTime(@RequestBody ContractRecord contractRecord) {
-		httpRequestExecutor.executeHttpRequest(() -> contractService.renewContractForPeriod(contractRecord),
-				"/api/reminders/service/renew", HttpMethod.PATCH);
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> contractService.renewContractForPeriod(contractRecord),
+					"/api/reminders/service/renew", HttpMethod.PATCH);
+		} catch (IndexOutOfBoundsException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"cannot find contract to renew with id of " + contractRecord.contractID());
+		}
+
 	}
 
 	@DeleteMapping
 	public void removeContract(@RequestParam Long contractId) {
-		httpRequestExecutor.executeHttpRequest(() -> contractService.deleteContractByID(contractId),
-				"/api/reminders/service", HttpMethod.DELETE);
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> contractService.deleteContractByID(contractId),
+					"/api/reminders/service", HttpMethod.DELETE);
+		} catch (IndexOutOfBoundsException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"cannot find contract to delete with id of " + contractId);
+		}
+
 	}
 
 	@PatchMapping

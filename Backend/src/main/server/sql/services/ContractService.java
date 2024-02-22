@@ -6,8 +6,10 @@ import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
+import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.function.SqlFunctionExecutor;
+import main.server.sql.repositories.CustomerRepository;
 import main.server.sql.repositories.ServiceContractRepository;
 import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,14 @@ import java.util.List;
 public class ContractService {
 	private final SqlFunctionExecutor sqlFunctionExecutor;
 	private final ServiceContractRepository serviceContractRepository;
+	private final CustomerRepository customerRepository;
 
 	public ContractService(SqlFunctionExecutor sqlFunctionExecutor,
-						   ServiceContractRepository serviceContractRepository) {
+						   ServiceContractRepository serviceContractRepository,
+						   CustomerRepository customerRepository) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 		this.serviceContractRepository = serviceContractRepository;
+		this.customerRepository = customerRepository;
 	}
 
 	public List<ProductReminderRecord> getRenews() {
@@ -84,7 +89,12 @@ public class ContractService {
 
 	@Transactional
 	public void deleteContractByID(Long contractID) {
-		serviceContractRepository.deleteByContractID(contractID);
+
+		if (serviceContractRepository.existsById(contractID))
+			serviceContractRepository.deleteById(contractID);
+		else
+			throw new IndexOutOfBoundsException();
+
 	}
 
 	@Transactional
@@ -105,12 +115,15 @@ public class ContractService {
 		//close the current contract
 		ServiceContractEntity currentContract =
 				serviceContractRepository.getContractByContractID(contractRecord.contractID());
+		if (currentContract == null)
+			throw new IndexOutOfBoundsException();
 		currentContract.setRenewed(true);
 		currentContract.setContractPrice(contractRecord.contractPrice());
 		currentContract.setContactDescription(contractRecord.contactDescription());
 		//create new contract
 		ServiceContractEntity newContract = new ServiceContractEntity();
 		newContract.setCustomerID(currentContract.getCustomerID());
+//		newContract.setCustomer(currentContract.getCustomer());
 		Timestamp startDateForNewContract =
 				UtilityFunctions.postDateByDaysAmount(currentContract.getFinishDateOfContract(), 1);
 		newContract.setStartDateOfContract(startDateForNewContract);
@@ -118,7 +131,11 @@ public class ContractService {
 				startDateForNewContract);
 		newContract.setContractPrice(contractRecord.contractPrice());
 		newContract.setPeriodKind(contractRecord.periodKind());
-		serviceContractRepository.saveAll(List.of(currentContract, newContract));
+		ServiceContractEntity savedContract = serviceContractRepository.save(newContract);
+		serviceContractRepository.save(currentContract);
+		CustomerEntity customer = currentContract.getCustomer();
+		customer.setActiveContractID(savedContract.getContractID());
+		customerRepository.save(customer);
 	}
 
 	private void setContactFinishDateBaseOnStartDayForContract(ePeriodKind periodKind,
