@@ -1,24 +1,35 @@
 package main.server.sql.services;
 
+import jakarta.transaction.Transactional;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.SqlQueryDirector;
 import main.server.sql.dto.ListSubset;
-import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
+import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
+import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
+import main.server.sql.entities.CustomerEntity;
 import main.server.sql.function.SqlFunctionExecutor;
-import org.springframework.stereotype.Repository;
+import main.server.sql.repositories.CustomerRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
+@Service
 public class CustomerService {
 	final SqlFunctionExecutor sqlFunctionExecutor;
+	private final CustomerRepository customerRepository;
 
-	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor) {
+	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor, CustomerRepository customerRepository) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 
+		this.customerRepository = customerRepository;
 	}
 
+	public List<CustomerFullDetailsRecord> getAllCustomers2() {
+		return sqlFunctionExecutor.executeTableValueFunction(
+				"fncCustomersWithContactAndMainAddress", CustomerFullDetailsRecord.class);
+	}
 
 	//    SELECT TOP 100 PERCENT
 
@@ -26,7 +37,7 @@ public class CustomerService {
 //    JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
 //    JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
 //    ORDER BY cust.customerShortName
-	public ListSubset<CustomerFlatDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
 
 
 //		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
@@ -35,54 +46,55 @@ public class CustomerService {
 //				.where()
 //				.equal("CustomersStatusID", "customerStatusID", false);
 
-		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomersDetails")
-				.select(CustomerFullDetailsRecord.class)
-				.build();
-		System.out.println(sqlQuery);
-		List<CustomerFlatDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
-				sqlQuery, CustomerFlatDetailsRecord.class);
-		int totalItemInDb = getCustomersAmount();
-		System.out.println(sqlQuery);
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder().from("tbCustomersDetails")
+//				.select("customerID",
+//						"customerShortName",
+//						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
+//						"customerMainPhone",
+//						"address",
+//						"city")
+//				.build();
+		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlLCustomerDetails();
+//		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
+//		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
+//				sqlQuery, CustomerSlimDetailsRecord.class);
+		long totalItemInDb = getCustomersAmount();
+//		System.out.println(sqlQuery);
 		return new ListSubset<>(customerList, totalItemInDb);
 
 	}
 
 	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) {
-//		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomers")
-//				.select("mainAddress", "mainContactPerson")
-//				.where().equal("customerID", customerDetails.getCustomerID(), false)
-//				.build();
-//		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.executeTableValueQuery(
-//				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
 
-
-//		String sqlInsertQueryContactTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersContactPersons").insert(customerDetails, "customersContactPersonID",
+		customerRepository.save(new CustomerEntity(customerDetails));
+//		customerDetails.setCustomerStatusID(
+//				getCustomerStatusIdFromDescription(
+//						customerDetails.getCustomerStatus()
+//				));
+//		System.out.println(getCustomerStatusIdFromDescription(
+//				customerDetails.getCustomerStatus()));
+//		String sqlInsertQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
+//				.from("tbCustomersDetails").insert(customerDetails, null,
+//						"customerName",
+//						"customerShortName",
+//						"customerIdentificationNumber",
+//						"customerStatusID",
+//						"customerMainPhone",
+//						"customerMainEMail",
+//						"remarks",
+//						"activeContractID",
+//						"address",
+//						"city",
+//						"postalCode",
+//						"addressRemarks",
 //						"contactPersonName",
+//						"contactPersonPost",
+//						"contactPersonPhone",
 //						"contactPersonMobilePhone")
 //				.build();
-//		String sqlUpdateQueryAddressTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersAddresses").insert(customerDetails, "customersAddressID",
-//						"address",
-//						"postalCode",
-//						"city",
-//						"addressRemarks")
-//				.build();
-//		System.out.println(sqlInsertQueryContactTable);
-//		System.out.println(sqlUpdateQueryAddressTable);
-//		Integer contactId = sqlFunctionExecutor.supplyScalarValueQuery(sqlInsertQueryContactTable, Integer.class);
-//		Integer addressId = sqlFunctionExecutor.supplyScalarValueQuery(sqlUpdateQueryAddressTable, Integer.class);
-//		System.out.println(contactId + " add: " + addressId);
-//		customerDetails.setMainAddress(addressId);
-//		customerDetails.setMainContactPerson(contactId);
-
-		String sqlInsertQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomersDetails").insert(customerDetails, null)
-				.build();
-
-		System.out.println(sqlInsertQueryCustomerTable);
-		sqlFunctionExecutor.runQuery(sqlInsertQueryCustomerTable);
+//
+//		System.out.println(sqlInsertQueryCustomerTable);
+//		sqlFunctionExecutor.runQuery(sqlInsertQueryCustomerTable);
 
 	}
 
@@ -94,47 +106,80 @@ public class CustomerService {
 				.equal("CustomersStatusID", "customerStatusID", false);
 	}
 
-//	private Integer getCustomerStatusIdFromDescription(String customerStatus) {
-//
-//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersStatuses").select("CustomersStatusID")
-//				.where()
-//				.equal("CustomersStatusDescription", customerStatus, true)
-//				.orderBy(new String[]{"CustomersStatusID"}, 0, 1)
-//				.build();
-//		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
-//	}
+	private Integer getCustomerStatusIdFromDescription(String customerStatus) {
 
-	public void updateCustomerDetails(int id, CustomerFullDetailsRecord customerDetailsUpdated) {
-//		System.out.println(customerDetailsUpdated);
-//		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomers")
-//				.select("mainAddress", "mainContactPerson")
-//				.where().equal("customerID", customerDetailsUpdated.getCustomerID(), false)
-//				.build();
-//		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.supplyTableValueQuery(
-//				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
-//		System.out.println(customerAddressIdContactId);
-
-		String sqlUpdateQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomersDetails")
-				.update(customerDetailsUpdated)
+		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+				.from("tbCustomersStatuses").select("CustomersStatusID")
 				.where()
-				.equal("customerID", id, false)
+				.equal("CustomersStatusDescription", customerStatus, true)
+				.orderBy(new String[]{"CustomersStatusID"}, 0, 1)
 				.build();
-//		String sqlUpdateQueryContactTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersContactPersons").update(customerDetailsUpdated, "contactPersonName",
-//						"contactPersonMobilePhone").where()
-//				.equal("customersContactPersonID", customerAddressIdContactId.getMainContactPerson(), false)
-//				.build();
-//		String sqlUpdateQueryAddressTable = SqlQueryBuilder.getNewBuilder()
-//				.from("tbCustomersAddresses").update(customerDetailsUpdated,
-//						"address", "postalCode", "city", "addressRemarks")
-//				.where()
-//				.equal("customersAddressID", customerAddressIdContactId.getMainAddress(), false)
-//				.build();
+		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, Integer.class);
+	}
 
-		sqlFunctionExecutor.runQuery(sqlUpdateQueryCustomerTable);
+	@Transactional
+	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
+
+		Optional<CustomerEntity> customerToUpdateOptional =
+				customerRepository.findById(customerDetailsUpdated.customerID());
+
+		if (customerToUpdateOptional.isEmpty())
+			throw new IndexOutOfBoundsException("CustomerEntity with id " + customerDetailsUpdated.customerID() + " " +
+					"not " +
+					"exist!");
+
+		CustomerEntity customerToUpdated = customerToUpdateOptional.get();
+		customerToUpdated.setCustomerID(customerToUpdated.getCustomerID());
+
+
+		customerRepository.save(customerToUpdated);
+////		System.out.println(customerDetailsUpdated);
+////		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
+////				.from("tbCustomers")
+////				.select("mainAddress", "mainContactPerson")
+////				.where().equal("customerID", customerDetailsUpdated.getCustomerID(), false)
+////				.build();
+////		CustomerAddressIdContactId customerAddressIdContactId = sqlFunctionExecutor.supplyTableValueQuery(
+////				sqlQueryGetIds, CustomerAddressIdContactId.class).get(0);
+////		System.out.println(customerAddressIdContactId);
+//		customerDetailsUpdated.setCustomerStatusID(
+//				getCustomerStatusIdFromDescription(
+//						customerDetailsUpdated.getCustomerStatus()
+//				));
+//		String sqlUpdateQueryCustomerTable = SqlQueryBuilder.getNewBuilder()
+//				.from("tbCustomersDetails").update(customerDetailsUpdated,
+//						"customerName",
+//						"customerShortName",
+//						"customerIdentificationNumber",
+//						"customerStatusID",
+//						"customerMainPhone",
+//						"customerMainEMail",
+//						"remarks",
+//						"activeContractID",
+//						"address",
+//						"city",
+//						"postalCode",
+//						"addressRemarks",
+//						"contactPersonName",
+//						"contactPersonPost",
+//						"contactPersonPhone",
+//						"contactPersonMobilePhone")
+//				.where()
+//				.equal("customerID", customerDetailsUpdated.getCustomerID(), false)
+//				.build();
+////		String sqlUpdateQueryContactTable = SqlQueryBuilder.getNewBuilder()
+////				.from("tbCustomersContactPersons").update(customerDetailsUpdated, "contactPersonName",
+////						"contactPersonMobilePhone").where()
+////				.equal("customersContactPersonID", customerAddressIdContactId.getMainContactPerson(), false)
+////				.build();
+////		String sqlUpdateQueryAddressTable = SqlQueryBuilder.getNewBuilder()
+////				.from("tbCustomersAddresses").update(customerDetailsUpdated,
+////						"address", "postalCode", "city", "addressRemarks")
+////				.where()
+////				.equal("customersAddressID", customerAddressIdContactId.getMainAddress(), false)
+////				.build();
+//
+//		sqlFunctionExecutor.runQuery(sqlUpdateQueryCustomerTable);
 //		sqlFunctionExecutor.runQuery(sqlUpdateQueryContactTable);
 //		sqlFunctionExecutor.runQuery(sqlUpdateQueryAddressTable);
 
@@ -142,36 +187,62 @@ public class CustomerService {
 
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
 
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("dbo.tbCustomersDetails")
-				.select(CustomerFullDetailsRecord.class)
-				.where()
-				.equal("customerID", id, false)
-				.build();
-		System.out.println(sqlQuery);
-
-		return sqlFunctionExecutor.supplyTableValueQuery(
-				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("dbo.tbCustomersDetails")
+//				.select("customerID",
+//						"customerShortName",
+//						"activeContractID",
+//						"customerName",
+//						"customerIdentificationNumber",
+//						SqlInnerQueryBuilder.build(getCustomerDescriptionFoID(), "customerStatus"),
+//						"customerMainPhone",
+//						"customerMainEMail",
+//						"remarks",
+//						"address",
+//						"city",
+//						"postalCode",
+//						"addressRemarks",
+//						"contactPersonName",
+//						"contactPersonMobilePhone")
+//				.where().equal("customerID", id, false)
+//				.build();
+//		System.out.println(sqlQuery);
+//
+//		return sqlFunctionExecutor.supplyTableValueQuery(
+//				sqlQuery, CustomerFullDetailsRecord.class).get(0);
+		return customerRepository.getCustomerByCustomerID(id);
 	}
 
-	public void deleteCustomer(int id) {
-		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
-				.from("dbo.tbCustomersDetails")
-				.delete()
-				.where()
-				.equal("customerID", id, false)
-				.build();
-		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
+	@Transactional
+	public void deleteCustomer(short id) {
+//		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("dbo.tbCustomersDetails")
+//				.delete()
+//				.where().equal("customerID", id, false)
+//				.build();
+//		sqlFunctionExecutor.runQuery(sqlDeleteQuery);
+		if (customerRepository.existsById(id))
+			customerRepository.deleteById(id);
+		else
+			throw new IndexOutOfBoundsException();
 
 	}
 
-	private int getCustomersAmount() {
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("tbCustomers")
-				.select("COUNT(customerID)").build();
+	private long getCustomersAmount() {
+//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
+//				.from("tbCustomers")
+//				.select("COUNT(customerID)").build();
 
-		return sqlFunctionExecutor.supplyScalarValueQuery(sqlQuery, int.class);
+		return customerRepository.count();
 	}
 
+	public String getCustomerNameByID(int id) {
+		return sqlFunctionExecutor.executeScalarValueFunction("fncCustShortNameForCustID", String.class, id);
+	}
+
+	public List<TaskRecord> getClosedTaskForClient(int id) {
+		return sqlFunctionExecutor.executeTableValueFunction("fncCustomersCloseTasksForID", TaskRecord.class, id);
+
+	}
 
 }

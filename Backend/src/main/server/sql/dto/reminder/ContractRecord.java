@@ -4,27 +4,15 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
-@Data
-public class ContractRecord {
-	@NotNull
-	private Integer ContractID;
-	@NotNull
-	private Integer CustomerID;
-	@NotNull
-	private String customerShortName;
+//convert it to record
 
-	@NotNull
-	private Date StartDateOfContract;
-	@NotNull
-	private Date FinishDateOfContract;
-	@NotNull
-	private Integer ContractPrice;
-	@Nullable
-	private String PeriodKind;
-	@Nullable
-	private String ContactDescription;
-//	@Nullable
-//	private Integer Renewed = 0;
+
+public record ContractRecord(@NotNull Long contractID, @NotNull Short customerID, String customerShortName,
+							 @NotNull Timestamp startDateOfContract,
+							 @NotNull Timestamp finishDateOfContract, @Nullable BigDecimal contractPrice,
+							 @NotNull ePeriodKind periodKind,
+							 @Nullable String contactDescription) {
 }

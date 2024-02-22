@@ -3,6 +3,7 @@ package main.server.sql;
 import jakarta.annotation.PostConstruct;
 import main.server.ServerConstants;
 import main.server.logger.ServerLogManager;
+import main.server.sql.config.SqlConnectionManger;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +32,7 @@ public class SqlClient {
 //    }
 
 	public SqlClient(SqlFunctionExecutor sqlFunctionExecutor, ServerLogManager logManager) {
-		sqlConnectionManger = new SqlConnectionManger(sqlConfigurationYamlFilePath);
+		sqlConnectionManger = new SqlConnectionManger();
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 		this.logManager = logManager;
 		sqlClientLogger = LogManager.getLogger(ServerConstants.SQL_CLIENT_LOGGER_NAME);
@@ -40,12 +41,12 @@ public class SqlClient {
 	@PostConstruct
 	public void createSqlConnection() {
 		sqlClientLogger.debug(String.format("Opening sql yaml file configuration at [%s]",
-                sqlConfigurationYamlFilePath));
+				sqlConfigurationYamlFilePath));
 		try {
 			sqlConnectionManger.initializeSqlConnectionConfig();
 			sqlClientLogger.info("Opening connection to sql server: " + sqlConnectionManger.getServerConfigDetails());
 			sqlConnectionManger.getSqlConnectionConfig().getConnection().close();//test connection to sql server and
-            // close it
+			// close it
 			sqlFunctionExecutor.initializeJdbcTemplate(sqlConnectionManger.getSqlConnectionConfig());
 			sqlClientLogger.info("Connection to sql server successfully.");
 		} catch (SQLException | IOException e) {
