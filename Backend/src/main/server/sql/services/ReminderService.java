@@ -4,12 +4,10 @@ import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.eJoinType;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
-import main.server.sql.dto.reminder.RenewReminderRecord;
 import main.server.sql.function.SqlFunctionExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -20,11 +18,6 @@ public class ReminderService {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
 	}
 
-	public List<RenewReminderRecord> getRenews() {
-		return sqlFunctionExecutor.executeTableValueFunction("fncSystemsDetailsForDate", RenewReminderRecord.class,
-				LocalDateTime.now());
-
-	}
 
 	public List<ContractRecord> getServiceRenewReminders(int daysReminderBeforeExpiration) {
 
