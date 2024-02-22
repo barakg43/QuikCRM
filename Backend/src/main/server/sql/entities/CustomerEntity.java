@@ -34,7 +34,7 @@ public class CustomerEntity {
 	@Column(columnDefinition = "nvarchar")
 	private String remarks;
 	@Column(columnDefinition = "decimal")
-	private Integer activeContractID;
+	private Long activeContractID;
 	@Column
 	private String address;
 	@Column(columnDefinition = "nchar", length = 50)

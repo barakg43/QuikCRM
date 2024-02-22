@@ -4,7 +4,7 @@ import main.server.sql.entities.eCustomerStatus;
 
 public record CustomerFullDetailsRecord(
 		Short customerID,
-		Integer activeContractID,
+		Long activeContractID,
 		String customerShortName,
 		String customerName,
 		eCustomerStatus customerStatus,
