@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -52,6 +53,7 @@ public class ProductReminderEntity {
 	private CustomerEntity customer;
 
 	@Column(name = "ValidityTill", columnDefinition = "datetimeoffset")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Timestamp validityTill;
 
 }
