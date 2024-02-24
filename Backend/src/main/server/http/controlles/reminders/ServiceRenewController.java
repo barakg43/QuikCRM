@@ -24,7 +24,8 @@ public class ServiceRenewController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ContractRecord> getServiceRenewsReminders(int daysBeforeExpiration, int monthsAfterExpiration) {
+	public List<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
+														  @RequestParam int monthsAfterExpiration) {
 		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewReminders(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
 						"/renews",
 				HttpMethod.GET);

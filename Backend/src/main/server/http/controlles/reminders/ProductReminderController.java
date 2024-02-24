@@ -26,7 +26,7 @@ public class ProductReminderController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ProductReminderRecord> getInvoiceReminders(int daysBeforeExpiration) {
+	public List<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration) {
 		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
@@ -58,7 +58,7 @@ public class ProductReminderController {
 	}
 
 	@PatchMapping
-	public void updateProductReminderData(ProductReminderRecord productReminderRecord) {
+	public void updateProductReminderData(@RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(productReminderRecord),
 				"/api/reminders/product", HttpMethod.PATCH);
 	}
