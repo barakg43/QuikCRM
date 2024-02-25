@@ -7,12 +7,12 @@
     "status": "סטטוס"
   },
   "status": {
-    "in-service": "שירות",
-    "out-of-service": "הפסקת שירות",
-    "bank-hours": "בנק שעות",
-    "cloud-server": "שרת בענן",
-    "cloud-mail": "מיילים בענן",
-    "charge": "חיוב"
+    "IN-SERVICE": "שירות",
+    "OUT-OF-SERVICE": "הפסקת שירות",
+    "BANK-HOURS": "בנק שעות",
+    "CLOUD-SERVER": "שרת בענן",
+    "CLOUD-MAIL": "מיילים בענן",
+    "CHARGE": "חיוב"
   },
   "details": {
     "activeContractID": "number",

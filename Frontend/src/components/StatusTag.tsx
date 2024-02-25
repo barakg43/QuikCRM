@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 const statusToColor: { [index: string]: string } = {
-  "in-service": "blue",
-  "out-of-service": "red",
-  "bank-hours": "pink",
-  "cloud-server": "orange",
-  "cloud-mail": "green",
-  charge: "yellow",
+  "IN-SERVICE": "blue",
+  "OUT-OF-SERVICE": "red",
+  "BANK-HOURS": "pink",
+  "CLOUD-SERVER": "orange",
+  "CLOUD-MAIL": "green",
+  CHARGE: "yellow",
   none: "white",
 };
 const StyledTag = styled.span<{ type: string }>`

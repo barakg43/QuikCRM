@@ -5,12 +5,12 @@ import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
 import { useToast } from "@chakra-ui/react";
 export const customerStatuses = [
-  "in-service",
-  "out-of-service",
-  "bank-hours",
-  "cloud-server",
-  "cloud-mail",
-  "charge",
+  "IN-SERVICE",
+  "OUT-OF-SERVICE",
+  "BANK-HOURS",
+  "CLOUD-SERVER",
+  "CLOUD-MAIL",
+  "CHARGE",
 ] as const;
 
 function CustomersTable() {
