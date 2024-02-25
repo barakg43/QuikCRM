@@ -1,10 +1,11 @@
-import { Box, Container, Flex, Portal } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { createPortal } from "react-dom";
-import styled from "styled-components";
 import "./../styles/LoadingSpinner.css";
-const StyledLoadingSpinner = styled.div``;
 
-function LoadingSpinner() {
+function LoadingSpinner({ callerName }: { callerName?: string }) {
+  if (callerName) {
+    console.log(callerName);
+  }
   return createPortal(<LoadingContainer />, document.body);
 }
 
