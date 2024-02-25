@@ -2,7 +2,6 @@ package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ProductReminderRecord;
-import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.services.ProductRenewService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
@@ -38,9 +38,10 @@ public class ProductReminderController {
 	}
 
 	@PatchMapping("/renew")
-	public void renewProductForPeriodTime(@RequestParam BigDecimal reminderId, @RequestParam ePeriodKind periodKind) {
+	public void renewProductForPeriodTime(@RequestParam BigDecimal reminderId,
+										  @RequestParam LocalDate newValidityDate) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
-						periodKind),
+						newValidityDate),
 				"/api/reminders/product/renew", HttpMethod.PATCH);
 	}
 

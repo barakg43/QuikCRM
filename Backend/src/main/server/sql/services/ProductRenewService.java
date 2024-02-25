@@ -3,13 +3,13 @@ package main.server.sql.services;
 
 import jakarta.transaction.Transactional;
 import main.server.sql.dto.reminder.ProductReminderRecord;
-import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.ProductReminderEntity;
 import main.server.sql.repositories.ProductReminderRepository;
 import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class ProductRenewService {
 	}
 
 	@Transactional
-	public void renewProductForPeriodTime(BigDecimal reminderId, ePeriodKind periodKind) {
+	public void renewProductForPeriodTime(BigDecimal reminderId, LocalDate newValidityDate) {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(reminderId);
 
@@ -44,7 +44,7 @@ public class ProductRenewService {
 			newReminder.setSystemDetailDescription(currentProductReminder.getSystemDetailDescription());
 			newReminder.setInternalIP(currentProductReminder.getInternalIP());
 			newReminder.setUserName(currentProductReminder.getUserName());
-			newReminder.setValidityTill(UtilityFunctions.postDateByMonthAmount(currentProductReminder.getValidityTill(), periodKind));
+			newReminder.setValidityTill(Timestamp.valueOf(newValidityDate.atStartOfDay()));
 			currentProductReminder.setValidityTill(null);
 			productReminderRepository.saveAll(List.of(currentProductReminder, newReminder));
 		} else
