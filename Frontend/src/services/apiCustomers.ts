@@ -18,13 +18,15 @@ export async function getAllCustomers({
   const toItem = fromItem + ITEMS_AMOUNT_PER_PAGE;
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
-      await httpClient.get(`/customers?fromItem=${fromItem}&toItem=${toItem}`);
+      await httpClient.get(`/customers`, {
+        params: { fromItem, toItem },
+      });
     return {
       customers: data.listSubset,
       totalItems: data.totalAmountInDataBase,
     };
-  } catch (error) {
-    console.log(error.toJSON());
+  } catch (error: unknown) {
+    console.log(error);
   }
 }
 export async function getCustomerDataByID(
