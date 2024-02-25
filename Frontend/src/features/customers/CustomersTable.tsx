@@ -1,15 +1,14 @@
 import { useTranslation } from "react-i18next";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomTable from "../../components/CustomTable";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
-import { useToast } from "@chakra-ui/react";
 export const customerStatuses = [
-  "IN-SERVICE",
-  "OUT-OF-SERVICE",
-  "BANK-HOURS",
-  "CLOUD-SERVER",
-  "CLOUD-MAIL",
+  "IN_SERVICE",
+  "OUT_OF_SERVICE",
+  "BANK_HOURS",
+  "CLOUD_SERVER",
+  "CLOUD_MAIL",
   "CHARGE",
 ] as const;
 
