@@ -1,7 +1,5 @@
-import styled from "styled-components";
-import { useSwitchLanguage } from "./useSwitchLanguage";
 import StyledSelect, { Option } from "../components/StyledSelect";
-import { ChangeEvent, ChangeEventHandler } from "react";
+import { useSwitchLanguage } from "./useSwitchLanguage";
 
 const langOption: Option[] = [
   { value: "en", label: "English" },

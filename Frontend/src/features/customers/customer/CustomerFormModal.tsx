@@ -7,16 +7,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
-  useLatestRef,
 } from "@chakra-ui/react";
-import CustomerForm from "./CustomerForm";
-import { useTranslation } from "react-i18next";
 import { Suspense, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import { useForm } from "react-hook-form";
 import { CustomerFullDataType } from "../customers";
+import CustomerForm from "./CustomerForm";
 
 function CustomerFormModal({
   customerToEdit = {},

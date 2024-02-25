@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCustomerDataByID } from "../../../services/apiCustomers";
-import { useToast } from "@chakra-ui/react";
 import axios from "axios";
+import { getCustomerDataByID } from "../../../services/apiCustomers";
 import { CustomerFullDataType } from "../customers";
 
 type useCustomerReturnType = {

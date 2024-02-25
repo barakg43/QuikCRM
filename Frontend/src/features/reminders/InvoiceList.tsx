@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import database from "./../../../data/database.json";
 import RenewContactReminder from "./RenewContactReminder";
 const StyledInvoiceList = styled.div`
   display: flex;

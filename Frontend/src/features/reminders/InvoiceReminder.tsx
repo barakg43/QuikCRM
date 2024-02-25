@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -34,23 +36,9 @@ const StyledInvoiceReminder = styled.div`
   }
 `;
 
-const H3 = styled.h3`
-  font-size: var(--scale-000);
-  margin-inline-start: var(--scale-000);
-`;
-
 const Date = styled.span`
   font-size: var(--scale-0000);
 `;
-
-const ContractID = styled.span``;
-// {
-//     "CustName": null,
-//     "InvoiceNum": null,
-//     "ContractID": "631",
-//     "DateOfDebit": "2023-12-17",
-//     "Renewal": 0
-//   },
 
 type InvoiceReminderProps = {
   CustName: string | null;
@@ -63,11 +51,8 @@ type InvoiceReminderProps = {
 
 function InvoiceReminder({
   CustName,
-  InvoiceNum,
   ContractID,
-  reminderRemark,
   DateOfDebit,
-  Renewal,
 }: InvoiceReminderProps) {
   const { t } = useTranslation("reminders", { keyPrefix: "invoice" });
   const dateString = `${t("dateOfDebit")} : ${DateOfDebit}`;

@@ -10,12 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { DetailRow } from "../../../components/DetailRow";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import CustomerFormModal from "./CustomerFormModal";
-import { useCustomer } from "./useCustomer";
 import StatusTag from "../../../components/StatusTag";
 import { CustomerFullDataType } from "../customers";
-import { DetailRow } from "../../../components/DetailRow";
+import CustomerFormModal from "./CustomerFormModal";
+import { useCustomer } from "./useCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -54,7 +54,7 @@ function CustomerDetails() {
     navigate(-1);
   }
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner callerName='CustomerDetails' />;
   }
 
   return (
@@ -74,6 +74,7 @@ function CustomerDetails() {
         customerName={customerName}
         customerIdentificationNumber={customerIdentificationNumber}
       />
+
       <Address
         address={address}
         city={city}
@@ -81,6 +82,7 @@ function CustomerDetails() {
         addressRemarks={addressRemarks}
       />
       <Notes remakes={remarks} />
+
       <Contact
         contactPersonMobilePhone={contactPersonMobilePhone}
         customerMainEMail={customerMainEMail}
@@ -107,7 +109,9 @@ function Header({
   customerData: CustomerFullDataType | Record<string, never>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
-
+  // function t(key: string) {
+  //   return key;
+  // }
   return (
     <GridItem
       // bg='green'
@@ -187,7 +191,6 @@ type AddressProps = {
 };
 function Address({ address, city, postalCode, addressRemarks }: AddressProps) {
   const { t } = useTranslation("customers", { keyPrefix: "details" });
-
   return (
     <GridItem bg='pink' area='address' padding='1rem'>
       <Flex
@@ -251,9 +254,9 @@ function Contact({
           useDivider={false}
         />
         {/* <Text>customerMainPhone {customerMainPhone}</Text>
-        <Text>customerMainEMail {customerMainEMail}</Text>
-        <Text>contactPersonName {contactPersonName}</Text>
-        <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
+          <Text>customerMainEMail {customerMainEMail}</Text>
+          <Text>contactPersonName {contactPersonName}</Text>
+          <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
       </Flex>
     </GridItem>
   );

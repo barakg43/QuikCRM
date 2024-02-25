@@ -3,6 +3,7 @@ import CustomTable from "../../components/CustomTable";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
+// eslint-disable-next-line react-refresh/only-export-components
 export const customerStatuses = [
   "IN_SERVICE",
   "OUT_OF_SERVICE",
@@ -15,7 +16,7 @@ export const customerStatuses = [
 function CustomersTable() {
   const { customers, isLoading, totalItems } = useCustomers();
   const { t } = useTranslation("customers", { keyPrefix: "table" });
-
+  console.log(totalItems);
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
       <CustomTable.Header>

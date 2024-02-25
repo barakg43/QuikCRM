@@ -1,4 +1,4 @@
-import { Divider, HStack, Text } from "@chakra-ui/react";
+import { HStack, Text } from "@chakra-ui/react";
 import {
   JSXElementConstructor,
   ReactElement,
@@ -9,7 +9,6 @@ import {
 export function DetailRow({
   label,
   value,
-  useDivider = true,
 }: {
   label: string;
   value:
@@ -24,14 +23,11 @@ export function DetailRow({
   useDivider?: boolean;
 }) {
   return (
-    <>
-      <HStack>
-        <Text as='span' fontWeight={500}>
-          {label}:
-        </Text>
-        <Text> {value}</Text>
-      </HStack>
-      {/* {useDivider && <Divider />} */}
-    </>
+    <HStack>
+      <Text as='span' fontWeight={500}>
+        {label}:
+      </Text>
+      <Text> {value}</Text>
+    </HStack>
   );
 }

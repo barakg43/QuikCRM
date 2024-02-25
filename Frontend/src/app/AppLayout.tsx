@@ -1,16 +1,8 @@
+import { Container } from "@chakra-ui/react";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import SideBar from "../components/Sidebar";
 import TopHeader from "../components/TopHeader";
-import { Outlet } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import {
-  Button,
-  Container,
-  Flex,
-  GridItem,
-  HStack,
-  Text,
-} from "@chakra-ui/react";
 
 const StyledAppLayout = styled.div`
   display: flex;
