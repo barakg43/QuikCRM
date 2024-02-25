@@ -2,7 +2,6 @@ package main.server.sql.dto.reminder;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
