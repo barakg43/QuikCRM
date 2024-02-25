@@ -3,9 +3,9 @@ package main.server.http.controlles;
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.TaskRecord;
-import main.server.sql.dto.customer.CustomerFlatDetailsRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
-import main.server.sql.executor.CustomerSqlExecutor;
+import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
+import main.server.sql.services.CustomerService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +20,12 @@ import java.util.List;
 public class CustomerController {
 
 	private final HttpRequestExecutor httpRequestExecutor;
-	final private CustomerSqlExecutor customerSqlExecutor;
+	final private CustomerService customerService;
 
-	public CustomerController(HttpRequestExecutor httpRequestExecutor, CustomerSqlExecutor customerSqlExecutor) {
+	public CustomerController(HttpRequestExecutor httpRequestExecutor, CustomerService customerService) {
 		this.httpRequestExecutor = httpRequestExecutor;
 //        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
-		this.customerSqlExecutor = customerSqlExecutor;
+		this.customerService = customerService;
 	}
 
 	//    @PostConstruct //start sql connection after CustomerHttpService ctor
@@ -40,11 +40,11 @@ public class CustomerController {
 	}
 
 	@GetMapping("")
-	public ListSubset<CustomerFlatDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
 																		@RequestParam(required = false) Integer toItem) {
 		System.out.println("customer all");
-		ListSubset<CustomerFlatDetailsRecord> test =
-				httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getSubsetOfCustomers(fromItem, toItem)
+		ListSubset<CustomerSlimDetailsRecord> test =
+				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(fromItem, toItem)
 						, "api/customers",
 						HttpMethod.GET);
 		System.out.println(test.getListSubset());
@@ -55,7 +55,7 @@ public class CustomerController {
 
 	@GetMapping("/customer/name")
 	public String getCostumerNameByID(@RequestParam int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getCustomerNameByID(id), "api" +
+		return httpRequestExecutor.executeHttpRequest(() -> customerService.getCustomerNameByID(id), "api" +
 				"/customers" +
 				"/name", HttpMethod.GET);
 //        return clientSqlExecutor.getClientNameByID(id);
@@ -65,7 +65,7 @@ public class CustomerController {
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(@PathVariable("id") int id) {
 		try {
 			CustomerFullDetailsRecord test =
-					httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.getFullCustomerDetailsForId(id),
+					httpRequestExecutor.executeHttpRequest(() -> customerService.getFullCustomerDetailsForId(id),
 							"api/customers/" + id
 							, HttpMethod.GET);
 			System.out.println("getFullCustomerDetailsForId" + test);
@@ -79,7 +79,7 @@ public class CustomerController {
 	@PostMapping("")
 	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
 
-		httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.addNewCustomer(customerDetails),
+		httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
 				"api/customers/"
 				, HttpMethod.POST);
 
@@ -90,8 +90,7 @@ public class CustomerController {
 	public void updateCustomerDetails(@PathVariable("id") int id,
 									  @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			customerDetails.setCustomerID(id);
-			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.updateCustomerDetails(customerDetails),
+			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerDetails),
 					"api/customers/" + id
 					, HttpMethod.PATCH);
 
@@ -102,9 +101,9 @@ public class CustomerController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteCustomer(@PathVariable("id") int id) {
+	public void deleteCustomer(@PathVariable("id") short id) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> customerSqlExecutor.deleteCustomer(id),
+			httpRequestExecutor.executeHttpRequest(() -> customerService.deleteCustomer(id),
 					"api/customers/" + id
 					, HttpMethod.DELETE);
 
@@ -113,6 +112,7 @@ public class CustomerController {
 					"Cant delete customer with id of " + id, exception);
 		}
 	}
+
 
 	@GetMapping("/customer/closed-tasks")
 	public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {

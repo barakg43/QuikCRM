@@ -7,11 +7,12 @@ import main.server.sql.SqlClient;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.eJoinType;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
-import main.server.sql.executor.CustomerSqlExecutor;
 import main.server.sql.function.SqlFunctionExecutor;
+import main.server.sql.services.CustomerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -20,6 +21,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SpringBootApplication
+//@EntityScan(basePackages = "main.server.sql.entities")
+@EnableJpaRepositories(basePackages = "main.server.sql.repositories")
+//@ComponentScan(basePackages = "main.server.sql.entities")
 public class ServerApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 //		testFunction();
@@ -113,7 +117,6 @@ public class ServerApplication extends SpringBootServletInitializer {
 
 		SqlClient sqlClient = new SqlClient(sqlFunctionExecutor, new ServerLogManager());
 		sqlClient.createSqlConnection();
-		CustomerSqlExecutor customerSqlExecutor = new CustomerSqlExecutor(sqlFunctionExecutor);
 		int loopAmount = 1;
 		Instant start, end;
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -149,7 +152,6 @@ public class ServerApplication extends SpringBootServletInitializer {
 		for (int i = 0; i < loopAmount; i++) {
 //            new Thread(()->{
 			Instant start1 = Instant.now();
-			customerSqlExecutor.addNewCustomer(customerFullDetailsRecord);
 			Instant end1 = Instant.now();
 			time1.addAndGet(Duration.between(start1, end1).toMillis());
 //            }).start();

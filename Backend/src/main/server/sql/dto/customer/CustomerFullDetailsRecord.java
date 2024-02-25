@@ -1,32 +1,47 @@
 package main.server.sql.dto.customer;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import main.server.sql.entities.eCustomerStatus;
 
-@Data
-@JsonIgnoreProperties(value = {"customerStatusID"})
-public class CustomerFullDetailsRecord {
-
-	private Integer customerID, activeContractID;
-	private String customerShortName;
-	private String customerName;
-	private String customerStatus;
-	private Integer customerStatusID;
-	private String customerIdentificationNumber;
-	private String customerMainPhone;
-	private String customerMainFax;
-	private String customerMainEMail;
-	private String customerWebSite;
-	private String remarks;
-	private String address;
-	private String city;
-	private String postalCode;
-	private String addressRemarks;
-	private String contactPersonName;
-	private String contactPersonPost;
-	private String contactPersonPhone;
-	private String contactPersonMobilePhone;
-	private String contactPersonFax;
-	private String contactPersonEMail;
-
+public record CustomerFullDetailsRecord(
+		Short customerID,
+		Long activeContractID,
+		String customerShortName,
+		String customerName,
+		eCustomerStatus customerStatus,
+		String customerIdentificationNumber,
+		String customerMainPhone,
+		String customerMainEMail,
+		String remarks,
+		String address,
+		String city,
+		String postalCode,
+		String addressRemarks,
+		String contactPersonName,
+		String contactPersonPost,
+		String contactPersonPhone,
+		String contactPersonMobilePhone
+) {
+//	public CustomerFullDetailsRecord(CustomerEntity customer) {
+//		this(customer.getCustomerID(),
+//				customer.getActiveContractID(),
+//				customer.getCustomerShortName(),
+//				customer.getCustomerName(),
+//				customer.getCustomerStatus(),
+//				customer.getCustomerIdentificationNumber(),
+//				customer.getCustomerMainPhone(),
+//				customer.getCustomerMainEMail(),
+//				customer.getRemarks(),
+//				customer.getAddress(),
+//				customer.getCity(),
+//				customer.getPostalCode(),
+//				customer.getAddressRemarks(),
+//				customer.getContactPersonName(),
+//				customer.getContactPersonPost(),
+//				customer.getContactPersonPhone(),
+//				customer.getContactPersonMobilePhone());
+//
+//	}
 }
+
+
+

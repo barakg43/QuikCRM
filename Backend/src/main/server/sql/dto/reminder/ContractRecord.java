@@ -3,39 +3,15 @@ package main.server.sql.dto.reminder;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
+//convert it to record
 
 
-public class ContractRecord {
-	@NotNull
-	private Integer ContractID;
-	@NotNull
-	private Integer CustomerID;
-	@Nullable
-	private Integer ContactPersonID;
-	@NotNull
-	private Integer ContractsKindID;
-	@NotNull
-	private Date StartDateOfContract;
-	@NotNull
-	private Date FinishDateOfContract;
-	@NotNull
-	private Integer ContractPrice;
-	@NotNull
-	private Integer QuantityOfMonths;
-	@NotNull
-	private Float Coefficient;
-	@Nullable
-
-	private String PeriodKind;
-	@NotNull
-	private Integer Number;
-	@Nullable
-
-	private String ContactDescription;
-	@Nullable
-	private Integer Renewed = 0;
-	@Nullable
-
-	private Integer ReminderID;
+public record ContractRecord(@NotNull Long contractID, @NotNull Short customerID, String customerShortName,
+							 @NotNull Timestamp startDateOfContract,
+							 @NotNull Timestamp finishDateOfContract, @Nullable BigDecimal contractPrice,
+							 @NotNull ePeriodKind periodKind,
+							 @Nullable String contactDescription) {
 }
