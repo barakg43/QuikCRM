@@ -6,6 +6,7 @@ import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
+import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
@@ -49,7 +50,7 @@ public class ContractService {
 //				.from("dbo.tbReminders")
 //				.select("ReminderID", "DateOfReminder", "TimeOfReminder", "ReminderRemark", "Closed",
 //						"ResponsibleUserName")
-//				.where().equal("Closed", 0, false).and().lessOrEqualThan("DateOfReminder", LocalDate.now(),
+//				.where().equal("Closed", 0, false).and().lessOrEqualThan("DateOfReminder", ePeriodKind.now(),
 //						true)
 //				.orderBy(new String[]{"DateOfReminder", "TimeOfReminder"})
 //				.build();
@@ -78,13 +79,24 @@ public class ContractService {
 
 	public void addNewContract(ContractRecord contractRecord) {
 		ServiceContractEntity serviceContractEntity = new ServiceContractEntity();
-		serviceContractEntity.setCustomerID(contractRecord.customerID());
-		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
-		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
-		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
-		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
-		saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
+		if (customerRepository.existsById(contractRecord.customerID())) {
+			CustomerEntity customerEntity = customerRepository.getReferenceById(contractRecord.customerID());
+
+			if (customerEntity.getActiveContractID() != null) {
+				throw new IllegalStateException("the customer already have active contact");
+			}
+			serviceContractEntity.setCustomerID(contractRecord.customerID());
+			serviceContractEntity.setContractPrice(contractRecord.contractPrice());
+			serviceContractEntity.setContactDescription(contractRecord.contactDescription());
+			serviceContractEntity.setPeriodKind(contractRecord.periodKind());
+			serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
+			serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+			saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
+		} else {
+			throw new IllegalArgumentException("customer with this id not exist");
+		}
+
+
 	}
 
 	@Transactional
