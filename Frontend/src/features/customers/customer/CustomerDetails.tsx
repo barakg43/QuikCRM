@@ -18,30 +18,6 @@ import { CustomerFullDataType } from "../customers";
 import { DetailRow } from "../../../components/DetailRow";
 export default CustomerDetails;
 
-const test = {
-  customerID: 129,
-  activeContractID: 564,
-  customerShortName: "אנגל דבלופרס                                      ",
-  customerName: "אנגל ג'נרל דיבלופרס בע\"מ",
-  customerStatus: "bank-hours                                        ",
-  customerIdentificationNumber: null,
-  customerMainPhone: "03-7655000",
-  customerMainFax: null,
-  customerMainEMail: null,
-  customerWebSite: null,
-  remarks: null,
-  address: "קרמניצקי 2",
-  city: "תל אביב                                           ",
-  postalCode: null,
-  addressRemarks: null,
-  contactPersonName: "שלי                           ",
-  contactPersonPost: null,
-  contactPersonPhone: "03-7655000",
-  contactPersonMobilePhone: null,
-  contactPersonFax: null,
-  contactPersonEMail: null,
-};
-
 function CustomerDetails() {
   const { customerId } = useParams();
   // console.log("customerId", customerId);\
@@ -66,7 +42,7 @@ function CustomerDetails() {
   } = customer;
   const navigate = useNavigate();
   if (error) {
-    console.error("Error cust", error);
+    console.error("Error customer", error);
 
     toast({
       title: "Error occurred",

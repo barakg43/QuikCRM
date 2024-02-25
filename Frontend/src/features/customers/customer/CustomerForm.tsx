@@ -8,11 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { HTMLInputTypeAttribute, LegacyRef } from "react";
-import {
-  UseFormRegister,
-  UseFormRegisterReturn,
-  useForm,
-} from "react-hook-form";
+import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
