@@ -1,12 +1,11 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
-import { Toaster } from "react-hot-toast";
-import GlobalStyle from "./../styles/GlobalStyle.js";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n/i18n";
-import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./../styles/ChakraTheme.ts";
+import GlobalStyle from "./../styles/GlobalStyle.js";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

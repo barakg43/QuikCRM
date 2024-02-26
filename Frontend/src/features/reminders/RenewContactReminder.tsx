@@ -1,31 +1,21 @@
-import styled from "styled-components";
 import {
-  Flex,
-  Heading,
-  Radio,
-  RadioGroup,
-  RangeSlider,
-  RangeSliderThumb,
-  RangeSliderTrack,
-  Stack,
-  StackDivider,
-} from "@chakra-ui/react";
-import { ContactProps } from "./reminder";
-import { Option } from "../../components/StyledSelect";
-import {
-  Box,
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
+  Flex,
   HStack,
+  Heading,
+  Radio,
+  RadioGroup,
+  Stack,
+  StackDivider,
   Text,
-  chakra,
 } from "@chakra-ui/react";
-import { DetailRow } from "../../components/DetailRow";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DetailRow } from "../../components/DetailRow";
 
 export type RenewContactProps = {
   ContractID: number;

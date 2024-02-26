@@ -3,18 +3,13 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Input,
-  Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { HTMLInputTypeAttribute, LegacyRef } from "react";
-import {
-  UseFormRegister,
-  UseFormRegisterReturn,
-  useForm,
-} from "react-hook-form";
+import { LegacyRef } from "react";
+import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
 import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
@@ -26,36 +21,14 @@ function CustomerForm({
   submitRef: LegacyRef<HTMLButtonElement> | undefined;
   customerToEdit?: CustomerFullDataType | Record<string, never>;
 }) {
-  const { register, handleSubmit, reset, getValues, formState } =
-    useForm<CustomerFullDataType>({
-      // defaultValues: isEditSession ? editValues : {},
-    });
+  const { register, handleSubmit, formState } = useForm<CustomerFullDataType>({
+    // defaultValues: isEditSession ? editValues : {},
+  }); // reset, getValues
   const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
   console.log("customerId", customerId);
-
-  // const {
-  //   customer: {
-  //     customerName,
-  //     customerShortName,
-  //     customerStatus,
-  //     customerIdentificationNumber,
-  //     customerMainPhone,
-  //     customerMainEMail,
-  //     remarks,
-  //     address,
-  //     city,
-  //     postalCode,
-  //     addressRemarks,
-  //     contactPersonName,
-  //     contactPersonPhone,
-  //     contactPersonPost,
-  //     contactPersonMobilePhone,
-  //   },
-  //   isLoading,
-  //   error,
-  // } = useCustomer(Number(customerId));
+  console.log(errors);
   const {
     customerName,
     customerShortName,
@@ -157,42 +130,6 @@ function CustomerForm({
       </HStack>
       <Button ref={submitRef} display='none' type='submit' />
     </form>
-  );
-}
-type FromRowProps = {
-  label: string;
-  type?: HTMLInputTypeAttribute | undefined;
-  register?: UseFormRegisterReturn<string> | undefined;
-  isRequired?: boolean;
-  defaultValue?: string | number | readonly string[] | undefined;
-};
-function FormRow({
-  label,
-  defaultValue,
-  type = "text",
-  register,
-  isRequired = false,
-}: FromRowProps) {
-  return (
-    <FormControl isRequired={isRequired} display='flex' alignItems='center'>
-      <FormLabel width='12rem'>{label}</FormLabel>
-      {type === "textarea" ? (
-        <Textarea
-          placeholder={label}
-          variant='flushed'
-          defaultValue={defaultValue || ""}
-          {...register}
-        />
-      ) : (
-        <Input
-          type={type}
-          defaultValue={defaultValue || ""}
-          placeholder={label}
-          variant='flushed'
-          {...register}
-        />
-      )}
-    </FormControl>
   );
 }
 

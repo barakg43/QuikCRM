@@ -1,8 +1,6 @@
+import { ResponsiveValue, Table } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import styled from "styled-components";
-import { Option } from "./StyledSelect";
-import LoadingSpinner from "./LoadingSpinner";
-import { ResponsiveValue, Table, TableContainer } from "@chakra-ui/react";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 const CommonRow = styled.div<{ columns: string }>`

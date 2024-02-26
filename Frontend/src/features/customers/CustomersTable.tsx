@@ -1,22 +1,22 @@
 import { useTranslation } from "react-i18next";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomTable from "../../components/CustomTable";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
-import { useToast } from "@chakra-ui/react";
+// eslint-disable-next-line react-refresh/only-export-components
 export const customerStatuses = [
-  "in-service",
-  "out-of-service",
-  "bank-hours",
-  "cloud-server",
-  "cloud-mail",
-  "charge",
+  "IN_SERVICE",
+  "OUT_OF_SERVICE",
+  "BANK_HOURS",
+  "CLOUD_SERVER",
+  "CLOUD_MAIL",
+  "CHARGE",
 ] as const;
 
 function CustomersTable() {
   const { customers, isLoading, totalItems } = useCustomers();
   const { t } = useTranslation("customers", { keyPrefix: "table" });
-
+  console.log(totalItems);
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
       <CustomTable.Header>
