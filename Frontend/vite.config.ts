@@ -1,15 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import eslint from "vite-plugin-eslint";
-// https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [react(), eslint()],
-  // base: `/quik`,
+  base: "",
   server: {
     proxy: {
       // string shorthand: http://localhost:5173/foo -> http://localhost:4567/foo
       "/assets": {
-        target: "http://barak-pc:8080",
+        target: "http://barak-pc:8080/quik",
         changeOrigin: true,
         secure: false,
         configure: (proxy, _options) => {

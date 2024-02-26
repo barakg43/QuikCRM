@@ -19,7 +19,7 @@ const Img = styled.img`
 `;
 
 function Logo() {
-  const imgSrc = "/assets/logo/logo.webp";
+  const imgSrc = "assets/logo/logo.webp";
   return (
     <StyledLogo>
       <Img src={imgSrc} alt='logo' />

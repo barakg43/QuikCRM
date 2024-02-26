@@ -6,7 +6,7 @@ import "./styles/pollen.css";
 function App() {
   return (
     <AppProviders>
-      <BrowserRouter>
+      <BrowserRouter basename='quik'>
         <AppRoutes />
       </BrowserRouter>
     </AppProviders>
