@@ -39,7 +39,7 @@ const rotateAstronaut = keyframes`
 `;
 
 const Container = styled.div`
-  background: url(/assets/404Page/img/bg_purple.png);
+  background: url(assets/404Page/img/bg_purple.png);
   background-repeat: repeat-x;
   background-size: cover;
   background-position: left top;
@@ -48,7 +48,7 @@ const Container = styled.div`
 `;
 
 const Stars = styled.div`
-  background: url(/assets/404Page/img/overlay_stars.svg);
+  background: url(assets/404Page/img/overlay_stars.svg);
   background-repeat: repeat;
   background-size: contain;
   background-position: left top;
@@ -239,7 +239,7 @@ function PageNotFound() {
     <Container>
       <Stars>
         <Content>
-          <Image404 src={"/assets/404Page/img/404.svg"} alt='404 image' />
+          <Image404 src={"assets/404Page/img/404.svg"} alt='404 image' />
           <p>
             {t("errorMessageFirstPart")} <br />
             <strong> {t("errorMessageSecondPart")}</strong>
@@ -247,16 +247,13 @@ function PageNotFound() {
           <StyledNavLink to='/'>{t("button")}</StyledNavLink>
         </Content>
         <Objects>
-          <Rocket src='/assets/404Page/img/rocket.svg' alt='Rocket' />
+          <Rocket src='assets/404Page/img/rocket.svg' alt='Rocket' />
           <EarthMoon>
-            <Earth src='/assets/404Page/img/earth.svg' alt='Earth' />
-            <Moon src='/assets/404Page/img/moon.svg' alt='Moon' />
+            <Earth src='assets/404Page/img/earth.svg' alt='Earth' />
+            <Moon src='assets/404Page/img/moon.svg' alt='Moon' />
           </EarthMoon>
           <AstronautBox>
-            <Astronaut
-              src='/assets/404Page/img/astronaut.svg'
-              alt='Astronaut'
-            />
+            <Astronaut src='assets/404Page/img/astronaut.svg' alt='Astronaut' />
           </AstronautBox>
         </Objects>
         <GlowingStars>
