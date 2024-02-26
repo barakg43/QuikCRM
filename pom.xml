@@ -14,6 +14,7 @@
     <packaging>war</packaging>
     <name>QuikHttpServer</name>
     <description>server</description>
+    <url>http://quik-crm:8080/</url>
     <properties>
         <start-class>main.server.ServerApplication</start-class>
         <java.version>17</java.version>
@@ -27,6 +28,9 @@
         <lombok.version>1.18.30</lombok.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <artifactId>quik</artifactId>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <start.class>main.server.ServerApplication</start.class>
     </properties>
     <dependencies>
         <dependency>
@@ -118,42 +122,13 @@
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
             <version>2.3.0</version>
         </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-boot-starter</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-swagger-ui</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
-        <!--&lt;!&ndash;            <version>${spring-boot-starter-jdbc.version}</version>&ndash;&gt;-->
-        <!--        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
-
-        <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.yaml</groupId>-->
-        <!--            <artifactId>snakeyaml</artifactId>-->
-        <!--            <version>2.0</version>-->
-        <!--        </dependency>-->
-        <!-- Json parser -->
     </dependencies>
     <build>
         <sourceDirectory>Backend/src</sourceDirectory>
         <finalName>${artifactId}</finalName>
 
         <plugins>
-            <!--			<plugin>-->
-            <!--				<groupId>org.springframework.boot</groupId>-->
-            <!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--			</plugin>-->
+
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -206,6 +181,7 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>${maven-resources-plugin.version}</version>
                 <executions>
@@ -247,49 +223,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!--				<plugin>-->
-            <!--					<groupId>org.apache.maven.plugins</groupId>-->
-            <!--					<artifactId>maven-war-plugin</artifactId>-->
-            <!--					<version>3.4.0</version>-->
-            <!--					<configuration>-->
-            <!--&lt;!&ndash;						<webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory>&ndash;&gt;-->
-            <!--					</configuration>-->
-            <!--				</plugin>-->
-
-            <!--			<plugin>-->
-            <!--				<groupId>org.apache.maven.plugins</groupId>-->
-            <!--				<artifactId>maven-dependency-plugin</artifactId>-->
-            <!--				<executions>-->
-            <!--					<execution>-->
-            <!--						<id>copy-dependencies</id>-->
-            <!--						<phase>prepare-package</phase>-->
-            <!--						<goals>-->
-            <!--							<goal>copy-dependencies</goal>-->
-            <!--						</goals>-->
-            <!--						<configuration>-->
-            <!--							<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-            <!--							<overWriteReleases>false</overWriteReleases>-->
-            <!--							<overWriteSnapshots>false</overWriteSnapshots>-->
-            <!--							<overWriteIfNewer>true</overWriteIfNewer>-->
-            <!--						</configuration>-->
-            <!--					</execution>-->
-            <!--				</executions>-->
-            <!--			</plugin>-->
-
-            <!--			<plugin>-->
-            <!--				<groupId>org.apache.tomcat.maven</groupId>-->
-            <!--				<artifactId>tomcat6-maven-plugin</artifactId>-->
-            <!--				<version>2.2</version>-->
-            <!--			</plugin>-->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <path>/war-plugin</path>
-                    <warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>
-                </configuration>
             </plugin>
 
         </plugins>
