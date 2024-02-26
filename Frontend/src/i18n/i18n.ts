@@ -16,7 +16,7 @@ i18n
   .init({
     backend: {
       // Adjust the path based on your folder structure
-      loadPath: "/locales/{{lng}}/{{ns}}.json",
+      loadPath: "locales/{{lng}}/{{ns}}.json",
     },
     fallbackLng: "he",
     debug: true,
