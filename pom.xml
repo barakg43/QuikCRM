@@ -167,9 +167,9 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!--                        <configuration>-->
-                        <!--                            <arguments>run build</arguments>-->
-                        <!--                        </configuration>-->
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
                     </execution>
                 </executions>
 
@@ -186,7 +186,26 @@
                 <version>${maven-resources-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources-backend-files</id>
+                        <id>copy-frontend-app-files-to-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>${basedir}/Backend/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/Frontend/dist</directory>
+                                    <includes>
+                                        <include>**/*.*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-resources-files-to-target</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -203,25 +222,7 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>copy-resources-frontend-files</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <overwrite>true</overwrite>
-                            <outputDirectory>${basedir}/target/classes/static</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/Frontend/dist</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
+
                 </executions>
             </plugin>
 
