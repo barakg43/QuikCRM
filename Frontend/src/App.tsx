@@ -6,7 +6,7 @@ import "./styles/pollen.css";
 function App() {
   return (
     <AppProviders>
-      <BrowserRouter basename='quik'>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <AppRoutes />
       </BrowserRouter>
     </AppProviders>
