@@ -3,6 +3,8 @@ import CustomTable from "../../components/CustomTable";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
+import Pagination from "../../components/Pagination";
+import { Td, Th } from "@chakra-ui/react";
 // eslint-disable-next-line react-refresh/only-export-components
 export const customerStatuses = [
   "IN_SERVICE",
@@ -13,18 +15,24 @@ export const customerStatuses = [
   "CHARGE",
 ] as const;
 
+function HeaderCell({ label }: { label: string }) {
+  return (
+    <Td border='none' as={"th"} textAlign='center'>
+      {label}
+    </Td>
+  );
+}
 function CustomersTable() {
   const { customers, isLoading, totalItems } = useCustomers();
   const { t } = useTranslation("customers", { keyPrefix: "table" });
-  console.log(totalItems);
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
       <CustomTable.Header>
-        <span>{t("customerId")}</span>
-        <span>{t("customerName")}</span>
-        <span>{t("address")}</span>
-        <span>{t("city")}</span>
-        <span>{t("status")}</span>
+        <HeaderCell label={t("customerId")} />
+        <HeaderCell label={t("customerName")} />
+        <HeaderCell label={t("address")} />
+        <HeaderCell label={t("city")} />
+        <HeaderCell label={t("status")} />
       </CustomTable.Header>
       {isLoading ? (
         <LoadingSpinner />
@@ -45,7 +53,7 @@ function CustomersTable() {
         />
       )}
       <CustomTable.Footer>
-        {/* <Pagination totalItemsAmount={totalItems} /> */}
+        <Pagination totalItemsAmount={totalItems} />
       </CustomTable.Footer>
     </CustomTable>
   );
