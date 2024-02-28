@@ -187,6 +187,9 @@
                 <executions>
                     <execution>
                         <id>copy-frontend-app-files-to-resources</id>
+=======
+                        <id>copy-resources-frontend-files</id>
+>>>>>>> #backend
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -223,6 +226,27 @@
                         </configuration>
                     </execution>
 
+=======
+                    <!--                    <execution>-->
+                    <!--                        <id>copy-resources-backend-files</id>-->
+                    <!--                        <phase>process-resources</phase>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>copy-resources</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <outputDirectory>${basedir}/target/classes</outputDirectory>-->
+                    <!--                            <resources>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>${basedir}/Backend/resources</directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>**/*.*</include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                            </resources>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
+                    <!--                   -->
+>>>>>>> #backend
                 </executions>
             </plugin>
 
