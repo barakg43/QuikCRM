@@ -4,7 +4,7 @@ import eslint from "vite-plugin-eslint";
 
 export default defineConfig({
   plugins: [react(), eslint()],
-  base: "",
+  base: "/quik",
   server: {
     proxy: {
       // string shorthand: http://localhost:5173/foo -> http://localhost:4567/foo
