@@ -159,4 +159,4 @@ buildNumber.properties
 /target
 Frontend/src/components/side.html
 
-Backend/resources/static/*
+/Backend/resources/static/
