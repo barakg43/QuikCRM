@@ -15,10 +15,7 @@ const StyledSideBar = styled.aside`
   border-right: 1px solid var(--color-primary-200);
   transition: width 300ms ease-in-out;
   overflow-x: clip;
-  width: 7rem;
-  &:hover {
-    width: 20rem;
-  }
+  width: 20rem;
 
   &:hover span {
     opacity: 100;
