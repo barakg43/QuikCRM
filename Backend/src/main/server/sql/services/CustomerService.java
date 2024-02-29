@@ -10,6 +10,9 @@ import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +20,12 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-	final SqlFunctionExecutor sqlFunctionExecutor;
+	private final SqlFunctionExecutor sqlFunctionExecutor;
 	private final CustomerRepository customerRepository;
+
 
 	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor, CustomerRepository customerRepository) {
 		this.sqlFunctionExecutor = sqlFunctionExecutor;
-
 		this.customerRepository = customerRepository;
 	}
 
@@ -37,7 +40,7 @@ public class CustomerService {
 //    JOIN dbo.tbCustomersAddresses AS ca ON cust.mainAddress = ca.customersAddressID
 //    JOIN dbo.tbCustomersContactPersons AS cp ON cust.mainContactPerson = cp.customersContactPersonID
 //    ORDER BY cust.customerShortName
-	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer fromItemNumber, Integer toItemNumber) {
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer pageNumber, Integer pageSize) {
 
 
 //		SqlQueryDirector statusQuery = SqlQueryBuilder.getNewBuilder()
@@ -54,7 +57,13 @@ public class CustomerService {
 //						"address",
 //						"city")
 //				.build();
-		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlLCustomerDetails();
+		Page<CustomerEntity> customerListEntities;
+		if (pageSize != null && pageNumber != null)
+			customerListEntities = customerRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		else //get all entities
+			customerListEntities = customerRepository.findAll(Pageable.unpaged());
+		List<CustomerSlimDetailsRecord> customerList =
+				customerListEntities.stream().map(CustomerSlimDetailsRecord::new).toList();
 //		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
 //		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQuery, CustomerSlimDetailsRecord.class);
