@@ -57,7 +57,13 @@ public class CustomerService {
 //						"address",
 //						"city")
 //				.build();
-		List<CustomerSlimDetailsRecord> customerList = customerRepository.findAlLCustomerDetails();
+		Page<CustomerEntity> customerListEntities;
+		if (pageSize != null && pageNumber != null)
+			customerListEntities = customerRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		else //get all entities
+			customerListEntities = customerRepository.findAll(Pageable.unpaged());
+		List<CustomerSlimDetailsRecord> customerList =
+				customerListEntities.stream().map(CustomerSlimDetailsRecord::new).toList();
 //		List<CustomerSlimDetailsRecord> customerList = new ArrayList<>();
 //		List<CustomerSlimDetailsRecord> customerList = sqlFunctionExecutor.supplyTableValueQuery(
 //				sqlQuery, CustomerSlimDetailsRecord.class);
