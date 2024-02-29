@@ -1,5 +1,9 @@
+import { Box, Link, VStack, chakra } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
+
+import { NavLink as ReactRouterLink } from "react-router-dom";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import {
   TbAlarm,
   TbClipboardList,
@@ -38,7 +42,6 @@ const StyledNavLink = styled(NavLink)`
   & span {
     display: block;
     font-size: var(--scale-5);
-    opacity: 0;
     transition: opacity 300ms ease-in-out;
     font-weight: var(--weight-medium);
     margin: 2px;
@@ -56,17 +59,32 @@ type NavLinkItemProps = {
 function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
   return (
     <li>
-      <StyledNavLink to={path}>
+      <ChakraLink
+        as={ReactRouterLink}
+        to={path}
+        display='flex'
+        gap='0.5rem'
+        _hover={{ backgroundColor: " var(--color-primary-700)" }}
+        borderRadius='var(--radius-sm)'
+        padding='0 var(--scale-0000)'
+        fontSize='var(--scale-5)'
+        _activeLink={{
+          fontWeight: "bold",
+          backgroundColor: " var(--color-primary-500)",
+        }}
+      >
         {icon}
-        <span>{label}</span>
-      </StyledNavLink>
+        <Box as='span' margin='2px'>
+          {label}
+        </Box>
+      </ChakraLink>
     </li>
   );
 }
 function MainNav() {
   const { t } = useTranslation("appLayout", { keyPrefix: "sidebar" });
   return (
-    <StyledMainNav>
+    <VStack listStyleType='none' gap='0.5rem' justifyContent='center'>
       <NavLinkItem
         icon={<TbUsers />}
         path='/customers'
@@ -92,7 +110,7 @@ function MainNav() {
         path='/settings'
         label={t("settings")}
       />
-    </StyledMainNav>
+    </VStack>
   );
 }
 
