@@ -14,12 +14,10 @@ type allCustomerParams = {
 export async function getAllCustomers({
   page,
 }: allCustomerParams): Promise<CustomersListType | undefined> {
-  const fromItem = (page - 1) * ITEMS_AMOUNT_PER_PAGE;
-  const toItem = fromItem + ITEMS_AMOUNT_PER_PAGE;
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
       await httpClient.get(`/customers`, {
-        params: { fromItem, toItem },
+        params: { pageNumber: page - 1, pageSize: ITEMS_AMOUNT_PER_PAGE },
       });
     return {
       customers: data.listSubset,
