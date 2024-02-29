@@ -40,11 +40,11 @@ public class CustomerController {
 	}
 
 	@GetMapping("")
-	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer fromItem,
-																		@RequestParam(required = false) Integer toItem) {
-		System.out.println("customer all");
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer pageNumber,
+																		@RequestParam(required = false) Integer pageSize) {
+
 		ListSubset<CustomerSlimDetailsRecord> test =
-				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(fromItem, toItem)
+				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(pageNumber, pageSize)
 						, "api/customers",
 						HttpMethod.GET);
 		System.out.println(test.getListSubset());
