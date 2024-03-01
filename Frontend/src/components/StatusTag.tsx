@@ -21,7 +21,8 @@ function StatusTag({ status }: { status: string }) {
       justifyContent='center'
       size='xl'
       borderRadius='20px'
-      padding='0.5rem 2rem 0.5rem 2rem'
+      padding='0.5rem 5rem 0.5rem 5rem'
+      margin='auto'
     >
       {t(statusString)}
     </Tag>
