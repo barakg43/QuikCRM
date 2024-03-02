@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
+import { HStack, VStack } from "@chakra-ui/react";
 
 const StyledSideBar = styled.aside`
   display: flex;
@@ -24,10 +25,10 @@ const StyledSideBar = styled.aside`
 
 function Sidebar() {
   return (
-    <StyledSideBar>
+    <VStack justifyContent='start' gap='10rem' w='20rem'>
       <Logo />
       <MainNav />
-    </StyledSideBar>
+    </VStack>
   );
 }
 
