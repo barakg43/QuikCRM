@@ -4,7 +4,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import CustomerRow from "./CustomerRow";
 import { useCustomers } from "./hooks/useCustomers";
 import Pagination from "../../components/Pagination";
-import { Td, Th } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 // eslint-disable-next-line react-refresh/only-export-components
 export const customerStatuses = [
   "IN_SERVICE",

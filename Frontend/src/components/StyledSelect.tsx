@@ -1,4 +1,4 @@
-import { LayoutProps, Select } from "@chakra-ui/react";
+import { LayoutProps, Select, SelectFieldProps } from "@chakra-ui/react";
 import { ChangeEventHandler, Key } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -22,7 +22,7 @@ type SelectProps = {
   options: Option[];
   value?: string | number | readonly string[] | undefined;
   onChange?: ChangeEventHandler<HTMLSelectElement> | undefined;
-  props?: object;
+  props?: SelectProps;
   register?: UseFormRegisterReturn<string> | undefined;
   width?: React.PropsWithoutRef<LayoutProps["width"]>;
 };
