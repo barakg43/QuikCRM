@@ -1,4 +1,4 @@
-import { Box, Link, VStack, chakra } from "@chakra-ui/react";
+import { Box, List, ListItem, VStack } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -58,18 +58,24 @@ type NavLinkItemProps = {
 
 function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
   return (
-    <li>
+    <ListItem w='100%'>
       <ChakraLink
         as={ReactRouterLink}
         to={path}
         display='flex'
         gap='0.5rem'
-        _hover={{ backgroundColor: " var(--color-primary-700)" }}
+        _hover={{
+          backgroundColor: " var(--color-primary-700)",
+          color: "white",
+        }}
         borderRadius='var(--radius-sm)'
-        padding='0 var(--scale-0000)'
+        // padding='0 var(--scale-00000)'
+        paddingInline={"var(--scale-0)"}
+        flexGrow={1}
         fontSize='var(--scale-5)'
         _activeLink={{
           fontWeight: "bold",
+          color: "white",
           backgroundColor: " var(--color-primary-500)",
         }}
       >
@@ -78,13 +84,22 @@ function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
           {label}
         </Box>
       </ChakraLink>
-    </li>
+    </ListItem>
   );
 }
 function MainNav() {
   const { t } = useTranslation("appLayout", { keyPrefix: "sidebar" });
   return (
-    <VStack listStyleType='none' gap='0.5rem' justifyContent='center'>
+    <List
+      listStyleType='none'
+      display='flex'
+      flexDir={"column"}
+      gap='1rem'
+      // justifyContent='center'
+      alignItems={"start"}
+      w='100%'
+      padding='0 2rem'
+    >
       <NavLinkItem
         icon={<TbUsers />}
         path='/customers'
@@ -110,7 +125,7 @@ function MainNav() {
         path='/settings'
         label={t("settings")}
       />
-    </VStack>
+    </List>
   );
 }
 
