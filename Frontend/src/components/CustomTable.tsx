@@ -1,12 +1,23 @@
 import {
   ResponsiveValue,
   Table,
+  TableRowProps,
+  forwardRef,
   Tbody,
   Text,
   Thead,
   Tr,
+  LayoutProps,
 } from "@chakra-ui/react";
-import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
+import {
+  HTMLAttributes,
+  LegacyRef,
+  MouseEventHandler,
+  ReactNode,
+  ReactPropTypes,
+  createContext,
+  useContext,
+} from "react";
 import styled from "styled-components";
 
 const TableContext = createContext<ValueType>({ columns: "" });
@@ -105,11 +116,6 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-type RowType = {
-  children: ReactNode;
-  onClick: MouseEventHandler<HTMLDivElement> | undefined;
-};
-
 // const CommonRow = styled.div<{ columns: string }>`
 //   display: grid;
 //   font-size: 1.6rem;
@@ -123,7 +129,13 @@ type RowType = {
 //     border-bottom: 1px var(--color-primary-300) solid;
 //   }
 // `;
-function Row({ onClick, children }: RowType) {
+type RowType = {
+  children: ReactNode;
+  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+  height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
+};
+
+function Row({ onClick, height, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
     <Tr
@@ -131,16 +143,15 @@ function Row({ onClick, children }: RowType) {
       gridTemplateColumns={columns}
       onClick={onClick}
       fontSize='1.6rem'
-      columnGap='var(--scale-000)'
-      alignItems='center'
-      padding='var(--scale-2) var(--scale-1)'
+      height={height}
       _notLast={{ borderBottom: "1px var(--color-primary-300) solid" }}
+      alignContent='center'
+      alignItems='center'
     >
       {children}
     </Tr>
   );
 }
-
 StyledTable.Header = Header;
 StyledTable.Row = Row;
 StyledTable.Footer = Footer;
