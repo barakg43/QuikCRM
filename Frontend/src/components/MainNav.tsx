@@ -1,8 +1,6 @@
-import { Box, List, ListItem, VStack } from "@chakra-ui/react";
+import { Box, List, ListItem } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-
-import { NavLink as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import {
   TbAlarm,
@@ -11,7 +9,7 @@ import {
   TbSettings,
   TbUsers,
 } from "react-icons/tb";
-import { NavLink } from "react-router-dom";
+import { NavLink as ReactRouterLink } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledMainNav = styled.menu`
@@ -22,34 +20,6 @@ const StyledMainNav = styled.menu`
   gap: var(--scale-3);
 `;
 
-const StyledNavLink = styled(NavLink)`
-  display: flex;
-  background-color: var(--color-primary-500);
-  border-radius: var(--radius-sm);
-  font-weight: var(--weight-medium);
-  align-items: center;
-  text-align: center;
-
-  gap: var(--scale-2);
-  padding: 0 var(--scale-0000);
-  /* transition-delay: 300ms; */
-  /* padding: var(--scale-000) var(--scale-00); */
-  & svg {
-    //for the icon
-    min-width: var(--scale-4);
-    min-height: var(--scale-1);
-  }
-  & span {
-    display: block;
-    font-size: var(--scale-5);
-    transition: opacity 300ms ease-in-out;
-    font-weight: var(--weight-medium);
-    margin: 2px;
-  }
-  &:hover {
-    background-color: var(--color-primary-500);
-  }
-`;
 type NavLinkItemProps = {
   path: string;
   label: string;
@@ -65,7 +35,7 @@ function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
         display='flex'
         gap='0.5rem'
         _hover={{
-          backgroundColor: " var(--color-primary-700)",
+          backgroundColor: " var(--color-primary-500)",
           color: "white",
         }}
         borderRadius='var(--radius-sm)'
@@ -75,8 +45,8 @@ function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
         fontSize='var(--scale-5)'
         _activeLink={{
           fontWeight: "bold",
-          color: "white",
-          backgroundColor: " var(--color-primary-500)",
+          color: "teal.900",
+          backgroundColor: " var(--color-primary-300)",
         }}
       >
         {icon}
