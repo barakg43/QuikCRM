@@ -1,3 +1,4 @@
+import { Container, Image } from "@chakra-ui/react";
 import styled from "styled-components";
 
 const StyledLogo = styled.div`
@@ -21,9 +22,17 @@ const Img = styled.img`
 function Logo() {
   const imgSrc = "assets/logo/logo.webp";
   return (
-    <StyledLogo>
-      <Img src={imgSrc} alt='logo' />
-    </StyledLogo>
+    <Container maxHeight='11rem'>
+      <Image
+        src={imgSrc}
+        alt='logo'
+        maxHeight='13rem'
+        display='block'
+        margin='auto'
+        paddingTop='1rem'
+        width='50%'
+      />
+    </Container>
   );
 }
 
