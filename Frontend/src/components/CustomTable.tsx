@@ -1,28 +1,19 @@
 import {
+  Box,
+  LayoutProps,
   ResponsiveValue,
   Table,
-  TableRowProps,
-  forwardRef,
   Tbody,
   Text,
   Thead,
   Tr,
-  LayoutProps,
 } from "@chakra-ui/react";
-import {
-  HTMLAttributes,
-  LegacyRef,
-  MouseEventHandler,
-  ReactNode,
-  ReactPropTypes,
-  createContext,
-  useContext,
-} from "react";
-import styled from "styled-components";
+import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
+// import styled from "styled-components";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
-const Footer = styled.footer``;
+const Footer = () => <Box />;
 
 // const EmptyTable = styled.p`
 //   font-size: 1.6rem;
@@ -59,14 +50,6 @@ function Body<T>({ data, render }: BodyProps<T>) {
   );
 }
 
-// const StyledTable = styled.div`
-//   font-size: var(--scale-3);
-//   width: 95%;
-//   /* border: 1px solid var(--color-primary-500); */
-//   /* background-color: var(--color-primary-0); */
-//   padding-top: var(--scale-3);
-//   text-align: center;
-// `;
 type TableProps = {
   columns: string;
   children: ReactNode;
