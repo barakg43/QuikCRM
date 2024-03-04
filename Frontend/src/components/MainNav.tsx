@@ -1,7 +1,6 @@
-import { Box, List, ListItem } from "@chakra-ui/react";
+import { Box, Link as ChakraLink, List, ListItem } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-import { Link as ChakraLink } from "@chakra-ui/react";
 import {
   TbAlarm,
   TbClipboardList,
@@ -10,15 +9,14 @@ import {
   TbUsers,
 } from "react-icons/tb";
 import { NavLink as ReactRouterLink } from "react-router-dom";
-import styled from "styled-components";
 
-const StyledMainNav = styled.menu`
-  justify-content: center;
-  padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
-  display: flex;
-  flex-direction: column;
-  gap: var(--scale-3);
-`;
+// const StyledMainNav = styled.menu`
+//   justify-content: center;
+//   padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
+//   display: flex;
+//   flex-direction: column;
+//   gap: var(--scale-3);
+// `;
 
 type NavLinkItemProps = {
   path: string;
