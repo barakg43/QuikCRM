@@ -69,9 +69,9 @@ public class ProductRenewService {
 	}
 
 	@Transactional
-	public void updateProductReminderData(ProductReminderRecord productReminderRecord) {
+	public void updateProductReminderData(BigDecimal reminderId, ProductReminderRecord productReminderRecord) {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
-				productReminderRepository.findById(productReminderRecord.systemDetailID());
+				productReminderRepository.findById(reminderId);
 
 		if (productReminderEntityToRenewOptional.isPresent()) {
 			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();

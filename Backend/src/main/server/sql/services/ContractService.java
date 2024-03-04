@@ -39,7 +39,8 @@ public class ContractService {
 
 	}
 
-	public List<ContractRecord> getServiceRenewReminders(int monthsAfterExpiration, int daysBeforeExpiration) {
+	public List<ContractRecord> getServiceRenewRemindersInPeriodTime(int monthsAfterExpiration,
+																	 int daysBeforeExpiration) {
 
 //        ( SELECT     TOP 100 PERCENT ReminderID, DateOfReminder, TimeOfReminder, ReminderRemark, Closed,
 //        ResponsibleUserName
@@ -57,23 +58,24 @@ public class ContractService {
 //		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
 ////        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class,
 ////        LocalDateTime.now());
-		return serviceContractRepository.getAllContractsRenewReminder(
+		return serviceContractRepository.getAllContractsRenewReminderInPeriodTime(
 				UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration),
 				UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration)
 		);
 	}
 
 	@Transactional
-	public void updateContract(ContractRecord contractRecord) {
+	public void updateContract(Long contractId, ContractRecord contractRecord) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
-				.getContractByContractID(contractRecord.contractID());
+				.getContractByContractID(contractId);
 		if (serviceContractEntity == null)
 			throw new IndexOutOfBoundsException();
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
+				contractRecord.startDateOfContract());
 		serviceContractRepository.save(serviceContractEntity);
 	}
 
@@ -89,8 +91,9 @@ public class ContractService {
 			serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 			serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 			serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-			serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 			serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+			setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
+					contractRecord.startDateOfContract());
 			saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
 		} else {
 			throw new IllegalArgumentException("customer with this id not exist");
@@ -125,10 +128,10 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void renewContractForPeriod(ContractRecord contractRecord) {
+	public void renewContractForPeriod(Long contractId, ContractRecord contractRecord) {
 		//close the current contract
 		ServiceContractEntity currentContract =
-				serviceContractRepository.getContractByContractID(contractRecord.contractID());
+				serviceContractRepository.getContractByContractID(contractId);
 		if (currentContract == null)
 			throw new IndexOutOfBoundsException();
 		currentContract.setRenewed(true);

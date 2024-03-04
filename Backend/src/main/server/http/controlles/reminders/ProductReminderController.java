@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
-@RequestMapping("/api/reminders/product")
+@RequestMapping("/api/product-renews")
 public class ProductReminderController {
 	private final HttpRequestExecutor httpRequestExecutor;
 	private final ProductRenewService productRenewService;
@@ -37,16 +37,16 @@ public class ProductReminderController {
 				"/api/reminders/product", HttpMethod.POST);
 	}
 
-	@PatchMapping("/renew")
-	public void renewProductForPeriodTime(@RequestParam BigDecimal reminderId,
+	@PatchMapping("{reminderId}/renew")
+	public void renewProductForPeriodTime(@PathVariable BigDecimal reminderId,
 										  @RequestParam LocalDate newValidityDate) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
 						newValidityDate),
 				"/api/reminders/product/renew", HttpMethod.PATCH);
 	}
 
-	@DeleteMapping
-	public void removeProductReminder(@RequestParam BigDecimal reminderId) {
+	@DeleteMapping("{reminderId}")
+	public void removeProductReminder(@PathVariable BigDecimal reminderId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
 					"/api/reminders/product", HttpMethod.DELETE);
@@ -58,9 +58,11 @@ public class ProductReminderController {
 
 	}
 
-	@PatchMapping
-	public void updateProductReminderData(@RequestBody ProductReminderRecord productReminderRecord) {
-		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(productReminderRecord),
+	@PatchMapping("{reminderId}")
+	public void updateProductReminderData(@PathVariable BigDecimal reminderId,
+										  @RequestBody ProductReminderRecord productReminderRecord) {
+		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(reminderId,
+						productReminderRecord),
 				"/api/reminders/product", HttpMethod.PATCH);
 	}
 }
