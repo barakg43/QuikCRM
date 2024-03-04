@@ -39,7 +39,7 @@ public class ProductReminderController {
 
 	@PatchMapping("{reminderId}/renew")
 	public void renewProductForPeriodTime(@PathVariable BigDecimal reminderId,
-										  @RequestParam LocalDate newValidityDate) {
+										  @RequestBody LocalDate newValidityDate) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
 						newValidityDate),
 				"/api/reminders/product/renew", HttpMethod.PATCH);
