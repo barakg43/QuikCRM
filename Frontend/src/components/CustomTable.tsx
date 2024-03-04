@@ -13,8 +13,9 @@ import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
-const Footer = () => <Box />;
-
+function Footer({ children }: { children: ReactNode }) {
+  return <Box>{children}</Box>;
+}
 // const EmptyTable = styled.p`
 //   font-size: 1.6rem;
 //   font-weight: 500;
@@ -70,11 +71,6 @@ function StyledTable({ columns, children, variant }: TableProps) {
   );
 }
 
-// const StyledHeader = styled(CommonRow)`
-//   padding: var(--scale-0);
-//   background-color: var(--color-primary-300);
-//   border-radius: var(--radius-md) var(--radius-md) 0 0;
-// `;
 type ValueType = {
   columns: string;
 };
