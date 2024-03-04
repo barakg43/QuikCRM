@@ -1,4 +1,4 @@
-import { ServiceRenewRecord } from "../features/service-renews/service-renews";
+import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
 export async function addNewServicesRenew({
