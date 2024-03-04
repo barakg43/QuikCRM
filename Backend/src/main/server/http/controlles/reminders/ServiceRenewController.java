@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
-@RequestMapping("/api/reminders/service")
+@RequestMapping("/api/contact-service")
 public class ServiceRenewController {
 	private final HttpRequestExecutor httpRequestExecutor;
 	private final ContractService contractService;
@@ -47,20 +47,20 @@ public class ServiceRenewController {
 
 	}
 
-	@PatchMapping("/renew")
-	public void renewContractForPeriodTime(@RequestBody ContractRecord contractRecord) {
+	@PatchMapping("{contractId}/renew/")
+	public void renewContractForPeriodTime(@PathVariable Long contractId, @RequestBody ContractRecord contractRecord) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> contractService.renewContractForPeriod(contractRecord),
-					"/api/reminders/service/renew", HttpMethod.PATCH);
+			httpRequestExecutor.executeHttpRequest(() -> contractService.renewContractForPeriod(contractId,
+							contractRecord),
+					"/api/reminders/service/renew/" + contractId, HttpMethod.PATCH);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"cannot find contract to renew with id of " + contractRecord.contractID());
+					"cannot find contract to renew with id of " + contractId);
 		}
-
 	}
 
-	@DeleteMapping
-	public void removeContract(@RequestParam Long contractId) {
+	@DeleteMapping("{contractId}")
+	public void removeContract(@PathVariable Long contractId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> contractService.deleteContractByID(contractId),
 					"/api/reminders/service", HttpMethod.DELETE);
@@ -71,10 +71,10 @@ public class ServiceRenewController {
 
 	}
 
-	@PatchMapping
-	public void updateContactData(@RequestBody ContractRecord contractRecord) {
+	@PatchMapping("{contractId}")
+	public void updateContactData(@PathVariable Long contractId, @RequestBody ContractRecord contractRecord) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> contractService.updateContract(contractRecord),
+			httpRequestExecutor.executeHttpRequest(() -> contractService.updateContract(contractId, contractRecord),
 					"/api/reminders/service", HttpMethod.PATCH);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,

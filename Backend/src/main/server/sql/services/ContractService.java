@@ -65,9 +65,9 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void updateContract(ContractRecord contractRecord) {
+	public void updateContract(Long contractId, ContractRecord contractRecord) {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
-				.getContractByContractID(contractRecord.contractID());
+				.getContractByContractID(contractId);
 		if (serviceContractEntity == null)
 			throw new IndexOutOfBoundsException();
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
@@ -128,10 +128,10 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void renewContractForPeriod(ContractRecord contractRecord) {
+	public void renewContractForPeriod(Long contractId, ContractRecord contractRecord) {
 		//close the current contract
 		ServiceContractEntity currentContract =
-				serviceContractRepository.getContractByContractID(contractRecord.contractID());
+				serviceContractRepository.getContractByContractID(contractId);
 		if (currentContract == null)
 			throw new IndexOutOfBoundsException();
 		currentContract.setRenewed(true);
