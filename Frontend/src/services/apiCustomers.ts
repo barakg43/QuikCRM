@@ -7,13 +7,11 @@ import {
 import { httpClient } from "./axios";
 import { SubsetListType } from "./globalTypes";
 
-type allCustomerParams = {
-  page: number;
-};
-
 export async function getAllCustomers({
   page,
-}: allCustomerParams): Promise<CustomersListType | undefined> {
+}: {
+  page: number;
+}): Promise<CustomersListType | undefined> {
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
       await httpClient.get(`/customers`, {
