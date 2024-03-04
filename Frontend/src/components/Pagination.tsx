@@ -1,39 +1,8 @@
+import { Button, ButtonProps, Flex, Text } from "@chakra-ui/react";
+import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
 import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-
-const StyledPagination = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  /* font-size: var(--scale-5); */
-`;
-const PaginationButton = styled.button`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: var(--scale-00);
-  border-radius: var(--radius-xl);
-  background-color: transparent;
-  border: none;
-  color: var(--color-brand-400);
-  &:not(:disabled):hover {
-    background-color: var(--color-primary-300);
-    color: var(--color-brand-800);
-  }
-  &:focus {
-    outline: none;
-  }
-  &:disabled {
-    color: var(--color-brand-200);
-  }
-`;
-const P = styled.p`
-  & span {
-    font-weight: var(--weight-bold);
-  }
-`;
 
 export const getPagesAmount = (totalItemsAmount: number) =>
   Math.ceil(totalItemsAmount / ITEMS_AMOUNT_PER_PAGE);
@@ -68,25 +37,70 @@ function Pagination({ totalItemsAmount = 0 }: { totalItemsAmount: number }) {
       ? currentPage * ITEMS_AMOUNT_PER_PAGE
       : totalItemsAmount;
   return (
-    <StyledPagination>
+    <Flex alignItems='center' justifyContent='space-around'>
       <PaginationButton onClick={previousPage} disabled={currentPage === 1}>
         {isRTL ? <TbChevronsRight /> : <TbChevronsLeft />}
         {t("button.previous")}
       </PaginationButton>
 
-      <P>
+      <Text
+        sx={{
+          span: {
+            fontWeight: "bold",
+          },
+        }}
+      >
         {t("summary.showing")} <span>{currentFrom}</span> {t("summary.to")}
         <span> {currentTo}</span> {t("summary.of")}
         <span> {totalItemsAmount}</span> {t("summary.results")}
-      </P>
+      </Text>
       <PaginationButton
         onClick={nextPage}
         disabled={currentPage === pagesCount}
       >
         {t("button.next")} {isRTL ? <TbChevronsLeft /> : <TbChevronsRight />}
       </PaginationButton>
-    </StyledPagination>
+    </Flex>
   );
 }
 
+function PaginationButton({
+  children,
+  onClick,
+  disabled,
+  ...props
+}: {
+  children: React.ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  disabled?: boolean | undefined;
+  props?: ButtonProps;
+}) {
+  console.log(children, disabled);
+
+  return (
+    <Button
+      onClick={onClick}
+      isDisabled={disabled}
+      display='flex'
+      justifyContent='space-evenly'
+      alignItems='center'
+      padding='var(--scale-00)'
+      borderRadius='3xl'
+      background='transparent'
+      border='none'
+      color='var(--color-brand-400)'
+      _focus={{ outline: "none" }}
+      _disabled={{ color: "var(--color-brand-200)" }}
+      sx={{
+        "&:not(:disabled):hover": {
+          backgroundColor: "var(--color-primary-300)",
+          color: " var(--color-brand-800)",
+        },
+      }}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
 export default Pagination;

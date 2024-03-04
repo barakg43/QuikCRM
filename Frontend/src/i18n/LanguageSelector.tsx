@@ -20,6 +20,8 @@ function LanguageSelector() {
       options={langOption}
       value={lang}
       onChange={handleLangChange}
+      width='10rem'
+      fontSize='1.2rem'
     />
   );
 }

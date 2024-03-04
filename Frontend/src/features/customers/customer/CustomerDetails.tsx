@@ -15,7 +15,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import StatusTag from "../../../components/StatusTag";
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
-import { useCustomer } from "./useCustomer";
+import { useCustomer } from "./hooks/useCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {

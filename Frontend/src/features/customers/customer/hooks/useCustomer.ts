@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getCustomerDataByID } from "../../../services/apiCustomers";
-import { CustomerFullDataType } from "../customers";
+import { getCustomerDataByID } from "../../../../services/apiCustomers";
+import { CustomerFullDataType } from "../../customers";
 
 type useCustomerReturnType = {
   customer: CustomerFullDataType | Record<string, never>;

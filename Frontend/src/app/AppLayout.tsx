@@ -1,21 +1,20 @@
-import { Container } from "@chakra-ui/react";
+import { Box, Container, Flex } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import styled from "styled-components";
 import SideBar from "../components/Sidebar";
 import TopHeader from "../components/TopHeader";
 
-const StyledAppLayout = styled.div`
-  display: flex;
-  height: 100vh;
-  width: 100dvw;
-`;
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+// const StyledAppLayout = styled.div`
+//   display: flex;
+//   height: 100vh;
+//   width: 100dvw;
+// `;
+// const MainContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   flex: 1;
 
-  background-color: var(--color-primary-100);
-`;
+//   background-color: var(--color-primary-100);
+// `;
 // const Container = styled.div`
 //   display: flex;
 //   flex-grow: 1 1 0;
@@ -25,26 +24,32 @@ const MainContainer = styled.div`
 //   margin: 0 auto;
 //   flex-direction: row;
 // `;
-const Main = styled.main`
-  background-color: var(--color-primary-100);
-  padding: 2rem;
-  height: 100vh;
-  overflow-y: scroll;
-`;
+// const Main = styled.main`
+//   background-color: var(--color-primary-100);
+//   padding: 2rem;
+//   height: 100vh;
+//   overflow-y: scroll;
+// `;
 
 function AppLayout() {
   return (
-    <StyledAppLayout>
+    <Flex h='100vh' w='100dvw'>
       <SideBar />
-      <MainContainer>
+      <Flex flexDir='column' grow={1}>
         <TopHeader />
-        <Main>
+        <Box
+          as='main'
+          padding='2rem'
+          height='100vh'
+          overflowY='scroll'
+          bg='var(--color-primary-100)'
+        >
           <Container centerContent display='flex' minH='100%' minW='100%'>
             <Outlet />
           </Container>
-        </Main>
-      </MainContainer>
-    </StyledAppLayout>
+        </Box>
+      </Flex>
+    </Flex>
   );
 }
 export default AppLayout;

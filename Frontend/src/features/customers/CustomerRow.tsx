@@ -14,13 +14,24 @@ function CustomerRow({
   const navigate = useNavigate();
 
   return (
-    <Table.Row onClick={() => navigate(`${customerID}`)}>
-      <Td textAlign='center'>{customerID}</Td>
-      <Td textAlign='center'>{customerShortName}</Td>
-      <Td textAlign='center'>{address}</Td>
-      <Td textAlign='center'>{city}</Td>
+    <Table.Row onClick={() => navigate(`${customerID}`)} height='5.6rem'>
+      <CustomerCell text={customerID} />
+      <CustomerCell text={customerShortName} />
+      <CustomerCell text={address} />
+      <CustomerCell text={city} />
       <StatusTag status={customerStatus} />
     </Table.Row>
+  );
+}
+function CustomerCell({
+  text,
+}: {
+  text: string | number | string[] | undefined;
+}) {
+  return (
+    <Td textAlign='center' lineHeight='unset'>
+      {text}
+    </Td>
   );
 }
 

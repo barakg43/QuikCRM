@@ -1,4 +1,8 @@
-import { LayoutProps, Select } from "@chakra-ui/react";
+import {
+  LayoutProps,
+  Select,
+  SelectProps as ChakraSelectProps,
+} from "@chakra-ui/react";
 import { ChangeEventHandler, Key } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -7,22 +11,11 @@ export type Option = {
   label: string | number | undefined;
 };
 
-// const StyledSelect = styled.select<{ type?: "white" | "dark" }>`
-//   font-size: var(--scale-3);
-//   padding: var(--size-1);
-//   border-radius: var(--radius-sm);
-//   border: 1px solid
-//     ${(props) =>
-//       props.type === "white"
-//         ? "var(--color-primary-100)"
-//         : "var(--color-primary-300)"};
-// `;
-
 type SelectProps = {
   options: Option[];
   value?: string | number | readonly string[] | undefined;
   onChange?: ChangeEventHandler<HTMLSelectElement> | undefined;
-  props?: object;
+  props?: ChakraSelectProps;
   register?: UseFormRegisterReturn<string> | undefined;
   width?: React.PropsWithoutRef<LayoutProps["width"]>;
 };

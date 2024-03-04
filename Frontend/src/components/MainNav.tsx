@@ -1,3 +1,4 @@
+import { Box, Link as ChakraLink, List, ListItem } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,46 +8,16 @@ import {
   TbSettings,
   TbUsers,
 } from "react-icons/tb";
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import { NavLink as ReactRouterLink } from "react-router-dom";
 
-const StyledMainNav = styled.menu`
-  justify-content: center;
-  padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
-  display: flex;
-  flex-direction: column;
-  gap: var(--scale-3);
-`;
+// const StyledMainNav = styled.menu`
+//   justify-content: center;
+//   padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
+//   display: flex;
+//   flex-direction: column;
+//   gap: var(--scale-3);
+// `;
 
-const StyledNavLink = styled(NavLink)`
-  display: flex;
-  background-color: var(--color-primary-500);
-  border-radius: var(--radius-sm);
-  font-weight: var(--weight-medium);
-  align-items: center;
-  text-align: center;
-
-  gap: var(--scale-2);
-  padding: 0 var(--scale-0000);
-  /* transition-delay: 300ms; */
-  /* padding: var(--scale-000) var(--scale-00); */
-  & svg {
-    //for the icon
-    min-width: var(--scale-4);
-    min-height: var(--scale-1);
-  }
-  & span {
-    display: block;
-    font-size: var(--scale-5);
-    opacity: 0;
-    transition: opacity 300ms ease-in-out;
-    font-weight: var(--weight-medium);
-    margin: 2px;
-  }
-  &:hover {
-    background-color: var(--color-primary-500);
-  }
-`;
 type NavLinkItemProps = {
   path: string;
   label: string;
@@ -55,18 +26,48 @@ type NavLinkItemProps = {
 
 function NavLinkItem({ path, label, icon }: NavLinkItemProps) {
   return (
-    <li>
-      <StyledNavLink to={path}>
+    <ListItem w='100%'>
+      <ChakraLink
+        as={ReactRouterLink}
+        to={path}
+        display='flex'
+        gap='0.5rem'
+        _hover={{
+          backgroundColor: " var(--color-primary-500)",
+          color: "white",
+        }}
+        borderRadius='var(--radius-sm)'
+        // padding='0 var(--scale-00000)'
+        paddingInline={"var(--scale-0)"}
+        flexGrow={1}
+        fontSize='var(--scale-5)'
+        _activeLink={{
+          fontWeight: "bold",
+          color: "teal.900",
+          backgroundColor: " var(--color-primary-300)",
+        }}
+      >
         {icon}
-        <span>{label}</span>
-      </StyledNavLink>
-    </li>
+        <Box as='span' margin='2px'>
+          {label}
+        </Box>
+      </ChakraLink>
+    </ListItem>
   );
 }
 function MainNav() {
   const { t } = useTranslation("appLayout", { keyPrefix: "sidebar" });
   return (
-    <StyledMainNav>
+    <List
+      listStyleType='none'
+      display='flex'
+      flexDir={"column"}
+      gap='1rem'
+      // justifyContent='center'
+      alignItems={"start"}
+      w='100%'
+      padding='0 2rem'
+    >
       <NavLinkItem
         icon={<TbUsers />}
         path='/customers'
@@ -92,7 +93,7 @@ function MainNav() {
         path='/settings'
         label={t("settings")}
       />
-    </StyledMainNav>
+    </List>
   );
 }
 

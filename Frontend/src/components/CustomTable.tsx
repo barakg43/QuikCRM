@@ -1,4 +1,6 @@
 import {
+  Box,
+  LayoutProps,
   ResponsiveValue,
   Table,
   Tbody,
@@ -7,12 +9,13 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
-const Footer = styled.footer``;
-
+function Footer({ children }: { children: ReactNode }) {
+  return <Box>{children}</Box>;
+}
 // const EmptyTable = styled.p`
 //   font-size: 1.6rem;
 //   font-weight: 500;
@@ -48,14 +51,6 @@ function Body<T>({ data, render }: BodyProps<T>) {
   );
 }
 
-// const StyledTable = styled.div`
-//   font-size: var(--scale-3);
-//   width: 95%;
-//   /* border: 1px solid var(--color-primary-500); */
-//   /* background-color: var(--color-primary-0); */
-//   padding-top: var(--scale-3);
-//   text-align: center;
-// `;
 type TableProps = {
   columns: string;
   children: ReactNode;
@@ -76,11 +71,6 @@ function StyledTable({ columns, children, variant }: TableProps) {
   );
 }
 
-// const StyledHeader = styled(CommonRow)`
-//   padding: var(--scale-0);
-//   background-color: var(--color-primary-300);
-//   border-radius: var(--radius-md) var(--radius-md) 0 0;
-// `;
 type ValueType = {
   columns: string;
 };
@@ -105,11 +95,6 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-type RowType = {
-  children: ReactNode;
-  onClick: MouseEventHandler<HTMLDivElement> | undefined;
-};
-
 // const CommonRow = styled.div<{ columns: string }>`
 //   display: grid;
 //   font-size: 1.6rem;
@@ -123,7 +108,13 @@ type RowType = {
 //     border-bottom: 1px var(--color-primary-300) solid;
 //   }
 // `;
-function Row({ onClick, children }: RowType) {
+type RowType = {
+  children: ReactNode;
+  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+  height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
+};
+
+function Row({ onClick, height, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
     <Tr
@@ -131,16 +122,15 @@ function Row({ onClick, children }: RowType) {
       gridTemplateColumns={columns}
       onClick={onClick}
       fontSize='1.6rem'
-      columnGap='var(--scale-000)'
-      alignItems='center'
-      padding='var(--scale-2) var(--scale-1)'
+      height={height}
       _notLast={{ borderBottom: "1px var(--color-primary-300) solid" }}
+      alignContent='center'
+      alignItems='center'
     >
       {children}
     </Tr>
   );
 }
-
 StyledTable.Header = Header;
 StyledTable.Row = Row;
 StyledTable.Footer = Footer;

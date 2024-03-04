@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 import Row from "../../components/Row";
 import StyledSelect from "../../components/StyledSelect";
+import { Button } from "@chakra-ui/react";
 
 const StyledInvoiceReminder = styled.div`
   display: flex;
@@ -89,7 +89,7 @@ function InvoiceReminder({
             value={renewPeriod}
             onChange={handleOnChangeRenewPeriod}
           />
-          <Button size='small' variation='secondary' onClick={renewReminder}>
+          <Button size='small' onClick={renewReminder}>
             {t("renew")}
           </Button>
         </Row>
