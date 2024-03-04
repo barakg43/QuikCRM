@@ -26,7 +26,7 @@ public class ServiceRenewController {
 	@GetMapping("/reminders")
 	public List<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
 														  @RequestParam int monthsAfterExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewReminders(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
+		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
 						"/renews",
 				HttpMethod.GET);
 
@@ -35,7 +35,6 @@ public class ServiceRenewController {
 
 
 	@PostMapping
-	@ResponseStatus
 	public void addNewContract(@RequestBody ContractRecord contractRecord) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> contractService.addNewContract(contractRecord),

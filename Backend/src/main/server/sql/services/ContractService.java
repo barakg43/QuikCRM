@@ -39,7 +39,8 @@ public class ContractService {
 
 	}
 
-	public List<ContractRecord> getServiceRenewReminders(int monthsAfterExpiration, int daysBeforeExpiration) {
+	public List<ContractRecord> getServiceRenewRemindersInPeriodTime(int monthsAfterExpiration,
+																	 int daysBeforeExpiration) {
 
 //        ( SELECT     TOP 100 PERCENT ReminderID, DateOfReminder, TimeOfReminder, ReminderRemark, Closed,
 //        ResponsibleUserName
@@ -57,7 +58,7 @@ public class ContractService {
 //		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
 ////        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class,
 ////        LocalDateTime.now());
-		return serviceContractRepository.getAllContractsRenewReminder(
+		return serviceContractRepository.getAllContractsRenewReminderInPeriodTime(
 				UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration),
 				UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration)
 		);
