@@ -73,8 +73,9 @@ public class ContractService {
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-		serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
+				contractRecord.startDateOfContract());
 		serviceContractRepository.save(serviceContractEntity);
 	}
 
@@ -90,8 +91,9 @@ public class ContractService {
 			serviceContractEntity.setContractPrice(contractRecord.contractPrice());
 			serviceContractEntity.setContactDescription(contractRecord.contactDescription());
 			serviceContractEntity.setPeriodKind(contractRecord.periodKind());
-			serviceContractEntity.setFinishDateOfContract(contractRecord.finishDateOfContract());
 			serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
+			setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
+					contractRecord.startDateOfContract());
 			saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
 		} else {
 			throw new IllegalArgumentException("customer with this id not exist");
