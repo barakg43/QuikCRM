@@ -9,7 +9,7 @@ export async function addNewServicesRenew({
   contactDescription,
 }: ServiceRenewRecord) {
   try {
-    await httpClient.post(`/reminders/service`, {
+    await httpClient.post(`/contract-service`, {
       customerID,
       startDateOfContract,
       contractPrice,
@@ -29,7 +29,7 @@ export async function updateServiceRenewDetails({
   contactDescription,
 }: ServiceRenewRecord) {
   try {
-    httpClient.patch(`/reminders/service/${contractID}`, {
+    httpClient.patch(`/contract-service/${contractID}`, {
       startDateOfContract,
       contractPrice,
       periodKind,
@@ -48,7 +48,7 @@ export async function renewService({
   contactDescription,
 }: ServiceRenewRecord) {
   try {
-    httpClient.patch(`/reminders/service/${contractID}/renew`, {
+    httpClient.patch(`/contract-service/${contractID}/renew`, {
       contractPrice,
       periodKind,
       contactDescription,
@@ -65,7 +65,7 @@ export async function getAllServiceRenewForPeriodTime({
   monthsAfterExpiration: number;
 }) {
   try {
-    httpClient.get(`/reminders/service/reminders`, {
+    httpClient.get(`/contract-service/reminders`, {
       params: {
         daysBeforeExpiration,
         monthsAfterExpiration,
@@ -77,7 +77,7 @@ export async function getAllServiceRenewForPeriodTime({
 }
 export async function deleteServiceRenew(contractID: number) {
   try {
-    httpClient.delete(`/reminders/service/${contractID}`);
+    httpClient.delete(`/contract-service/${contractID}`);
   } catch (error: unknown) {
     console.log(error);
   }
