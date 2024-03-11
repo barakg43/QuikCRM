@@ -1,6 +1,5 @@
-function ServiceRenewsTable() {}
-
-function CustomersTable() {
+function ServiceRenewsTable() {
+  return null;
   // const { customers, isLoading, totalItems } = useCustomers();
   // const { t } = useTranslation("customers", { keyPrefix: "table" });
   // return (
