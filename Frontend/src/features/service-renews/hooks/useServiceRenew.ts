@@ -1,19 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { getAllServiceRenewForPeriodTime } from "../../../services/apiServiceRenew";
+import { ServiceRenewRecord } from "../serviceRenews";
 
-type useCustomerReturnType = {
-  customer: CustomerFullDataType | Record<string, never>;
+type useServiceRemindersReturnType = {
+  serviceReminderList: ServiceRenewRecord[] | [];
   isLoading: boolean;
   error: Error | null;
 };
-export function useServices(customerId: number): useCustomerReturnType {
+export function useServiceReminders({
+  daysBeforeExpiration,
+  monthsAfterExpiration,
+}: {
+  daysBeforeExpiration: number;
+  monthsAfterExpiration: number;
+}): useServiceRemindersReturnType {
   const {
-    data: customer = {},
+    data: serviceReminderList = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["customer", customerId],
-    queryFn: () => getCustomerDataByID(customerId),
+    queryKey: ["service-renews", daysBeforeExpiration, monthsAfterExpiration],
+    queryFn: () =>
+      getAllServiceRenewForPeriodTime({
+        daysBeforeExpiration,
+        monthsAfterExpiration,
+      }),
   });
   if (error) {
     if (axios.isAxiosError(error)) {
@@ -21,7 +33,5 @@ export function useServices(customerId: number): useCustomerReturnType {
       console.error(error.response);
     }
   }
-  // console.log("useCustomer");
-
-  return { customer, isLoading, error };
+  return { serviceReminderList, isLoading, error };
 }

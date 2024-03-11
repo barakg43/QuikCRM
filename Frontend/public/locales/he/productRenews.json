@@ -1,0 +1,24 @@
+{
+  "renew-table": {
+    "header": "תזכורת"
+  },
+  "delete": {
+    "confirmation": "האם אתה בטוח שברצונך למחוק את החיוב?",
+    "toast-title": "מחיקת חידוש מוצרים",
+    "toast-message-success": "התזכורת נמחקה בהצלחה",
+    "toast-message-error": "אירעה שגיאה במחיקת התזכורת"
+  },
+  "renew": {
+    "button": "חידוש",
+    "toast-title": "חידוש מוצרים",
+    "toast-message-success": "התזכורת חודשה בהצלחה",
+    "toast-message-error": "אירעה שגיאה בחידוש התזכורת"
+  },
+  "update": {
+    "title": "עדכון חידוש מוצרים",
+    "toast-title": "עדכון חידוש מוצרים",
+    "toast-message-success": "התזכורת עודכנה בהצלחה",
+    "toast-message-error": "אירעה שגיאה בעדכון התזכורת",
+    "button": "עדכן"
+  }
+}

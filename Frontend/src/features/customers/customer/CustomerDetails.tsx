@@ -16,6 +16,7 @@ import StatusTag from "../../../components/StatusTag";
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
 import { useCustomer } from "./hooks/useCustomer";
+import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteServiceContract";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -262,10 +263,14 @@ function Contact({
   );
 }
 function Child() {
+  const { deleteServiceContract, isPending } = useDeleteServiceContract();
+
   return (
     <GridItem bg='red' area='child' padding='1rem'>
       <Flex>
-        <Button colorScheme='teal'>Edit</Button>
+        <Button colorScheme='teal' onClick={() => deleteServiceContract(2)}>
+          Edit
+        </Button>
       </Flex>
     </GridItem>
   );
