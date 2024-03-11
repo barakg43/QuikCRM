@@ -1,4 +1,4 @@
-import { Toast, ToastId, useToast } from "@chakra-ui/react";
+import { ToastId, useToast } from "@chakra-ui/react";
 import { useRef } from "react";
 
 type statusOptions =

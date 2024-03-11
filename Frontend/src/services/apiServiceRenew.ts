@@ -1,4 +1,3 @@
-import { useTimeout } from "@chakra-ui/react";
 import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
@@ -86,6 +85,6 @@ export async function deleteServiceRenew(contractID: number) {
     throw error;
   }
 }
-function timeout(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function timeout(ms: number) {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }

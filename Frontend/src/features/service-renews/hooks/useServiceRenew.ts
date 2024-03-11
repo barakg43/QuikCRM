@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CustomerFullDataType } from "../../customers/customers";
-import { getCustomerDataByID } from "../../../services/apiCustomers";
+import { ServiceRenewRecord } from "../serviceRenews";
+import { getAllServiceRenewForPeriodTime } from "../../../services/apiServiceRenew";
 
 type useServiceRemindersReturnType = {
   serviceReminderList: ServiceRenewRecord[] | [];
