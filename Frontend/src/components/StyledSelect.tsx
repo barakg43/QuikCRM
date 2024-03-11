@@ -1,6 +1,7 @@
 import {
   LayoutProps,
   Select,
+  forwardRef,
   SelectProps as ChakraSelectProps,
 } from "@chakra-ui/react";
 import { ChangeEventHandler, Key } from "react";
@@ -20,16 +21,10 @@ type SelectProps = {
   width?: React.PropsWithoutRef<LayoutProps["width"]>;
 };
 
-function StyledSelect({
-  options,
-  value,
-  width,
-  register,
-  onChange,
-  ...props
-}: SelectProps) {
-  return (
+const StyledSelect = forwardRef<ChakraSelectProps & SelectProps, "select">(
+  ({ options, value, width, register, onChange, ...props }, ref) => (
     <Select
+      ref={ref}
       variant='flushed'
       value={value}
       onChange={onChange}
@@ -46,7 +41,7 @@ function StyledSelect({
         </option>
       ))}
     </Select>
-  );
-}
+  )
+);
 
 export default StyledSelect;
