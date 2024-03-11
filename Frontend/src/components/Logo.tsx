@@ -1,4 +1,5 @@
 import { Container, Image } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 // const StyledLogo = styled.div`
 //   text-align: center;
@@ -20,6 +21,7 @@ import { Container, Image } from "@chakra-ui/react";
 
 function Logo() {
   const imgSrc = "/quik/assets/logo/logo.webp";
+  const navigate = useNavigate();
   return (
     <Container centerContent maxHeight='11rem'>
       <Image
@@ -28,6 +30,8 @@ function Logo() {
         maxHeight='13rem'
         display='block'
         paddingTop='1rem'
+        onClick={() => navigate("/")}
+        cursor='pointer'
       />
     </Container>
   );
