@@ -41,7 +41,9 @@ export async function updateServiceRenewDetails({
   }
 }
 
-export async function getServiceRenewById(contractID: number) {}
+export async function getServiceRenewById(contractID: number) {
+  console.log(contractID);
+}
 export async function renewService({
   contractID,
   contractPrice,
