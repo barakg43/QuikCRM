@@ -1,0 +1,16 @@
+{
+  "empty": "{{resource}} לא קיים מידע על",
+  "pagination": {
+    "button": {
+      "next": "הבא",
+      "previous": "הקודם"
+    },
+    "summary": {
+      "showing": "מראה",
+      "to": "עד",
+      "of": "מתוך",
+      "results": "תוצאות"
+    }
+  },
+  "buttons": { "edit": "ערוך", "delete": "מחק" }
+}

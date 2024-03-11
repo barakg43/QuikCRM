@@ -1,0 +1,10 @@
+{
+  "sidebar": {
+    "account": "account",
+    "settings": "settings",
+    "reminders": "reminders",
+    "activities": "activities",
+    "customers": "customers",
+    "reports": "reports"
+  }
+}
