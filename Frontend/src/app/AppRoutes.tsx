@@ -1,17 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Account from "../pages/Account.tsx";
 import Activities from "../pages/Activities";
+import Customer from "../pages/Customer.tsx";
 import Customers from "../pages/Customers.tsx";
 import PageNotFound from "../pages/PageNotFound";
-import Reminders from "../pages/Reminders";
+import ProductRenews from "../pages/ProductRenews.tsx";
 import Reports from "../pages/Reports";
+import ServiceRenews from "../pages/ServiceRenews.tsx";
 import Settings from "../pages/Settings";
 import SignUp from "../pages/Signup";
 import Login from "./../pages/Login.tsx";
 import AppLayout from "./AppLayout.tsx";
-import Customer from "../pages/Customer.tsx";
-import ServiceRenews from "../pages/ServiceRenews.tsx";
-import ProductRenews from "../pages/ProductRenews.tsx";
 ``;
 function AppRoutes() {
   return (
