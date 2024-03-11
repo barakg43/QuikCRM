@@ -263,7 +263,7 @@ function Contact({
   );
 }
 function Child() {
-  const { deleteServiceContract, isPending } = useDeleteServiceContract();
+  const { deleteServiceContract } = useDeleteServiceContract();
 
   return (
     <GridItem bg='red' area='child' padding='1rem'>
