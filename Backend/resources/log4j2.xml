@@ -15,14 +15,14 @@
         </Property>
     </Properties>
     <Appenders>
-        <File name="sqlClientFileAppender" fileName="logs/sql-client.log" append="false">
+        <File name="sqlClientFileAppender" fileName="../logs/quik/sql-client.log" append="false">
             <PatternLayout>
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]:
                     %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
                 </Pattern>
             </PatternLayout>
         </File>
-        <File name="jdbcDriverFileAppender" fileName="logs/jdbc-driver.log" append="false">
+        <File name="jdbcDriverFileAppender" fileName="../logs/quik/jdbc-driver.log" append="false">
             <PatternLayout>
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]:
                     %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
@@ -42,7 +42,7 @@
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} %clr{${LOG_LEVEL_PATTERN}} --- [%15.15t]: %msg%n</Pattern>
             </PatternLayout>
         </Console>
-        <File name="requestsFileAppender" fileName="logs/requests.log" append="false">
+        <File name="requestsFileAppender" fileName="../logs/quik/requests.log" append="false">
             <PatternLayout>
                 <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %p: %msg%n</Pattern>
             </PatternLayout>

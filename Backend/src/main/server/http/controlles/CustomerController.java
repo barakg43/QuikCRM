@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
@@ -35,8 +36,18 @@ public class CustomerController {
 
 	@GetMapping("/test")
 	public String getTest() {
-		System.out.println("test!!!");
-		return "test";
+		System.out.println("test!");
+		return printPWD();
+	}
+
+	private String printPWD() {
+		String currentPath = null;
+		try {
+			currentPath = new java.io.File(".").getCanonicalPath();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return "Current dir:" + currentPath;
 	}
 
 	@GetMapping("")

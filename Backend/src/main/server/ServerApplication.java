@@ -8,13 +8,11 @@ import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.bulider.component.eJoinType;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.function.SqlFunctionExecutor;
-import main.server.sql.services.CustomerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
@@ -26,8 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 //@ComponentScan(basePackages = "main.server.sql.entities")
 public class ServerApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
-//		testFunction();
-//		testSqlBuilder();
+
 		SpringApplication.run(ServerApplication.class, args);
 	}
 
@@ -177,8 +174,5 @@ public class ServerApplication extends SpringBootServletInitializer {
 
 	}
 
-	private static void printPWD() throws IOException {
-		String currentPath = new java.io.File(".").getCanonicalPath();
-		System.out.println("Current dir:" + currentPath);
-	}
+
 }
