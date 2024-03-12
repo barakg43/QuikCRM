@@ -15,14 +15,14 @@
         </Property>
     </Properties>
     <Appenders>
-        <File name="sqlClientFileAppender" fileName="../logs/quik/sql-client.log" append="false">
+        <File name="sqlClientFileAppender" fileName="logs/quik1/sql-client.log" append="false">
             <PatternLayout>
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]:
                     %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
                 </Pattern>
             </PatternLayout>
         </File>
-        <File name="jdbcDriverFileAppender" fileName="../logs/quik/jdbc-driver.log" append="false">
+        <File name="jdbcDriverFileAppender" fileName="logs/quik1/jdbc-driver.log" append="false">
             <PatternLayout>
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} {${LOG_LEVEL_PATTERN}} --- [%10.10t]:
                     %msg%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
@@ -30,7 +30,7 @@
             </PatternLayout>
         </File>
         <RollingFile name="LOGFILE-DAILY"
-                     filePattern="../logs/quik/spring-log_%d{yyyy-MM-dd}.log">
+                     filePattern="logs/quik1/spring-log_%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
@@ -42,7 +42,7 @@
                 <Pattern>%d{${LOG_DATEFORMAT_PATTERN}} %clr{${LOG_LEVEL_PATTERN}} --- [%15.15t]: %msg%n</Pattern>
             </PatternLayout>
         </Console>
-        <File name="requestsFileAppender" fileName="../logs/quik/requests.log" append="false">
+        <File name="requestsFileAppender" fileName="logs/quik1/requests.log" append="false">
             <PatternLayout>
                 <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %p: %msg%n</Pattern>
             </PatternLayout>
