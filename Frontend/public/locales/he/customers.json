@@ -32,5 +32,25 @@
     "contactPersonMobilePhone": "נייד איש קשר",
     "contactPersonPhone": "טלפון איש קשר",
     "contactPersonPost": "תפקיד"
+  },
+
+  "delete": {
+    "confirmation": "האם אתה בטוח שברצונך למחוק את הלקוח?",
+    "toast-title": "מחיקת לקוח ",
+    "toast-message-success": "הלקוח נמחק בהצלחה",
+    "toast-message-error": "אירעה שגיאה במחיקת הלקוח"
+  },
+  "add": {
+    "button": "שמירה",
+    "toast-title": "הוספת מוצרים",
+    "toast-message-success": "הלקוח נוסף בהצלחה",
+    "toast-message-error": "אירעה שגיאה בהוספת לקוח"
+  },
+  "update": {
+    "title": "עדכון פרטי לקוח",
+    "toast-title": "עדכון חידוש מוצרים",
+    "toast-message-success": "הלקוח עודכן בהצלחה",
+    "toast-message-error": "אירעה שגיאה בעדכון הלקוח",
+    "button": "עדכן"
   }
 }
