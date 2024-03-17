@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import {  addNewProductReminder} from "../../../services/apiProductRenew";
+import { addNewProductReminder } from "../../../services/apiProductRenew";
 export function useAddServiceContract() {
   const toast = useToast();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "add" });
@@ -21,7 +21,7 @@ export function useAddServiceContract() {
         status: "error",
       });
       queryClient.invalidateQueries({
-        queryKey: ["services"],
+        queryKey: ["product-renews"],
       });
     },
   });

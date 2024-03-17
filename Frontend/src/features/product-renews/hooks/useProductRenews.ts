@@ -1,8 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
-import { getAllServiceRenewForPeriodTime } from "../../../services/apiServiceRenew";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import {
   ProductRenewRecord,
   getAllProductReminderForPeriodTime,

@@ -15,7 +15,7 @@ export function useRenewServiceContract() {
         status: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["services-contracts"],
+        queryKey: ["product-renews"],
       });
     },
     onError: () =>
