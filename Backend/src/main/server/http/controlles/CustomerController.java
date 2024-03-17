@@ -11,11 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -34,21 +33,6 @@ public class CustomerController {
 //        sqlClient.createSqlConnection();
 	}
 
-	@GetMapping("/test")
-	public String getTest() {
-		System.out.println("test!");
-		return printPWD();
-	}
-
-	private String printPWD() {
-		String currentPath = null;
-		try {
-			currentPath = new java.io.File(".").getCanonicalPath();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return "Current dir:" + currentPath;
-	}
 
 	@GetMapping("")
 	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer pageNumber,
