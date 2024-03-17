@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { getPagesAmount } from "../../../components/Pagination";
-import { getAllCustomers } from "../../../services/apiCustomers";
+import { getCustomersSubset_API } from "../../../services/apiCustomers";
 import { CustomersListType } from "../customers";
 import { useToast } from "@chakra-ui/react";
 
@@ -20,7 +20,7 @@ export function useCustomers() {
     error,
   }: UseQueryResult<CustomersListType> = useQuery({
     queryKey: ["customers", page],
-    queryFn: () => getAllCustomers({ page }),
+    queryFn: () => getCustomersSubset_API({ page }),
   });
   console.log("error useCustomers", error);
   if (error) {
@@ -36,13 +36,13 @@ export function useCustomers() {
   if (page < pageCount)
     queryClient.prefetchQuery({
       queryKey: ["customers", page + 1],
-      queryFn: () => getAllCustomers({ page: page + 1 }),
+      queryFn: () => getCustomersSubset_API({ page: page + 1 }),
     });
 
   if (page > 1)
     queryClient.prefetchQuery({
       queryKey: ["customers", page - 1],
-      queryFn: () => getAllCustomers({ page: page - 1 }),
+      queryFn: () => getCustomersSubset_API({ page: page - 1 }),
     });
 
   return { customers, totalItems, isLoading, error };

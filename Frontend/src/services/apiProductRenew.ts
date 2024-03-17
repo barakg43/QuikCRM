@@ -11,7 +11,7 @@ export type ProductRenewRecord = {
   password: string;
   validityTill: Date;
 };
-export async function addNewProductReminder({
+export async function addNewProductReminder_API({
   customerID,
   internalIP,
   externalIP,
@@ -35,7 +35,7 @@ export async function addNewProductReminder({
   }
 }
 
-export async function updateProductReminder({
+export async function updateProductReminder_API({
   customerID,
   systemDetailID,
   internalIP,
@@ -60,10 +60,10 @@ export async function updateProductReminder({
   }
 }
 
-export async function getProductRemindersByCustomerId(customerID: number) {
+export async function getProductRemindersByCustomerId_API(customerID: number) {
   console.log(customerID);
 }
-export async function renewProductReminder({
+export async function renewProductReminder_API({
   systemDetailID,
   newValidityDate,
 }: {
@@ -79,7 +79,7 @@ export async function renewProductReminder({
     console.log(error);
   }
 }
-export async function getAllProductReminderForPeriodTime({
+export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
 }: {
   daysBeforeExpiration: number;
@@ -94,7 +94,7 @@ export async function getAllProductReminderForPeriodTime({
     console.log(error);
   }
 }
-export async function deleteProductReminder(reminderId: number) {
+export async function deleteProductReminder_API(reminderId: number) {
   try {
     httpClient.delete(`/product-renews/${reminderId}`);
   } catch (error: unknown) {

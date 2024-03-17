@@ -1,13 +1,13 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { addNewServicesRenew } from "../../../services/apiServiceRenew";
+import { addNewServicesRenew_API } from "../../../services/apiServiceRenew";
 export function useAddServiceContract() {
   const toast = useToast();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "add" });
   const queryClient = useQueryClient();
   const { mutate: addServiceContract, isPending } = useMutation({
-    mutationFn: addNewServicesRenew,
+    mutationFn: addNewServicesRenew_API,
     onSuccess: () =>
       toast({
         description: t("toast-title"),

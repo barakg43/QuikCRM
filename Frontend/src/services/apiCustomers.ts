@@ -7,7 +7,7 @@ import {
 import { httpClient } from "./axios";
 import { SubsetListType } from "./globalTypes";
 
-export async function getAllCustomers({
+export async function getCustomersSubset_API({
   page,
 }: {
   page: number;
@@ -25,7 +25,7 @@ export async function getAllCustomers({
     console.log(error);
   }
 }
-export async function getCustomerDataByID(
+export async function getCustomerDataByID_API(
   customerId: number
 ): Promise<CustomerFullDataType> {
   const { data }: { data: CustomerFullDataType } = await httpClient.get(
@@ -33,4 +33,75 @@ export async function getCustomerDataByID(
   );
   // console.log("data", data);
   return data;
+}
+export async function addNewCustomer_API({
+  customerShortName,
+  customerName,
+  customerIdentificationNumber,
+  customerStatus,
+  remarks,
+  customerMainPhone,
+  customerMainEMail,
+  contactPersonPost,
+  contactPersonPhone,
+  contactPersonName,
+  contactPersonMobilePhone,
+  city,
+  address,
+  addressRemarks,
+}: CustomerFullDataType) {
+  await httpClient.post("customers", {
+    customerShortName,
+    customerName,
+    customerIdentificationNumber,
+    customerStatus,
+    remarks,
+    customerMainPhone,
+    customerMainEMail,
+    contactPersonPost,
+    contactPersonPhone,
+    contactPersonName,
+    contactPersonMobilePhone,
+    city,
+    address,
+    addressRemarks,
+  });
+}
+export async function updateNewCustomer_API({
+  customerID,
+  customerShortName,
+  customerName,
+  customerIdentificationNumber,
+  customerStatus,
+  remarks,
+  customerMainPhone,
+  customerMainEMail,
+  contactPersonPost,
+  contactPersonPhone,
+  contactPersonName,
+  contactPersonMobilePhone,
+  city,
+  address,
+  addressRemarks,
+}: CustomerFullDataType) {
+  await httpClient.patch(`customers/${customerID}`, {
+    customerShortName,
+    customerName,
+    customerIdentificationNumber,
+    customerStatus,
+    remarks,
+    customerMainPhone,
+    customerMainEMail,
+    contactPersonPost,
+    contactPersonPhone,
+    contactPersonName,
+    contactPersonMobilePhone,
+    city,
+    address,
+    addressRemarks,
+  });
+}
+
+export async function deleteCustomer_API(customerID: number) {
+  await httpClient.delete(`customers/${customerID}`);
 }

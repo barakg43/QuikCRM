@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import {
   ProductRenewRecord,
-  getAllProductReminderForPeriodTime,
+  getAllProductReminderForPeriodTime_API,
 } from "../../../services/apiProductRenew";
 
 export function useServiceContractRenews() {
@@ -20,7 +20,7 @@ export function useServiceContractRenews() {
   }: UseQueryResult<ProductRenewRecord | never[]> = useQuery({
     queryKey: ["product-renews", daysBeforeExpiration],
     queryFn: () =>
-      getAllProductReminderForPeriodTime({
+      getAllProductReminderForPeriodTime_API({
         daysBeforeExpiration,
       }),
   });
