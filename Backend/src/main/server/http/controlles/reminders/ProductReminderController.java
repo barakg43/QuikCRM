@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/product-renews")
 public class ProductReminderController {

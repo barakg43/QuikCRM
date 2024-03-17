@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/contact-service")
 public class ServiceRenewController {
