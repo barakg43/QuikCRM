@@ -67,7 +67,7 @@ export async function addNewCustomer_API({
     addressRemarks,
   });
 }
-export async function updateNewCustomer_API({
+export async function updateCustomerDetails_API({
   customerID,
   customerShortName,
   customerName,
