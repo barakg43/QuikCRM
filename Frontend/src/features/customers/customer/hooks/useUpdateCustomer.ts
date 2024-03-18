@@ -1,13 +1,16 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { updateServiceRenewDetails_API } from "../../../services/apiServiceRenew";
-export function useAddServiceContract() {
+import { updateCustomerDetails_API } from "../../../../services/apiCustomers";
+import { useSearchParams } from "react-router-dom";
+export function useUpdateCustomer() {
   const toast = useToast();
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "update" });
+  const { t } = useTranslation("customers", { keyPrefix: "update" });
+  const [searchParams] = useSearchParams();
+  const customerId = Number(searchParams.get("customerId"));
   const queryClient = useQueryClient();
-  const { mutate: updateServiceContract, isPending } = useMutation({
-    mutationFn: updateServiceRenewDetails_API,
+  const { mutate: updateCustomerDetails, isPending } = useMutation({
+    mutationFn: updateCustomerDetails_API,
     onSuccess: () => {
       toast({
         description: t("toast-title"),
@@ -15,7 +18,7 @@ export function useAddServiceContract() {
         status: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["product-renews"],
+        queryKey: ["customer", customerId],
       });
     },
 
@@ -26,5 +29,5 @@ export function useAddServiceContract() {
         status: "error",
       }),
   });
-  return { updateServiceContract, isPending };
+  return { updateCustomerDetails, isPending };
 }

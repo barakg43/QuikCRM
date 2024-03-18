@@ -1,16 +1,20 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { deleteServiceRenew_API } from "../../../services/apiServiceRenew";
-export function useDeleteServiceContract() {
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { deleteCustomer_API } from "../../../../services/apiCustomers";
+export function useDeleteCustomer() {
   const toast = useToast();
   //   const { createInfinityToast, updateToast } = useUpdatableToaster(
   //     "delete service contract"
   //   );
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "delete" });
+  const [searchParams] = useSearchParams();
+  const customerId = Number(searchParams.get("customerId"));
+  const navigate = useNavigate();
+  const { t } = useTranslation("customers", { keyPrefix: "delete" });
   const queryClient = useQueryClient();
-  const { mutate: deleteServiceContract, isPending } = useMutation({
-    mutationFn: deleteServiceRenew_API,
+  const { mutate: deleteCustomer, isPending } = useMutation({
+    mutationFn: () => deleteCustomer_API(customerId),
     // onMutate: () => createInfinityToast("pending text", "loading"),
     onSuccess: () => {
       toast({
@@ -19,8 +23,9 @@ export function useDeleteServiceContract() {
         status: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["product-renews"],
+        queryKey: ["customers"],
       });
+      navigate("/customers");
     },
     onError: () =>
       toast({
@@ -36,5 +41,5 @@ export function useDeleteServiceContract() {
   //       loading: { title: "Promise pending", description: "Please wait" },
   //     });
   //   }
-  return { deleteServiceContract, isPending };
+  return { deleteCustomer, isPending };
 }

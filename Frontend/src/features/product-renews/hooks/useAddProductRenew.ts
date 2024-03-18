@@ -21,7 +21,7 @@ export function useAddServiceContract() {
         status: "error",
       });
       queryClient.invalidateQueries({
-        queryKey: ["product-renews"],
+        queryKey: ["customer"],
       });
     },
   });
