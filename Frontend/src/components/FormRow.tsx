@@ -17,7 +17,9 @@ function FormRow({
 }: FromRowProps) {
   return (
     <FormControl isRequired={isRequired} display='flex' alignItems='center'>
-      <FormLabel width='12rem'>{label}</FormLabel>
+      <FormLabel width='12rem' fontSize='1.25rem'>
+        {label}
+      </FormLabel>
       {type === "textarea" ? (
         <Textarea
           placeholder={label}
