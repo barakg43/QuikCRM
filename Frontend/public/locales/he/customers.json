@@ -41,16 +41,19 @@
     "toast-message-error": "אירעה שגיאה במחיקת הלקוח"
   },
   "add": {
-    "button": "שמירה",
-    "toast-title": "הוספת מוצרים",
+    "button": "הוספת לקוח",
+    "save-button": "שמירה",
+    "title": "הוספת לקוח חדש",
+    "toast-title": "הוספת לקוח",
     "toast-message-success": "הלקוח נוסף בהצלחה",
     "toast-message-error": "אירעה שגיאה בהוספת לקוח"
   },
   "update": {
     "title": "עדכון פרטי לקוח",
+    "button": "עדכן",
     "toast-title": "עדכון חידוש מוצרים",
     "toast-message-success": "הלקוח עודכן בהצלחה",
-    "toast-message-error": "אירעה שגיאה בעדכון הלקוח",
-    "button": "עדכן"
-  }
+    "toast-message-error": "אירעה שגיאה בעדכון הלקוח"
+  },
+  "cancel-button": "בטל"
 }
