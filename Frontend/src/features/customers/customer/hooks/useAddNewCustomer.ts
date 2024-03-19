@@ -2,8 +2,9 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { addNewCustomer_API } from "../../../../services/apiCustomers";
-export function useAddServiceContract() {
+export function useAddNewCustomer() {
   const toast = useToast();
+
   const { t } = useTranslation("customers", { keyPrefix: "add" });
   const queryClient = useQueryClient();
   const { mutate: addNewCustomer, isPending } = useMutation({
