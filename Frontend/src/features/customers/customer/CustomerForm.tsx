@@ -13,6 +13,8 @@ import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
 import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
+import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
+import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
 
 function CustomerForm({
   submitRef,
@@ -27,6 +29,8 @@ function CustomerForm({
   const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
+  const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer();
+  const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
   console.log("customerId", customerId);
   console.log(errors);
   const {
@@ -47,7 +51,11 @@ function CustomerForm({
     contactPersonMobilePhone,
   } = customerToEdit;
   function onSubmit(data: CustomerFullDataType) {
-    console.log(data);
+    if (customerId) {
+      updateCustomerDetails({ ...data, customerID: Number(customerId) });
+    } else {
+      addNewCustomer(data);
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
