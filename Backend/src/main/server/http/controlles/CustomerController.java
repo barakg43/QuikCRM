@@ -81,17 +81,18 @@ public class CustomerController {
 
 	}
 
-	@PatchMapping("/{id}")
-	public void updateCustomerDetails(@PathVariable("id") int id,
+	@PatchMapping("/{customerId}")
+	public void updateCustomerDetails(@PathVariable("customerId") short customerId,
 									  @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerDetails),
-					"api/customers/" + id
+			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerId,
+							customerDetails),
+					"api/customers/" + customerId
 					, HttpMethod.PATCH);
 
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"Cant update customer with id of " + id, exception);
+					"Cant update customer with id of " + customerId, exception);
 		}
 	}
 

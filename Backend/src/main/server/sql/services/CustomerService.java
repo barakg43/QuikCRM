@@ -127,20 +127,17 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void updateCustomerDetails(CustomerFullDetailsRecord customerDetailsUpdated) {
+	public void updateCustomerDetails(Short customerId, CustomerFullDetailsRecord customerDetailsUpdated) {
 
-		Optional<CustomerEntity> customerToUpdateOptional =
-				customerRepository.findById(customerDetailsUpdated.customerID());
-
-		if (customerToUpdateOptional.isEmpty())
-			throw new IndexOutOfBoundsException("CustomerEntity with id " + customerDetailsUpdated.customerID() + " " +
+		Optional<CustomerEntity> customerToUpdatedOptional = customerRepository.findById(customerId);
+		if (customerToUpdatedOptional.isEmpty())
+			throw new IndexOutOfBoundsException("CustomerEntity with id " + customerId + " " +
 					"not " +
 					"exist!");
 
-		CustomerEntity customerToUpdated = customerToUpdateOptional.get();
-		customerToUpdated.setCustomerID(customerToUpdated.getCustomerID());
 
-
+		CustomerEntity customerToUpdated = customerToUpdatedOptional.get();
+		customerToUpdated.copyFieldsFromCustomerRecord(customerDetailsUpdated);
 		customerRepository.save(customerToUpdated);
 ////		System.out.println(customerDetailsUpdated);
 ////		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
