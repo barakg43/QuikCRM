@@ -24,11 +24,11 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
 			"p.customer.customerShortName ," +
 			"p.id " +
-			",p.systemDetailDescription, " +
-			"p.internalIP, " +
-			"p.externalIP," +
-			" p.userName," +
-			" p.password, " +
+			",p.prductDetailDescription, " +
+			"p.notes1, " +
+			"p.notes2," +
+			" p.notes3," +
+			" p.notes3, " +
 			"p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
 	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID);
 
