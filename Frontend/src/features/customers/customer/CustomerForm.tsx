@@ -11,10 +11,10 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
-import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
-import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
+import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
+import { customerStatuses } from "../CustomersTable.tsx";
 
 function CustomerForm({
   submitRef,
@@ -51,6 +51,8 @@ function CustomerForm({
     contactPersonMobilePhone,
   } = customerToEdit;
   function onSubmit(data: CustomerFullDataType) {
+    console.log(data);
+
     if (customerId) {
       updateCustomerDetails({ ...data, customerID: Number(customerId) });
     } else {
@@ -91,7 +93,7 @@ function CustomerForm({
           <FormRow
             label={t("customerMainEMail")}
             defaultValue={customerMainEMail}
-            register={register("customerMainPhone")}
+            register={register("customerMainEMail")}
           />
           <FormRow
             type='textarea'
@@ -126,8 +128,16 @@ function CustomerForm({
             defaultValue={address}
             register={register("address")}
           />
-          <FormRow label={t("city")} defaultValue={city} />
-          <FormRow label={t("postalCode")} defaultValue={postalCode} />
+          <FormRow
+            label={t("city")}
+            defaultValue={city}
+            register={register("city")}
+          />
+          <FormRow
+            label={t("postalCode")}
+            defaultValue={postalCode}
+            register={register("postalCode")}
+          />
           <FormRow
             type='textarea'
             label={t("addressRemarks")}
