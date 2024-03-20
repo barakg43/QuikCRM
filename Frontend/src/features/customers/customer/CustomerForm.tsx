@@ -19,18 +19,22 @@ import { customerStatuses } from "../CustomersTable.tsx";
 function CustomerForm({
   submitRef,
   customerToEdit = {},
+  OnSubmit,
 }: {
   submitRef: LegacyRef<HTMLButtonElement> | undefined;
   customerToEdit?: CustomerFullDataType | Record<string, never>;
+  OnSubmit?: () => void;
 }) {
-  const { register, handleSubmit, formState } = useForm<CustomerFullDataType>({
-    // defaultValues: isEditSession ? editValues : {},
-  }); // reset, getValues
+  const { register, handleSubmit, formState, reset } =
+    useForm<CustomerFullDataType>({
+      // defaultValues: isEditSession ? editValues : {},
+    }); // reset, getValues
   const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
   const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer();
   const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
+  const isSubmiting = isAdding || isUpdating;
   console.log("customerId", customerId);
   console.log(errors);
   const {
@@ -58,6 +62,8 @@ function CustomerForm({
     } else {
       addNewCustomer(data);
     }
+    reset();
+    OnSubmit?.();
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
