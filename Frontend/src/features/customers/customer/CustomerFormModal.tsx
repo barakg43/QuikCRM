@@ -9,9 +9,8 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import LoadingSpinner from "../../../components/LoadingSpinner";
 import { CustomerFullDataType } from "../customers";
 import CustomerForm from "./CustomerForm";
 
@@ -21,13 +20,13 @@ function CustomerFormModal({
   customerToEdit?: CustomerFullDataType | Record<string, never>;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation("components", { keyPrefix: "buttons" });
+  const { t } = useTranslation("customers");
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <Button colorScheme='teal' onClick={onOpen}>
-        {t("edit")}
+    // <Suspense fallback={<LoadingSpinner />}>
+    <>
+      <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
+        {customerToEdit.customerID ? t("edit.button") : t("add.button")}
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay
@@ -35,7 +34,9 @@ function CustomerFormModal({
           backdropFilter='blur(10px) hue-rotate(90deg)'
         />
         <ModalContent minWidth={"50%"}>
-          <ModalHeader>Add new customer</ModalHeader>
+          <ModalHeader marginInlineStart='2rem' fontSize='1.6rem'>
+            {customerToEdit ? t("update.title") : t("add.title")}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <CustomerForm
@@ -43,15 +44,24 @@ function CustomerFormModal({
               submitRef={submitButtonRef}
             />
           </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-            <Button onClick={() => submitButtonRef.current?.click()}>
-              Save
+          <ModalFooter gap='1rem'>
+            <Button fontSize='1rem' onClick={onClose}>
+              {t("cancel-button")}
+            </Button>
+            <Button
+              fontSize='1.1rem'
+              fontWeight='bold'
+              onClick={() => submitButtonRef.current?.click()}
+            >
+              {customerToEdit.customerID
+                ? t("update.button")
+                : t("add.save-button")}
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Suspense>
+    </>
+    // </Suspense>
   );
 }
 

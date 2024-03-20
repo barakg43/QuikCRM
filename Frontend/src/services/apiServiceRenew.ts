@@ -1,7 +1,7 @@
 import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
-export async function addNewServicesRenew({
+export async function addNewServicesRenew_API({
   customerID,
   startDateOfContract,
   contractPrice,
@@ -21,7 +21,7 @@ export async function addNewServicesRenew({
   }
 }
 
-export async function updateServiceRenewDetails({
+export async function updateServiceRenewDetails_API({
   contractID,
   startDateOfContract,
   contractPrice,
@@ -43,7 +43,7 @@ export async function updateServiceRenewDetails({
 export async function getServiceRenewById(contractID: number) {
   console.log(contractID);
 }
-export async function renewService({
+export async function renewService_API({
   contractID,
   contractPrice,
   periodKind,
@@ -59,7 +59,7 @@ export async function renewService({
     console.log(error);
   }
 }
-export async function getAllServiceRenewForPeriodTime({
+export async function getAllServiceRenewForPeriodTime_API({
   daysBeforeExpiration,
   monthsAfterExpiration,
 }: {
@@ -77,7 +77,7 @@ export async function getAllServiceRenewForPeriodTime({
     console.log(error);
   }
 }
-export async function deleteServiceRenew(contractID: number) {
+export async function deleteServiceRenew_API(contractID: number) {
   try {
     httpClient.delete(`/contract-service/${contractID}`);
   } catch (error: unknown) {
