@@ -9,20 +9,22 @@ export function useAddNewCustomer() {
   const queryClient = useQueryClient();
   const { mutate: addNewCustomer, isPending } = useMutation({
     mutationFn: addNewCustomer_API,
-    onSuccess: () =>
+    onSuccess: () => {
       toast({
         description: t("toast-title"),
         title: t("toast-message-success"),
         status: "success",
-      }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["customers"],
+      });
+    },
+
     onError: () => {
       toast({
         description: t("toast-title"),
         title: t("toast-message-error"),
         status: "error",
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["customers"],
       });
     },
   });
