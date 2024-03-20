@@ -8,21 +8,21 @@ import java.sql.Timestamp;
 public record ProductReminderRecord(Short customerID,
 									String custShortName,
 									BigDecimal systemDetailID,
-									String systemDetailDescription,
-									String internalIP,
-									String externalIP,
-									String userName,
-									String password,
+									String productDetailDescription,
+									String notes1,
+									String notes2,
+									String notes3,
+									String notes4,
 									Timestamp validityTill) {
 	public static ProductReminderRecord convertFromEntity(ProductReminderEntity productReminderEntity) {
 		return new ProductReminderRecord(productReminderEntity.getCustomer().getCustomerID(),
 				productReminderEntity.getCustomer().getCustomerShortName(),
 				productReminderEntity.getId(),
-				productReminderEntity.getSystemDetailDescription(),
-				productReminderEntity.getInternalIP(),
-				productReminderEntity.getExternalIP(),
-				productReminderEntity.getUserName(),
-				productReminderEntity.getPassword(),
+				productReminderEntity.getProductDetailDescription(),
+				productReminderEntity.getNotes1(),
+				productReminderEntity.getNotes2(),
+				productReminderEntity.getNotes3(),
+				productReminderEntity.getNotes4(),
 				productReminderEntity.getValidityTill());
 
 

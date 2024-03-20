@@ -39,11 +39,11 @@ public class ProductRenewService {
 			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();
 			ProductReminderEntity newReminder = new ProductReminderEntity();
 			newReminder.setCustomerID(currentProductReminder.getCustomerID());
-			newReminder.setPassword(currentProductReminder.getPassword());
-			newReminder.setExternalIP(currentProductReminder.getExternalIP());
-			newReminder.setSystemDetailDescription(currentProductReminder.getSystemDetailDescription());
-			newReminder.setInternalIP(currentProductReminder.getInternalIP());
-			newReminder.setUserName(currentProductReminder.getUserName());
+			newReminder.setNotes4(currentProductReminder.getNotes4());
+			newReminder.setNotes2(currentProductReminder.getNotes2());
+			newReminder.setProductDetailDescription(currentProductReminder.getProductDetailDescription());
+			newReminder.setNotes1(currentProductReminder.getNotes1());
+			newReminder.setNotes3(currentProductReminder.getNotes3());
 			newReminder.setValidityTill(Timestamp.valueOf(newValidityDate.atStartOfDay()));
 			currentProductReminder.setValidityTill(null);
 			productReminderRepository.saveAll(List.of(currentProductReminder, newReminder));
@@ -85,11 +85,11 @@ public class ProductRenewService {
 	private void copyAllProductRecordPropertiesToEntity(ProductReminderRecord sourceRecord,
 														ProductReminderEntity targetEntity) {
 		targetEntity.setValidityTill(sourceRecord.validityTill());
-		targetEntity.setPassword(sourceRecord.password());
-		targetEntity.setInternalIP(sourceRecord.internalIP());
-		targetEntity.setExternalIP(sourceRecord.externalIP());
-		targetEntity.setSystemDetailDescription(sourceRecord.systemDetailDescription());
-		targetEntity.setUserName(sourceRecord.userName());
+		targetEntity.setNotes4(sourceRecord.notes4());
+		targetEntity.setNotes1(sourceRecord.notes1());
+		targetEntity.setNotes2(sourceRecord.notes2());
+		targetEntity.setProductDetailDescription(sourceRecord.productDetailDescription());
+		targetEntity.setNotes3(sourceRecord.notes3());
 		targetEntity.setCustomerID(sourceRecord.customerID());
 
 
