@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getCustomerDataByID } from "../../../../services/apiCustomers";
+import { getCustomerDataByID_API } from "../../../../services/apiCustomers";
 import { CustomerFullDataType } from "../../customers";
 
 type useCustomerReturnType = {
@@ -15,7 +15,7 @@ export function useCustomer(customerId: number): useCustomerReturnType {
     error,
   } = useQuery({
     queryKey: ["customer", customerId],
-    queryFn: () => getCustomerDataByID(customerId),
+    queryFn: () => getCustomerDataByID_API(customerId),
   });
   if (error) {
     if (axios.isAxiosError(error)) {

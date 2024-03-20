@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { deleteServiceRenew_API as deleteService } from "../../../services/apiServiceRenew";
+import { deleteServiceRenew_API } from "../../../services/apiServiceRenew";
 export function useDeleteServiceContract() {
   const toast = useToast();
   //   const { createInfinityToast, updateToast } = useUpdatableToaster(
@@ -10,7 +10,7 @@ export function useDeleteServiceContract() {
   const { t } = useTranslation("serviceRenews", { keyPrefix: "delete" });
   const queryClient = useQueryClient();
   const { mutate: deleteServiceContract, isPending } = useMutation({
-    mutationFn: deleteService,
+    mutationFn: deleteServiceRenew_API,
     // onMutate: () => createInfinityToast("pending text", "loading"),
     onSuccess: () => {
       toast({
@@ -19,7 +19,7 @@ export function useDeleteServiceContract() {
         status: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["services-contracts"],
+        queryKey: ["product-renews"],
       });
     },
     onError: () =>
