@@ -61,6 +61,10 @@ public class CustomerEntity {
 	}
 
 	public CustomerEntity(CustomerFullDetailsRecord customerFullDetailsRecord) {
+		copyFieldsFromCustomerRecord(customerFullDetailsRecord);
+	}
+
+	public void copyFieldsFromCustomerRecord(CustomerFullDetailsRecord customerFullDetailsRecord) {
 		this.customerShortName = customerFullDetailsRecord.customerShortName();
 		this.customerName = customerFullDetailsRecord.customerName();
 		this.customerIdentificationNumber = customerFullDetailsRecord.customerIdentificationNumber();
