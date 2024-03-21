@@ -42,6 +42,7 @@ function CustomerFormModal({
             <CustomerForm
               customerToEdit={customerToEdit}
               submitRef={submitButtonRef}
+              OnSubmit={onClose}
             />
           </ModalBody>
           <ModalFooter gap='1rem'>

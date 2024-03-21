@@ -11,26 +11,30 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
-import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
-import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
+import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
+import { customerStatuses } from "../CustomersTable.tsx";
 
 function CustomerForm({
   submitRef,
   customerToEdit = {},
+  OnSubmit,
 }: {
   submitRef: LegacyRef<HTMLButtonElement> | undefined;
   customerToEdit?: CustomerFullDataType | Record<string, never>;
+  OnSubmit?: () => void;
 }) {
-  const { register, handleSubmit, formState } = useForm<CustomerFullDataType>({
-    // defaultValues: isEditSession ? editValues : {},
-  }); // reset, getValues
+  const { register, handleSubmit, formState, reset } =
+    useForm<CustomerFullDataType>({
+      // defaultValues: isEditSession ? editValues : {},
+    }); // reset, getValues
   const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
   const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer();
   const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
+  const isSubmiting = isAdding || isUpdating;
   console.log("customerId", customerId);
   console.log(errors);
   const {
@@ -51,11 +55,15 @@ function CustomerForm({
     contactPersonMobilePhone,
   } = customerToEdit;
   function onSubmit(data: CustomerFullDataType) {
+    console.log(data);
+
     if (customerId) {
       updateCustomerDetails({ ...data, customerID: Number(customerId) });
     } else {
       addNewCustomer(data);
     }
+    reset();
+    OnSubmit?.();
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,7 +99,7 @@ function CustomerForm({
           <FormRow
             label={t("customerMainEMail")}
             defaultValue={customerMainEMail}
-            register={register("customerMainPhone")}
+            register={register("customerMainEMail")}
           />
           <FormRow
             type='textarea'
@@ -126,8 +134,16 @@ function CustomerForm({
             defaultValue={address}
             register={register("address")}
           />
-          <FormRow label={t("city")} defaultValue={city} />
-          <FormRow label={t("postalCode")} defaultValue={postalCode} />
+          <FormRow
+            label={t("city")}
+            defaultValue={city}
+            register={register("city")}
+          />
+          <FormRow
+            label={t("postalCode")}
+            defaultValue={postalCode}
+            register={register("postalCode")}
+          />
           <FormRow
             type='textarea'
             label={t("addressRemarks")}

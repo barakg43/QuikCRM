@@ -21,7 +21,6 @@ export function useUpdateCustomer() {
         queryKey: ["customer", customerId],
       });
     },
-
     onError: () =>
       toast({
         description: t("toast-title"),
