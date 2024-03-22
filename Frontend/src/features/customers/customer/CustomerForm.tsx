@@ -5,6 +5,7 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react";
+import { TFunction } from "i18next";
 import { HTMLInputTypeAttribute, LegacyRef } from "react";
 import {
   UseFormRegister,
@@ -13,14 +14,12 @@ import {
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import FormRow, { FromRowProps } from "../../../components/FormRow.tsx";
+import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
+import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
 import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
-import { customerStatuses } from "../CustomersTable.tsx";
-import { TFunction } from "i18next";
-import theme from "../../../styles/ChakraTheme";
 
 function CustomerForm({
   submitRef,
