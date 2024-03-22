@@ -15,7 +15,7 @@
     "CHARGE": "חיוב"
   },
   "details": {
-    "activeContractID": "number",
+    "activeContractID": "מספר חוזה",
     "customerID": "מספר לקוח",
     "customerShortName": "שם מקוצר",
     "customerStatus": "סטטוס לקוח",
@@ -55,5 +55,9 @@
     "toast-message-success": "הלקוח עודכן בהצלחה",
     "toast-message-error": "אירעה שגיאה בעדכון הלקוח"
   },
-  "cancel-button": "בטל"
+  "cancel-button": "בטל",
+  "form": {
+    "too-big-text": "השדה מוגבל ל {{length}} תווים",
+    "required": "שדה זה נדרש"
+  }
 }
