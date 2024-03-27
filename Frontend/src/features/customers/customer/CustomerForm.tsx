@@ -6,8 +6,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
-import { HTMLInputTypeAttribute, LegacyRef } from "react";
 import {
+  Dispatch,
+  HTMLInputTypeAttribute,
+  LegacyRef,
+  SetStateAction,
+  useEffect,
+} from "react";
+import {
+  FieldError,
   UseFormRegister,
   UseFormRegisterReturn,
   useForm,
@@ -59,9 +66,9 @@ function CustomerForm({
     contactPersonPost,
     contactPersonMobilePhone,
   } = customerToEdit;
-  function onSubmit(data: CustomerFullDataType) {
-    console.log(data);
 
+  function onSubmit(data: CustomerFullDataType) {
+    if (errors) return;
     if (customerId) {
       updateCustomerDetails({ ...data, customerID: Number(customerId) });
     } else {
@@ -79,12 +86,15 @@ function CustomerForm({
             label='customerName'
             defaultValue={customerName}
             maxLength={100}
+            error={errors?.customerName}
           />
           <FormRowCustomer
             register={register}
             label='customerShortName'
             defaultValue={customerShortName}
-            maxLength={100}
+            isRequired
+            maxLength={50}
+            error={errors?.customerShortName}
           />
 
           <FormRowCustomer
@@ -92,6 +102,7 @@ function CustomerForm({
             label='customerIdentificationNumber'
             defaultValue={customerIdentificationNumber}
             maxLength={9}
+            error={errors?.customerIdentificationNumber}
           />
 
           <StatusSelect
@@ -102,7 +113,9 @@ function CustomerForm({
             register={register}
             label='customerMainPhone'
             defaultValue={customerMainPhone}
+            isRequired
             maxLength={10}
+            error={errors?.customerMainPhone}
           />
 
           <FormRowCustomer
@@ -110,6 +123,7 @@ function CustomerForm({
             label='customerMainEMail'
             defaultValue={customerMainEMail}
             maxLength={100}
+            error={errors?.customerMainEMail}
           />
 
           <FormRowCustomer
@@ -125,6 +139,7 @@ function CustomerForm({
             defaultValue={contactPersonName}
             maxLength={30}
             register={register}
+            error={errors?.contactPersonName}
           />
 
           <FormRowCustomer
@@ -132,18 +147,23 @@ function CustomerForm({
             defaultValue={contactPersonPost}
             maxLength={50}
             register={register}
+            error={errors?.contactPersonPost}
           />
 
           <FormRowCustomer
             label='contactPersonMobilePhone'
             defaultValue={contactPersonMobilePhone}
             register={register}
+            maxLength={11}
+            error={errors?.contactPersonMobilePhone}
           />
 
           <FormRowCustomer
             label='contactPersonPhone'
             defaultValue={contactPersonPhone}
             register={register}
+            maxLength={10}
+            error={errors?.contactPersonPhone}
           />
 
           <FormRowCustomer
@@ -151,6 +171,7 @@ function CustomerForm({
             defaultValue={address}
             register={register}
             maxLength={80}
+            error={errors?.address}
           />
 
           <FormRowCustomer
@@ -158,6 +179,7 @@ function CustomerForm({
             defaultValue={city}
             register={register}
             maxLength={50}
+            error={errors?.city}
           />
 
           <FormRowCustomer
@@ -165,6 +187,7 @@ function CustomerForm({
             defaultValue={postalCode}
             register={register}
             maxLength={7}
+            error={errors?.postalCode}
           />
 
           <FormRowCustomer
@@ -186,6 +209,7 @@ type FormRowCustomerProps = {
   type?: HTMLInputTypeAttribute | undefined;
   isRequired?: boolean | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
+  error?: FieldError | undefined;
   label:
     | "customerID"
     | "activeContractID"
@@ -208,17 +232,18 @@ type FormRowCustomerProps = {
 function FormRowCustomer({
   maxLength,
   label,
-  // t,
+  error,
   defaultValue,
   isRequired,
   register,
   type,
 }: FormRowCustomerProps) {
-  const { t } = useTranslation("customers", { keyPrefix: "details" });
+  const { t } = useTranslation("customers");
   return (
     <FormRow
-      label={t(label)}
+      label={t("details." + label)}
       defaultValue={defaultValue}
+      error={error?.message}
       register={register(label, {
         required: isRequired ? t("form.required") : undefined,
         maxLength:
