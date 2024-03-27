@@ -73,12 +73,13 @@ public class CustomerController {
 
 	@PostMapping("")
 	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
-
-		httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
-				"api/customers/"
-				, HttpMethod.POST);
-
-
+		try {
+			httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
+					"api/customers/"
+					, HttpMethod.POST);
+		} catch (IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
 	@PatchMapping("/{customerId}")
