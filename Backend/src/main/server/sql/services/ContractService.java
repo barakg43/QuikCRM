@@ -65,7 +65,8 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void updateContract(Long contractId, ContractRecord contractRecord) {
+	public void updateContract(Long contractId, ContractRecord contractRecord) throws IndexOutOfBoundsException,
+			IllegalArgumentException {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contractId);
 		if (serviceContractEntity == null)
@@ -76,10 +77,12 @@ public class ContractService {
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
 				contractRecord.startDateOfContract());
-		serviceContractRepository.save(serviceContractEntity);
+		UtilityFunctions.validEntityValidations(serviceContractEntity);
+		validAndSaveToRepository(serviceContractEntity);
+
 	}
 
-	public void addNewContract(ContractRecord contractRecord) {
+	public void addNewContract(ContractRecord contractRecord) throws IllegalStateException, IllegalArgumentException {
 		ServiceContractEntity serviceContractEntity = new ServiceContractEntity();
 		if (customerRepository.existsById(contractRecord.customerID())) {
 			CustomerEntity customerEntity = customerRepository.getReferenceById(contractRecord.customerID());
@@ -103,7 +106,7 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void deleteContractByID(Long contractID) {
+	public void deleteContractByID(Long contractID) throws IndexOutOfBoundsException {
 
 		if (serviceContractRepository.existsById(contractID))
 			serviceContractRepository.deleteById(contractID);
@@ -113,7 +116,7 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void setContactReminderState(Long contactID, boolean toEnable) {
+	public void setContactReminderState(Long contactID, boolean toEnable) throws IndexOutOfBoundsException {
 		ServiceContractEntity serviceContractEntity = serviceContractRepository
 				.getContractByContractID(contactID);
 		if (serviceContractEntity == null)
@@ -128,7 +131,7 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void renewContractForPeriod(Long contractId, ContractRecord contractRecord) {
+	public void renewContractForPeriod(Long contractId, ContractRecord contractRecord) throws IndexOutOfBoundsException, IllegalArgumentException {
 		//close the current contract
 		ServiceContractEntity currentContract =
 				serviceContractRepository.getContractByContractID(contractId);
@@ -148,12 +151,14 @@ public class ContractService {
 				startDateForNewContract);
 		newContract.setContractPrice(contractRecord.contractPrice());
 		newContract.setPeriodKind(contractRecord.periodKind());
-		serviceContractRepository.save(currentContract);
+		UtilityFunctions.validEntityValidations(currentContract);
+		validAndSaveToRepository(currentContract);
 		saveContractAndUpdateActiveContractInCustomer(newContract);
 	}
 
 	private void saveContractAndUpdateActiveContractInCustomer(ServiceContractEntity newContract) {
-		ServiceContractEntity savedContract = serviceContractRepository.save(newContract);
+		UtilityFunctions.validEntityValidations(newContract);
+		ServiceContractEntity savedContract = validAndSaveToRepository(newContract);
 		savedContract.getCustomer().setActiveContractID(savedContract.getContractID());
 		customerRepository.save(savedContract.getCustomer());
 	}
@@ -164,6 +169,11 @@ public class ContractService {
 		int periodInMonths = periodKind.getMonthsPeriod();
 		newContract.setFinishDateOfContract(UtilityFunctions.postDateByMonthAmount(startDateForNewContract,
 				periodInMonths));
+	}
+
+	private ServiceContractEntity validAndSaveToRepository(ServiceContractEntity serviceContractEntity) {
+		UtilityFunctions.validEntityValidations(serviceContractEntity);
+		return serviceContractRepository.save(serviceContractEntity);
 	}
 
 
