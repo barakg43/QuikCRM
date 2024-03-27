@@ -31,7 +31,7 @@ public class ProductRenewService {
 	}
 
 	@Transactional
-	public void renewProductForPeriodTime(BigDecimal reminderId, LocalDate newValidityDate) {
+	public void renewProductForPeriodTime(BigDecimal reminderId, LocalDate newValidityDate) throws IndexOutOfBoundsException {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(reminderId);
 
@@ -46,7 +46,8 @@ public class ProductRenewService {
 			newReminder.setNotes3(currentProductReminder.getNotes3());
 			newReminder.setValidityTill(Timestamp.valueOf(newValidityDate.atStartOfDay()));
 			currentProductReminder.setValidityTill(null);
-			productReminderRepository.saveAll(List.of(currentProductReminder, newReminder));
+			validAndSaveToRepository(currentProductReminder);
+			validAndSaveToRepository(newReminder);
 		} else
 			throw new IndexOutOfBoundsException("Cannot find product reminder to renew with id of " + reminderId);
 	}
@@ -55,13 +56,11 @@ public class ProductRenewService {
 
 		ProductReminderEntity newReminderEntity = new ProductReminderEntity();
 		copyAllProductRecordPropertiesToEntity(productReminderRecord, newReminderEntity);
-		productReminderRepository.save(newReminderEntity);
-
-
+		validAndSaveToRepository(newReminderEntity);
 	}
 
 	@Transactional
-	public void removeProductReminder(BigDecimal id) {
+	public void removeProductReminder(BigDecimal id) throws IndexOutOfBoundsException {
 		if (productReminderRepository.existsById(id))
 			productReminderRepository.deleteById(id);
 		else
@@ -69,17 +68,22 @@ public class ProductRenewService {
 	}
 
 	@Transactional
-	public void updateProductReminderData(BigDecimal reminderId, ProductReminderRecord productReminderRecord) {
+	public void updateProductReminderData(BigDecimal reminderId, ProductReminderRecord productReminderRecord) throws IndexOutOfBoundsException {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(reminderId);
 
 		if (productReminderEntityToRenewOptional.isPresent()) {
 			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();
 			copyAllProductRecordPropertiesToEntity(productReminderRecord, currentProductReminder);
-			productReminderRepository.save(currentProductReminder);
+			validAndSaveToRepository(currentProductReminder);
 		} else
 			throw new IndexOutOfBoundsException("Cannot find product reminder to update with id of " + productReminderRecord.systemDetailID());
 
+	}
+
+	private ProductReminderEntity validAndSaveToRepository(ProductReminderEntity productReminderEntity) {
+		UtilityFunctions.validEntityValidations(productReminderEntity);
+		return productReminderRepository.save(productReminderEntity);
 	}
 
 	private void copyAllProductRecordPropertiesToEntity(ProductReminderRecord sourceRecord,
