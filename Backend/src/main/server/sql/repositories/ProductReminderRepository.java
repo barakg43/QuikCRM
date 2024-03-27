@@ -24,7 +24,7 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
 			"p.customer.customerShortName ," +
 			"p.id " +
-			",p.prductDetailDescription, " +
+			",p.productDetailDescription, " +
 			"p.notes1, " +
 			"p.notes2," +
 			" p.notes3," +
