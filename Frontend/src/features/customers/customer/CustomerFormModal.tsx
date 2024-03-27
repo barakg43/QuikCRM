@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CustomerFullDataType } from "../customers";
 import CustomerForm from "./CustomerForm";

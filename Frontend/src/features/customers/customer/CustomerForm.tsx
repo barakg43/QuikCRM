@@ -5,16 +5,28 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react";
-import { LegacyRef } from "react";
-import { UseFormRegisterReturn, useForm } from "react-hook-form";
+import { TFunction } from "i18next";
+import {
+  Dispatch,
+  HTMLInputTypeAttribute,
+  LegacyRef,
+  SetStateAction,
+  useEffect,
+} from "react";
+import {
+  FieldError,
+  UseFormRegister,
+  UseFormRegisterReturn,
+  useForm,
+} from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
+import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
 import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
-import { customerStatuses } from "../CustomersTable.tsx";
 
 function CustomerForm({
   submitRef,
@@ -29,7 +41,7 @@ function CustomerForm({
     useForm<CustomerFullDataType>({
       // defaultValues: isEditSession ? editValues : {},
     }); // reset, getValues
-  const { t } = useTranslation("customers", { keyPrefix: "details" });
+  // const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
   const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer();
@@ -54,9 +66,9 @@ function CustomerForm({
     contactPersonPost,
     contactPersonMobilePhone,
   } = customerToEdit;
-  function onSubmit(data: CustomerFullDataType) {
-    console.log(data);
 
+  function onSubmit(data: CustomerFullDataType) {
+    if (errors) return;
     if (customerId) {
       updateCustomerDetails({ ...data, customerID: Number(customerId) });
     } else {
@@ -69,86 +81,120 @@ function CustomerForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <HStack gap={"1rem"} justifyContent='space-around'>
         <VStack justifyItems='flex-start'>
-          <FormRow
-            label={t("customerName")}
+          <FormRowCustomer
+            register={register}
+            label='customerName'
             defaultValue={customerName}
-            register={register("customerName")}
+            maxLength={100}
+            error={errors?.customerName}
           />
-          <FormRow
-            label={t("customerShortName")}
+          <FormRowCustomer
+            register={register}
+            label='customerShortName'
             defaultValue={customerShortName}
             isRequired
-            register={register("customerShortName")}
+            maxLength={50}
+            error={errors?.customerShortName}
           />
-          <FormRow
-            label={t("customerIdentificationNumber")}
+
+          <FormRowCustomer
+            register={register}
+            label='customerIdentificationNumber'
             defaultValue={customerIdentificationNumber}
-            register={register("customerIdentificationNumber")}
+            maxLength={9}
+            error={errors?.customerIdentificationNumber}
           />
+
           <StatusSelect
-            label={t("customerStatus")}
             value={customerStatus}
             register={register("customerStatus")}
           />
-          <FormRow
-            label={t("customerMainPhone")}
+          <FormRowCustomer
+            register={register}
+            label='customerMainPhone'
             defaultValue={customerMainPhone}
             isRequired
-            register={register("customerMainPhone")}
+            maxLength={10}
+            error={errors?.customerMainPhone}
           />
-          <FormRow
-            label={t("customerMainEMail")}
+
+          <FormRowCustomer
+            register={register}
+            label='customerMainEMail'
             defaultValue={customerMainEMail}
-            register={register("customerMainEMail")}
+            maxLength={100}
+            error={errors?.customerMainEMail}
           />
-          <FormRow
-            type='textarea'
-            label={t("remarks")}
+
+          <FormRowCustomer
+            register={register}
+            label='remarks'
             defaultValue={remarks}
-            register={register("remarks")}
+            type='textarea'
           />
         </VStack>
         <VStack>
-          <FormRow
-            label={t("contactPersonName")}
+          <FormRowCustomer
+            label='contactPersonName'
             defaultValue={contactPersonName}
-            register={register("contactPersonName")}
+            maxLength={30}
+            register={register}
+            error={errors?.contactPersonName}
           />
-          <FormRow
-            label={t("contactPersonPost")}
+
+          <FormRowCustomer
+            label='contactPersonPost'
             defaultValue={contactPersonPost}
-            register={register("contactPersonPost")}
+            maxLength={50}
+            register={register}
+            error={errors?.contactPersonPost}
           />
-          <FormRow
-            label={t("contactPersonMobilePhone")}
+
+          <FormRowCustomer
+            label='contactPersonMobilePhone'
             defaultValue={contactPersonMobilePhone}
-            register={register("contactPersonMobilePhone")}
+            register={register}
+            maxLength={11}
+            error={errors?.contactPersonMobilePhone}
           />
-          <FormRow
-            label={t("contactPersonPhone")}
+
+          <FormRowCustomer
+            label='contactPersonPhone'
             defaultValue={contactPersonPhone}
-            register={register("contactPersonPhone")}
+            register={register}
+            maxLength={10}
+            error={errors?.contactPersonPhone}
           />
-          <FormRow
-            label={t("address")}
+
+          <FormRowCustomer
+            label='address'
             defaultValue={address}
-            register={register("address")}
+            register={register}
+            maxLength={80}
+            error={errors?.address}
           />
-          <FormRow
-            label={t("city")}
+
+          <FormRowCustomer
+            label='city'
             defaultValue={city}
-            register={register("city")}
+            register={register}
+            maxLength={50}
+            error={errors?.city}
           />
-          <FormRow
-            label={t("postalCode")}
+
+          <FormRowCustomer
+            label='postalCode'
             defaultValue={postalCode}
-            register={register("postalCode")}
+            register={register}
+            maxLength={7}
+            error={errors?.postalCode}
           />
-          <FormRow
-            type='textarea'
-            label={t("addressRemarks")}
+
+          <FormRowCustomer
+            label='addressRemarks'
             defaultValue={addressRemarks}
-            register={register("addressRemarks")}
+            register={register}
+            type='textarea'
           />
         </VStack>
       </HStack>
@@ -156,27 +202,82 @@ function CustomerForm({
     </form>
   );
 }
+type FormRowCustomerProps = {
+  maxLength?: number | undefined;
+  t?: TFunction<string, string>;
+  register: UseFormRegister<CustomerFullDataType>;
+  type?: HTMLInputTypeAttribute | undefined;
+  isRequired?: boolean | undefined;
+  defaultValue?: string | number | readonly string[] | undefined;
+  error?: FieldError | undefined;
+  label:
+    | "customerID"
+    | "activeContractID"
+    | "customerShortName"
+    | "customerName"
+    | "customerStatus"
+    | "customerIdentificationNumber"
+    | "customerMainPhone"
+    | "customerMainEMail"
+    | "remarks"
+    | "address"
+    | "city"
+    | "postalCode"
+    | "addressRemarks"
+    | "contactPersonName"
+    | "contactPersonPhone"
+    | "contactPersonPost"
+    | "contactPersonMobilePhone";
+};
+function FormRowCustomer({
+  maxLength,
+  label,
+  error,
+  defaultValue,
+  isRequired,
+  register,
+  type,
+}: FormRowCustomerProps) {
+  const { t } = useTranslation("customers");
+  return (
+    <FormRow
+      label={t("details." + label)}
+      defaultValue={defaultValue}
+      error={error?.message}
+      register={register(label, {
+        required: isRequired ? t("form.required") : undefined,
+        maxLength:
+          maxLength != undefined
+            ? {
+                value: maxLength,
+                message: t("form.too-big-text", { length: maxLength }),
+              }
+            : undefined,
+      })}
+      isRequired={isRequired}
+      type={type}
+    />
+  );
+}
 
 function StatusSelect({
-  label,
   register,
   value,
 }: {
-  label: string;
   register?: UseFormRegisterReturn<string> | undefined;
   value?: string | number | readonly string[] | undefined;
 }) {
-  const { t } = useTranslation("customers", { keyPrefix: "status" });
+  const { t } = useTranslation("customers");
   const StatusOptions: Option[] = customerStatuses.map((customerStatus) => {
     return {
-      label: t(customerStatus),
+      label: t("status." + customerStatus),
       value: customerStatus,
     };
   });
 
   return (
     <FormControl isRequired display='flex' alignItems='center'>
-      <FormLabel width='12rem'>{label}</FormLabel>
+      <FormLabel width='12rem'>{t("details.customerStatus")}</FormLabel>
       <StyledSelect
         width='10rem'
         value={value}
