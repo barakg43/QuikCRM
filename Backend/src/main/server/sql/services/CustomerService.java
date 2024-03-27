@@ -10,6 +10,7 @@ import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
+import main.server.uilities.UtilityFunctions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,9 +74,11 @@ public class CustomerService {
 
 	}
 
-	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) {
+	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) throws IllegalArgumentException {
+		CustomerEntity customer = new CustomerEntity(customerDetails);
+		validAndSaveToRepository(customer);
 
-		customerRepository.save(new CustomerEntity(customerDetails));
+
 //		customerDetails.setCustomerStatusID(
 //				getCustomerStatusIdFromDescription(
 //						customerDetails.getCustomerStatus()
@@ -127,7 +130,7 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void updateCustomerDetails(Short customerId, CustomerFullDetailsRecord customerDetailsUpdated) {
+	public void updateCustomerDetails(Short customerId, CustomerFullDetailsRecord customerDetailsUpdated) throws IndexOutOfBoundsException {
 
 		Optional<CustomerEntity> customerToUpdatedOptional = customerRepository.findById(customerId);
 		if (customerToUpdatedOptional.isEmpty())
@@ -138,7 +141,9 @@ public class CustomerService {
 
 		CustomerEntity customerToUpdated = customerToUpdatedOptional.get();
 		customerToUpdated.copyFieldsFromCustomerRecord(customerDetailsUpdated);
-		customerRepository.save(customerToUpdated);
+		validAndSaveToRepository(customerToUpdated);
+
+
 ////		System.out.println(customerDetailsUpdated);
 ////		String sqlQueryGetIds = SqlQueryBuilder.getNewBuilder()
 ////				.from("tbCustomers")
@@ -191,6 +196,11 @@ public class CustomerService {
 
 	}
 
+	private CustomerEntity validAndSaveToRepository(CustomerEntity customerEntityToSave) {
+		UtilityFunctions.validEntityValidations(customerEntityToSave);
+		return customerRepository.save(customerEntityToSave);
+	}
+
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(int id) {
 
 //		String sqlQuery = SqlQueryBuilder.getNewBuilder()
@@ -220,7 +230,7 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public void deleteCustomer(short id) {
+	public void deleteCustomer(short id) throws IndexOutOfBoundsException {
 //		String sqlDeleteQuery = SqlQueryBuilder.getNewBuilder()
 //				.from("dbo.tbCustomersDetails")
 //				.delete()
