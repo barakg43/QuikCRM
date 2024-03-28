@@ -9,7 +9,8 @@ import GlobalStyle from "./../styles/GlobalStyle.js";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5,
+      staleTime: 120000,
+      refetchInterval: 60000,
     },
   },
 });
