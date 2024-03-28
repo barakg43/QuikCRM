@@ -26,7 +26,7 @@ function CustomerFormModal({
     // <Suspense fallback={<LoadingSpinner />}>
     <>
       <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
-        {customerToEdit.customerID ? t("edit.button") : t("add.button")}
+        {customerToEdit.customerID ? t("update.edit") : t("add.button")}
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay
