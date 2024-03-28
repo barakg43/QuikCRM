@@ -75,8 +75,6 @@ function PaginationButton({
   disabled?: boolean | undefined;
   props?: ButtonProps;
 }) {
-  console.log(children, disabled);
-
   return (
     <Button
       onClick={onClick}
