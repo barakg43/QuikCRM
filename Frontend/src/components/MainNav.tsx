@@ -75,9 +75,15 @@ function MainNav() {
       />
       <NavLinkItem
         icon={<TbAlarm />}
-        path='/reminders'
-        label={t("reminders")}
+        path='/product-renews'
+        label={t("product-renews")}
       />
+      <NavLinkItem
+        icon={<TbAlarm />}
+        path='/service-renews'
+        label={t("/service-renews")}
+      />
+
       <NavLinkItem
         icon={<TbClipboardList />}
         path='/activities'
