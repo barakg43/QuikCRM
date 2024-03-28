@@ -6,13 +6,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
-import {
-  Dispatch,
-  HTMLInputTypeAttribute,
-  LegacyRef,
-  SetStateAction,
-  useEffect,
-} from "react";
+import { HTMLInputTypeAttribute, LegacyRef } from "react";
 import {
   FieldError,
   UseFormRegister,
@@ -44,11 +38,12 @@ function CustomerForm({
   // const { t } = useTranslation("customers", { keyPrefix: "details" });
   const { errors } = formState;
   const { customerId } = useParams();
-  const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer();
+  const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer(
+    Number(customerId)
+  );
   const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
   const isSubmiting = isAdding || isUpdating;
-  console.log("customerId", customerId);
-  console.log(errors);
+
   const {
     customerName,
     customerShortName,
@@ -68,7 +63,8 @@ function CustomerForm({
   } = customerToEdit;
 
   function onSubmit(data: CustomerFullDataType) {
-    if (errors) return;
+    if (errors && Object.keys(errors).length > 0) return;
+
     if (customerId) {
       updateCustomerDetails({ ...data, customerID: Number(customerId) });
     } else {
