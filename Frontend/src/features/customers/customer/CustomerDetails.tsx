@@ -254,10 +254,7 @@ function Contact({
           value={contactPersonMobilePhone}
           useDivider={false}
         />
-        {/* <Text>customerMainPhone {customerMainPhone}</Text>
-          <Text>customerMainEMail {customerMainEMail}</Text>
-          <Text>contactPersonName {contactPersonName}</Text>
-          <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
+
       </Flex>
     </GridItem>
   );

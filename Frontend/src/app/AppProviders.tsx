@@ -44,8 +44,8 @@ function AppProviders({ children }: AppProvidersType) {
                 //     color: "var(--color-grey-700) ",
                 //   },
               }
-            } */}
-          {/* /> */}
+            } 
+           /> */}
           {children}
         </ChakraProvider>
       </I18nextProvider>

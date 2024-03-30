@@ -32,10 +32,7 @@ function CustomerForm({
   OnSubmit?: () => void;
 }) {
   const { register, handleSubmit, formState, reset } =
-    useForm<CustomerFullDataType>({
-      // defaultValues: isEditSession ? editValues : {},
-    }); // reset, getValues
-  // const { t } = useTranslation("customers", { keyPrefix: "details" });
+    useForm<CustomerFullDataType>(); // reset, getValues
   const { errors } = formState;
   const { customerId } = useParams();
   const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer(

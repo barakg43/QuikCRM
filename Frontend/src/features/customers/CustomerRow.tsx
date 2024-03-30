@@ -19,7 +19,7 @@ function CustomerRow({
       <CustomerCell text={customerShortName} />
       <CustomerCell text={address} />
       <CustomerCell text={city} />
-      <StatusTag status={customerStatus} />
+      <StatusTag status={customerStatus || "none"} />
     </Table.Row>
   );
 }

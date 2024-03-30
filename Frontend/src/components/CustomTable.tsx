@@ -9,19 +9,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
-// import styled from "styled-components";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
 function Footer({ children }: { children: ReactNode }) {
   return <Box>{children}</Box>;
 }
-// const EmptyTable = styled.p`
-//   font-size: 1.6rem;
-//   font-weight: 500;
-//   text-align: center;
-//   margin: 2.4rem;
-// `;
 
 type BodyProps<T> = {
   data: T[] | null | undefined;
@@ -29,10 +22,6 @@ type BodyProps<T> = {
   isLoading: boolean;
 };
 
-// const StyledBody = styled.tbody`
-//   margin: 0.4rem 0;
-//   min-height: 70vh;
-// `;
 function Body<T>({ data, render }: BodyProps<T>) {
   if (data == undefined || data == null || data.length == 0)
     return (
@@ -95,18 +84,6 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-// const CommonRow = styled.div<{ columns: string }>`
-//   display: grid;
-//   font-size: 1.6rem;
-//   grid-template-columns: ${(props) => props.columns};
-//   column-gap: var(--scale-000);
-//   align-items: center;
-// `;
-// const StyledRow = styled(CommonRow)`
-//   padding: var(--scale-2) var(--scale-1);
-//   &:not(:last-child) {
-//     border-bottom: 1px var(--color-primary-300) solid;
-//   }
 // `;
 type RowType = {
   children: ReactNode;
