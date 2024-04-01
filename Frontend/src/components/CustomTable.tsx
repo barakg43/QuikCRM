@@ -45,7 +45,7 @@ type TableProps = {
   children: ReactNode;
   variant?: ResponsiveValue<string> | undefined;
 };
-function StyledTable({ columns, children, variant }: TableProps) {
+function CustomTable({ columns, children, variant }: TableProps) {
   return (
     <TableContext.Provider value={{ columns }}>
       <Table
@@ -108,8 +108,8 @@ function Row({ onClick, height, children }: RowType) {
     </Tr>
   );
 }
-StyledTable.Header = Header;
-StyledTable.Row = Row;
-StyledTable.Footer = Footer;
-StyledTable.Body = Body;
-export default StyledTable;
+CustomTable.Header = Header;
+CustomTable.Row = Row;
+CustomTable.Footer = Footer;
+CustomTable.Body = Body;
+export default CustomTable;
