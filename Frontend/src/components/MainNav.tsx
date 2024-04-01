@@ -72,7 +72,7 @@ function MainNav() {
       <NavLinkItem
         icon={<TbAlarm />}
         path='/service-renews'
-        label={t("/service-renews")}
+        label={t("service-renews")}
       />
 
       <NavLinkItem
