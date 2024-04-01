@@ -17,7 +17,7 @@ export function useServiceContractRenews() {
     data: serviceContractRenews = [],
     isLoading,
     error,
-  }: UseQueryResult<ServiceRenewRecord | never[]> = useQuery({
+  }: UseQueryResult<ServiceRenewRecord[] | never[]> = useQuery({
     queryKey: [
       "services-contracts",
       daysBeforeExpiration,
