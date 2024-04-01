@@ -9,6 +9,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
+import Empty from "./Empty";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
@@ -20,18 +21,12 @@ type BodyProps<T> = {
   data: T[] | null | undefined;
   render: (item: T, index: number) => JSX.Element;
   isLoading: boolean;
+  resourceName?: string | undefined;
 };
 
-function Body<T>({ data, render }: BodyProps<T>) {
+function Body<T>({ data, render, resourceName }: BodyProps<T>) {
   if (data == undefined || data == null || data.length == 0)
-    return (
-      <Text
-        fontSize='1.2rem'
-        fontWeight={500}
-        textAlign='center'
-        margin='2.4rem'
-      />
-    );
+    return <Empty resource={resourceName || "table"} />;
 
   return (
     <Tbody margin='0.4rem 0' minHeight='70vh'>
