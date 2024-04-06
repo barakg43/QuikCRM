@@ -82,7 +82,7 @@ function Header({ children }: { children: ReactNode }) {
 // `;
 type RowType = {
   children: ReactNode;
-  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+  onClick?: MouseEventHandler<HTMLDivElement> | undefined;
   height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
 };
 
