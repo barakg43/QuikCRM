@@ -12,20 +12,20 @@ import {
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import CustomerForm from "./SeviceRenewForm";
+import { ServiceRenewRecord } from "./serviceRenews";
 
 function ServiceRenewFormModal({
-  customerToEdit = {},
+  serviceRenew = {},
 }: {
-  customerToEdit?: any | Record<string, never>;
+  serviceRenew?: ServiceRenewRecord | Record<string, never>;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation("customers");
+  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   return (
-    // <Suspense fallback={<LoadingSpinner />}>
     <>
       <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
-        {customerToEdit.customerID ? t("update.edit") : t("add.button")}
+        {t("renew-button")}
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay
@@ -34,7 +34,7 @@ function ServiceRenewFormModal({
         />
         <ModalContent minWidth={"50%"}>
           <ModalHeader marginInlineStart='2rem' fontSize='1.6rem'>
-            {customerToEdit ? t("update.title") : t("add.title")}
+            {t("renew-title")}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
