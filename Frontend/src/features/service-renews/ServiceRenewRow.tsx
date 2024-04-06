@@ -19,7 +19,10 @@ function ServiceRenewRow({
   startDateOfContract,
   contractPrice,
   periodKind,
-}: ServiceRenewRecord) {
+  onRenew,
+}: ServiceRenewRecord & {
+  onRenew: (serviceRenew: ServiceRenewRecord) => void;
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   // contractID: number;
@@ -30,9 +33,20 @@ function ServiceRenewRow({
   // contractPrice: number;
   // periodKind: "MONTHLY" | "QUARTERLY" | "YEARLY";
   // contactDescription: string;
-
+  function handleRenew() {
+    onRenew({
+      contractID,
+      customerID,
+      customerShortName,
+      startDateOfContract,
+      finishDateOfContract,
+      contractPrice,
+      periodKind,
+      contactDescription,
+    });
+  }
   return (
-    <CustomTable.Row onClick={() => navigate(`${contractID}`)} height='5.6rem'>
+    <CustomTable.Row height='5.6rem'>
       <BodyTableCell
         text={customerShortName}
         onClick={() => navigate(`/customers/${customerID}`)}
@@ -53,7 +67,7 @@ function ServiceRenewRow({
       >
         {t("period." + periodKind)}
       </Tag>
-      <Button>{t("renew-button")}</Button>
+      <Button onClick={handleRenew}>{t("renew-button")}</Button>
     </CustomTable.Row>
   );
 }
