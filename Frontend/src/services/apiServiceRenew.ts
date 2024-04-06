@@ -1,4 +1,7 @@
-import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
+import {
+  RenewContractProps,
+  ServiceRenewRecord,
+} from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
 export async function addNewServicesRenew_API({
@@ -43,12 +46,13 @@ export async function updateServiceRenewDetails_API({
 export async function getServiceRenewById(contractID: number) {
   console.log(contractID);
 }
+
 export async function renewService_API({
   contractID,
   contractPrice,
   periodKind,
   contactDescription,
-}: ServiceRenewRecord) {
+}: RenewContractProps) {
   try {
     httpClient.patch(`/contract-service/${contractID}/renew`, {
       contractPrice,
