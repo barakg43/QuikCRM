@@ -16,8 +16,10 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
+import { ServiceRenewRecord } from "./serviceRenews";
+import Example from "./Example";
 
-export type RenewContactProps = {
+type RenewContactProps = {
   ContractID: number;
   CustomerID: number;
   customerShortName: string;
@@ -29,22 +31,21 @@ export type RenewContactProps = {
   PeriodKind: string;
 };
 function RenewContactReminder({
-  ContractID,
-  CustomerID,
-  FinishDateOfContract,
-  StartDateOfContract,
-  ContactDescription,
-  ReminderDate,
-  ContractPrice,
+  contractID,
+  customerID,
+  finishDateOfContract,
+  startDateOfContract,
+  contactDescription,
+  contractPrice,
   customerShortName,
-  PeriodKind,
-}: RenewContactProps) {
+  periodKind,
+}: ServiceRenewRecord) {
   return (
     <Card>
       {/* _hover={{ backgroundColor: "teal.100" }}*/}
       <CardHeader>
         <Heading as='h4' fontSize='x-large' fontFamily='inherit'>
-          {ContractID} | {CustomerID}- {customerShortName}
+          {contractID} | {customerID}- {customerShortName}
         </Heading>
       </CardHeader>
       <CardBody
@@ -57,22 +58,19 @@ function RenewContactReminder({
           <HStack divider={<StackDivider />}>
             <DetailRow
               label={"StartDate"}
-              value={StartDateOfContract.toLocaleDateString()}
+              value={startDateOfContract.toLocaleDateString()}
             />
             <DetailRow
               label={"endDate"}
-              value={FinishDateOfContract.toLocaleDateString()}
+              value={finishDateOfContract.toLocaleDateString()}
             />
-            <DetailRow label={"PeriodKind"} value={PeriodKind} />
+            <DetailRow label={"PeriodKind"} value={periodKind} />
+            <Example />
           </HStack>
           <HStack>
-            <DetailRow
-              label={"ReminderDate"}
-              value={ReminderDate.toLocaleDateString()}
-            />
-            <DetailRow label={"ContractPrice"} value={ContractPrice} />
+            <DetailRow label={"ContractPrice"} value={contractPrice} />
           </HStack>
-          <DetailRow label={"ContactDescription"} value={ContactDescription} />
+          <DetailRow label={"ContactDescription"} value={contactDescription} />
         </Stack>
       </CardBody>
       <CardFooter>
@@ -85,6 +83,7 @@ function RenewContactReminder({
 function RenewPanel() {
   const [period, setPeriod] = useState("1");
   const { t } = useTranslation("reminders", { keyPrefix: "serviceRenew" });
+
   return (
     <Flex grow={1} gap={6} fontSize='2xl'>
       <Text>renew for:</Text>
