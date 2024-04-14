@@ -5,6 +5,7 @@ import {
   Table,
   Tbody,
   Text,
+  Tfoot,
   Thead,
   Tr,
 } from "@chakra-ui/react";
@@ -14,7 +15,11 @@ import Empty from "./Empty";
 const TableContext = createContext<ValueType>({ columns: "" });
 
 function Footer({ children }: { children: ReactNode }) {
-  return <Box>{children}</Box>;
+  return (
+    <Tfoot>
+      <Tr>{children}</Tr>
+    </Tfoot>
+  );
 }
 
 type BodyProps<T> = {
