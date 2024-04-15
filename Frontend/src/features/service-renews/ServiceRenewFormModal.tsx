@@ -52,7 +52,6 @@ function ServiceRenewFormModal({
             fontWeight='bold'
             onClick={() => {
               submitButtonRef.current?.click();
-              console.log("submit service");
             }}
           >
             {t("renew-button")}
