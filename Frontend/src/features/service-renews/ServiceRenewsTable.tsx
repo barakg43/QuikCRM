@@ -1,16 +1,22 @@
 import { useTranslation } from "react-i18next";
 import { useServiceContractRenews } from "./hooks/useServiceContractRenews";
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex, Tr, useDisclosure } from "@chakra-ui/react";
 import CustomTable from "./../../components/CustomTable.tsx";
 import TableHeaderCell from "../../components/TableHeaderCell";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ServiceRenewRow from "./ServiceRenewRow.tsx";
 import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
+import { useState } from "react";
+import { ServiceRenewRecord } from "./serviceRenews";
 function ServiceRenewsTable() {
-  // return null;
   const { serviceContractRenews, isLoading } = useServiceContractRenews();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
-  console.log("serviceContractRenews", serviceContractRenews);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [serviceToRenew, setServiceToRenew] = useState<ServiceRenewRecord>();
+  function handleRenew(serviceRenew: ServiceRenewRecord) {
+    setServiceToRenew(serviceRenew);
+    onOpen();
+  }
   return (
     <>
       <Flex
@@ -19,7 +25,11 @@ function ServiceRenewsTable() {
         paddingBottom='10px'
         w='95%'
       >
-        {/* <CustomerFormModal /> */}
+        <ServiceRenewFormModal
+          isOpen={isOpen}
+          onClose={onClose}
+          serviceRenew={serviceToRenew}
+        />
       </Flex>
       <CustomTable columns={"1fr ".repeat(5)}>
         <CustomTable.Header>
@@ -46,12 +56,13 @@ function ServiceRenewsTable() {
                 periodKind={serviceReminder.periodKind}
                 contactDescription={serviceReminder.contactDescription}
                 key={serviceReminder.contractID}
+                onRenew={handleRenew}
               />
             )}
           />
         )}
         <CustomTable.Footer>
-          {""}
+          <Box as='td'>{""}</Box>
           {/* <Pagination totalItemsAmount={totalItems} /> */}
         </CustomTable.Footer>
       </CustomTable>
