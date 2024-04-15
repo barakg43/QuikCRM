@@ -11,12 +11,17 @@
     "contractPrice": "מחיר חוזה",
     "periodKind": "תקופת שירות",
     "contactDescription": "פרטים נוספים",
+    "cancel-button": "ביטול",
     "renew-button": "חידוש",
     "renew-title": "חידוש חוזה שירות",
     "period": {
-      "MONTHLY": "חודש",
-      "QUARTERLY": "רבעון",
-      "YEARLY": "שנה"
+      "MONTHLY": "חודשי",
+      "QUARTERLY": "רבעוני",
+      "YEARLY": "שנתי"
+    },
+    "form": {
+      "too-big-text": "השדה מוגבל ל {{length}} תווים",
+      "required": "שדה זה נדרש"
     }
   },
   "delete": {
