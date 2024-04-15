@@ -17,7 +17,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
 import { ServiceRenewRecord } from "./serviceRenews";
-import Example from "./Example";
 
 type RenewContactProps = {
   ContractID: number;
@@ -65,7 +64,6 @@ function RenewContactReminder({
               value={finishDateOfContract.toLocaleDateString()}
             />
             <DetailRow label={"PeriodKind"} value={periodKind} />
-            <Example />
           </HStack>
           <HStack>
             <DetailRow label={"ContractPrice"} value={contractPrice} />
