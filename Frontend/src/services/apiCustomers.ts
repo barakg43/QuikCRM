@@ -31,7 +31,6 @@ export async function getCustomerDataByID_API(
   const { data }: { data: CustomerFullDataType } = await httpClient.get(
     `/customers/${customerId}`
   );
-  // console.log("data", data);
   return data;
 }
 export async function addNewCustomer_API({
