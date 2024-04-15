@@ -3,7 +3,7 @@ import { ServiceRenewRecord } from "./serviceRenews";
 import { BodyTableCell } from "../customers/BodyTableCell";
 import CustomTable from "../../components/CustomTable";
 import { useTranslation } from "react-i18next";
-import { Button, Tag } from "@chakra-ui/react";
+import { Button, Tag, Td } from "@chakra-ui/react";
 
 const periodColors = {
   MONTHLY: "blue",
@@ -57,17 +57,21 @@ function ServiceRenewRow({
       <BodyTableCell
         text={new Date(finishDateOfContract).toLocaleDateString("en-GB")}
       />
-      <Tag
-        backgroundColor={periodColors[periodKind]}
-        justifyContent='center'
-        size='xl'
-        borderRadius='20px'
-        padding='0.5rem 5rem 0.5rem 5rem'
-        margin='auto'
-      >
-        {t("period." + periodKind)}
-      </Tag>
-      <Button onClick={handleRenew}>{t("renew-button")}</Button>
+      <Td>
+        <Tag
+          backgroundColor={periodColors[periodKind]}
+          justifyContent='center'
+          size='xl'
+          borderRadius='20px'
+          padding='0.5rem 5rem 0.5rem 5rem'
+          margin='auto'
+        >
+          {t("period." + periodKind)}
+        </Tag>
+      </Td>
+      <Td>
+        <Button onClick={handleRenew}>{t("renew-button")}</Button>
+      </Td>
     </CustomTable.Row>
   );
 }
