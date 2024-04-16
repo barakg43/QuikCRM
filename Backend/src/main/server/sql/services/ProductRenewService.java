@@ -26,7 +26,7 @@ public class ProductRenewService {
 
 	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
 		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBefore(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
+				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 

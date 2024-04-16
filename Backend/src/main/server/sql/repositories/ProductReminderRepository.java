@@ -12,14 +12,12 @@ import java.util.List;
 
 @Repository
 public interface ProductReminderRepository extends JpaRepository<ProductReminderEntity, BigDecimal> {
-//	SELECT     TOP 100 PERCENT CustomerID, dbo.fncCustShortNameForCustID(CustomerID) AS CustShortName,
-////	SystemDetailID, SystemDetailDescription,
-////	InternalIP, ExternalIP, UserName, Password, ValidityTill
+//	SELECT     TOP 100 PERCENT *
 ////	FROM         dbo.tbSystemsDetails
 ////	WHERE     (ValidityTill < DATEADD(month, 2, @Date))
 ////	ORDER BY ValidityTill
 
-	List<ProductReminderEntity> findAllByValidityTillBefore(Timestamp maxValidityTill);
+	List<ProductReminderEntity> findAllByValidityTillBeforeOrderByValidityTillAsc(Timestamp maxValidityTill);
 
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
 			"p.customer.customerShortName ," +
