@@ -159,8 +159,9 @@ public class ContractService {
 	private void saveContractAndUpdateActiveContractInCustomer(ServiceContractEntity newContract) {
 		UtilityFunctions.validEntityValidations(newContract);
 		ServiceContractEntity savedContract = validAndSaveToRepository(newContract);
-		savedContract.getCustomer().setActiveContractID(savedContract.getContractID());
-		customerRepository.save(savedContract.getCustomer());
+		CustomerEntity customerToUpdate = customerRepository.getReferenceById(savedContract.getCustomerID());
+		customerToUpdate.setActiveContractID(savedContract.getContractID());
+		customerRepository.save(customerToUpdate);
 	}
 
 	private void setContactFinishDateBaseOnStartDayForContract(ePeriodKind periodKind,
