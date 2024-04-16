@@ -5,12 +5,8 @@ import { FieldError, UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
 import FormRow from "../../components/FormRow";
-import {
-  PeriodType,
-  RenewContractProps,
-  ServiceRenewRecord,
-} from "./serviceRenews";
 import { RenewServicePanel } from "./RenewServicePanel";
+import { RenewContractProps, ServiceRenewRecord } from "./serviceRenews";
 function ServiceRenewForm({
   submitButtonRef,
   serviceRenew = {},
@@ -97,11 +93,5 @@ export function RenewRowForm({
     />
   );
 }
-export type RenewPanelProps = {
-  contractID: number;
-  defaultPeriodKind: PeriodType;
-  submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
-  onSubmit?: () => void;
-};
 
 export default ServiceRenewForm;

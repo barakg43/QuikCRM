@@ -2,12 +2,20 @@ import { Button, Flex, Radio, VStack, useRadio } from "@chakra-ui/react";
 import { UseFormRegister, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import CustomRadioGroup from "./CustomRadioGroup";
-import { RenewPanelProps, RenewRowForm } from "./ServiceRenewForm";
+import { RenewRowForm } from "./ServiceRenewForm";
 import { useRenewServiceContract } from "./hooks/useRenewServiceContract";
-import { RenewContractProps } from "./serviceRenews";
-
+import { PeriodType, RenewContractProps } from "./serviceRenews";
+import { LegacyRef } from "react";
+export type RenewPanelProps = {
+  contractID: number;
+  defaultPeriodKind: PeriodType;
+  submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
+  contractPrice: number;
+  onSubmit?: () => void;
+};
 export function RenewServicePanel({
   contractID,
+  contractPrice,
   defaultPeriodKind,
   submitButtonRef,
   onSubmit,
