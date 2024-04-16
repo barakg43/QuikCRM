@@ -78,12 +78,8 @@ function RadioCard(props: RadioButtonProps) {
   const { register = { onChange: () => {} }, ...radioProps } = props;
   const { state, getInputProps, getRadioProps, htmlProps, getLabelProps } =
     useRadio(radioProps);
-
-  const input = getInputProps();
   const { onChange: registerOnChange, ...registerProps } = register;
   const { onChange: inputOnChange, ...inputProps } = getInputProps();
-  // console.log("input", input);
-  // console.log("register", register);
   function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     inputOnChange?.(event);
     registerOnChange(event);
