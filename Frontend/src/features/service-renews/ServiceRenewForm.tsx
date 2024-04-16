@@ -48,6 +48,7 @@ function ServiceRenewForm({
         contractID={contractID}
         submitButtonRef={submitButtonRef}
         onSubmit={onSubmit}
+        contractPrice={contractPrice}
         defaultPeriodKind={periodKind}
       />
     </Stack>

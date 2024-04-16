@@ -31,15 +31,21 @@ export function RenewServicePanel({
     periodKind,
     contactDescription,
   }: RenewContractProps) {
-    console.log("test", contractPrice, periodKind, contactDescription);
+    console.log(
+      "test",
+      contractID,
+      contractPrice,
+      periodKind,
+      contactDescription
+    );
 
     if (errors && Object.keys(errors).length > 0) return;
-    // renewServiceContract({
-    //   contractID,
-    //   contractPrice,
-    //   periodKind,
-    //   contactDescription,
-    // });
+    renewServiceContract({
+      contractID,
+      contractPrice,
+      periodKind,
+      contactDescription,
+    });
     reset();
     onSubmit?.();
   }
@@ -62,6 +68,7 @@ export function RenewServicePanel({
             label='contractPrice'
             register={register}
             error={errors?.contractPrice}
+            defaultValue={contractPrice}
             type='number'
           />
         </VStack>
