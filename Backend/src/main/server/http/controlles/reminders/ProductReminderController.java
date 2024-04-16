@@ -34,8 +34,8 @@ public class ProductReminderController {
 	}
 
 	@PostMapping
-	public void addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
-		httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
+	public BigDecimal addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
 				"/api/reminders/product", HttpMethod.POST);
 	}
 
