@@ -77,11 +77,12 @@ public class ContractService {
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
 				contractRecord.startDateOfContract());
+		UtilityFunctions.validEntityValidations(serviceContractEntity);
 		validAndSaveToRepository(serviceContractEntity);
 
 	}
 
-	public Short addNewContract(ContractRecord contractRecord) throws IllegalStateException, IllegalArgumentException {
+	public void addNewContract(ContractRecord contractRecord) throws IllegalStateException, IllegalArgumentException {
 		ServiceContractEntity serviceContractEntity = new ServiceContractEntity();
 		if (customerRepository.existsById(contractRecord.customerID())) {
 			CustomerEntity customerEntity = customerRepository.getReferenceById(contractRecord.customerID());
@@ -96,8 +97,7 @@ public class ContractService {
 			serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 			setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
 					contractRecord.startDateOfContract());
-			CustomerEntity savedUpdatedCustomer = saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
-			return savedUpdatedCustomer.getCustomerID();
+			saveContractAndUpdateActiveContractInCustomer(serviceContractEntity);
 		} else {
 			throw new IllegalArgumentException("customer with this id not exist");
 		}
@@ -156,12 +156,11 @@ public class ContractService {
 		saveContractAndUpdateActiveContractInCustomer(newContract);
 	}
 
-	private CustomerEntity saveContractAndUpdateActiveContractInCustomer(ServiceContractEntity newContract) {
+	private void saveContractAndUpdateActiveContractInCustomer(ServiceContractEntity newContract) {
 		UtilityFunctions.validEntityValidations(newContract);
 		ServiceContractEntity savedContract = validAndSaveToRepository(newContract);
-		CustomerEntity customerToUpdate = customerRepository.getReferenceById(savedContract.getCustomerID());
-		customerToUpdate.setActiveContractID(savedContract.getContractID());
-		return customerRepository.save(customerToUpdate);
+		savedContract.getCustomer().setActiveContractID(savedContract.getContractID());
+		customerRepository.save(savedContract.getCustomer());
 	}
 
 	private void setContactFinishDateBaseOnStartDayForContract(ePeriodKind periodKind,

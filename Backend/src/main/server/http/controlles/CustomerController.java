@@ -14,9 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.List;
 
-import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
-
-@CrossOrigin(origins = SERVER_CROSS_ORIGIN)
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -74,9 +72,9 @@ public class CustomerController {
 	}
 
 	@PostMapping("")
-	public Short addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
+	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			return httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
+			httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
 					"api/customers/"
 					, HttpMethod.POST);
 		} catch (IllegalArgumentException e) {

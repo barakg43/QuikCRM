@@ -12,9 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
-
-@CrossOrigin(origins = SERVER_CROSS_ORIGIN)
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/product-renews")
 public class ProductReminderController {
@@ -34,8 +32,8 @@ public class ProductReminderController {
 	}
 
 	@PostMapping
-	public BigDecimal addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
-		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
+	public void addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
+		httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
 				"/api/reminders/product", HttpMethod.POST);
 	}
 
