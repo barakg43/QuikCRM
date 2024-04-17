@@ -22,7 +22,6 @@ export function useCustomers() {
     queryKey: ["customers", page],
     queryFn: () => getCustomersSubset_API({ page }),
   });
-  console.log("error useCustomers", error);
   if (error) {
     toast({
       title: "Error occurred",

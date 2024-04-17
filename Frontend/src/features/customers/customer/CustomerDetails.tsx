@@ -13,10 +13,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { DetailRow } from "../../../components/DetailRow";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import StatusTag from "../../../components/StatusTag";
+import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteServiceContract";
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
 import { useCustomer } from "./hooks/useCustomer";
-import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteServiceContract";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -161,7 +161,7 @@ function General({
     >
       <Flex
         flexDirection='row'
-        gap={2}
+        gap='2rem'
         justifyContent='space-around'
         height='100%'
         alignItems='center'
@@ -254,10 +254,7 @@ function Contact({
           value={contactPersonMobilePhone}
           useDivider={false}
         />
-        {/* <Text>customerMainPhone {customerMainPhone}</Text>
-          <Text>customerMainEMail {customerMainEMail}</Text>
-          <Text>contactPersonName {contactPersonName}</Text>
-          <Text>contactPersonMobilePhone {contactPersonMobilePhone}</Text> */}
+
       </Flex>
     </GridItem>
   );

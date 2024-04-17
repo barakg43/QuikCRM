@@ -9,7 +9,8 @@ import GlobalStyle from "./../styles/GlobalStyle.js";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5,
+      staleTime: 120000,
+      refetchInterval: 60000,
     },
   },
 });
@@ -43,8 +44,8 @@ function AppProviders({ children }: AppProvidersType) {
                 //     color: "var(--color-grey-700) ",
                 //   },
               }
-            } */}
-          {/* /> */}
+            } 
+           /> */}
           {children}
         </ChakraProvider>
       </I18nextProvider>

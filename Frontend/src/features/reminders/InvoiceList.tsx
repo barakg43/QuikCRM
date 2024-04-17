@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import RenewContactReminder from "./RenewContactReminder";
+import RenewContactReminder from "../service-renews/RenewContactReminder";
 const StyledInvoiceList = styled.div`
   display: flex;
   flex-direction: column;

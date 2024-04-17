@@ -1,8 +1,28 @@
 {
   "renew-table": {
     "header": "תזכורת",
-    "error-message-fetch": "אירעה שגיאה בטעינת התזכורות"
-    
+    "title": "תזכורות לחוזי שירות",
+    "error-message-fetch": "אירעה שגיאה בטעינת התזכורות",
+    "contractID": "מספר חוזה",
+    "customerID": "מספר לקוח",
+    "customerShortName": "שם לקוח",
+    "startDateOfContract": "תאריך התחלה",
+    "finishDateOfContract": "תאריך סיום",
+    "contractPrice": "מחיר חוזה",
+    "periodKind": "תקופת שירות",
+    "contactDescription": "פרטים נוספים",
+    "cancel-button": "ביטול",
+    "renew-button": "חידוש",
+    "renew-title": "חידוש חוזה שירות",
+    "period": {
+      "MONTHLY": "חודשי",
+      "QUARTERLY": "רבעוני",
+      "YEARLY": "שנתי"
+    },
+    "form": {
+      "too-big-text": "השדה מוגבל ל {{length}} תווים",
+      "required": "שדה זה נדרש"
+    }
   },
   "delete": {
     "confirmation": "האם אתה בטוח שברצונך למחוק את החיוב?",

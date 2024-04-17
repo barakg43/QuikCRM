@@ -34,12 +34,6 @@ export function useDeleteCustomer() {
         status: "error",
       }),
   });
-  //   async function deleteServiceContract(id: number) {
-  //     toast.promise(new Promise(() => deleteServiceContract1(id)), {
-  //       success: { title: "Promise resolved", description: "Looks great" },
-  //       error: { title: "Promise rejected", description: "Something wrong" },
-  //       loading: { title: "Promise pending", description: "Please wait" },
-  //     });
-  //   }
+
   return { deleteCustomer, isPending };
 }

@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { CustomerFullDataType } from "../customers";
 import CustomerForm from "./CustomerForm";
@@ -26,7 +26,7 @@ function CustomerFormModal({
     // <Suspense fallback={<LoadingSpinner />}>
     <>
       <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
-        {customerToEdit.customerID ? t("edit.button") : t("add.button")}
+        {customerToEdit.customerID ? t("update.edit") : t("add.button")}
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay
@@ -52,7 +52,11 @@ function CustomerFormModal({
             <Button
               fontSize='1.1rem'
               fontWeight='bold'
-              onClick={() => submitButtonRef.current?.click()}
+              onClick={() => {
+                submitButtonRef.current?.click();
+
+                console.log("submit");
+              }}
             >
               {customerToEdit.customerID
                 ? t("update.button")

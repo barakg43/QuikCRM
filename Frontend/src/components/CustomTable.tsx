@@ -5,44 +5,33 @@ import {
   Table,
   Tbody,
   Text,
+  Tfoot,
   Thead,
   Tr,
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
-// import styled from "styled-components";
+import Empty from "./Empty";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
 function Footer({ children }: { children: ReactNode }) {
-  return <Box>{children}</Box>;
+  return (
+    <Tfoot>
+      <Tr>{children}</Tr>
+    </Tfoot>
+  );
 }
-// const EmptyTable = styled.p`
-//   font-size: 1.6rem;
-//   font-weight: 500;
-//   text-align: center;
-//   margin: 2.4rem;
-// `;
 
 type BodyProps<T> = {
   data: T[] | null | undefined;
   render: (item: T, index: number) => JSX.Element;
   isLoading: boolean;
+  resourceName?: string | undefined;
 };
 
-// const StyledBody = styled.tbody`
-//   margin: 0.4rem 0;
-//   min-height: 70vh;
-// `;
-function Body<T>({ data, render }: BodyProps<T>) {
+function Body<T>({ data, render, resourceName }: BodyProps<T>) {
   if (data == undefined || data == null || data.length == 0)
-    return (
-      <Text
-        fontSize='1.2rem'
-        fontWeight={500}
-        textAlign='center'
-        margin='2.4rem'
-      />
-    );
+    return <Empty resource={resourceName || "table"} />;
 
   return (
     <Tbody margin='0.4rem 0' minHeight='70vh'>
@@ -56,7 +45,7 @@ type TableProps = {
   children: ReactNode;
   variant?: ResponsiveValue<string> | undefined;
 };
-function StyledTable({ columns, children, variant }: TableProps) {
+function CustomTable({ columns, children, variant }: TableProps) {
   return (
     <TableContext.Provider value={{ columns }}>
       <Table
@@ -95,22 +84,10 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-// const CommonRow = styled.div<{ columns: string }>`
-//   display: grid;
-//   font-size: 1.6rem;
-//   grid-template-columns: ${(props) => props.columns};
-//   column-gap: var(--scale-000);
-//   align-items: center;
-// `;
-// const StyledRow = styled(CommonRow)`
-//   padding: var(--scale-2) var(--scale-1);
-//   &:not(:last-child) {
-//     border-bottom: 1px var(--color-primary-300) solid;
-//   }
 // `;
 type RowType = {
   children: ReactNode;
-  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+  onClick?: MouseEventHandler<HTMLDivElement> | undefined;
   height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
 };
 
@@ -131,8 +108,8 @@ function Row({ onClick, height, children }: RowType) {
     </Tr>
   );
 }
-StyledTable.Header = Header;
-StyledTable.Row = Row;
-StyledTable.Footer = Footer;
-StyledTable.Body = Body;
-export default StyledTable;
+CustomTable.Header = Header;
+CustomTable.Row = Row;
+CustomTable.Footer = Footer;
+CustomTable.Body = Body;
+export default CustomTable;

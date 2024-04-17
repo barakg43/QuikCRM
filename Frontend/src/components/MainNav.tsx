@@ -10,14 +10,6 @@ import {
 } from "react-icons/tb";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 
-// const StyledMainNav = styled.menu`
-//   justify-content: center;
-//   padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
-//   display: flex;
-//   flex-direction: column;
-//   gap: var(--scale-3);
-// `;
-
 type NavLinkItemProps = {
   path: string;
   label: string;
@@ -63,7 +55,6 @@ function MainNav() {
       display='flex'
       flexDir={"column"}
       gap='1rem'
-      // justifyContent='center'
       alignItems={"start"}
       w='100%'
       padding='0 2rem'
@@ -75,9 +66,15 @@ function MainNav() {
       />
       <NavLinkItem
         icon={<TbAlarm />}
-        path='/reminders'
-        label={t("reminders")}
+        path='/product-renews'
+        label={t("product-renews")}
       />
+      <NavLinkItem
+        icon={<TbAlarm />}
+        path='/service-renews'
+        label={t("service-renews")}
+      />
+
       <NavLinkItem
         icon={<TbClipboardList />}
         path='/activities'

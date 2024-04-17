@@ -51,6 +51,7 @@
   "update": {
     "title": "עדכון פרטי לקוח",
     "button": "עדכן",
+    "edit": "ערוך",
     "toast-title": "עדכון חידוש מוצרים",
     "toast-message-success": "הלקוח עודכן בהצלחה",
     "toast-message-error": "אירעה שגיאה בעדכון הלקוח"
