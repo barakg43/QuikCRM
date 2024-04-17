@@ -37,9 +37,9 @@ public class ServiceRenewController {
 
 
 	@PostMapping
-	public void addNewContract(@RequestBody ContractRecord contractRecord) {
+	public Short addNewContract(@RequestBody ContractRecord contractRecord) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> contractService.addNewContract(contractRecord),
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.addNewContract(contractRecord),
 					"/api/contract-service/", HttpMethod.POST);
 		} catch (IllegalStateException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
