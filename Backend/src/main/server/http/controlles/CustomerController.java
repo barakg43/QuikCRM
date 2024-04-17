@@ -74,9 +74,9 @@ public class CustomerController {
 	}
 
 	@PostMapping("")
-	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
+	public Short addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
+			return httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
 					"api/customers/"
 					, HttpMethod.POST);
 		} catch (IllegalArgumentException e) {
