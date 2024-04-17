@@ -18,7 +18,8 @@ public interface ServiceContractRepository extends JpaRepository<ServiceContract
 			".customerShortName, " +
 			"c.startDateOfContract, c.finishDateOfContract, c.contractPrice, c.periodKind, c.contactDescription) " +
 			" FROM ServiceContractEntity c WHERE c.renewed = false AND c.finishDateOfContract >= ?1 AND c" +
-			".finishDateOfContract <= ?2")
+			".finishDateOfContract <= ?2"
+			+ " ORDER BY c.finishDateOfContract ASC")
 	List<ContractRecord> getAllContractsRenewReminderInPeriodTime(Timestamp minimumDate, Timestamp expirationDate);
 
 	void deleteByContractID(Long contactID);

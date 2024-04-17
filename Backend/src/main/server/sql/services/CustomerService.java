@@ -74,11 +74,10 @@ public class CustomerService {
 
 	}
 
-	public void addNewCustomer(CustomerFullDetailsRecord customerDetails) throws IllegalArgumentException {
+	public Short addNewCustomer(CustomerFullDetailsRecord customerDetails) throws IllegalArgumentException {
 		CustomerEntity customer = new CustomerEntity(customerDetails);
-		validAndSaveToRepository(customer);
-
-
+		CustomerEntity customerSaved = validAndSaveToRepository(customer);
+		return customerSaved.getCustomerID();
 //		customerDetails.setCustomerStatusID(
 //				getCustomerStatusIdFromDescription(
 //						customerDetails.getCustomerStatus()
