@@ -1,12 +1,9 @@
 import { HStack, Stack, StackDivider } from "@chakra-ui/react";
-import { TFunction } from "i18next";
-import { HTMLInputTypeAttribute, LegacyRef } from "react";
-import { FieldError, UseFormRegister } from "react-hook-form";
+import { LegacyRef } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
-import FormRow from "../../components/FormRow";
-import { RenewServicePanel } from "./RenewServicePanel";
-import { RenewContractProps, ServiceRenewRecord } from "./serviceRenews";
+import RenewServicePanel from "./RenewServicePanel";
+import { ServiceRenewRecord } from "./serviceRenews";
 function ServiceRenewForm({
   submitButtonRef,
   serviceRenew = {},
@@ -54,45 +51,4 @@ function ServiceRenewForm({
     </Stack>
   );
 }
-type FormRowServiceRenewProps = {
-  maxLength?: number | undefined;
-  t?: TFunction<string, string>;
-  register: UseFormRegister<RenewContractProps>;
-  type?: HTMLInputTypeAttribute | undefined;
-  isRequired?: boolean | undefined;
-  defaultValue?: string | number | readonly string[] | undefined;
-  error?: FieldError | undefined;
-  label: "contractID" | "contractPrice" | "periodKind" | "contactDescription";
-};
-export function RenewRowForm({
-  maxLength,
-  label,
-  error,
-  defaultValue,
-  isRequired,
-  register,
-  type,
-}: FormRowServiceRenewProps) {
-  const { t } = useTranslation("serviceRenews");
-  return (
-    <FormRow
-      label={t(label)}
-      defaultValue={defaultValue}
-      error={error?.message}
-      register={register(label, {
-        required: isRequired ? t("form.required") : undefined,
-        maxLength:
-          maxLength != undefined
-            ? {
-                value: maxLength,
-                message: t("form.too-big-text", { length: maxLength }),
-              }
-            : undefined,
-      })}
-      isRequired={isRequired}
-      type={type}
-    />
-  );
-}
-
 export default ServiceRenewForm;
