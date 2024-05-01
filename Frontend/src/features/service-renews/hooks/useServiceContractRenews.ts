@@ -4,15 +4,14 @@ import { useSearchParams } from "react-router-dom";
 import { getAllServiceRenewForPeriodTime_API } from "../../../services/apiServiceRenew";
 import { ServiceRenewRecord } from "../serviceRenews";
 import { useTranslation } from "react-i18next";
+import { useServiceRenewPeriodParams } from "./useServiceRenewPeriodParams";
 
 export function useServiceContractRenews() {
   const toast = useToast();
-  const [searchParams] = useSearchParams();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
-  const daysBeforeExpiration =
-    Number(searchParams.get("daysBeforeExpiration")) || 15;
-  const monthsAfterExpiration =
-    Number(searchParams.get("monthsAfterExpiration")) || 4;
+
+  const { daysBeforeExpiration, monthsAfterExpiration } =
+    useServiceRenewPeriodParams();
   const {
     data: serviceContractRenews = [],
     isLoading,

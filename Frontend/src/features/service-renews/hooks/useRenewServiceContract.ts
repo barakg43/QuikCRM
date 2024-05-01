@@ -1,15 +1,15 @@
 import { useToast } from "@chakra-ui/react";
-import {
-  useMutation,
-  useQueryClient
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { renewService_API } from "../../../services/apiServiceRenew";
+import { useServiceRenewPeriodParams } from "./useServiceRenewPeriodParams";
 
 export function useRenewServiceContract() {
   const toast = useToast();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew" });
   const queryClient = useQueryClient();
+  const { daysBeforeExpiration, monthsAfterExpiration } =
+    useServiceRenewPeriodParams();
   const { mutate: renewServiceContract, isPending } = useMutation({
     mutationFn: renewService_API,
     onSuccess: () => {
@@ -19,7 +19,11 @@ export function useRenewServiceContract() {
         status: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["services-contracts"],
+        queryKey: [
+          "services-contracts",
+          daysBeforeExpiration,
+          monthsAfterExpiration,
+        ],
       });
     },
     onError: () =>
