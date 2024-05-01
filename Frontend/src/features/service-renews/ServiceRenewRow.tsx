@@ -25,14 +25,6 @@ function ServiceRenewRow({
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
-  // contractID: number;
-  // customerID: number;
-  // customerShortName: string;
-  // startDateOfContract: Date;
-  // finishDateOfContract: Date;
-  // contractPrice: number;
-  // periodKind: "MONTHLY" | "QUARTERLY" | "YEARLY";
-  // contactDescription: string;
   function handleRenew() {
     onRenew({
       contractID,
@@ -57,20 +49,30 @@ function ServiceRenewRow({
       <BodyTableCell
         text={new Date(finishDateOfContract).toLocaleDateString("en-GB")}
       />
-      <Td>
+      <Td textAlign={"center"}>
         <Tag
           backgroundColor={periodColors[periodKind]}
           justifyContent='center'
           size='xl'
-          borderRadius='20px'
-          padding='0.5rem 5rem 0.5rem 5rem'
+          borderRadius='full'
+          padding='0.5rem 0 0.5rem 0'
+          w={"15rem"}
           margin='auto'
+          color={`${periodColors[periodKind]}.50`}
         >
           {t("period." + periodKind)}
         </Tag>
       </Td>
       <Td>
-        <Button onClick={handleRenew}>{t("renew-button")}</Button>
+        <Button
+          _focus={{ outline: "none", "box-shadow": "none" }}
+          _hover={{ backgroundColor: "teal.500", color: "white" }}
+          onClick={handleRenew}
+          fontSize={"xl"}
+          padding={"0.5rem 3rem 0.5rem 3rem"}
+        >
+          {t("renew-button")}
+        </Button>
       </Td>
     </CustomTable.Row>
   );
