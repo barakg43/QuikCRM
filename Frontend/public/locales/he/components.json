@@ -12,5 +12,12 @@
       "results": "תוצאות"
     }
   },
-  "buttons": { "edit": "ערוך", "delete": "מחק", "add": "הוספה" }
+  "buttons": {
+    "edit": "ערוך",
+    "delete": "מחק",
+    "add": "הוסף",
+    "cancel": "בטל",
+    "save": "שמור",
+    "update": "עדכן"
+  }
 }
