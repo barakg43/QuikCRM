@@ -18,17 +18,6 @@ import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
 import { ServiceRenewRecord } from "./serviceRenews";
 
-type RenewContactProps = {
-  ContractID: number;
-  CustomerID: number;
-  customerShortName: string;
-  ContractPrice: number;
-  StartDateOfContract: Date;
-  FinishDateOfContract: Date;
-  ReminderDate: Date;
-  ContactDescription: string;
-  PeriodKind: string;
-};
 function RenewContactReminder({
   contractID,
   customerID,
@@ -41,18 +30,12 @@ function RenewContactReminder({
 }: ServiceRenewRecord) {
   return (
     <Card>
-      {/* _hover={{ backgroundColor: "teal.100" }}*/}
       <CardHeader>
         <Heading as='h4' fontSize='x-large' fontFamily='inherit'>
           {contractID} | {customerID}- {customerShortName}
         </Heading>
       </CardHeader>
-      <CardBody
-      // w={"max-content"}
-      // display='flex'
-      // flexDirection='column'
-      // gap='1rem'
-      >
+      <CardBody>
         <Stack divider={<StackDivider />} spacing='3'>
           <HStack divider={<StackDivider />}>
             <DetailRow
