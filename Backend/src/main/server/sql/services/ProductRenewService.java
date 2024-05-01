@@ -26,7 +26,7 @@ public class ProductRenewService {
 
 	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
 		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBefore(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
+				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
@@ -52,11 +52,11 @@ public class ProductRenewService {
 			throw new IndexOutOfBoundsException("Cannot find product reminder to renew with id of " + reminderId);
 	}
 
-	public void addNewProductReminder(ProductReminderRecord productReminderRecord) {
-
+	public BigDecimal addNewProductReminder(ProductReminderRecord productReminderRecord) {
 		ProductReminderEntity newReminderEntity = new ProductReminderEntity();
 		copyAllProductRecordPropertiesToEntity(productReminderRecord, newReminderEntity);
-		validAndSaveToRepository(newReminderEntity);
+		ProductReminderEntity savedReminder = validAndSaveToRepository(newReminderEntity);
+		return savedReminder.getId();
 	}
 
 	@Transactional
@@ -81,7 +81,7 @@ public class ProductRenewService {
 
 	}
 
-	private ProductReminderEntity validAndSaveToRepository(ProductReminderEntity productReminderEntity) {
+	private ProductReminderEntity validAndSaveToRepository(ProductReminderEntity productReminderEntity) throws IllegalArgumentException {
 		UtilityFunctions.validEntityValidations(productReminderEntity);
 		return productReminderRepository.save(productReminderEntity);
 	}
