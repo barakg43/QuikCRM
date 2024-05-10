@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import StyledModal from "../../components/StyledModal";
+import StyledModal from "../../../../../components/StyledModal";
+import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
 import ServiceRenewForm from "./ServiceRenewForm";
-import { ServiceRenewRecord } from "./serviceRenews";
 
 function ServiceRenewFormModal({
   isOpen,
