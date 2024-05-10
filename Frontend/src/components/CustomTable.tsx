@@ -28,12 +28,56 @@ type BodyProps<T> = {
   resourceName?: string | undefined;
 };
 
+type fontSizeProp =
+  | ResponsiveValue<
+      | number
+      | "small"
+      | (string & Record<string, never>)
+      | "-moz-initial"
+      | "inherit"
+      | "initial"
+      | "revert"
+      | "revert-layer"
+      | "unset"
+      | "large"
+      | "medium"
+      | "x-large"
+      | "x-small"
+      | "xx-large"
+      | "xx-small"
+      | "xxx-large"
+      | "larger"
+      | "smaller"
+    >
+  | undefined;
+export function BodyTableCell({
+  children,
+  onClick,
+  fontSize = "medium",
+}: {
+  onClick?: MouseEventHandler<HTMLTableCellElement> | undefined;
+  fontSize?: fontSizeProp | undefined;
+  children: ReactNode | undefined;
+}) {
+  return (
+    <Td
+      textAlign='center'
+      lineHeight='unset'
+      onClick={onClick}
+      fontSize={fontSize}
+      border='none'
+    >
+      {children}
+    </Td>
+  );
+}
+
 function Body<T>({ data, render, resourceName }: BodyProps<T>) {
   if (data == undefined || data == null || data.length == 0)
     return <Empty resource={resourceName || "table"} />;
 
   return (
-    <Tbody margin='0.4rem 0' minHeight='70vh'>
+    <Tbody margin='0.4rem 0' minHeight='85vh'>
       {data.map(render)}
     </Tbody>
   );
@@ -114,6 +158,7 @@ function Row({ onClick, height, children }: RowType) {
   );
 }
 Header.Cell = HeaderCell;
+Row.Cell = BodyTableCell;
 CustomTable.Header = Header;
 CustomTable.Row = Row;
 CustomTable.Footer = Footer;
