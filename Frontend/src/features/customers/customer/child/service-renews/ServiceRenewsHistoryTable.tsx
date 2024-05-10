@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import CustomTable from "../../../../../components/CustomTable.tsx";
 import LoadingSpinner from "../../../../../components/LoadingSpinner.tsx";
+import AddEditServiceContractModal from "../../../../service-renews/AddEditServiceContractModal";
 import { useServiceContractRenews } from "../../../../service-renews/hooks/useServiceContractRenews.ts";
 import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
-import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
 import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";
 function ServiceRenewsHistoryTable() {
   const { serviceContractRenews, isLoading } = useServiceContractRenews();
@@ -20,11 +20,7 @@ function ServiceRenewsHistoryTable() {
         paddingBottom='10px'
         w='95%'
       >
-        <ServiceRenewFormModal
-          isOpen={isOpen}
-          onClose={onClose}
-          serviceRenew={{}}
-        />
+        <AddEditServiceContractModal serviceRenewToEdit={{}} />
       </Flex>
       <CustomTable columns={"1fr ".repeat(6)}>
         <CustomTable.Header>
