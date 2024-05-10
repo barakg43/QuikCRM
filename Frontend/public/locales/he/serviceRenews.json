@@ -24,9 +24,10 @@
       "required": "שדה זה נדרש"
     }
   },
+  "title": "חוזה שירות",
   "delete": {
     "confirmation": "האם אתה בטוח שברצונך למחוק את החיוב?",
-    "toast-title": "מחיקת חידוש מוצרים",
+    "toast-title": "מחיקת חוזה שירות",
     "toast-message-success": "התזכורת נמחקה בהצלחה",
     "toast-message-error": "אירעה שגיאה במחיקת התזכורת"
   },
