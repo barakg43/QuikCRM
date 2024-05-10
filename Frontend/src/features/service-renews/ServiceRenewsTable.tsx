@@ -32,10 +32,10 @@ function ServiceRenewsTable() {
       </Flex>
       <CustomTable columns={"1fr ".repeat(5)}>
         <CustomTable.Header>
-          <TableHeaderCell label={t("customerShortName")} />
-          <TableHeaderCell label={t("startDateOfContract")} />
-          <TableHeaderCell label={t("finishDateOfContract")} />
-          <TableHeaderCell label={t("periodKind")} />
+          <CustomTable.Header.Cell label={t("customerShortName")} />
+          <CustomTable.Header.Cell label={t("startDateOfContract")} />
+          <CustomTable.Header.Cell label={t("finishDateOfContract")} />
+          <CustomTable.Header.Cell label={t("periodKind")} />
         </CustomTable.Header>
         {isLoading ? (
           <LoadingSpinner />
