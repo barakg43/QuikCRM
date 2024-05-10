@@ -53,7 +53,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
             width: buttonWidth,
             register,
           })}
-          onChange={(event) => onChange(event?.target?.value)}
+          onChange={(event) => onChange?.(event?.target?.value)}
         >
           {option.label}
         </RadioCard>
