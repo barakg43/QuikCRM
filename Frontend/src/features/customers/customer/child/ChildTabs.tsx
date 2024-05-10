@@ -1,15 +1,18 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import ServiceRenewsHistoryTable from "./service-renews/ServiceRenewsHistoryTable";
 function ChildTabs() {
+  const { t } = useTranslation("customers", { keyPrefix: "child" });
+
   return (
-    <Tabs isLazy>
+    <Tabs isLazy height={"100vh"}>
       <TabList>
-        <Tab>One</Tab>
-        <Tab>Service Renews History</Tab>
-        <Tab>Three</Tab>
+        <Tab>{t("activities")}</Tab>
+        <Tab>{t("service-contracts")}</Tab>
+        <Tab>{t("product-renews")}</Tab>
       </TabList>
 
-      <TabPanels>
+      <TabPanels overflow='scroll'>
         <TabPanel>
           <p>Activities</p>
         </TabPanel>
