@@ -26,12 +26,13 @@ function ServiceRenewsHistoryTable() {
           serviceRenew={{}}
         />
       </Flex>
-      <CustomTable columns={"1fr ".repeat(5)}>
+      <CustomTable columns={"1fr ".repeat(6)}>
         <CustomTable.Header>
           <CustomTable.Header.Cell label={t("contractID")} />
           <CustomTable.Header.Cell label={t("startDateOfContract")} />
           <CustomTable.Header.Cell label={t("finishDateOfContract")} />
           <CustomTable.Header.Cell label={t("contactDescription")} />
+          <CustomTable.Header.Cell label={t("contractPrice")} />
         </CustomTable.Header>
         {isLoading ? (
           <LoadingSpinner />
