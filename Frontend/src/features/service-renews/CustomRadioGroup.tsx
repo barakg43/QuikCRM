@@ -9,7 +9,7 @@ import {
   useRadio,
   useRadioGroup,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomRadioGroupProps extends UseRadioGroupProps {
@@ -19,8 +19,6 @@ interface CustomRadioGroupProps extends UseRadioGroupProps {
   buttonWidth?: React.PropsWithoutRef<LayoutProps["width"]>;
   label?: string | undefined;
   register?: UseFormRegisterReturn<string> | undefined;
-
-  onChange?: (value: string) => void;
 }
 
 const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
@@ -55,6 +53,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
             width: buttonWidth,
             register,
           })}
+          onChange={(event) => onChange(event?.target?.value)}
         >
           {option.label}
         </RadioCard>
@@ -75,13 +74,14 @@ type RadioButtonProps = UseRadioProps & {
   register?: UseFormRegisterReturn<string> | undefined;
 };
 function RadioCard(props: RadioButtonProps) {
-  const { register = { onChange: () => {} }, ...radioProps } = props;
+  const { register = { onChange: () => {} }, onChange, ...radioProps } = props;
   const { state, getInputProps, getRadioProps, htmlProps, getLabelProps } =
     useRadio(radioProps);
   const { onChange: registerOnChange, ...registerProps } = register;
   const { onChange: inputOnChange, ...inputProps } = getInputProps();
   function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     inputOnChange?.(event);
+    onChange?.(event);
     registerOnChange(event);
   }
   return (
