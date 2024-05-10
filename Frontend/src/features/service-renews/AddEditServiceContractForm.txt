@@ -155,32 +155,7 @@ function AddEditServiceContractForm({
       </HStack>
       <Button ref={submitRef} display='none' type='submit' />
     </form>
-    // <Stack divider={<StackDivider />} spacing='3'>
-    //   <HStack divider={<StackDivider />}>
-    //     <DetailRow
-    //       label={t("startDateOfContract")}
-    //       value={new Date(startDateOfContract).toLocaleDateString()}
-    //     />
-    //     <DetailRow
-    //       label={t("finishDateOfContract")}
-    //       value={new Date(finishDateOfContract).toLocaleDateString()}
-    //     />
 
-    //     <DetailRow label={t("periodKind")} value={t("period." + periodKind)} />
-    //   </HStack>
-    //   <HStack divider={<StackDivider />}>
-    //     <DetailRow label={t("contractPrice")} value={contractPrice} />
-    //     <DetailRow label={t("contactDescription")} value={contactDescription} />
-    //   </HStack>
-    //   <RenewServicePanel
-    //     contractID={contractID}
-    //     submitButtonRef={submitButtonRef}
-    //     onSubmit={onSubmit}
-    //     contractPrice={contractPrice}
-    //     defaultPeriodKind={periodKind}
-    //   />
-    // </Stack>
-  );
 }
 
 export default AddEditServiceContractForm;
