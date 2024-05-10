@@ -261,9 +261,7 @@ function Contact({
 function Child() {
   return (
     <GridItem bg='red' area='child' padding='1rem'>
-      <Flex>
-        <ChildTabs />
-      </Flex>
+      <ChildTabs />
     </GridItem>
   );
 }
