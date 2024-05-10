@@ -44,7 +44,7 @@ function ServiceRenewsTable() {
           <CustomTable.Body
             data={serviceContractRenews}
             isLoading={isLoading}
-            resourceName='title'
+            resourceName={t("title")}
             render={(serviceReminder) => (
               <ServiceRenewRow
                 customerID={serviceReminder.customerID}
