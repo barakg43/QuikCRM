@@ -4,6 +4,7 @@ import {
   ResponsiveValue,
   Table,
   Tbody,
+  Td,
   Text,
   Tfoot,
   Thead,
@@ -11,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import Empty from "./Empty";
+import TableHeaderCell from "./TableHeaderCell";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
@@ -59,7 +61,13 @@ function CustomTable({ columns, children, variant }: TableProps) {
     </TableContext.Provider>
   );
 }
-
+function HeaderCell({ label }: { label: string }) {
+  return (
+    <Td border='none' as={"th"} textAlign='center'>
+      {label}
+    </Td>
+  );
+}
 type ValueType = {
   columns: string;
 };
@@ -108,6 +116,7 @@ function Row({ onClick, height, children }: RowType) {
     </Tr>
   );
 }
+Header.Cell = HeaderCell;
 CustomTable.Header = Header;
 CustomTable.Row = Row;
 CustomTable.Footer = Footer;
