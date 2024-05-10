@@ -10,6 +10,7 @@ import { ServiceRenewRecord } from "./serviceRenews";
 function AddEditServiceContractForm({
   submitButtonRef,
   serviceRenewToEdit = {},
+  onSubmit,
 }: {
   submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
   serviceRenewToEdit?: ServiceRenewRecord | Record<string, never>;
@@ -28,19 +29,20 @@ function AddEditServiceContractForm({
   const { register, handleSubmit, formState, reset } =
     useForm<ServiceRenewRecord>();
   const { errors } = formState;
-  function onSubmit(data: ServiceRenewRecord) {
+  function onSubmitForm(data: ServiceRenewRecord) {
     if (serviceRenewToEdit) {
       updateServiceContract({ ...data, contractID });
     } else {
       addServiceContract(data);
     }
+    onSubmit?.();
     reset();
   }
   const startDateDefaultValue = startDateOfContract
     .toISOString()
     .substring(0, 10);
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmitForm)}>
       <HStack gap={"1rem"} justifyContent='space-around'>
         <VStack justifyItems='flex-start'>
           <ServiceFormRow
@@ -50,6 +52,7 @@ function AddEditServiceContractForm({
             error={errors?.startDateOfContract}
             type='date'
           />
+
           <ServiceFormRow
             label='contractPrice'
             register={register}
