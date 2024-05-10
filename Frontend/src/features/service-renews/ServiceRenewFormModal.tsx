@@ -25,7 +25,7 @@ function ServiceRenewFormModal({
         <ServiceRenewForm
           submitButtonRef={submitButtonRef}
           serviceRenew={serviceRenew}
-          onSubmit={() => onClose()}
+          onSubmit={onClose}
         />
       )}
     />
