@@ -3,19 +3,21 @@ import { HTMLInputTypeAttribute } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import FormRow from "../../components/FormRow";
-import { RenewContractProps } from "./serviceRenews";
+import { RenewContractProps, ServiceRenewRecord } from "./serviceRenews";
 
-type FormRowServiceRenewProps = {
+type ServiceFormRowProps = {
   maxLength?: number | undefined;
   t?: TFunction<string, string>;
-  register: UseFormRegister<RenewContractProps>;
+  register:
+    | UseFormRegister<RenewContractProps>
+    | UseFormRegister<ServiceRenewRecord>;
   type?: HTMLInputTypeAttribute | undefined;
   isRequired?: boolean | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
   error?: FieldError | undefined;
-  label: "contractID" | "contractPrice" | "periodKind" | "contactDescription";
+  label: keyof ServiceRenewRecord;
 };
-function RenewFormRow({
+function ServiceFormRow({
   maxLength,
   label,
   error,
@@ -23,7 +25,7 @@ function RenewFormRow({
   isRequired,
   register,
   type,
-}: FormRowServiceRenewProps) {
+}: ServiceFormRowProps) {
   const { t } = useTranslation("serviceRenews");
   return (
     <FormRow
@@ -46,4 +48,4 @@ function RenewFormRow({
   );
 }
 
-export default RenewFormRow;
+export default ServiceFormRow;
