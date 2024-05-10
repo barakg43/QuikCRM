@@ -1,19 +1,8 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { useRef } from "react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
+import StyledModal from "../../../components/StyledModal";
 import { CustomerFullDataType } from "../customers";
 import CustomerForm from "./CustomerForm";
-import StyledModal from "../../../components/StyledModal";
 
 function CustomerFormModal({
   customerToEdit = {},
