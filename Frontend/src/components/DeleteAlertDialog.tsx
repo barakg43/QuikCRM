@@ -1,13 +1,13 @@
 import {
-  Button,
-  useDisclosure,
   AlertDialog,
   AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogContent,
   AlertDialogOverlay,
-  AlertDialogCloseButton,
+  Button,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,7 +58,7 @@ function DeleteAlertDialog({
               {t("delete-alert", { resourceName })}
             </AlertDialogBody>
 
-            <AlertDialogFooter>
+            <AlertDialogFooter gap='1rem'>
               <Button ref={cancelRef} onClick={onClose}>
                 {t("buttons.cancel")}
               </Button>
