@@ -5,22 +5,16 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react";
-import { TFunction } from "i18next";
-import { HTMLInputTypeAttribute, LegacyRef } from "react";
-import {
-  FieldError,
-  UseFormRegister,
-  UseFormRegisterReturn,
-  useForm,
-} from "react-hook-form";
+import { LegacyRef } from "react";
+import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import FormRow from "../../../components/FormRow.tsx";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
 import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
 import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
+import FormRowCustomer from "./FormRowCustomer.tsx";
 
 function CustomerForm({
   submitRef,
@@ -195,64 +189,6 @@ function CustomerForm({
     </form>
   );
 }
-type FormRowCustomerProps = {
-  maxLength?: number | undefined;
-  t?: TFunction<string, string>;
-  register: UseFormRegister<CustomerFullDataType>;
-  type?: HTMLInputTypeAttribute | undefined;
-  isRequired?: boolean | undefined;
-  defaultValue?: string | number | readonly string[] | undefined;
-  error?: FieldError | undefined;
-  label:
-    | "customerID"
-    | "activeContractID"
-    | "customerShortName"
-    | "customerName"
-    | "customerStatus"
-    | "customerIdentificationNumber"
-    | "customerMainPhone"
-    | "customerMainEMail"
-    | "remarks"
-    | "address"
-    | "city"
-    | "postalCode"
-    | "addressRemarks"
-    | "contactPersonName"
-    | "contactPersonPhone"
-    | "contactPersonPost"
-    | "contactPersonMobilePhone";
-};
-function FormRowCustomer({
-  maxLength,
-  label,
-  error,
-  defaultValue,
-  isRequired,
-  register,
-  type,
-}: FormRowCustomerProps) {
-  const { t } = useTranslation("customers");
-  return (
-    <FormRow
-      label={t("details." + label)}
-      defaultValue={defaultValue}
-      error={error?.message}
-      register={register(label, {
-        required: isRequired ? t("form.required") : undefined,
-        maxLength:
-          maxLength != undefined
-            ? {
-                value: maxLength,
-                message: t("form.too-big-text", { length: maxLength }),
-              }
-            : undefined,
-      })}
-      isRequired={isRequired}
-      type={type}
-    />
-  );
-}
-
 function StatusSelect({
   register,
   value,
