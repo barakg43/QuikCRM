@@ -56,11 +56,11 @@
     "toast-message-success": "הלקוח עודכן בהצלחה",
     "toast-message-error": "אירעה שגיאה בעדכון הלקוח"
   },
-  "child":{
+  "child": {
     "activities": "פעילויות",
     "service-contracts": "חוזי שירות",
     "product-renews": "חידושי מוצרים"
-  }
+  },
   "cancel-button": "בטל",
   "form": {
     "too-big-text": "השדה מוגבל ל {{length}} תווים",
