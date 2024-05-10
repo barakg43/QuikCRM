@@ -13,24 +13,7 @@ type FormRowCustomerProps = {
   isRequired?: boolean | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
   error?: FieldError | undefined;
-  label:
-    | "customerID"
-    | "activeContractID"
-    | "customerShortName"
-    | "customerName"
-    | "customerStatus"
-    | "customerIdentificationNumber"
-    | "customerMainPhone"
-    | "customerMainEMail"
-    | "remarks"
-    | "address"
-    | "city"
-    | "postalCode"
-    | "addressRemarks"
-    | "contactPersonName"
-    | "contactPersonPhone"
-    | "contactPersonPost"
-    | "contactPersonMobilePhone";
+  label: keyof CustomerFullDataType;
 };
 function FormRowCustomer({
   maxLength,
