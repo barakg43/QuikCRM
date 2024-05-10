@@ -1,6 +1,6 @@
-import { Button } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../../components/CustomTable";
+import DeleteAlertDialog from "../../../../../components/DeleteAlertDialog";
 import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
 
 type ServiceRenewHistoryProps = {
@@ -17,7 +17,7 @@ function ServiceRenewHistoryRow({
   startDateOfContract,
   contractPrice,
 }: ServiceRenewHistoryProps) {
-  const { t } = useTranslation("components", { keyPrefix: "buttons" });
+  const { t } = useTranslation("serviceRenews");
   const { deleteServiceContract, isPending } = useDeleteServiceContract();
   const fontSize = "small";
   const Cell = CustomTable.Row.Cell;
@@ -36,7 +36,9 @@ function ServiceRenewHistoryRow({
       <Cell fontSize={fontSize}>{contactDescription}</Cell>
       <Cell fontSize={fontSize}>{contractPrice}</Cell>
       <Cell>
-        <Button
+        <DeleteAlertDialog onConfirm={handleDelete} resourceName={t("title")} />
+
+        {/* <Button
           _focus={{ outline: "none", "box-shadow": "none" }}
           isLoading={isPending}
           _hover={{ backgroundColor: "teal.500", color: "white" }}
@@ -45,7 +47,7 @@ function ServiceRenewHistoryRow({
           padding={"0.5rem 3rem 0.5rem 3rem"}
         >
           {t("delete")}
-        </Button>
+        </Button> */}
       </Cell>
     </CustomTable.Row>
   );
