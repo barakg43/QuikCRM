@@ -1,8 +1,7 @@
-import { Button, Td } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../../components/CustomTable";
 import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
-import { BodyTableCell } from "../../../BodyTableCell";
 
 type ServiceRenewHistoryProps = {
   contractID: number;
@@ -20,21 +19,23 @@ function ServiceRenewHistoryRow({
 }: ServiceRenewHistoryProps) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
   const { deleteServiceContract, isPending } = useDeleteServiceContract();
+  const fontSize = "small";
+  const Cell = CustomTable.Row.Cell;
   function handleDelete() {
     deleteServiceContract(contractID);
   }
   return (
     <CustomTable.Row height='5.6rem'>
-      <BodyTableCell text={contractID} />
-      <BodyTableCell
-        text={new Date(startDateOfContract).toLocaleDateString("en-GB")}
-      />
-      <BodyTableCell
-        text={new Date(finishDateOfContract).toLocaleDateString("en-GB")}
-      />
-      <BodyTableCell text={contactDescription} />
-      <BodyTableCell text={contractPrice} />
-      <Td>
+      <Cell fontSize={fontSize}>{contractID}</Cell>
+      <Cell fontSize={fontSize}>
+        {new Date(startDateOfContract).toLocaleDateString("en-GB")}
+      </Cell>
+      <Cell fontSize={fontSize}>
+        {new Date(finishDateOfContract).toLocaleDateString("en-GB")}
+      </Cell>
+      <Cell fontSize={fontSize}>{contactDescription}</Cell>
+      <Cell fontSize={fontSize}>{contractPrice}</Cell>
+      <Cell>
         <Button
           _focus={{ outline: "none", "box-shadow": "none" }}
           isLoading={isPending}
@@ -45,7 +46,7 @@ function ServiceRenewHistoryRow({
         >
           {t("delete")}
         </Button>
-      </Td>
+      </Cell>
     </CustomTable.Row>
   );
 }
