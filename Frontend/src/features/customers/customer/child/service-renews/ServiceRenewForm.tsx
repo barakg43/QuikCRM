@@ -1,9 +1,10 @@
 import { HStack, Stack, StackDivider } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useTranslation } from "react-i18next";
-import { DetailRow } from "../../components/DetailRow";
-import RenewServicePanel from "./RenewServicePanel";
-import { ServiceRenewRecord } from "./serviceRenews";
+import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
+import { DetailRow } from "../../../../../components/DetailRow";
+import RenewServicePanel from "../../../../service-renews/RenewServicePanel";
+
 function ServiceRenewForm({
   submitButtonRef,
   serviceRenew = {},

@@ -1,6 +1,5 @@
 import CustomTable from "../../../../../components/CustomTable";
 import LoadingSpinner from "../../../../../components/LoadingSpinner";
-import TableHeaderCell from "../../../../../components/TableHeaderCell";
 
 function ServiceRenewCustomer() {
   const isLoading = false;
@@ -8,17 +7,13 @@ function ServiceRenewCustomer() {
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
       <CustomTable.Header>
-        <TableHeaderCell label={t("customerId")} />
-        <TableHeaderCell label={t("customerName")} />
-        <TableHeaderCell label={t("address")} />
-        <TableHeaderCell label={t("city")} />
-        <TableHeaderCell label={t("status")} />
+        <CustomTable.Header.Cell label={"customerId"} />
       </CustomTable.Header>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <CustomTable.Body
-          data={customers}
+          data={{}}
           isLoading={isLoading}
           render={(customer) => (
             <CustomerRow

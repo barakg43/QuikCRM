@@ -13,11 +13,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { DetailRow } from "../../../components/DetailRow";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import StatusTag from "../../../components/StatusTag";
-import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteServiceContract";
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
-import { useCustomer } from "./hooks/useCustomer";
 import ChildTabs from "./child/ChildTabs";
+import { useCustomer } from "./hooks/useCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {

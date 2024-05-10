@@ -1,12 +1,11 @@
-import { useTranslation } from "react-i18next";
-import { useServiceContractRenews } from "./hooks/useServiceContractRenews";
-import { Box, Flex, Tr, useDisclosure } from "@chakra-ui/react";
-import CustomTable from "./../../components/CustomTable.tsx";
-import TableHeaderCell from "../../components/TableHeaderCell";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import ServiceRenewRow from "./ServiceRenewRow.tsx";
-import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import CustomTable from "./../../components/CustomTable.tsx";
+import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
+import ServiceRenewRow from "./ServiceRenewRow.tsx";
+import { useServiceContractRenews } from "./hooks/useServiceContractRenews";
 import { ServiceRenewRecord } from "./serviceRenews";
 function ServiceRenewsTable() {
   const { serviceContractRenews, isLoading } = useServiceContractRenews();

@@ -1,8 +1,7 @@
 import { Button, Td } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
-import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
 import CustomTable from "../../../../../components/CustomTable";
+import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
 import { BodyTableCell } from "../../../BodyTableCell";
 
 type ServiceRenewHistoryProps = {

@@ -9,7 +9,7 @@ import {
   useRadio,
   useRadioGroup,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomRadioGroupProps extends UseRadioGroupProps {

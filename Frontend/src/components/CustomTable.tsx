@@ -1,18 +1,15 @@
 import {
-  Box,
   LayoutProps,
   ResponsiveValue,
   Table,
   Tbody,
   Td,
-  Text,
   Tfoot,
   Thead,
   Tr,
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import Empty from "./Empty";
-import TableHeaderCell from "./TableHeaderCell";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
