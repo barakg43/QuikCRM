@@ -17,6 +17,7 @@ import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteSe
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
 import { useCustomer } from "./hooks/useCustomer";
+import ChildTabs from "./child/ChildTabs";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -254,20 +255,15 @@ function Contact({
           value={contactPersonMobilePhone}
           useDivider={false}
         />
-
       </Flex>
     </GridItem>
   );
 }
 function Child() {
-  const { deleteServiceContract } = useDeleteServiceContract();
-
   return (
     <GridItem bg='red' area='child' padding='1rem'>
       <Flex>
-        <Button colorScheme='teal' onClick={() => deleteServiceContract(2)}>
-          Edit
-        </Button>
+        <ChildTabs />
       </Flex>
     </GridItem>
   );
