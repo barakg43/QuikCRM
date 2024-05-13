@@ -1,3 +1,4 @@
+import { SystemStyleObject } from "@chakra-ui/react";
 import { TFunction } from "i18next";
 import { HTMLInputTypeAttribute } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
@@ -16,6 +17,7 @@ type ServiceFormRowProps = {
   defaultValue?: string | number | readonly string[] | undefined;
   error?: FieldError | undefined;
   label: keyof ServiceRenewRecord;
+  sx?: SystemStyleObject | undefined;
 };
 function ServiceFormRow({
   maxLength,
@@ -25,6 +27,7 @@ function ServiceFormRow({
   isRequired,
   register,
   type,
+  sx,
 }: ServiceFormRowProps) {
   const { t } = useTranslation("serviceRenews");
   return (
@@ -44,6 +47,7 @@ function ServiceFormRow({
       })}
       isRequired={isRequired}
       type={type}
+      sx={sx}
     />
   );
 }
