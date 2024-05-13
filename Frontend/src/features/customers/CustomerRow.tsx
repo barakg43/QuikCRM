@@ -18,7 +18,9 @@ function CustomerRow({
       <Table.Row.Cell>{customerShortName} </Table.Row.Cell>
       <Table.Row.Cell>{address}</Table.Row.Cell>
       <Table.Row.Cell>{city}</Table.Row.Cell>
-      <StatusTag status={customerStatus || "none"} />
+      <Table.Row.Cell>
+        <StatusTag status={customerStatus || "none"} />
+      </Table.Row.Cell>
     </Table.Row>
   );
 }
