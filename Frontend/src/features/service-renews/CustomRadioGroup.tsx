@@ -3,6 +3,7 @@ import {
   LayoutProps,
   Stack,
   StackDirection,
+  SystemStyleObject,
   Text,
   UseRadioGroupProps,
   UseRadioProps,
@@ -19,6 +20,7 @@ interface CustomRadioGroupProps extends UseRadioGroupProps {
   buttonWidth?: React.PropsWithoutRef<LayoutProps["width"]>;
   label?: string | undefined;
   register?: UseFormRegisterReturn<string> | undefined;
+  sx?: SystemStyleObject | undefined;
 }
 
 const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
@@ -29,6 +31,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   label,
   register,
   direction = "row",
+  sx,
   ...props
 }) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -39,7 +42,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   const group = getRootProps();
 
   return (
-    <Stack {...group} direction={direction} height={"100%"}>
+    <Stack {...group} direction={direction} height={"100%"} sx={sx}>
       {label && (
         <Text textAlign={"center"} alignContent={"center"}>
           {label}
