@@ -2,6 +2,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  SystemStyleObject,
   Text,
   Textarea,
   VStack,
@@ -15,6 +16,7 @@ type FromRowProps = {
   isRequired?: boolean;
   error?: string | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
+  sx?: SystemStyleObject | undefined;
 };
 function FormRow({
   label,
@@ -23,9 +25,15 @@ function FormRow({
   register,
   error,
   isRequired = false,
+  sx,
 }: FromRowProps) {
   return (
-    <FormControl isRequired={isRequired} display='flex' alignItems='center'>
+    <FormControl
+      isRequired={isRequired}
+      display='flex'
+      alignItems='center'
+      sx={sx}
+    >
       <FormLabel width='12rem' fontSize='1.25rem'>
         {label}
       </FormLabel>
