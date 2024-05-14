@@ -57,6 +57,7 @@
             <AppenderRef ref="requestsFileAppender"/>
             <AppenderRef ref="customConsoleAppender"/>
         </logger>
+        
 
         <Root level="INFO">
             <AppenderRef ref="Console"/>

@@ -54,7 +54,6 @@ public class SqlConnectionManger {
 		try {
 			fileReader = new FileReader(sqlConfigurationYamlFilePath);
 			sqlConfiguration = yamlMapper.readValue(fileReader, SqlConfiguration.class);
-
 		} catch (IOException e) {
 			sqlLogger.error(e.getMessage() + "\nAbsolute path: " + new File(".").getAbsolutePath());
 			throw new RuntimeException(e);
@@ -62,6 +61,7 @@ public class SqlConnectionManger {
 
 		return sqlConfiguration;
 	}
+
 
 	@Bean
 	@Primary
