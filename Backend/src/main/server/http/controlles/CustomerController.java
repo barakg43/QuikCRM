@@ -2,7 +2,6 @@ package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.ListSubset;
-import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.services.CustomerService;
@@ -10,9 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.Instant;
-import java.util.List;
 
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
@@ -26,15 +22,8 @@ public class CustomerController {
 
 	public CustomerController(HttpRequestExecutor httpRequestExecutor, CustomerService customerService) {
 		this.httpRequestExecutor = httpRequestExecutor;
-//        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
 		this.customerService = customerService;
 	}
-
-	//    @PostConstruct //start sql connection after CustomerHttpService ctor
-	private void startSqlConnection() {
-//        sqlClient.createSqlConnection();
-	}
-
 
 	@GetMapping("")
 	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer pageNumber,
@@ -110,21 +99,5 @@ public class CustomerController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant delete customer with id of " + id, exception);
 		}
-	}
-
-
-	@GetMapping("/customer/closed-tasks")
-	public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {
-//        return sqlClient.getClosedTaskForCustomer(id);
-		return null;
-	}
-
-	@GetMapping("/supplier/name")
-	public String getSupplierNameByID(@RequestParam int id) {
-		String result = "";
-		Instant startTime = Instant.now();
-//        result = sqlClient.getSupplierNameByID(id);
-		Instant endTime = Instant.now();
-		return result;
 	}
 }
