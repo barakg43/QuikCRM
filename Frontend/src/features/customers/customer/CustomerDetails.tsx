@@ -7,6 +7,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { UseMutateFunction } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteAlertDialog from "../../../components/DeleteAlertDialog";
@@ -55,9 +56,10 @@ function CustomerDetails() {
     });
     navigate(-1);
   }
-  if (isLoading) {
+
+  const { deleteCustomer, isPending: isDeleting } = useDeleteCustomer();
+  if (isLoading || isDeleting)
     return <LoadingSpinner callerName='CustomerDetails' />;
-  }
 
   return (
     <Grid
@@ -96,6 +98,7 @@ function CustomerDetails() {
         customerData={customer}
         customerID={customerID}
         customerShortName={customerShortName}
+        deleteCustomerApi={deleteCustomer}
       />
     </Grid>
   );
@@ -105,21 +108,23 @@ function Header({
   customerID,
   customerShortName,
   customerData,
+  deleteCustomerApi,
 }: {
   customerID: number;
   customerShortName: string | undefined;
   customerData: CustomerFullDataType | Record<string, never>;
+  deleteCustomerApi: UseMutateFunction<void, Error, number, unknown>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
-  const { deleteCustomer, isPending } = useDeleteCustomer();
   const navigate = useNavigate();
 
   // function t(key: string) {
   //   return key;
   // }
   function handleDelete() {
-    deleteCustomer(customerID, { onSuccess: () => navigate("/customers") });
+    deleteCustomerApi(customerID, { onSuccess: () => navigate("/customers") });
   }
+
   return (
     <GridItem
       // bg='green'
