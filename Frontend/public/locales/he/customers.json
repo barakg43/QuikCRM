@@ -36,7 +36,7 @@
 
   "delete": {
     "confirmation": "האם אתה בטוח שברצונך למחוק את הלקוח?",
-    "toast-title": "מחיקת לקוח ",
+    "toast-title": "מחיקת לקוח",
     "toast-message-success": "הלקוח נמחק בהצלחה",
     "toast-message-error": "אירעה שגיאה במחיקת הלקוח"
   },
