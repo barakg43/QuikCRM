@@ -7,9 +7,9 @@ function ChildTabs() {
   return (
     <Tabs isLazy height={"100vh"}>
       <TabList>
-        <Tab>{t("activities")}</Tab>
-        <Tab>{t("service-contracts")}</Tab>
-        <Tab>{t("product-renews")}</Tab>
+        <Tab fontSize='large'>{t("activities")}</Tab>
+        <Tab fontSize='large'>{t("service-contracts")}</Tab>
+        <Tab fontSize='large'>{t("product-renews")}</Tab>
       </TabList>
 
       <TabPanels overflow='scroll'>
