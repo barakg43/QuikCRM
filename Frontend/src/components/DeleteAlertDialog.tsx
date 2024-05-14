@@ -32,7 +32,7 @@ function DeleteAlertDialog({
   return (
     <>
       <Button
-        _focus={{ outline: "none", "box-shadow": "none" }}
+        _focus={{ outline: "none", boxShadow: "none" }}
         isLoading={isPending}
         _hover={{ backgroundColor: "teal.500", color: "white" }}
         onClick={onOpen}
@@ -50,7 +50,7 @@ function DeleteAlertDialog({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              t({"buttons.cancel"}) {resourceName}
+              {t("buttons.delete")} {resourceName}
             </AlertDialogHeader>
             <AlertDialogCloseButton />
 
