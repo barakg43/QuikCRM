@@ -22,7 +22,8 @@ function ServiceRenewHistoryRow({
   const fontSize = "small";
   const Cell = CustomTable.Row.Cell;
   function handleDelete() {
-    deleteServiceContract(contractID);
+    console.log("contractID", contractID);
+    // deleteServiceContract(contractID);
   }
   return (
     <CustomTable.Row height='5.6rem'>
@@ -36,7 +37,11 @@ function ServiceRenewHistoryRow({
       <Cell fontSize={fontSize}>{contactDescription}</Cell>
       <Cell fontSize={fontSize}>{contractPrice}</Cell>
       <Cell>
-        <DeleteAlertDialog onConfirm={handleDelete} resourceName={t("title")} />
+        <DeleteAlertDialog
+          isPending={isPending}
+          onConfirm={handleDelete}
+          resourceName={t("title")}
+        />
 
         {/* <Button
           _focus={{ outline: "none", "box-shadow": "none" }}
