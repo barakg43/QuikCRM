@@ -60,7 +60,7 @@ function ServiceRenewRow({
       </Cell>
       <Cell>
         <Button
-          _focus={{ outline: "none", "box-shadow": "none" }}
+          _focus={{ outline: "none", boxShadow: "none" }}
           _hover={{ backgroundColor: "teal.500", color: "white" }}
           onClick={handleRenew}
           fontSize={"xl"}
