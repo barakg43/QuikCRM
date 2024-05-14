@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Flex, Text } from "@chakra-ui/react";
+import { As, Button, ButtonProps, Flex, Text } from "@chakra-ui/react";
 import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
 import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
@@ -7,7 +7,13 @@ import { useSearchParams } from "react-router-dom";
 export const getPagesAmount = (totalItemsAmount: number) =>
   Math.ceil(totalItemsAmount / ITEMS_AMOUNT_PER_PAGE);
 export const ITEMS_AMOUNT_PER_PAGE = 10;
-function Pagination({ totalItemsAmount = 0 }: { totalItemsAmount: number }) {
+function Pagination({
+  totalItemsAmount = 0,
+  as,
+}: {
+  totalItemsAmount: number;
+  as: As | undefined;
+}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("components", { keyPrefix: "pagination" });
 
@@ -37,7 +43,7 @@ function Pagination({ totalItemsAmount = 0 }: { totalItemsAmount: number }) {
       ? currentPage * ITEMS_AMOUNT_PER_PAGE
       : totalItemsAmount;
   return (
-    <Flex alignItems='center' justifyContent='space-around'>
+    <Flex alignItems='center' justifyContent='space-around' as={as}>
       <PaginationButton onClick={previousPage} disabled={currentPage === 1}>
         {isRTL ? <TbChevronsRight /> : <TbChevronsLeft />}
         {t("button.previous")}
