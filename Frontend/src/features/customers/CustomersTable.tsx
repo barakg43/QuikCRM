@@ -57,7 +57,7 @@ function CustomersTable() {
           />
         )}
         <CustomTable.Footer>
-          <Pagination totalItemsAmount={totalItems} />
+          <Pagination as='td' totalItemsAmount={totalItems} />
         </CustomTable.Footer>
       </CustomTable>
     </>
