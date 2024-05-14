@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Flex,
   Grid,
@@ -10,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import DeleteAlertDialog from "../../../components/DeleteAlertDialog";
 import { DetailRow } from "../../../components/DetailRow";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import StatusTag from "../../../components/StatusTag";
@@ -17,6 +17,7 @@ import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
 import ChildTabs from "./child/ChildTabs";
 import { useCustomer } from "./hooks/useCustomer";
+import { useDeleteCustomer } from "./hooks/useDeleteCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -105,14 +106,20 @@ function Header({
   customerShortName,
   customerData,
 }: {
-  customerID: number | undefined;
+  customerID: number;
   customerShortName: string | undefined;
   customerData: CustomerFullDataType | Record<string, never>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
+  const { deleteCustomer, isPending } = useDeleteCustomer();
+  const navigate = useNavigate();
+
   // function t(key: string) {
   //   return key;
   // }
+  function handleDelete() {
+    deleteCustomer(customerID, { onSuccess: () => navigate("/customers") });
+  }
   return (
     <GridItem
       // bg='green'
@@ -132,7 +139,10 @@ function Header({
         </Text>
 
         <HStack>
-          <Button colorScheme='red'>{t("delete")}</Button>
+          <DeleteAlertDialog
+            onConfirm={handleDelete}
+            resourceName={t("title")}
+          />
           <CustomerFormModal customerToEdit={customerData} />
         </HStack>
       </Flex>
