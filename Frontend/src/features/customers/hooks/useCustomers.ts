@@ -13,6 +13,7 @@ export function useCustomers() {
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const toast = useToast();
+  const querySearch = searchParams.get("query") || undefined;
   const queryClient = useQueryClient();
   const {
     data: { customers, totalItems } = { customers: [], totalItems: 0 },
@@ -20,7 +21,7 @@ export function useCustomers() {
     error,
   }: UseQueryResult<CustomersListType> = useQuery({
     queryKey: ["customers", page],
-    queryFn: () => getCustomersSubset_API({ page }),
+    queryFn: () => getCustomersSubset_API({ page, querySearch }),
   });
   if (error) {
     toast({
