@@ -2,13 +2,10 @@ package main.server.sql.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.ContractRecord;
-import main.server.sql.dto.reminder.InvoiceReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
-import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
 import main.server.sql.repositories.ServiceContractRepository;
 import main.server.uilities.UtilityFunctions;
@@ -21,14 +18,13 @@ import java.util.Optional;
 
 @Service
 public class ContractService {
-	private final SqlFunctionExecutor sqlFunctionExecutor;
 	private final ServiceContractRepository serviceContractRepository;
 	private final CustomerRepository customerRepository;
 
-	public ContractService(SqlFunctionExecutor sqlFunctionExecutor,
-						   ServiceContractRepository serviceContractRepository,
-						   CustomerRepository customerRepository) {
-		this.sqlFunctionExecutor = sqlFunctionExecutor;
+	public ContractService(
+			ServiceContractRepository serviceContractRepository,
+			CustomerRepository customerRepository) {
+
 		this.serviceContractRepository = serviceContractRepository;
 		this.customerRepository = customerRepository;
 	}
@@ -164,21 +160,5 @@ public class ContractService {
 	private ServiceContractEntity validAndSaveToRepository(ServiceContractEntity serviceContractEntity) {
 		UtilityFunctions.validEntityValidations(serviceContractEntity);
 		return serviceContractRepository.save(serviceContractEntity);
-	}
-
-
-	@Deprecated
-	public List<InvoiceReminderRecord> getInvoiceReminders() {
-		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-				.from("tbInvoicesForContracts")
-				.select("dbo.fncCustNameForActiveContractID(contractID) AS custShortName, contractID, dateOfDebit, " +
-						"invoiceNum, renewal")
-				.where()
-				.is("invoiceNum", "NULL", false)
-				.and().lessOrEqualThan("dateOfDebit", LocalDate.now(), true)
-				.build();
-		System.out.println(sqlQuery);
-		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, InvoiceReminderRecord.class);
-
 	}
 }

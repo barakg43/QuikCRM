@@ -5,7 +5,6 @@ import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.entities.CustomerEntity;
-import main.server.sql.function.SqlFunctionExecutor;
 import main.server.sql.repositories.CustomerRepository;
 import main.server.uilities.UtilityFunctions;
 import org.springframework.data.domain.Page;
@@ -18,11 +17,9 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-	private final SqlFunctionExecutor sqlFunctionExecutor;
 	private final CustomerRepository customerRepository;
 
-	public CustomerService(SqlFunctionExecutor sqlFunctionExecutor, CustomerRepository customerRepository) {
-		this.sqlFunctionExecutor = sqlFunctionExecutor;
+	public CustomerService(CustomerRepository customerRepository) {
 		this.customerRepository = customerRepository;
 	}
 
@@ -44,7 +41,7 @@ public class CustomerService {
 		CustomerEntity customerSaved = validAndSaveToRepository(customer);
 		return customerSaved.getCustomerID();
 	}
-	
+
 	@Transactional
 	public void updateCustomerDetails(Short customerId, CustomerFullDetailsRecord customerDetailsUpdated) throws IndexOutOfBoundsException {
 
