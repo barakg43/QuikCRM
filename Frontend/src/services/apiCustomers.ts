@@ -9,13 +9,19 @@ import { SubsetListType } from "./globalTypes";
 
 export async function getCustomersSubset_API({
   page,
+  querySearch,
 }: {
   page: number;
+  querySearch?: string | undefined;
 }): Promise<CustomersListType | undefined> {
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
       await httpClient.get(`/customers`, {
-        params: { pageNumber: page, pageSize: ITEMS_AMOUNT_PER_PAGE },
+        params: {
+          pageNumber: page,
+          pageSize: ITEMS_AMOUNT_PER_PAGE,
+          query: querySearch,
+        },
       });
     return {
       customers: data.listSubset,
