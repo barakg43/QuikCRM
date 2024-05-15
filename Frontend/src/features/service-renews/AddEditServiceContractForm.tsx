@@ -40,6 +40,7 @@ function AddEditServiceContractForm({
     YEARLY: 12,
   };
   function onSubmitForm(data: ServiceRenewRecord) {
+    console.log("test", data, serviceRenewToEdit);
     if (serviceRenewToEdit) {
       updateServiceContract({ ...data, contractID });
     } else {
