@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { deleteServiceRenew_API } from "../../../services/apiServiceRenew";
-export function useDeleteServiceContract() {
+export function useDeleteProductRenew() {
   const toast = useToast();
   //   const { createInfinityToast, updateToast } = useUpdatableToaster(
   //     "delete service contract"

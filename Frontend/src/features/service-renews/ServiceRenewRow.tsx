@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { ServiceRenewRecord } from "./serviceRenews";
-import { BodyTableCell } from "../customers/BodyTableCell";
-import CustomTable from "../../components/CustomTable";
+import { Button, Tag } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { Button, Tag, Td } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import CustomTable from "../../components/CustomTable";
+import { ServiceRenewRecord } from "./serviceRenews";
 
 const periodColors = {
   MONTHLY: "blue",
@@ -25,6 +24,7 @@ function ServiceRenewRow({
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const Cell = CustomTable.Row.Cell;
   function handleRenew() {
     onRenew({
       contractID,
@@ -39,17 +39,12 @@ function ServiceRenewRow({
   }
   return (
     <CustomTable.Row height='5.6rem'>
-      <BodyTableCell
-        text={customerShortName}
-        onClick={() => navigate(`/customers/${customerID}`)}
-      />
-      <BodyTableCell
-        text={new Date(startDateOfContract).toLocaleDateString("en-GB")}
-      />
-      <BodyTableCell
-        text={new Date(finishDateOfContract).toLocaleDateString("en-GB")}
-      />
-      <Td textAlign={"center"}>
+      <Cell onClick={() => navigate(`/customers/${customerID}`)}>
+        {customerShortName}
+      </Cell>
+      <Cell>{new Date(startDateOfContract).toLocaleDateString("en-GB")}</Cell>
+      <Cell>{new Date(finishDateOfContract).toLocaleDateString("en-GB")}</Cell>
+      <Cell>
         <Tag
           backgroundColor={periodColors[periodKind]}
           justifyContent='center'
@@ -62,10 +57,10 @@ function ServiceRenewRow({
         >
           {t("period." + periodKind)}
         </Tag>
-      </Td>
-      <Td>
+      </Cell>
+      <Cell>
         <Button
-          _focus={{ outline: "none", "box-shadow": "none" }}
+          _focus={{ outline: "none", boxShadow: "none" }}
           _hover={{ backgroundColor: "teal.500", color: "white" }}
           onClick={handleRenew}
           fontSize={"xl"}
@@ -73,7 +68,7 @@ function ServiceRenewRow({
         >
           {t("renew-button")}
         </Button>
-      </Td>
+      </Cell>
     </CustomTable.Row>
   );
 }

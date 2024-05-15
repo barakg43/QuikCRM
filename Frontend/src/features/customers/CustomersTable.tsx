@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import CustomTable from "../../components/CustomTable";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import Pagination from "../../components/Pagination";
-import TableHeaderCell from "../../components/TableHeaderCell";
 import CustomerRow from "./CustomerRow";
 import CustomerFormModal from "./customer/CustomerFormModal";
 import { useCustomers } from "./hooks/useCustomers";
@@ -32,17 +31,18 @@ function CustomersTable() {
       </Flex>
       <CustomTable columns={"1fr ".repeat(5)}>
         <CustomTable.Header>
-          <TableHeaderCell label={t("customerId")} />
-          <TableHeaderCell label={t("customerName")} />
-          <TableHeaderCell label={t("address")} />
-          <TableHeaderCell label={t("city")} />
-          <TableHeaderCell label={t("status")} />
+          <CustomTable.Header.Cell label={t("customerId")} />
+          <CustomTable.Header.Cell label={t("customerName")} />
+          <CustomTable.Header.Cell label={t("address")} />
+          <CustomTable.Header.Cell label={t("city")} />
+          <CustomTable.Header.Cell label={t("status")} />
         </CustomTable.Header>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <CustomTable.Body
             data={customers}
+            resourceName={t("title")}
             isLoading={isLoading}
             render={(customer) => (
               <CustomerRow
@@ -57,7 +57,7 @@ function CustomersTable() {
           />
         )}
         <CustomTable.Footer>
-          <Pagination totalItemsAmount={totalItems} />
+          <Pagination as='td' totalItemsAmount={totalItems} />
         </CustomTable.Footer>
       </CustomTable>
     </>

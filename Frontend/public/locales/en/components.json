@@ -20,5 +20,5 @@
     "save": "שמור",
     "update": "עדכן"
   },
-  "delete-alert": "ה האם אתה בטוח שאתה רוצה למחוק את{{resourceName}}?\nפעולה זו לא ניתנת לביטול"
+  "delete-alert": "Are you sure you want to delete {{resourceName}}?\nYou can't undo this action afterwards."
 }

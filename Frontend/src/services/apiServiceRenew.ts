@@ -98,6 +98,3 @@ export async function deleteServiceRenew_API(contractID: number) {
     throw error;
   }
 }
-// function timeout(ms: number) {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// }

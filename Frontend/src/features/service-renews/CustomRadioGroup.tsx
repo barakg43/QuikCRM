@@ -3,13 +3,14 @@ import {
   LayoutProps,
   Stack,
   StackDirection,
+  SystemStyleObject,
   Text,
   UseRadioGroupProps,
   UseRadioProps,
   useRadio,
   useRadioGroup,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomRadioGroupProps extends UseRadioGroupProps {
@@ -19,8 +20,7 @@ interface CustomRadioGroupProps extends UseRadioGroupProps {
   buttonWidth?: React.PropsWithoutRef<LayoutProps["width"]>;
   label?: string | undefined;
   register?: UseFormRegisterReturn<string> | undefined;
-
-  onChange?: (value: string) => void;
+  sx?: SystemStyleObject | undefined;
 }
 
 const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
@@ -31,6 +31,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   label,
   register,
   direction = "row",
+  sx,
   ...props
 }) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -41,7 +42,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   const group = getRootProps();
 
   return (
-    <Stack {...group} direction={direction} height={"100%"}>
+    <Stack {...group} direction={direction} height={"100%"} sx={sx}>
       {label && (
         <Text textAlign={"center"} alignContent={"center"}>
           {label}
@@ -55,6 +56,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
             width: buttonWidth,
             register,
           })}
+          onValueChange={onChange}
         >
           {option.label}
         </RadioCard>
@@ -72,10 +74,15 @@ type RadioButtonProps = UseRadioProps & {
   label?: string;
   width?: React.PropsWithoutRef<LayoutProps["width"]>;
   children?: React.ReactNode;
+  onValueChange?: (value: string) => void;
   register?: UseFormRegisterReturn<string> | undefined;
 };
 function RadioCard(props: RadioButtonProps) {
-  const { register = { onChange: () => {} }, ...radioProps } = props;
+  const {
+    register = { onChange: () => {} },
+    onValueChange,
+    ...radioProps
+  } = props;
   const { state, getInputProps, getRadioProps, htmlProps, getLabelProps } =
     useRadio(radioProps);
   const { onChange: registerOnChange, ...registerProps } = register;
@@ -83,6 +90,7 @@ function RadioCard(props: RadioButtonProps) {
   function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     inputOnChange?.(event);
     registerOnChange(event);
+    onValueChange?.(event.target?.value);
   }
   return (
     <Box cursor='pointer' textAlign='center' as='label' {...htmlProps}>

@@ -1,21 +1,17 @@
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import CustomTable from "./../../components/CustomTable.tsx";
-import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
-import ServiceRenewRow from "./ServiceRenewRow.tsx";
-import { useServiceContractRenews } from "./hooks/useServiceContractRenews";
-import { ServiceRenewRecord } from "./serviceRenews";
-function ServiceRenewsTable() {
+
+import CustomTable from "../../../../../components/CustomTable.tsx";
+import LoadingSpinner from "../../../../../components/LoadingSpinner.tsx";
+import AddEditServiceContractModal from "../../../../service-renews/AddEditServiceContractModal";
+import { useServiceContractRenews } from "../../../../service-renews/hooks/useServiceContractRenews.ts";
+import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
+import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";
+function ServiceRenewsHistoryTable() {
   const { serviceContractRenews, isLoading } = useServiceContractRenews();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [serviceToRenew, setServiceToRenew] = useState<ServiceRenewRecord>();
-  function handleRenew(serviceRenew: ServiceRenewRecord) {
-    setServiceToRenew(serviceRenew);
-    onOpen();
-  }
+
   return (
     <>
       <Flex
@@ -24,18 +20,15 @@ function ServiceRenewsTable() {
         paddingBottom='10px'
         w='95%'
       >
-        <ServiceRenewFormModal
-          isOpen={isOpen}
-          onClose={onClose}
-          serviceRenew={serviceToRenew}
-        />
+        <AddEditServiceContractModal serviceRenewToEdit={{}} />
       </Flex>
-      <CustomTable columns={"1fr ".repeat(5)}>
+      <CustomTable columns={"1fr ".repeat(6)}>
         <CustomTable.Header>
-          <CustomTable.Header.Cell label={t("customerShortName")} />
+          <CustomTable.Header.Cell label={t("contractID")} />
           <CustomTable.Header.Cell label={t("startDateOfContract")} />
           <CustomTable.Header.Cell label={t("finishDateOfContract")} />
-          <CustomTable.Header.Cell label={t("periodKind")} />
+          <CustomTable.Header.Cell label={t("contactDescription")} />
+          <CustomTable.Header.Cell label={t("contractPrice")} />
         </CustomTable.Header>
         {isLoading ? (
           <LoadingSpinner />
@@ -44,18 +37,14 @@ function ServiceRenewsTable() {
             data={serviceContractRenews}
             isLoading={isLoading}
             resourceName={t("title")}
-            render={(serviceReminder) => (
-              <ServiceRenewRow
-                customerID={serviceReminder.customerID}
-                customerShortName={serviceReminder.customerShortName}
+            render={(serviceReminder: ServiceRenewRecord) => (
+              <ServiceRenewHistoryRow
                 contractID={serviceReminder.contractID}
                 startDateOfContract={serviceReminder.startDateOfContract}
                 finishDateOfContract={serviceReminder.finishDateOfContract}
                 contractPrice={serviceReminder.contractPrice}
-                periodKind={serviceReminder.periodKind}
                 contactDescription={serviceReminder.contactDescription}
                 key={serviceReminder.contractID}
-                onRenew={handleRenew}
               />
             )}
           />
@@ -69,4 +58,4 @@ function ServiceRenewsTable() {
   );
 }
 
-export default ServiceRenewsTable;
+export default ServiceRenewsHistoryTable;

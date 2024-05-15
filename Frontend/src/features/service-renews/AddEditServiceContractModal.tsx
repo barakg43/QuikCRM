@@ -1,69 +1,38 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { useRef } from "react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
+import StyledModal from "../../components/StyledModal";
+import AddEditServiceContractForm from "./AddEditServiceContractForm";
 import { ServiceRenewRecord } from "./serviceRenews";
 
-function CustomerFormModal({
-  customerToEdit = {},
+function AddEditServiceContractModal({
+  serviceRenewToEdit = {},
 }: {
-  customerToEdit?: ServiceRenewRecord | Record<string, never>;
+  serviceRenewToEdit?: ServiceRenewRecord | Record<string, never>;
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation("customers");
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isEditing = Object.keys(serviceRenewToEdit).length !== 0;
+
   return (
     <>
       <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
-        {customerToEdit.customerID ? t("update.edit") : t("add.button")}
+        {serviceRenewToEdit.customerID ? t("update.edit") : t("add.button")}
       </Button>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay
-          bg='blackAlpha.300'
-          backdropFilter='blur(10px) hue-rotate(90deg)'
-        />
-        <ModalContent minWidth={"50%"}>
-          <ModalHeader marginInlineStart='2rem' fontSize='1.6rem'>
-            {customerToEdit ? t("update.title") : t("add.title")}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <CustomerForm
-              customerToEdit={customerToEdit}
-              submitRef={submitButtonRef}
-              OnSubmit={onClose}
-            />
-          </ModalBody>
-          <ModalFooter gap='1rem'>
-            <Button fontSize='1rem' onClick={onClose}>
-              {t("cancel-button")}
-            </Button>
-            <Button
-              fontSize='1.1rem'
-              fontWeight='bold'
-              onClick={() => {
-                submitButtonRef.current?.click();
-                console.log("submit");
-              }}
-            >
-              {customerToEdit.customerID
-                ? t("update.button")
-                : t("add.save-button")}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <StyledModal
+        isOpen={isOpen}
+        isEditing={isEditing}
+        onClose={onClose}
+        title={isEditing ? t("update.title") : t("add.title")}
+        renderBody={(submitButtonRef) => (
+          <AddEditServiceContractForm
+            serviceRenewToEdit={serviceRenewToEdit}
+            submitButtonRef={submitButtonRef}
+            onSubmit={onClose}
+          />
+        )}
+      />
     </>
   );
 }
 
-export default CustomerFormModal;
+export default AddEditServiceContractModal;

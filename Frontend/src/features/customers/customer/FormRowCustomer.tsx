@@ -2,20 +2,20 @@ import { TFunction } from "i18next";
 import { HTMLInputTypeAttribute } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import FormRow from "../../components/FormRow";
-import { RenewContractProps } from "./serviceRenews";
+import FormRow from "../../../components/FormRow.tsx";
+import { CustomerFullDataType } from "../customers";
 
-type FormRowServiceRenewProps = {
+type FormRowCustomerProps = {
   maxLength?: number | undefined;
   t?: TFunction<string, string>;
-  register: UseFormRegister<RenewContractProps>;
+  register: UseFormRegister<CustomerFullDataType>;
   type?: HTMLInputTypeAttribute | undefined;
   isRequired?: boolean | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
   error?: FieldError | undefined;
-  label: "contractID" | "contractPrice" | "periodKind" | "contactDescription";
+  label: keyof CustomerFullDataType;
 };
-function RenewFormRow({
+function FormRowCustomer({
   maxLength,
   label,
   error,
@@ -23,11 +23,11 @@ function RenewFormRow({
   isRequired,
   register,
   type,
-}: FormRowServiceRenewProps) {
-  const { t } = useTranslation("serviceRenews");
+}: FormRowCustomerProps) {
+  const { t } = useTranslation("customers");
   return (
     <FormRow
-      label={t(label)}
+      label={t("details." + label)}
       defaultValue={defaultValue}
       error={error?.message}
       register={register(label, {
@@ -45,5 +45,4 @@ function RenewFormRow({
     />
   );
 }
-
-export default RenewFormRow;
+export default FormRowCustomer;

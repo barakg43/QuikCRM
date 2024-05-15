@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Flex,
   Grid,
@@ -8,15 +7,18 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { UseMutateFunction } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import DeleteAlertDialog from "../../../components/DeleteAlertDialog";
 import { DetailRow } from "../../../components/DetailRow";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import StatusTag from "../../../components/StatusTag";
-import { useDeleteServiceContract } from "../../service-renews/hooks/useDeleteServiceContract";
 import { CustomerFullDataType } from "../customers";
 import CustomerFormModal from "./CustomerFormModal";
+import ChildTabs from "./child/ChildTabs";
 import { useCustomer } from "./hooks/useCustomer";
+import { useDeleteCustomer } from "./hooks/useDeleteCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -54,9 +56,10 @@ function CustomerDetails() {
     });
     navigate(-1);
   }
-  if (isLoading) {
+
+  const { deleteCustomer, isPending: isDeleting } = useDeleteCustomer();
+  if (isLoading || isDeleting)
     return <LoadingSpinner callerName='CustomerDetails' />;
-  }
 
   return (
     <Grid
@@ -95,6 +98,7 @@ function CustomerDetails() {
         customerData={customer}
         customerID={customerID}
         customerShortName={customerShortName}
+        deleteCustomerApi={deleteCustomer}
       />
     </Grid>
   );
@@ -104,15 +108,23 @@ function Header({
   customerID,
   customerShortName,
   customerData,
+  deleteCustomerApi,
 }: {
-  customerID: number | undefined;
+  customerID: number;
   customerShortName: string | undefined;
   customerData: CustomerFullDataType | Record<string, never>;
+  deleteCustomerApi: UseMutateFunction<void, Error, number, unknown>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
+  const navigate = useNavigate();
+
   // function t(key: string) {
   //   return key;
   // }
+  function handleDelete() {
+    deleteCustomerApi(customerID, { onSuccess: () => navigate("/customers") });
+  }
+
   return (
     <GridItem
       // bg='green'
@@ -132,7 +144,10 @@ function Header({
         </Text>
 
         <HStack>
-          <Button colorScheme='red'>{t("delete")}</Button>
+          <DeleteAlertDialog
+            onConfirm={handleDelete}
+            resourceName={t("title")}
+          />
           <CustomerFormModal customerToEdit={customerData} />
         </HStack>
       </Flex>
@@ -254,21 +269,14 @@ function Contact({
           value={contactPersonMobilePhone}
           useDivider={false}
         />
-
       </Flex>
     </GridItem>
   );
 }
 function Child() {
-  const { deleteServiceContract } = useDeleteServiceContract();
-
   return (
     <GridItem bg='red' area='child' padding='1rem'>
-      <Flex>
-        <Button colorScheme='teal' onClick={() => deleteServiceContract(2)}>
-          Edit
-        </Button>
-      </Flex>
+      <ChildTabs />
     </GridItem>
   );
 }

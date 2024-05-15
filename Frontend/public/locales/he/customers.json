@@ -36,7 +36,7 @@
 
   "delete": {
     "confirmation": "האם אתה בטוח שברצונך למחוק את הלקוח?",
-    "toast-title": "מחיקת לקוח ",
+    "toast-title": "מחיקת לקוח",
     "toast-message-success": "הלקוח נמחק בהצלחה",
     "toast-message-error": "אירעה שגיאה במחיקת הלקוח"
   },
@@ -55,6 +55,11 @@
     "toast-title": "עדכון חידוש מוצרים",
     "toast-message-success": "הלקוח עודכן בהצלחה",
     "toast-message-error": "אירעה שגיאה בעדכון הלקוח"
+  },
+  "child": {
+    "activities": "פעילויות",
+    "service-contracts": "חוזי שירות",
+    "product-renews": "חידושי מוצרים"
   },
   "cancel-button": "בטל",
   "form": {

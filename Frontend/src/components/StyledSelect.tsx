@@ -4,7 +4,7 @@ import {
   Select,
   forwardRef,
 } from "@chakra-ui/react";
-import { ChangeEventHandler, Key, useState } from "react";
+import { ChangeEventHandler, Key } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 export type Option = {
