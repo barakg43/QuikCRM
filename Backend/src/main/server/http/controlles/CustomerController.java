@@ -39,14 +39,6 @@ public class CustomerController {
 	}
 
 
-	@GetMapping("/customer/name")
-	public String getCostumerNameByID(@RequestParam int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerService.getCustomerNameByID(id), "api" +
-				"/customers" +
-				"/name", HttpMethod.GET);
-//        return clientSqlExecutor.getClientNameByID(id);
-	}
-
 	@GetMapping("/{id}")
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(@PathVariable("id") int id) {
 		try {
