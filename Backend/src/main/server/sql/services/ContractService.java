@@ -1,5 +1,6 @@
 package main.server.sql.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.ContractRecord;
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContractService {
@@ -64,6 +66,17 @@ public class ContractService {
 		);
 	}
 
+	public List<ContractRecord> getServiceRenewRemindersForCustomer(short customerID) {
+		Optional<CustomerEntity> customerToFind = customerRepository.findById(customerID);
+		if (customerToFind.isEmpty())
+			throw new EntityNotFoundException("cannot find customer with id of " + customerID);
+
+		List<ServiceContractEntity> serviceContractListAllByCustomer =
+				serviceContractRepository.findAllByCustomerOrderByStartDateOfContract(customerToFind.get());
+		return serviceContractListAllByCustomer.
+				stream().map(ContractRecord::new).toList();
+	}
+
 	@Transactional
 	public void updateContract(Long contractId, ContractRecord contractRecord) throws IndexOutOfBoundsException,
 			IllegalArgumentException {
@@ -72,7 +85,7 @@ public class ContractService {
 		if (serviceContractEntity == null)
 			throw new IndexOutOfBoundsException();
 		serviceContractEntity.setContractPrice(contractRecord.contractPrice());
-		serviceContractEntity.setContactDescription(contractRecord.contactDescription());
+		serviceContractEntity.setContractDescription(contractRecord.contractDescription());
 		serviceContractEntity.setPeriodKind(contractRecord.periodKind());
 		serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
@@ -91,7 +104,7 @@ public class ContractService {
 			}
 			serviceContractEntity.setCustomerID(contractRecord.customerID());
 			serviceContractEntity.setContractPrice(contractRecord.contractPrice());
-			serviceContractEntity.setContactDescription(contractRecord.contactDescription());
+			serviceContractEntity.setContractDescription(contractRecord.contractDescription());
 			serviceContractEntity.setPeriodKind(contractRecord.periodKind());
 			serviceContractEntity.setStartDateOfContract(contractRecord.startDateOfContract());
 			setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), serviceContractEntity,
@@ -139,7 +152,7 @@ public class ContractService {
 			throw new IndexOutOfBoundsException();
 		currentContract.setRenewed(true);
 		currentContract.setContractPrice(contractRecord.contractPrice());
-		currentContract.setContactDescription(contractRecord.contactDescription());
+		currentContract.setContractDescription(contractRecord.contractDescription());
 		//create new contract
 		ServiceContractEntity newContract = new ServiceContractEntity();
 		newContract.setCustomerID(currentContract.getCustomerID());
