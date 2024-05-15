@@ -23,15 +23,28 @@ public class CustomerService {
 		this.customerRepository = customerRepository;
 	}
 
-	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer pageNumber, Integer pageSize) {
+	public ListSubset<CustomerSlimDetailsRecord> getSubsetOfCustomers(Integer pageNumber, Integer pageSize,
+																	  String query) {
+
 		Page<CustomerEntity> customerListEntities;
-		if (pageSize != null && pageNumber != null)
-			customerListEntities = customerRepository.findAll(PageRequest.of(pageNumber, pageSize));
-		else //get all entities
-			customerListEntities = customerRepository.findAll(Pageable.unpaged());
+		ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("customerID")
+				.withMatcher("customerName", ExampleMatcher.GenericPropertyMatchers.contains())
+				.withMatcher("customerShortName", ExampleMatcher.GenericPropertyMatchers.contains())
+				.withIgnoreCase()
+				.withIgnoreNullValues();
+		CustomerEntity customerToFilter = new CustomerEntity();
+		customerToFilter.setCustomerName(query);
+		customerToFilter.setCustomerShortName(query);
+		Example<CustomerEntity> exampleCustomer = Example.of(customerToFilter, matcher);
+
+		if (pageSize != null && pageNumber != null) {
+			customerListEntities = customerRepository.findAll(exampleCustomer, PageRequest.of(pageNumber - 1,
+					pageSize));
+		} else //get all entities
+			customerListEntities = customerRepository.findAll(exampleCustomer, Pageable.unpaged());
 		List<CustomerSlimDetailsRecord> customerList =
 				customerListEntities.stream().map(CustomerSlimDetailsRecord::new).toList();
-		long totalItemInDb = getCustomersAmount();
+		long totalItemInDb = getCustomersAmount(exampleCustomer);
 		return new ListSubset<>(customerList, totalItemInDb);
 
 	}
@@ -75,7 +88,7 @@ public class CustomerService {
 
 	}
 
-	private long getCustomersAmount() {
-		return customerRepository.count();
+	private long getCustomersAmount(Example<CustomerEntity> example) {
+		return customerRepository.count(example);
 	}
 }
