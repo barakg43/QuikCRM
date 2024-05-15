@@ -42,12 +42,9 @@ public class CustomerController {
 	@GetMapping("/{id}")
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(@PathVariable("id") int id) {
 		try {
-			CustomerFullDetailsRecord test =
-					httpRequestExecutor.executeHttpRequest(() -> customerService.getFullCustomerDetailsForId(id),
-							"api/customers/" + id
-							, HttpMethod.GET);
-			System.out.println("getFullCustomerDetailsForId" + test);
-			return test;
+			return httpRequestExecutor.executeHttpRequest(() -> customerService.getFullCustomerDetailsForId(id),
+					"api/customers/" + id
+					, HttpMethod.GET);
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant find customer with id of " + id, exception);
@@ -73,7 +70,6 @@ public class CustomerController {
 							customerDetails),
 					"api/customers/" + customerId
 					, HttpMethod.PATCH);
-
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant update customer with id of " + customerId, exception);
