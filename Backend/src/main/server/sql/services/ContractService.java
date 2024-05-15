@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import main.server.sql.bulider.SqlQueryBuilder;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.InvoiceReminderRecord;
-import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,31 +33,9 @@ public class ContractService {
 		this.customerRepository = customerRepository;
 	}
 
-	public List<ProductReminderRecord> getRenews() {
-		return sqlFunctionExecutor.executeTableValueFunction("fncSystemsDetailsForDate", ProductReminderRecord.class,
-				LocalDateTime.now());
-
-	}
 
 	public List<ContractRecord> getServiceRenewRemindersInPeriodTime(int monthsAfterExpiration,
 																	 int daysBeforeExpiration) {
-
-//        ( SELECT     TOP 100 PERCENT ReminderID, DateOfReminder, TimeOfReminder, ReminderRemark, Closed,
-//        ResponsibleUserName
-//        FROM         dbo.tbReminders
-//        WHERE     (Closed = 0) AND (DateOfReminder < DATEADD(day, 1, @Date))
-//        ORDER BY DateOfReminder, TimeOfReminder )
-//		String sqlQuery = SqlQueryBuilder.getNewBuilder()
-//				.from("dbo.tbReminders")
-//				.select("ReminderID", "DateOfReminder", "TimeOfReminder", "ReminderRemark", "Closed",
-//						"ResponsibleUserName")
-//				.where().equal("Closed", 0, false).and().lessOrEqualThan("DateOfReminder", ePeriodKind.now(),
-//						true)
-//				.orderBy(new String[]{"DateOfReminder", "TimeOfReminder"})
-//				.build();
-//		return sqlFunctionExecutor.supplyTableValueQuery(sqlQuery, ServiceRenewReminderRecord.class);
-////        return sqlFunctionExecutor.executeTableValueFunction("fncReminders", ServiceRenewReminderRecord.class,
-////        LocalDateTime.now());
 		return serviceContractRepository.getAllContractsRenewReminderInPeriodTime(
 				UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration),
 				UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration)
@@ -193,10 +169,6 @@ public class ContractService {
 
 	@Deprecated
 	public List<InvoiceReminderRecord> getInvoiceReminders() {
-//		SELECT     dbo.fncCustNameForActiveContractID(contractID) AS custShortName, contractID, dateOfDebit,
-//		invoiceNum, renewal
-//		FROM         dbo.tbInvoicesForContracts
-//		WHERE     (invoiceNum IS NULL) AND (dateOfDebit < DATEADD(day, 1, @Date))
 		String sqlQuery = SqlQueryBuilder.getNewBuilder()
 				.from("tbInvoicesForContracts")
 				.select("dbo.fncCustNameForActiveContractID(contractID) AS custShortName, contractID, dateOfDebit, " +
