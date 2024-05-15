@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import {
   UseQueryResult,
   useQuery,
@@ -7,7 +8,6 @@ import { useSearchParams } from "react-router-dom";
 import { getPagesAmount } from "../../../components/Pagination";
 import { getCustomersSubset_API } from "../../../services/apiCustomers";
 import { CustomersListType } from "../customers";
-import { useToast } from "@chakra-ui/react";
 
 export function useCustomers() {
   const [searchParams] = useSearchParams();
