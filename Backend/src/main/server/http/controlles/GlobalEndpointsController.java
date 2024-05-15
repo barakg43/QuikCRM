@@ -1,5 +1,7 @@
 package main.server.http.controlles;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +14,22 @@ import java.time.format.DateTimeFormatter;
 
 @Controller
 public class GlobalEndpointsController {
+	private static final Logger logger = LogManager.getLogger("restartedMain");
 	private final String healthResponse = String.format("{\"boot-time\":\"%s\"}",
 			LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")));
+
+	public static String printPWD() {
+		String currentPath = null;
+		String massage = null;
+		try {
+			currentPath = new java.io.File(".").getCanonicalPath();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		massage = "Current dir:" + currentPath;
+		logger.info(massage);
+		return massage;
+	}
 
 	@RequestMapping(value = "/{path:[^\\.]*}")
 	public String forward(@PathVariable String path) {
@@ -34,16 +50,6 @@ public class GlobalEndpointsController {
 	public String getTest() {
 		System.out.println("test!");
 		return printPWD();
-	}
-
-	private String printPWD() {
-		String currentPath = null;
-		try {
-			currentPath = new java.io.File(".").getCanonicalPath();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return "Current dir:" + currentPath;
 	}
 
 }

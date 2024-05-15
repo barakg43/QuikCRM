@@ -53,7 +53,7 @@ public class ServiceContractEntity {
 
 	@Size(max = 500)
 	@Column
-	private String contactDescription;
+	private String contractDescription;
 
 	@Column
 	private Boolean renewed = false;

@@ -1,5 +1,6 @@
 package main.server.http.controlles.reminders;
 
+import jakarta.persistence.EntityNotFoundException;
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.services.ContractService;
@@ -33,6 +34,18 @@ public class ServiceRenewController {
 				HttpMethod.GET);
 
 
+	}
+
+
+	@GetMapping("/customer/{customerId}")
+	public List<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId) {
+		try {
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId), "/api/contract-service" +
+							"/customer/" + customerId,
+					HttpMethod.GET);
+		} catch (EntityNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
 	}
 
 
