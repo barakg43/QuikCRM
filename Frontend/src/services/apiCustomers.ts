@@ -15,7 +15,7 @@ export async function getCustomersSubset_API({
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
       await httpClient.get(`/customers`, {
-        params: { pageNumber: page - 1, pageSize: ITEMS_AMOUNT_PER_PAGE },
+        params: { pageNumber: page, pageSize: ITEMS_AMOUNT_PER_PAGE },
       });
     return {
       customers: data.listSubset,
