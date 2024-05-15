@@ -27,10 +27,11 @@ public class CustomerController {
 
 	@GetMapping("")
 	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer pageNumber,
-																		@RequestParam(required = false) Integer pageSize) {
+																		@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String query) {
 
 		ListSubset<CustomerSlimDetailsRecord> test =
-				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(pageNumber, pageSize)
+				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(pageNumber, pageSize
+								, query)
 						, "api/customers",
 						HttpMethod.GET);
 		System.out.println(test.getListSubset());

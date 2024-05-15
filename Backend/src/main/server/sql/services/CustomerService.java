@@ -7,9 +7,7 @@ import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.repositories.CustomerRepository;
 import main.server.uilities.UtilityFunctions;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
