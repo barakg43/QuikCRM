@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import LanguageSelector from "../i18n/LanguageSelector";
+import SearchBar from "./SearchBar";
 
 function TopHeader() {
   return (
@@ -15,6 +16,7 @@ function TopHeader() {
       height='5rem'
       alignItems='center'
     >
+      <SearchBar />
       <LanguageSelector />
     </Flex>
   );
