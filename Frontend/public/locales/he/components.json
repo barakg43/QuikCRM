@@ -1,5 +1,5 @@
 {
-  "empty": "{{resource}} לא קיימים נתונים על",
+  "empty": "לא קיימים נתונים על {{resource}} ",
   "pagination": {
     "button": {
       "next": "הבא",
