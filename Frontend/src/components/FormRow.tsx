@@ -43,6 +43,7 @@ function FormRow({
             placeholder={label}
             variant='flushed'
             defaultValue={defaultValue || ""}
+            isInvalid={error !== undefined}
             {...register}
           />
         ) : (
@@ -51,6 +52,7 @@ function FormRow({
             defaultValue={defaultValue || ""}
             placeholder={label}
             variant='flushed'
+            isInvalid={error !== undefined}
             {...register}
           />
         )}
