@@ -57,6 +57,7 @@ export async function addNewCustomer_API({
   contactPersonMobilePhone,
   city,
   address,
+  postalCode,
   addressRemarks,
 }: CustomerFullDataType) {
   await httpClient.post("customers", {
@@ -73,6 +74,7 @@ export async function addNewCustomer_API({
     contactPersonMobilePhone,
     city,
     address,
+    postalCode,
     addressRemarks,
   });
 }
@@ -91,6 +93,7 @@ export async function updateCustomerDetails_API({
   contactPersonMobilePhone,
   city,
   address,
+  postalCode,
   addressRemarks,
 }: CustomerFullDataType) {
   await httpClient.patch(`customers/${customerID}`, {
@@ -107,6 +110,7 @@ export async function updateCustomerDetails_API({
     contactPersonMobilePhone,
     city,
     address,
+    postalCode,
     addressRemarks,
   });
 }
