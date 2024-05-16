@@ -9,7 +9,6 @@ export function useUpdateCustomer(customerId: number) {
   const { mutate: updateCustomerDetails, isPending } = useMutation({
     mutationFn: updateCustomerDetails_API,
     onSuccess: () => {
-      console.log("success");
       // queryClient.setQueryData(["user"], user);
       toast({
         description: t("toast-title"),
