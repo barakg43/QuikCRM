@@ -1,3 +1,4 @@
+import { GenericAbortSignal } from "axios";
 import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
 import {
   CustomerFullDataType,
@@ -10,9 +11,11 @@ import { SubsetListType } from "./globalTypes";
 export async function getCustomersSubset_API({
   page,
   querySearch,
+  signal,
 }: {
   page: number;
   querySearch?: string | undefined;
+  signal?: GenericAbortSignal | undefined;
 }): Promise<CustomersListType | undefined> {
   try {
     const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
@@ -22,6 +25,7 @@ export async function getCustomersSubset_API({
           pageSize: ITEMS_AMOUNT_PER_PAGE,
           query: querySearch,
         },
+        signal,
       });
     return {
       customers: data.listSubset,
