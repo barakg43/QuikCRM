@@ -1,11 +1,10 @@
 import {
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   SystemStyleObject,
-  Text,
   Textarea,
-  VStack,
 } from "@chakra-ui/react";
 import { HTMLInputTypeAttribute } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
@@ -32,36 +31,29 @@ function FormRow({
       isRequired={isRequired}
       display='flex'
       alignItems='center'
+      isInvalid={error !== undefined}
       sx={sx}
     >
       <FormLabel width='12rem' fontSize='1.25rem'>
         {label}
       </FormLabel>
-      <VStack>
-        {type === "textarea" ? (
-          <Textarea
-            placeholder={label}
-            variant='flushed'
-            defaultValue={defaultValue || ""}
-            isInvalid={error !== undefined}
-            {...register}
-          />
-        ) : (
-          <Input
-            type={type}
-            defaultValue={defaultValue || ""}
-            placeholder={label}
-            variant='flushed'
-            isInvalid={error !== undefined}
-            {...register}
-          />
-        )}
-        {error && (
-          <Text color='red.500' fontSize='1rem' fontWeight='bold'>
-            {error}
-          </Text>
-        )}
-      </VStack>
+      {type === "textarea" ? (
+        <Textarea
+          placeholder={label}
+          variant='flushed'
+          defaultValue={defaultValue || ""}
+          {...register}
+        />
+      ) : (
+        <Input
+          type={type}
+          defaultValue={defaultValue || ""}
+          placeholder={label}
+          variant='flushed'
+          {...register}
+        />
+      )}
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 }
