@@ -4,7 +4,8 @@
     "customerName": "שם הלקוח",
     "address": "כתובת",
     "city": "עיר",
-    "status": "סטטוס"
+    "status": "סטטוס",
+    "title": "לקוחות"
   },
   "status": {
     "IN_SERVICE": "שירות",
