@@ -8,7 +8,7 @@ type SearchbarProps = {
 };
 function SearchBar({ paramKey = "query" }: SearchbarProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get(paramKey) || "");
+  const [query, setQuery] = useState("");
   usePathChange(() => {
     searchParams.delete(paramKey);
     setQuery("");
