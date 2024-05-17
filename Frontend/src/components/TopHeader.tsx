@@ -1,11 +1,12 @@
-import { Flex } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import LanguageSelector from "../i18n/LanguageSelector";
 import SearchBar from "./SearchBar";
 
 function TopHeader() {
   return (
-    <Flex
+    <Grid
       as='header'
+      templateColumns='1fr 2fr 1fr'
       fontSize='x-large'
       justifyContent='flex-end'
       borderBottom='2px solid var(--color-primary-300)'
@@ -16,9 +17,15 @@ function TopHeader() {
       height='5rem'
       alignItems='center'
     >
-      <SearchBar />
+      <div/>
+      <GridItem alignContent={"center"}>
+        <SearchBar />
+      </GridItem >
+      <GridItem alignContent="end">
       <LanguageSelector />
-    </Flex>
+      </GridItem>
+
+    </Grid>
   );
 }
 
