@@ -37,25 +37,23 @@ function CustomersTable() {
           <CustomTable.Header.Cell label={t("city")} />
           <CustomTable.Header.Cell label={t("status")} />
         </CustomTable.Header>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <CustomTable.Body
-            data={customers}
-            resourceName={t("title")}
-            isLoading={isLoading}
-            render={(customer) => (
-              <CustomerRow
-                customerID={customer.customerID}
-                customerShortName={customer.customerShortName}
-                address={customer.address}
-                city={customer.city}
-                customerStatus={customer.customerStatus}
-                key={customer.customerID}
-              />
-            )}
-          />
-        )}
+
+        <CustomTable.Body
+          data={customers}
+          resourceName={t("title")}
+          isLoading={isLoading}
+          render={(customer) => (
+            <CustomerRow
+              customerID={customer.customerID}
+              customerShortName={customer.customerShortName}
+              address={customer.address}
+              city={customer.city}
+              customerStatus={customer.customerStatus}
+              key={customer.customerID}
+            />
+          )}
+        />
+
         <CustomTable.Footer>
           <Pagination as='td' totalItemsAmount={totalItems} />
         </CustomTable.Footer>

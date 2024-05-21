@@ -37,29 +37,26 @@ function ServiceRenewsTable() {
           <CustomTable.Header.Cell label={t("finishDateOfContract")} />
           <CustomTable.Header.Cell label={t("periodKind")} />
         </CustomTable.Header>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <CustomTable.Body
-            data={serviceContractRenews}
-            isLoading={isLoading}
-            resourceName={t("title")}
-            render={(serviceReminder) => (
-              <ServiceRenewRow
-                customerID={serviceReminder.customerID}
-                customerShortName={serviceReminder.customerShortName}
-                contractID={serviceReminder.contractID}
-                startDateOfContract={serviceReminder.startDateOfContract}
-                finishDateOfContract={serviceReminder.finishDateOfContract}
-                contractPrice={serviceReminder.contractPrice}
-                periodKind={serviceReminder.periodKind}
-                contactDescription={serviceReminder.contactDescription}
-                key={serviceReminder.contractID}
-                onRenew={handleRenew}
-              />
-            )}
-          />
-        )}
+        <CustomTable.Body
+          data={serviceContractRenews}
+          isLoading={isLoading}
+          resourceName={t("title")}
+          render={(serviceReminder) => (
+            <ServiceRenewRow
+              customerID={serviceReminder.customerID}
+              customerShortName={serviceReminder.customerShortName}
+              contractID={serviceReminder.contractID}
+              startDateOfContract={serviceReminder.startDateOfContract}
+              finishDateOfContract={serviceReminder.finishDateOfContract}
+              contractPrice={serviceReminder.contractPrice}
+              periodKind={serviceReminder.periodKind}
+              contactDescription={serviceReminder.contactDescription}
+              key={serviceReminder.contractID}
+              onRenew={handleRenew}
+            />
+          )}
+        />
+
         <CustomTable.Footer>
           <Box as='td'>{""}</Box>
           {/* <Pagination totalItemsAmount={totalItems} /> */}

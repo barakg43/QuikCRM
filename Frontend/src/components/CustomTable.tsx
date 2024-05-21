@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import Empty from "./Empty";
+import LoadingSpinner from "./LoadingSpinner";
 
 const TableContext = createContext<ValueType>({ columns: "" });
 
@@ -72,7 +73,8 @@ export function BodyTableCell({
   );
 }
 
-function Body<T>({ data, render, resourceName }: BodyProps<T>) {
+function Body<T>({ data, render, resourceName, isLoading }: BodyProps<T>) {
+  if (isLoading) return <LoadingSpinner />;
   if (data == undefined || data == null || data.length == 0)
     return <Empty resource={resourceName || "table"} />;
 
