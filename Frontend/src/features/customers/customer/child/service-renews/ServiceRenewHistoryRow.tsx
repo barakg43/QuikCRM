@@ -1,21 +1,23 @@
+import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../../components/CustomTable";
 import DeleteAlertDialog from "../../../../../components/DeleteAlertDialog";
 import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
+import { BasicServiceContractProps } from "./AddEditServiceContractForm";
+import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
-type ServiceRenewHistoryProps = {
-  contractID: number;
-  startDateOfContract: Date;
+interface ServiceRenewHistoryProps extends BasicServiceContractProps {
+  isActiveContract?: boolean | undefined;
   finishDateOfContract: Date;
-  contractPrice: number;
-  contactDescription: string;
-};
+}
 function ServiceRenewHistoryRow({
   contractID,
   contactDescription,
   finishDateOfContract,
   startDateOfContract,
   contractPrice,
+  periodKind,
+  isActiveContract = false,
 }: ServiceRenewHistoryProps) {
   const { t } = useTranslation("serviceRenews");
   const { deleteServiceContract, isPending } = useDeleteServiceContract();
@@ -37,12 +39,30 @@ function ServiceRenewHistoryRow({
       <Cell fontSize={fontSize}>{contactDescription}</Cell>
       <Cell fontSize={fontSize}>{contractPrice}</Cell>
       <Cell>
-        <DeleteAlertDialog
-          isPending={isPending}
-          onConfirm={handleDelete}
-          resourceName={t("title")}
-        />
+        {isActiveContract && (
+          <Flex
+            alignContent='center'
+            justifyContent='flex-end'
+            paddingBottom='10px'
+            w='95%'
+          >
+            <DeleteAlertDialog
+              isPending={isPending}
+              onConfirm={handleDelete}
+              resourceName={t("title")}
+            />
 
+            <AddEditServiceContractModal
+              serviceRenewToEdit={{
+                contactDescription,
+                contractID,
+                contractPrice,
+                periodKind,
+                startDateOfContract,
+              }}
+            />
+          </Flex>
+        )}
         {/* <Button
           _focus={{ outline: "none", "box-shadow": "none" }}
           isLoading={isPending}
