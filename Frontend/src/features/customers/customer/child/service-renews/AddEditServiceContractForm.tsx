@@ -1,16 +1,20 @@
 import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { DetailRow } from "../../components/DetailRow";
+import { DetailRow } from "../../../../../components/DetailRow";
 import {
   calculateForwardDateByMonthsAndDays,
   getStringDate,
-} from "../../services/utils";
-import PeriodSelector from "./PeriodSelector";
-import ServiceFormRow from "./ServiceFormRow";
-import { useAddServiceContract } from "./hooks/useAddServiceContract";
-import { useUpdateServiceContract } from "./hooks/useUpdateServiceContract";
-import { PeriodType, ServiceRenewRecord } from "./serviceRenews";
+} from "../../../../../services/utils";
+import PeriodSelector from "../../../../service-renews/PeriodSelector";
+import ServiceFormRow from "../../../../service-renews/ServiceFormRow";
+import { useAddServiceContract } from "../../../../service-renews/hooks/useAddServiceContract";
+import { useUpdateServiceContract } from "../../../../service-renews/hooks/useUpdateServiceContract";
+import {
+  PeriodType,
+  RenewServiceContractProps,
+  ServiceRenewRecord,
+} from "../../../../service-renews/serviceRenews";
 
 function AddEditServiceContractForm({
   submitButtonRef,
@@ -18,7 +22,7 @@ function AddEditServiceContractForm({
   onSubmit,
 }: {
   submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
-  serviceRenewToEdit?: ServiceRenewRecord | Record<string, never>;
+  serviceRenewToEdit?: RenewServiceContractProps | Record<string, never>;
   onSubmit?: () => void;
 }) {
   const {
@@ -42,18 +46,17 @@ function AddEditServiceContractForm({
   function onSubmitForm(data: ServiceRenewRecord) {
     console.log("test", data, serviceRenewToEdit);
     if (serviceRenewToEdit) {
-      updateServiceContract({ ...data, contractID });
+      // updateServiceContract({ ...data, contractID });
     } else {
-      addServiceContract(data);
+      // addServiceContract(data);
     }
     onSubmit?.();
     reset();
   }
-  const startDate = startDateOfContract ?? new Date();
-  const startDateDefaultValue = getStringDate(startDate);
-  const finishDateOfContract = getStringDate(
+  const startDateDefaultValue = getStringDate(startDateOfContract);
+  const finishDateDefaultValue = getStringDate(
     calculateForwardDateByMonthsAndDays({
-      startDate,
+      startDate: startDateOfContract,
       months: periodToMonths[period],
     })
   );
@@ -83,10 +86,9 @@ function AddEditServiceContractForm({
         />
         <DetailRow
           label='finishDateOfContract'
-          value={finishDateOfContract}
+          value={finishDateDefaultValue}
           sx={{ gridArea: "finish" }}
         />
-
         <ServiceFormRow
           label='contractPrice'
           register={register}

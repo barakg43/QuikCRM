@@ -1,13 +1,13 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import StyledModal from "../../components/StyledModal";
+import StyledModal from "../../../../../components/StyledModal";
+import { RenewServiceContractProps } from "../../../../service-renews/serviceRenews";
 import AddEditServiceContractForm from "./AddEditServiceContractForm";
-import { ServiceRenewRecord } from "./serviceRenews";
 
 function AddEditServiceContractModal({
   serviceRenewToEdit = {},
 }: {
-  serviceRenewToEdit?: ServiceRenewRecord | Record<string, never>;
+  serviceRenewToEdit?: RenewServiceContractProps | Record<string, never>;
 }) {
   const { t } = useTranslation("customers");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -16,7 +16,7 @@ function AddEditServiceContractModal({
   return (
     <>
       <Button colorScheme='teal' onClick={onOpen} fontSize='1.2rem'>
-        {serviceRenewToEdit.customerID ? t("update.edit") : t("add.button")}
+        {serviceRenewToEdit.contractID ? t("update.edit") : t("add.button")}
       </Button>
       <StyledModal
         isOpen={isOpen}
