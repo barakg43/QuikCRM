@@ -8,10 +8,12 @@ export type ServiceRenewRecord = {
   periodKind: PeriodType;
   contactDescription: string;
 };
-export type RenewContractProps = {
-  contractID: number;
+
+export interface RenewServiceContractProps {
+  contactDescription: string;
+  contractID?: number | undefined;
   contractPrice: number;
   periodKind: PeriodType;
-  contactDescription: string;
-};
+  startDateOfContract: Date;
+}
 export type PeriodType = "MONTHLY" | "QUARTERLY" | "YEARLY";
