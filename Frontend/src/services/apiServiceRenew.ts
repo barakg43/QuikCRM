@@ -1,16 +1,16 @@
-import {
-  RenewContractProps,
-  ServiceRenewRecord,
-} from "../features/service-renews/serviceRenews";
+import { RenewServiceContractProps } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
+interface AddNewServiceProps extends RenewServiceContractProps {
+  customerID: number | undefined;
+}
 export async function addNewServicesRenew_API({
   customerID,
   startDateOfContract,
   contractPrice,
   periodKind,
   contactDescription,
-}: ServiceRenewRecord) {
+}: AddNewServiceProps) {
   try {
     await httpClient.post(`/contract-service`, {
       customerID,
@@ -30,7 +30,7 @@ export async function updateServiceRenewDetails_API({
   contractPrice,
   periodKind,
   contactDescription,
-}: ServiceRenewRecord) {
+}: RenewServiceContractProps) {
   try {
     httpClient.patch(`/contract-service/${contractID}`, {
       startDateOfContract,
@@ -52,7 +52,7 @@ export async function renewService_API({
   contractPrice,
   periodKind,
   contactDescription,
-}: RenewContractProps) {
+}: RenewServiceContractProps) {
   try {
     httpClient.patch(`/contract-service/${contractID}/renew`, {
       contractPrice,
