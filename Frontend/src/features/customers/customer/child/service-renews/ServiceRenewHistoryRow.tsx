@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../../components/CustomTable";
 import DeleteAlertDialog from "../../../../../components/DeleteAlertDialog";
 import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
-import { BasicServiceContractProps } from "./AddEditServiceContractForm";
+import { RenewServiceContractProps } from "../../../../service-renews/serviceRenews";
 import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
-interface ServiceRenewHistoryProps extends BasicServiceContractProps {
+interface ServiceRenewHistoryProps extends RenewServiceContractProps {
   isActiveContract?: boolean | undefined;
   finishDateOfContract: Date;
 }
