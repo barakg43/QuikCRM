@@ -1,9 +1,13 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ServiceRenewsHistoryTable from "./service-renews/ServiceRenewsHistoryTable";
 function ChildTabs() {
   const { t } = useTranslation("customers", { keyPrefix: "child" });
-
+  const [tabIndex, setTabIndex] = useState(0);
+  const handleTabsChange = (index: number) => {
+    setTabIndex(index);
+  };
   return (
     <Tabs isLazy height={"100vh"}>
       <TabList>
