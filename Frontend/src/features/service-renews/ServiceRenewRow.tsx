@@ -9,6 +9,9 @@ const periodColors = {
   QUARTERLY: "green",
   YEARLY: "gray",
 };
+interface ServiceRowProps extends ServiceRenewRecord {
+  onRenew: (serviceRenew: ServiceRenewRecord) => void;
+}
 function ServiceRenewRow({
   contractID,
   customerID,
@@ -19,9 +22,7 @@ function ServiceRenewRow({
   contractPrice,
   periodKind,
   onRenew,
-}: ServiceRenewRecord & {
-  onRenew: (serviceRenew: ServiceRenewRecord) => void;
-}) {
+}: ServiceRowProps) {
   const navigate = useNavigate();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   const Cell = CustomTable.Row.Cell;
