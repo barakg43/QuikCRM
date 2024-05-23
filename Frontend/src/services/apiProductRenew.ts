@@ -1,33 +1,35 @@
 import { httpClient } from "./axios";
 
-export type ProductRenewRecord = {
-  customerID: number;
-  custShortName: string;
-  systemDetailID: 0;
-  systemDetailDescription: string;
-  internalIP: string;
-  externalIP: string;
-  userName: string;
-  password: string;
-  validityTill: Date;
-};
+// export type ProductRenewRecord = {
+//   customerID: number;
+//   custShortName: string;
+//   systemDetailID: 0;
+//   systemDetailDescription: string;
+//   internalIP: string;
+//   externalIP: string;
+//   userName: string;
+//   password: string;
+//   validityTill: Date;
+// };
 export async function addNewProductReminder_API({
   customerID,
-  internalIP,
-  externalIP,
-  systemDetailDescription,
-  userName,
-  password,
+  productDetailDescription,
+  systemDetailID,
+  notes1,
+  notes2,
+  notes3,
+  notes4,
   validityTill,
-}: ProductRenewRecord) {
+}: ProductRenew) {
   try {
     await httpClient.post(`/product-renews`, {
       customerID,
-      internalIP,
-      externalIP,
-      systemDetailDescription,
-      userName,
-      password,
+      productDetailDescription,
+      systemDetailID,
+      notes1,
+      notes2,
+      notes3,
+      notes4,
       validityTill,
     });
   } catch (error: unknown) {
@@ -36,23 +38,21 @@ export async function addNewProductReminder_API({
 }
 
 export async function updateProductReminder_API({
-  customerID,
+  productDetailDescription,
   systemDetailID,
-  internalIP,
-  externalIP,
-  systemDetailDescription,
-  userName,
-  password,
+  notes1,
+  notes2,
+  notes3,
+  notes4,
   validityTill,
-}: ProductRenewRecord) {
+}: ProductRenew) {
   try {
     httpClient.patch(`/product-renews/${systemDetailID}`, {
-      customerID,
-      internalIP,
-      externalIP,
-      systemDetailDescription,
-      userName,
-      password,
+      productDetailDescription,
+      notes1,
+      notes2,
+      notes3,
+      notes4,
       validityTill,
     });
   } catch (error: unknown) {
