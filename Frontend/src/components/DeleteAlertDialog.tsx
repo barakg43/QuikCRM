@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { TbTrash } from "react-icons/tb";
 
 type DeleteAlertDialogProps = {
   resourceName: string;
@@ -34,11 +35,13 @@ function DeleteAlertDialog({
       <Button
         _focus={{ outline: "none", boxShadow: "none" }}
         isLoading={isPending}
-        _hover={{ backgroundColor: "teal.500", color: "white" }}
+        backgroundColor='red.300'
+        _hover={{ backgroundColor: "red.500", color: "white" }}
         onClick={onOpen}
         fontSize={"xl"}
-        padding={"0.5rem 3rem 0.5rem 3rem"}
+        padding={"0.5rem 2rem 0.5rem 2rem"}
       >
+        <TbTrash />
         {t("buttons.delete")}
       </Button>
 
