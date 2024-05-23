@@ -12,9 +12,9 @@ import { useParams } from "react-router-dom";
 import StyledSelect, { Option } from "../../../components/StyledSelect.tsx";
 import { customerStatuses } from "../CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers";
-import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
-import { useUpdateCustomer } from "./hooks/useUpdateCustomer";
 import FormRowCustomer from "./FormRowCustomer.tsx";
+import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
+import { useUpdateCustomer } from "./hooks/useUpdateCustomer.ts";
 
 function CustomerForm({
   submitRef,

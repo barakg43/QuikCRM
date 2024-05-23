@@ -1,7 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../components/CustomTable";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import Pagination from "../../components/Pagination";
 import CustomerRow from "./CustomerRow";
 import CustomerFormModal from "./customer/CustomerFormModal";
