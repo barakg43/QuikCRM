@@ -32,13 +32,13 @@
     "toast-message-error": "אירעה שגיאה במחיקת התזכורת"
   },
   "add": {
-    "button": "חידוש",
+    "button": "הוספת חוזה שירות",
     "toast-title": "חידוש מוצרים",
     "toast-message-success": "התזכורת חודשה בהצלחה",
     "toast-message-error": "אירעה שגיאה בחידוש התזכורת"
   },
   "update": {
-    "title": "עדכון חידוש מוצרים",
+    "title": "עדכון חוזה שירות",
     "toast-title": "עדכון חידוש מוצרים",
     "toast-message-success": "התזכורת עודכנה בהצלחה",
     "toast-message-error": "אירעה שגיאה בעדכון התזכורת",
