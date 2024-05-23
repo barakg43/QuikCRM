@@ -1,6 +1,7 @@
 import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { DetailRow } from "../../../../../components/DetailRow";
 import {
   calculateForwardDateByMonthsAndDays,
@@ -13,7 +14,6 @@ import { useUpdateServiceContract } from "../../../../service-renews/hooks/useUp
 import {
   PeriodType,
   RenewServiceContractProps,
-  ServiceRenewRecord,
 } from "../../../../service-renews/serviceRenews";
 
 function AddEditServiceContractForm({
@@ -32,31 +32,34 @@ function AddEditServiceContractForm({
     periodKind,
     startDateOfContract,
   } = serviceRenewToEdit;
+  const { customerId } = useParams();
   const [period, setPeriod] = useState<PeriodType>(periodKind);
   const { addServiceContract } = useAddServiceContract();
   const { updateServiceContract } = useUpdateServiceContract();
   const { register, handleSubmit, formState, reset } =
-    useForm<ServiceRenewRecord>();
+    useForm<RenewServiceContractProps>();
   const { errors } = formState;
   const periodToMonths = {
     MONTHLY: 1,
     QUARTERLY: 3,
     YEARLY: 12,
   };
-  function onSubmitForm(data: ServiceRenewRecord) {
-    console.log("test", data, serviceRenewToEdit);
+  function onSubmitForm(data: RenewServiceContractProps) {
+    console.log("test", data);
     if (serviceRenewToEdit) {
       // updateServiceContract({ ...data, contractID });
     } else {
-      // addServiceContract(data);
+      addServiceContract({ ...data, customerID: Number(customerId) });
     }
     onSubmit?.();
     reset();
   }
-  const startDateDefaultValue = getStringDate(startDateOfContract);
+  const startDate = startDateOfContract
+    ? new Date(startDateOfContract)
+    : new Date();
   const finishDateDefaultValue = getStringDate(
     calculateForwardDateByMonthsAndDays({
-      startDate: startDateOfContract,
+      startDate: startDate,
       months: periodToMonths[period],
     })
   );
@@ -72,7 +75,7 @@ function AddEditServiceContractForm({
         <ServiceFormRow
           label='startDateOfContract'
           register={register}
-          defaultValue={startDateDefaultValue}
+          defaultValue={startDate.toLocaleDateString("en-CA")}
           error={errors?.startDateOfContract}
           type='date'
           sx={{ gridArea: "start" }}
