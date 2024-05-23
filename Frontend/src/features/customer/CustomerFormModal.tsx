@@ -1,7 +1,7 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import StyledModal from "../../../components/StyledModal";
-import { CustomerFullDataType } from "../customers";
+import StyledModal from "../../components/StyledModal";
+import { CustomerFullDataType } from "../customers/customers";
 import CustomerForm from "./CustomerForm";
 
 function CustomerFormModal({

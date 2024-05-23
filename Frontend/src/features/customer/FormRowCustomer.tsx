@@ -2,8 +2,8 @@ import { TFunction } from "i18next";
 import { HTMLInputTypeAttribute } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import FormRow from "../../../components/FormRow.tsx";
-import { CustomerFullDataType } from "../customers";
+import FormRow from "../../components/FormRow.tsx";
+import { CustomerFullDataType } from "../customers/customers";
 
 type FormRowCustomerProps = {
   maxLength?: number | undefined;

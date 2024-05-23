@@ -2,9 +2,9 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 
 import { useParams } from "react-router-dom";
-import CustomTable from "../../../../../components/CustomTable.tsx";
-import { useServiceContractRenews } from "../../../../service-renews/hooks/useServiceContractRenews.ts";
-import { ServiceRenewRecord } from "../../../../service-renews/serviceRenews";
+import CustomTable from "../../../../components/CustomTable.tsx";
+import { useServiceContractRenews } from "../../../service-renews/hooks/useServiceContractRenews.ts";
+import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import { useCustomer } from "../../hooks/useCustomer.ts";
 import AddEditServiceContractModal from "./AddEditServiceContractModal.tsx";
 import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";

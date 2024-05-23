@@ -1,8 +1,8 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { TbEdit, TbPencilCheck } from "react-icons/tb";
-import StyledModal from "../../../../../components/StyledModal";
-import { RenewServiceContractProps } from "../../../../service-renews/serviceRenews";
+import StyledModal from "../../../../components/StyledModal";
+import { RenewServiceContractProps } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractForm from "./AddEditServiceContractForm";
 
 function AddEditServiceContractModal({

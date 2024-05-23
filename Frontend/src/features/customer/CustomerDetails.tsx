@@ -10,11 +10,11 @@ import {
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import DeleteAlertDialog from "../../../components/DeleteAlertDialog";
-import { DetailRow } from "../../../components/DetailRow";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import StatusTag from "../../../components/StatusTag";
-import { CustomerFullDataType } from "../customers";
+import DeleteAlertDialog from "../../components/DeleteAlertDialog";
+import { DetailRow } from "../../components/DetailRow";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import StatusTag from "../../components/StatusTag";
+import { CustomerFullDataType } from "../customers/customers";
 import CustomerFormModal from "./CustomerFormModal";
 import ChildTabs from "./child/ChildTabs";
 import { useCustomer } from "./hooks/useCustomer";

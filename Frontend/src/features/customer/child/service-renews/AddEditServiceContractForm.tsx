@@ -2,19 +2,19 @@ import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { DetailRow } from "../../../../../components/DetailRow";
+import { DetailRow } from "../../../../components/DetailRow";
 import {
   calculateForwardDateByMonthsAndDays,
   getStringDate,
-} from "../../../../../services/utils";
-import PeriodSelector from "../../../../service-renews/PeriodSelector";
-import ServiceFormRow from "../../../../service-renews/ServiceFormRow";
-import { useAddServiceContract } from "../../../../service-renews/hooks/useAddServiceContract";
-import { useUpdateServiceContract } from "../../../../service-renews/hooks/useUpdateServiceContract";
+} from "../../../../services/utils";
+import PeriodSelector from "../../../service-renews/PeriodSelector";
+import ServiceFormRow from "../../../service-renews/ServiceFormRow";
+import { useAddServiceContract } from "../../../service-renews/hooks/useAddServiceContract";
+import { useUpdateServiceContract } from "../../../service-renews/hooks/useUpdateServiceContract";
 import {
   PeriodType,
   RenewServiceContractProps,
-} from "../../../../service-renews/serviceRenews";
+} from "../../../service-renews/serviceRenews";
 
 function AddEditServiceContractForm({
   submitButtonRef,

@@ -1,32 +1,30 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { addNewCustomer_API } from "../../../../services/apiCustomers";
-export function useAddNewCustomer() {
+import { updateCustomerDetails_API } from "../../../services/apiCustomers";
+export function useUpdateCustomer(customerId: number) {
   const toast = useToast();
-
-  const { t } = useTranslation("customers", { keyPrefix: "add" });
+  const { t } = useTranslation("customers", { keyPrefix: "update" });
   const queryClient = useQueryClient();
-  const { mutate: addNewCustomer, isPending } = useMutation({
-    mutationFn: addNewCustomer_API,
+  const { mutate: updateCustomerDetails, isPending } = useMutation({
+    mutationFn: updateCustomerDetails_API,
     onSuccess: () => {
+      // queryClient.setQueryData(["user"], user);
       toast({
         description: t("toast-title"),
         title: t("toast-message-success"),
         status: "success",
       });
-      queryClient.invalidateQueries({
-        queryKey: ["customers"],
+      queryClient.refetchQueries({
+        queryKey: ["customer", customerId],
       });
     },
-
-    onError: () => {
+    onError: () =>
       toast({
         description: t("toast-title"),
         title: t("toast-message-error"),
         status: "error",
-      });
-    },
+      }),
   });
-  return { addNewCustomer, isPending };
+  return { updateCustomerDetails, isPending };
 }

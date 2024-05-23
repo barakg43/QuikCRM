@@ -1,22 +1,21 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { updateCustomerDetails_API } from "../../../../services/apiCustomers";
-export function useUpdateCustomer(customerId: number) {
+import { deleteCustomer_API } from "../../../services/apiCustomers";
+export function useDeleteCustomer() {
   const toast = useToast();
-  const { t } = useTranslation("customers", { keyPrefix: "update" });
+  const { t } = useTranslation("customers", { keyPrefix: "delete" });
   const queryClient = useQueryClient();
-  const { mutate: updateCustomerDetails, isPending } = useMutation({
-    mutationFn: updateCustomerDetails_API,
+  const { mutate: deleteCustomer, isPending } = useMutation({
+    mutationFn: deleteCustomer_API,
     onSuccess: () => {
-      // queryClient.setQueryData(["user"], user);
       toast({
         description: t("toast-title"),
         title: t("toast-message-success"),
         status: "success",
       });
-      queryClient.refetchQueries({
-        queryKey: ["customer", customerId],
+      queryClient.invalidateQueries({
+        queryKey: ["customers"],
       });
     },
     onError: () =>
@@ -26,5 +25,6 @@ export function useUpdateCustomer(customerId: number) {
         status: "error",
       }),
   });
-  return { updateCustomerDetails, isPending };
+
+  return { deleteCustomer, isPending };
 }

@@ -2,8 +2,8 @@ import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../components/CustomTable";
 import Pagination from "../../components/Pagination";
+import CustomerFormModal from "../customer/CustomerFormModal";
 import CustomerRow from "./CustomerRow";
-import CustomerFormModal from "./customer/CustomerFormModal";
 import { useCustomers } from "./hooks/useCustomers";
 // eslint-disable-next-line react-refresh/only-export-components
 export const customerStatuses = [

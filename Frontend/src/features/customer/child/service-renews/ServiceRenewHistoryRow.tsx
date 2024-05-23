@@ -1,9 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import CustomTable from "../../../../../components/CustomTable";
-import DeleteAlertDialog from "../../../../../components/DeleteAlertDialog";
-import { useDeleteServiceContract } from "../../../../service-renews/hooks/useDeleteServiceContract";
-import { RenewServiceContractProps } from "../../../../service-renews/serviceRenews";
+import CustomTable from "../../../../components/CustomTable";
+import DeleteAlertDialog from "../../../../components/DeleteAlertDialog";
+import { useDeleteServiceContract } from "../../../service-renews/hooks/useDeleteServiceContract";
+import { RenewServiceContractProps } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
 interface ServiceRenewHistoryProps extends RenewServiceContractProps {
