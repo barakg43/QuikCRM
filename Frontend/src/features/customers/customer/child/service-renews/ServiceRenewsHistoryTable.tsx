@@ -22,14 +22,16 @@ function ServiceRenewsHistoryTable() {
   const isLoading = isLoadingCustomer || isLoadingHistory;
   return (
     <>
-      <Flex
-        alignContent='center'
-        justifyContent='flex-end'
-        paddingBottom='10px'
-        w='95%'
-      >
-        <AddEditServiceContractModal />
-      </Flex>
+      {!activeContractID && (
+        <Flex
+          alignContent='center'
+          justifyContent='flex-end'
+          paddingBottom='10px'
+          w='95%'
+        >
+          <AddEditServiceContractModal />
+        </Flex>
+      )}
       <CustomTable columns={"1fr ".repeat(6)}>
         <CustomTable.Header>
           <CustomTable.Header.Cell label={t("contractID")} />
