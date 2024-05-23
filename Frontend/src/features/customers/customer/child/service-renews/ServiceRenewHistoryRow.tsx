@@ -24,8 +24,7 @@ function ServiceRenewHistoryRow({
   const fontSize = "small";
   const Cell = CustomTable.Row.Cell;
   function handleDelete() {
-    console.log("contractID", contractID);
-    // deleteServiceContract(contractID);
+    deleteServiceContract(contractID || -1);
   }
   return (
     <CustomTable.Row height='5.6rem'>
