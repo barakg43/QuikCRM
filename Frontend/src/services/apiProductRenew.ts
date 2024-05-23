@@ -83,13 +83,14 @@ export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
 }: {
   daysBeforeExpiration: number;
-}) {
+}): Promise<ProductRenew[] | never[] | undefined> {
   try {
-    httpClient.get(`/product-renews/reminders`, {
+    const { data } = await httpClient.get(`/product-renews/reminders`, {
       params: {
         daysBeforeExpiration,
       },
     });
+    return data;
   } catch (error: unknown) {
     console.log(error);
   }
