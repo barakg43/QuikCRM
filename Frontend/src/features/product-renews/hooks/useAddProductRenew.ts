@@ -2,11 +2,11 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { addNewProductReminder_API } from "../../../services/apiProductRenew";
-export function useAddServiceContract() {
+export function useAddProductRenew() {
   const toast = useToast();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "add" });
   const queryClient = useQueryClient();
-  const { mutate: addServiceContract, isPending } = useMutation({
+  const { mutate: addNewProductReminder, isPending } = useMutation({
     mutationFn: addNewProductReminder_API,
     onSuccess: () =>
       toast({
@@ -25,5 +25,5 @@ export function useAddServiceContract() {
       });
     },
   });
-  return { addServiceContract, isPending };
+  return { addNewProductReminder, isPending };
 }
