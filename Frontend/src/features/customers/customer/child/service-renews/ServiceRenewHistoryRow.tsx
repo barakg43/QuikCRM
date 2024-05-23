@@ -43,6 +43,7 @@ function ServiceRenewHistoryRow({
             alignContent='center'
             justifyContent='flex-end'
             paddingBottom='10px'
+            gap='1rem'
             w='95%'
           >
             <DeleteAlertDialog
