@@ -1,4 +1,7 @@
-import { RenewServiceContractProps } from "../features/service-renews/serviceRenews";
+import {
+  RenewServiceContractProps,
+  ServiceRenewRecord,
+} from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
 interface AddNewServiceProps extends RenewServiceContractProps {
@@ -69,7 +72,7 @@ export async function getAllServiceRenewForPeriodTime_API({
 }: {
   daysBeforeExpiration: number;
   monthsAfterExpiration: number;
-}) {
+}): Promise<ServiceRenewRecord[] | never[] | undefined> {
   try {
     //   const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
     //     await httpClient.get(`/customers`, {
