@@ -47,7 +47,7 @@ function AddEditServiceContractForm({
   function onSubmitForm(data: RenewServiceContractProps) {
     console.log("test", data);
     if (serviceRenewToEdit) {
-      // updateServiceContract({ ...data, contractID });
+      updateServiceContract({ ...data, contractID });
     } else {
       addServiceContract({ ...data, customerID: Number(customerId) });
     }
