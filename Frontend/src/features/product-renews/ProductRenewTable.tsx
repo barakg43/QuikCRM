@@ -2,6 +2,7 @@ import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../components/CustomTable";
+import ProductRenewFormModal from "./ProductRenewFormModal";
 import ProductRenewRow from "./ProductRenewRow";
 import { useProductRenews } from "./hooks/useProductRenews";
 
@@ -9,8 +10,8 @@ function ProductRenewTable() {
   const { productRenews, isLoading } = useProductRenews();
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [productToRenew, setProductToRenew] = useState<ProductRenewRecord>();
-  function handleRenew(productRenew: ProductRenewRecord) {
+  const [productToRenew, setProductToRenew] = useState<ProductReminderRecord>();
+  function handleRenew(productRenew: ProductReminderRecord) {
     setProductToRenew(productRenew);
     onOpen();
   }
@@ -22,11 +23,11 @@ function ProductRenewTable() {
         paddingBottom='10px'
         w='95%'
       >
-        {/* <ServiceRenewFormModal
+        <ProductRenewFormModal
           isOpen={isOpen}
           onClose={onClose}
-          serviceRenew={serviceToRenew}
-        /> */}
+          productRenew={productToRenew}
+        />
       </Flex>
       <CustomTable columns={"1fr ".repeat(5)}>
         <CustomTable.Header>
