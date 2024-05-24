@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
 
-interface ProductRenewRowProps extends ProductRenewRecord {
-  onRenew: (product: ProductRenewRecord) => void;
+interface ProductRenewRowProps extends ProductReminderRecord {
+  onRenew: (product: ProductReminderRecord) => void;
 }
 function ProductRenewRow({
   custShortName,
