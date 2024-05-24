@@ -1,4 +1,4 @@
-interface ProductRenew {
+interface ProductRenewRecord {
   customerID: number;
   custShortName?: string;
   systemDetailID: number;

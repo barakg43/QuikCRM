@@ -9,8 +9,8 @@ function ProductRenewTable() {
   const { productRenews, isLoading } = useProductRenews();
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [productToRenew, setProductToRenew] = useState<ProductRenew>();
-  function handleRenew(productRenew: ProductRenew) {
+  const [productToRenew, setProductToRenew] = useState<ProductRenewRecord>();
+  function handleRenew(productRenew: ProductRenewRecord) {
     setProductToRenew(productRenew);
     onOpen();
   }

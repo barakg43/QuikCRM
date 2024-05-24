@@ -14,7 +14,7 @@ export function useProductRenews() {
     data: productRenews = [],
     isLoading,
     error,
-  }: UseQueryResult<ProductRenew[] | never[]> = useQuery({
+  }: UseQueryResult<ProductRenewRecord[] | never[]> = useQuery({
     queryKey: ["product-renews", daysBeforeExpiration],
     queryFn: () =>
       getAllProductReminderForPeriodTime_API({

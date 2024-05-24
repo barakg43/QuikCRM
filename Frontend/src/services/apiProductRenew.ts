@@ -20,7 +20,7 @@ export async function addNewProductReminder_API({
   notes3,
   notes4,
   validityTill,
-}: ProductRenew) {
+}: ProductRenewRecord) {
   try {
     await httpClient.post(`/product-renews`, {
       customerID,
@@ -45,7 +45,7 @@ export async function updateProductReminder_API({
   notes3,
   notes4,
   validityTill,
-}: ProductRenew) {
+}: ProductRenewRecord) {
   try {
     httpClient.patch(`/product-renews/${systemDetailID}`, {
       productDetailDescription,
@@ -83,7 +83,7 @@ export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
 }: {
   daysBeforeExpiration: number;
-}): Promise<ProductRenew[] | never[] | undefined> {
+}): Promise<ProductRenewRecord[] | never[] | undefined> {
   try {
     const { data } = await httpClient.get(`/product-renews/reminders`, {
       params: {
