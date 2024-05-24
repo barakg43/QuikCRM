@@ -1,6 +1,8 @@
-interface ProductRenewRecord {
+interface ProductReminderRecord extends RenewProductRecord {
   customerID: number;
   custShortName?: string;
+}
+interface RenewProductRecord {
   systemDetailID: number;
   productDetailDescription: string;
   notes1: string | undefined;
