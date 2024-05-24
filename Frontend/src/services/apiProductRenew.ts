@@ -20,7 +20,7 @@ export async function addNewProductReminder_API({
   notes3,
   notes4,
   validityTill,
-}: ProductRenewRecord) {
+}: ProductReminderRecord) {
   try {
     await httpClient.post(`/product-renews`, {
       customerID,
@@ -45,7 +45,7 @@ export async function updateProductReminder_API({
   notes3,
   notes4,
   validityTill,
-}: ProductRenewRecord) {
+}: ProductReminderRecord) {
   try {
     httpClient.patch(`/product-renews/${systemDetailID}`, {
       productDetailDescription,
@@ -65,16 +65,22 @@ export async function getProductRemindersByCustomerId_API(customerID: number) {
 }
 export async function renewProductReminder_API({
   systemDetailID,
-  newValidityDate,
-}: {
-  systemDetailID: number;
-  newValidityDate: Date;
-}) {
+  validityTill,
+  productDetailDescription,
+  notes1,
+  notes2,
+  notes3,
+  notes4,
+}: RenewProductRecord) {
   try {
-    httpClient.patch(
-      `/product-renews/${systemDetailID}/renew`,
-      newValidityDate
-    );
+    httpClient.patch(`/product-renews/${systemDetailID}/renew`, {
+      validityTill,
+      productDetailDescription,
+      notes1,
+      notes2,
+      notes3,
+      notes4,
+    });
   } catch (error: unknown) {
     console.log(error);
   }
@@ -83,7 +89,7 @@ export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
 }: {
   daysBeforeExpiration: number;
-}): Promise<ProductRenewRecord[] | never[] | undefined> {
+}): Promise<ProductReminderRecord[] | never[] | undefined> {
   try {
     const { data } = await httpClient.get(`/product-renews/reminders`, {
       params: {
