@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { addNewProductReminder_API } from "../../../services/apiProductRenew";
 export function useAddProductRenew() {
   const toast = useToast();
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "add" });
+  const { t } = useTranslation("productRenews", { keyPrefix: "add" });
   const queryClient = useQueryClient();
   const { mutate: addNewProductReminder, isPending } = useMutation({
     mutationFn: addNewProductReminder_API,

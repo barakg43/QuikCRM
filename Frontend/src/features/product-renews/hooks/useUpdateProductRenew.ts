@@ -2,12 +2,13 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { updateServiceRenewDetails_API } from "../../../services/apiServiceRenew";
+import { updateProductReminder_API } from "../../../services/apiProductRenew";
 export function useAddServiceContract() {
   const toast = useToast();
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "update" });
+  const { t } = useTranslation("productRenews", { keyPrefix: "update" });
   const queryClient = useQueryClient();
-  const { mutate: updateServiceContract, isPending } = useMutation({
-    mutationFn: updateServiceRenewDetails_API,
+  const { mutate: updateProductReminder, isPending } = useMutation({
+    mutationFn: updateProductReminder_API,
     onSuccess: () => {
       toast({
         description: t("toast-title"),
@@ -26,5 +27,5 @@ export function useAddServiceContract() {
         status: "error",
       }),
   });
-  return { updateServiceContract, isPending };
+  return { updateProductReminder, isPending };
 }

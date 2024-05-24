@@ -1,16 +1,16 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { deleteServiceRenew_API } from "../../../services/apiServiceRenew";
-export function useDeleteProductRenew() {
+import { deleteProductReminder_API } from "../../../services/apiProductRenew";
+export function useDeleteProductReminder() {
   const toast = useToast();
   //   const { createInfinityToast, updateToast } = useUpdatableToaster(
   //     "delete service contract"
   //   );
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "delete" });
+  const { t } = useTranslation("productRenews", { keyPrefix: "delete" });
   const queryClient = useQueryClient();
-  const { mutate: deleteServiceContract, isPending } = useMutation({
-    mutationFn: deleteServiceRenew_API,
+  const { mutate: deleteProductReminder, isPending } = useMutation({
+    mutationFn: deleteProductReminder_API,
     // onMutate: () => createInfinityToast("pending text", "loading"),
     onSuccess: () => {
       toast({
@@ -36,5 +36,5 @@ export function useDeleteProductRenew() {
   //       loading: { title: "Promise pending", description: "Please wait" },
   //     });
   //   }
-  return { deleteServiceContract, isPending };
+  return { deleteProductReminder, isPending };
 }
