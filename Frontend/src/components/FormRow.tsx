@@ -34,7 +34,7 @@ function FormRow({
       isInvalid={error !== undefined}
       sx={sx}
     >
-      <FormLabel width='12rem' fontSize='1.25rem'>
+      <FormLabel width='12rem' fontSize='1.25rem' fontWeight={600}>
         {label}
       </FormLabel>
       {type === "textarea" ? (

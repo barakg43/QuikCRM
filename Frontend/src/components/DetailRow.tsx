@@ -26,7 +26,7 @@ export function DetailRow({
 }) {
   return (
     <HStack sx={sx} as='span'>
-      <Text as='span' fontWeight={500}>
+      <Text as='span' fontWeight={600}>
         {label}:
       </Text>
       <Text> {value}</Text>
