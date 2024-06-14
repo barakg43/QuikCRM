@@ -24,6 +24,7 @@ function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
       <ProductRenewFormModal
         isOpen={isOpen}
         onClose={onClose}
+        title={t("header")}
         productRenew={productToRenew}
       />
       <CustomTable.Row height='5.6rem'>
