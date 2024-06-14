@@ -24,7 +24,6 @@ function ProductRenewPanel({
   submitButtonRef,
   onSubmit,
 }: ProductRenewPanelProps) {
-  const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const { renewProductReminder } = useRenewProductReminder();
   // const {} = useRadioGroup();
   const { register, handleSubmit, formState, reset } =
@@ -37,6 +36,7 @@ function ProductRenewPanel({
     notes2,
     notes3,
     notes4,
+    validityTill,
   }: RenewProductRecord) {
     if (errors && Object.keys(errors).length > 0) return;
     renewProductReminder({
@@ -46,6 +46,7 @@ function ProductRenewPanel({
       notes2,
       notes3,
       notes4,
+      validityTill,
     });
     reset();
     onSubmit?.();
