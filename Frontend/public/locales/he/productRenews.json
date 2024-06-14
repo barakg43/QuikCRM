@@ -1,15 +1,15 @@
 {
+  "customerID": "מספר לקוח",
+  "custShortName": "שם לקוח",
+  "systemDetailID": "מספר תזכורת",
+  "productDetailDescription": "תיאור מוצר",
+  "notes1": "הערות",
+  "notes2": "הערות 2",
+  "notes3": "הערות 3",
+  "notes4": " הערות 4",
+  "validityTill": "תוקף",
   "renew-table": {
     "header": "תזכורת",
-    "customerID": "מספר לקוח",
-    "custShortName": "שם לקוח",
-    "systemDetailID": "מספר תזכורת",
-    "productDetailDescription": "תיאור מוצר",
-    "notes1": "הערות",
-    "notes2": "הערות 2",
-    "notes3": "הערות 3",
-    "notes4": " הערות 4",
-    "validityTill": "תוקף",
     "renew-button": "חידוש"
   },
   "delete": {
