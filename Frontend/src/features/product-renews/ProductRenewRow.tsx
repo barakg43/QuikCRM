@@ -1,58 +1,51 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
+import ProductRenewFormModal from "./ProductRenewFormModal";
 
-interface ProductRenewRowProps extends ProductReminderRecord {
-  onRenew: (product: ProductReminderRecord) => void;
+interface ProductRenewRowProps {
+  productToRenew: ProductReminderRecord;
 }
-function ProductRenewRow({
-  custShortName,
-  customerID,
-  productDetailDescription,
-  systemDetailID,
-  validityTill,
-  notes1,
-  notes2,
-  notes3,
-  notes4,
-  onRenew,
-}: ProductRenewRowProps) {
+function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
+  const {
+    custShortName,
+    customerID,
+    productDetailDescription,
+    systemDetailID,
+    validityTill,
+  } = productToRenew;
   const navigate = useNavigate();
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const Cell = CustomTable.Row.Cell;
-  function handleRenew() {
-    onRenew({
-      customerID,
-      productDetailDescription,
-      systemDetailID,
-      validityTill,
-      notes1,
-      notes2,
-      notes3,
-      notes4,
-    });
-  }
   return (
-    <CustomTable.Row height='5.6rem'>
-      <Cell>{systemDetailID}</Cell>
-      <Cell onClick={() => navigate(`/customers/${customerID}`)}>
-        {custShortName}
-      </Cell>
-      <Cell>{productDetailDescription}</Cell>
-      <Cell>{new Date(validityTill).toLocaleDateString("en-GB")}</Cell>
-      <Cell>
-        <Button
-          _focus={{ outline: "none", boxShadow: "none" }}
-          _hover={{ backgroundColor: "teal.500", color: "white" }}
-          onClick={handleRenew}
-          fontSize={"xl"}
-          padding={"0.5rem 3rem 0.5rem 3rem"}
-        >
-          {t("renew-button")}
-        </Button>
-      </Cell>
-    </CustomTable.Row>
+    <>
+      <ProductRenewFormModal
+        isOpen={isOpen}
+        onClose={onClose}
+        productRenew={productToRenew}
+      />
+      <CustomTable.Row height='5.6rem'>
+        <Cell>{systemDetailID}</Cell>
+        <Cell onClick={() => navigate(`/customers/${customerID}`)}>
+          {custShortName}
+        </Cell>
+        <Cell>{productDetailDescription}</Cell>
+        <Cell>{new Date(validityTill).toLocaleDateString("en-GB")}</Cell>
+        <Cell>
+          <Button
+            _focus={{ outline: "none", boxShadow: "none" }}
+            _hover={{ backgroundColor: "teal.500", color: "white" }}
+            onClick={onOpen}
+            fontSize={"xl"}
+            padding={"0.5rem 3rem 0.5rem 3rem"}
+          >
+            {t("renew-button")}
+          </Button>
+        </Cell>
+      </CustomTable.Row>
+    </>
   );
 }
 
