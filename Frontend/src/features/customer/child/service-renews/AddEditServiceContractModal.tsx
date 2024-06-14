@@ -2,13 +2,13 @@ import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { TbEdit, TbPencilCheck } from "react-icons/tb";
 import StyledModal from "../../../../components/StyledModal";
-import { RenewServiceContractProps } from "../../../service-renews/serviceRenews";
+import { RenewServiceContract } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractForm from "./AddEditServiceContractForm";
 
 function AddEditServiceContractModal({
   serviceRenewToEdit = {},
 }: {
-  serviceRenewToEdit?: RenewServiceContractProps | Record<string, never>;
+  serviceRenewToEdit?: RenewServiceContract | Record<string, never>;
 }) {
   const { t } = useTranslation("serviceRenews");
   const { isOpen, onOpen, onClose } = useDisclosure();
