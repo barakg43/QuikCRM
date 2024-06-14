@@ -44,7 +44,7 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   return (
     <Stack {...group} direction={direction} height={"100%"} sx={sx}>
       {label && (
-        <Text textAlign={"center"} alignContent={"center"}>
+        <Text textAlign='center' alignContent='center' fontWeight='bold'>
           {label}
         </Text>
       )}
@@ -108,7 +108,11 @@ function RadioCard(props: RadioButtonProps) {
         borderWidth='2px'
         boxShadow='md'
       >
-        <Text textAlign='center' {...getLabelProps()}>
+        <Text
+          textAlign='center'
+          fontWeight={state.isChecked ? "bold" : "normal"}
+          {...getLabelProps()}
+        >
           {props.children}
         </Text>
       </Box>
