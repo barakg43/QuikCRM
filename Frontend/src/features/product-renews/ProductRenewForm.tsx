@@ -23,7 +23,7 @@ function ProductRenewForm({
     notes3,
     notes4,
   } = productRenew;
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("productRenews");
 
   return (
     <Stack divider={<StackDivider />} spacing='3'>

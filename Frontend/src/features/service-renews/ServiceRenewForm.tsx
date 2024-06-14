@@ -21,7 +21,7 @@ function ServiceRenewForm({
     periodKind,
     startDateOfContract,
   } = serviceRenew;
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("serviceRenews");
 
   return (
     <Stack divider={<StackDivider />} spacing='3'>

@@ -24,7 +24,7 @@ function ServiceRenewRow({
   onRenew,
 }: ServiceRowProps) {
   const navigate = useNavigate();
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("serviceRenews");
   const Cell = CustomTable.Row.Cell;
   function handleRenew() {
     onRenew({

@@ -11,7 +11,7 @@ function ProductRenewFormModal({
   onClose: () => void;
   productRenew?: ProductReminderRecord | Record<string, never>;
 }) {
-  const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("productRenews");
   const isEditing = Object.keys(productRenew).length !== 0;
 
   return (

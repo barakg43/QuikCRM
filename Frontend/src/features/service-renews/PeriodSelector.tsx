@@ -16,7 +16,7 @@ function PeriodSelector({
   onChange,
   sx,
 }: PeriodSelectorProps) {
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("serviceRenews");
 
   const options = [
     { value: "MONTHLY", label: t("period.MONTHLY") },
