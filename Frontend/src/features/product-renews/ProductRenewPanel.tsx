@@ -1,7 +1,6 @@
 import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import ExtendFormRow from "../../components/ExtendFormRow";
 import { useRenewProductReminder } from "./hooks/useRenewProductReminder";
 
@@ -31,7 +30,6 @@ function ProductRenewPanel({
     useForm<RenewProductRecord>();
   const { errors } = formState;
   function onRenew({
-    systemDetailID,
     productDetailDescription,
     notes1,
     notes2,
