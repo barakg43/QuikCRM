@@ -1,16 +1,5 @@
 import { httpClient } from "./axios";
 
-// export type ProductRenewRecord = {
-//   customerID: number;
-//   custShortName: string;
-//   systemDetailID: 0;
-//   systemDetailDescription: string;
-//   internalIP: string;
-//   externalIP: string;
-//   userName: string;
-//   password: string;
-//   validityTill: Date;
-// };
 export async function addNewProductReminder_API({
   customerID,
   productDetailDescription,
@@ -34,6 +23,7 @@ export async function addNewProductReminder_API({
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -57,6 +47,7 @@ export async function updateProductReminder_API({
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -72,18 +63,14 @@ export async function renewProductReminder_API({
   notes3,
   notes4,
 }: RenewProductRecord) {
-  try {
-    httpClient.patch(`/product-renews/${systemDetailID}/renew`, {
-      validityTill,
-      productDetailDescription,
-      notes1,
-      notes2,
-      notes3,
-      notes4,
-    });
-  } catch (error: unknown) {
-    console.log(error);
-  }
+  await httpClient.patch(`/product-renews/${systemDetailID}/renew`, {
+    validityTill,
+    productDetailDescription,
+    notes1,
+    notes2,
+    notes3,
+    notes4,
+  });
 }
 export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
@@ -99,11 +86,12 @@ export async function getAllProductReminderForPeriodTime_API({
     return data;
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 export async function deleteProductReminder_API(reminderId: number) {
   try {
-    httpClient.delete(`/product-renews/${reminderId}`);
+    await httpClient.delete(`/product-renews/${reminderId}`);
   } catch (error: unknown) {
     console.log(error);
     throw error;
