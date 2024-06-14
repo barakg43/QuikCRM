@@ -19,7 +19,7 @@ function ProductRenewFormModal({
       isOpen={isOpen}
       onClose={onClose}
       isEditing={isEditing}
-      title={isEditing ? t("update.title") : t("add.title")}
+      title={isEditing ? t("renew-title") : t("add.title")}
       renderBody={(submitButtonRef) => (
         <ProductRenewForm
           submitButtonRef={submitButtonRef}
