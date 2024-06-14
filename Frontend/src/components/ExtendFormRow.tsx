@@ -18,7 +18,8 @@ type ExtendFormRowProps<T extends FieldValues> = {
   isRequired?: boolean | undefined;
   defaultValue?: string | number | readonly string[] | undefined;
   error?: FieldError | undefined;
-  translationNS?: string;
+  translationNS: string;
+  keyPrefix?: string | undefined;
   label: Path<T>;
   sx?: SystemStyleObject | undefined;
 };
@@ -27,13 +28,14 @@ function ExtendFormRow<T extends FieldValues>({
   label,
   error,
   translationNS,
+  keyPrefix,
   defaultValue,
   isRequired,
   register,
   type,
   sx,
 }: ExtendFormRowProps<T>) {
-  const { t } = useTranslation(translationNS);
+  const { t } = useTranslation(translationNS, { keyPrefix });
   return (
     <FormRow
       label={t(label)}
