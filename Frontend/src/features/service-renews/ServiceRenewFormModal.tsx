@@ -12,7 +12,7 @@ function ServiceRenewFormModal({
   onClose: () => void;
   serviceRenew?: ServiceRenewRecord | Record<string, never>;
 }) {
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
+  const { t } = useTranslation("serviceRenews");
   const isEditing = Object.keys(serviceRenew).length !== 0;
 
   return (
