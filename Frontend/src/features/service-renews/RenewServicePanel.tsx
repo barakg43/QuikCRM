@@ -1,11 +1,10 @@
 import { Button, Flex, VStack } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import ExtendFormRow from "../../components/ExtendFormRow";
 import PeriodSelector from "./PeriodSelector";
-import ServiceFormRow from "./ServiceFormRow";
 import { useRenewServiceContract } from "./hooks/useRenewServiceContract";
-import { PeriodType, RenewContractProps } from "./serviceRenews";
+import { PeriodType, RenewServiceContract } from "./serviceRenews";
 export type RenewPanelProps = {
   contractID: number;
   defaultPeriodKind: PeriodType;
@@ -20,17 +19,16 @@ function RenewServicePanel({
   submitButtonRef,
   onSubmit,
 }: RenewPanelProps) {
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   const { renewServiceContract } = useRenewServiceContract();
   // const {} = useRadioGroup();
   const { register, handleSubmit, formState, reset } =
-    useForm<RenewContractProps>();
+    useForm<RenewServiceContract>();
   const { errors } = formState;
   function onRenew({
     contractPrice,
     periodKind,
     contactDescription,
-  }: RenewContractProps) {
+  }: RenewServiceContract) {
     console.log(
       "test",
       contractID,
@@ -54,15 +52,17 @@ function RenewServicePanel({
     <form onSubmit={handleSubmit(onRenew)}>
       <Flex grow={1} gap={6} fontSize='2xl'>
         <VStack>
-          <ServiceFormRow
+          <ExtendFormRow
             label='contactDescription'
             register={register}
+            translationNS='serviceRenews'
             error={errors?.contactDescription}
             type='textarea'
           />
-          <ServiceFormRow
+          <ExtendFormRow
             label='contractPrice'
             register={register}
+            translationNS='serviceRenews'
             error={errors?.contractPrice}
             defaultValue={contractPrice}
             type='number'
