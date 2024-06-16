@@ -69,6 +69,7 @@ function ProductRenewPanel({
           type='textarea'
           defaultValue={productDetailDescription}
           isRequired
+          sx={{ gridColumn: "span 2" }}
         />
 
         <ExtendFormRow
@@ -79,7 +80,14 @@ function ProductRenewPanel({
           isRequired
           translationNS='productRenews'
         />
-
+        <ExtendFormRow
+          label='price'
+          register={register}
+          error={errors?.validityTill}
+          type='number'
+          isRequired
+          translationNS='productRenews'
+        />
         <ExtendFormRow
           label='notes1'
           register={register}
