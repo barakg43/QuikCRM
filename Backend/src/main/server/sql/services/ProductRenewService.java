@@ -42,6 +42,10 @@ public class ProductRenewService {
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
+	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID) {
+		return productReminderRepository.findAllByCustomer_CustomerID(customerID);
+	}
+
 	@Transactional
 	public void renewProductForPeriodTime(BigDecimal reminderId, ProductReminderRecord productReminderRecord) throws IndexOutOfBoundsException {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
@@ -72,6 +76,7 @@ public class ProductRenewService {
 		else
 			throw new IndexOutOfBoundsException();
 	}
+
 
 	@Transactional
 	public void updateProductReminderData(BigDecimal reminderId, ProductReminderRecord productReminderRecord) throws IndexOutOfBoundsException {

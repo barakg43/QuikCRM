@@ -32,6 +32,13 @@ public class ProductReminderController {
 				"/product-renews", HttpMethod.GET);
 	}
 
+	@GetMapping("/customer/{cstomerID}")
+	public List<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getProductRemindersForCustomer
+				(customerID), "/product-renews" +
+				"/reminders/customer/" + customerID, HttpMethod.GET);
+	}
+
 	@PostMapping
 	public BigDecimal addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
 		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
