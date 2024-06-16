@@ -46,6 +46,9 @@ public class ProductReminderEntity {
 	@Column(name = "Password", length = 50)
 	private String notes4;
 
+	@Column(name = "Price", precision = 10, scale = 8)
+	private BigDecimal price;
+
 	@Column(name = "CustomerID", nullable = false)
 	private Short customerID;
 	@ManyToOne(fetch = FetchType.LAZY)
