@@ -43,14 +43,14 @@ public class ProductReminderController {
 										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
 						productReminderRecord),
-				"/api/reminders/product/renew", HttpMethod.PATCH);
+				String.format("/api/product-renews/%s/renew", reminderId), HttpMethod.PATCH);
 	}
 
 	@DeleteMapping("{reminderId}")
 	public void removeProductReminder(@PathVariable BigDecimal reminderId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
-					"/api/reminders/product", HttpMethod.DELETE);
+					"/api/product-renews/" + reminderId, HttpMethod.DELETE);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id " +
 					"of" +
@@ -64,6 +64,6 @@ public class ProductReminderController {
 										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(reminderId,
 						productReminderRecord),
-				"/api/reminders/product", HttpMethod.PATCH);
+				"/api/product-renews/" + reminderId, HttpMethod.PATCH);
 	}
 }
