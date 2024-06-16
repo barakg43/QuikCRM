@@ -9,9 +9,9 @@ export async function addNewProductReminder_API({
   notes3,
   notes4,
   validityTill,
-}: ProductReminderRecord) {
+}: ProductReminderRecord): Promise<number | undefined> {
   try {
-    await httpClient.post(`/product-renews`, {
+    return await httpClient.post(`/product-renews`, {
       customerID,
       productDetailDescription,
       systemDetailID,
