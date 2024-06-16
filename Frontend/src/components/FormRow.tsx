@@ -42,6 +42,7 @@ function FormRow({
           placeholder={label}
           variant='flushed'
           defaultValue={defaultValue || ""}
+          fontSize='1.1rem'
           {...register}
         />
       ) : (
@@ -50,6 +51,7 @@ function FormRow({
           defaultValue={defaultValue || ""}
           placeholder={label}
           variant='flushed'
+          fontSize='1.1rem'
           {...register}
         />
       )}
