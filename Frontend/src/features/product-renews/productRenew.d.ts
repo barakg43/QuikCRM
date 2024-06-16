@@ -9,5 +9,6 @@ interface RenewProductRecord {
   notes2: string | undefined;
   notes3: string | undefined;
   notes4: string | undefined;
+  price: number;
   validityTill: Date;
 }
