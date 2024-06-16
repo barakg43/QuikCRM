@@ -1,6 +1,7 @@
 import {
   LayoutProps,
   ResponsiveValue,
+  SystemStyleObject,
   Table,
   Tbody,
   Td,
@@ -51,15 +52,18 @@ type fontSizeProp =
       | "smaller"
     >
   | undefined;
+type BodyTableCellProps = {
+  onClick?: MouseEventHandler<HTMLTableCellElement> | undefined;
+  fontSize?: fontSizeProp | undefined;
+  children: ReactNode | undefined;
+  sx?: SystemStyleObject | undefined;
+};
 export function BodyTableCell({
   children,
   onClick,
   fontSize = "medium",
-}: {
-  onClick?: MouseEventHandler<HTMLTableCellElement> | undefined;
-  fontSize?: fontSizeProp | undefined;
-  children: ReactNode | undefined;
-}) {
+  sx,
+}: BodyTableCellProps) {
   return (
     <Td
       textAlign='center'
@@ -67,6 +71,7 @@ export function BodyTableCell({
       onClick={onClick}
       fontSize={fontSize}
       border='none'
+      sx={sx}
     >
       {children}
     </Td>
