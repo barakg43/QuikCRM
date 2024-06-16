@@ -20,14 +20,15 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 	List<ProductReminderEntity> findAllByValidityTillBeforeOrderByValidityTillAsc(Timestamp maxValidityTill);
 
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
-			"p.customer.customerShortName ," +
-			"p.id " +
-			",p.productDetailDescription, " +
-			"p.notes1, " +
-			"p.notes2," +
-			" p.notes3," +
+			" p.customer.customerShortName, " +
+			" p.id, " +
+			" p.productDetailDescription, " +
+			" p.notes1, " +
+			" p.notes2, " +
 			" p.notes3, " +
-			"p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
+			" p.notes3, " +
+			" p.price, " +
+			" p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
 	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID);
 
 
