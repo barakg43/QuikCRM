@@ -145,9 +145,10 @@ type RowType = {
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;
   height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
+  sx?: SystemStyleObject | undefined;
 };
 
-function Row({ onClick, height, children }: RowType) {
+function Row({ onClick, height, sx, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
     <Tr
@@ -159,6 +160,7 @@ function Row({ onClick, height, children }: RowType) {
       _notLast={{ borderBottom: "1px var(--color-primary-300) solid" }}
       alignContent='center'
       alignItems='center'
+      sx={sx}
     >
       {children}
     </Tr>
