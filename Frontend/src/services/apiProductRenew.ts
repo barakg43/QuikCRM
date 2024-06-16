@@ -51,8 +51,10 @@ export async function updateProductReminder_API({
   }
 }
 
-export async function getProductRemindersByCustomerId_API(customerID: number) {
-  console.log(customerID);
+export async function getProductRemindersByCustomerId_API(
+  customerID: number
+): Promise<ProductReminderRecord[] | never[] | undefined> {
+  return await httpClient.get(`/product-renews/customer/${customerID}`);
 }
 export async function renewProductReminder_API({
   systemDetailID,
