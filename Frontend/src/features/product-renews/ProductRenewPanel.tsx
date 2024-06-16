@@ -36,6 +36,7 @@ function ProductRenewPanel({
     notes3,
     notes4,
     validityTill,
+    price,
   }: RenewProductRecord) {
     if (errors && Object.keys(errors).length > 0) return;
     renewProductReminder({
@@ -46,6 +47,7 @@ function ProductRenewPanel({
       notes3,
       notes4,
       validityTill,
+      price,
     });
     reset();
     onSubmit?.();

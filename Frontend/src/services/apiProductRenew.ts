@@ -62,6 +62,7 @@ export async function renewProductReminder_API({
   notes2,
   notes3,
   notes4,
+  price,
 }: RenewProductRecord) {
   await httpClient.patch(`/product-renews/${systemDetailID}/renew`, {
     validityTill,
@@ -70,6 +71,7 @@ export async function renewProductReminder_API({
     notes2,
     notes3,
     notes4,
+    price,
   });
 }
 export async function getAllProductReminderForPeriodTime_API({
