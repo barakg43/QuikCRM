@@ -9,7 +9,6 @@ import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +21,19 @@ public class ProductRenewService {
 
 	public ProductRenewService(ProductReminderRepository productReminderRepository) {
 		this.productReminderRepository = productReminderRepository;
+	}
+
+	private static ProductReminderEntity getProductReminderEntity(ProductReminderRecord productReminderRecord,
+																  Short customerID) {
+		ProductReminderEntity newReminder = new ProductReminderEntity();
+		newReminder.setCustomerID(customerID);
+		newReminder.setProductDetailDescription(productReminderRecord.productDetailDescription());
+		newReminder.setNotes1(productReminderRecord.notes1());
+		newReminder.setNotes2(productReminderRecord.notes2());
+		newReminder.setNotes3(productReminderRecord.notes3());
+		newReminder.setNotes4(productReminderRecord.notes4());
+		newReminder.setValidityTill(productReminderRecord.validityTill());
+		return newReminder;
 	}
 
 	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
