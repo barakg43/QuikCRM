@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
@@ -41,9 +40,9 @@ public class ProductReminderController {
 
 	@PatchMapping("{reminderId}/renew")
 	public void renewProductForPeriodTime(@PathVariable BigDecimal reminderId,
-										  @RequestBody LocalDate newValidityDate) {
+										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
-						newValidityDate),
+						productReminderRecord),
 				"/api/reminders/product/renew", HttpMethod.PATCH);
 	}
 
