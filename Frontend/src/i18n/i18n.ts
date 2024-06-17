@@ -21,6 +21,7 @@ i18n
     fallbackLng: "he",
     debug: true,
     load: "currentOnly",
+    preload: ["he", "en"],
     defaultNS: "he",
     ns: [
       "appLayout",
