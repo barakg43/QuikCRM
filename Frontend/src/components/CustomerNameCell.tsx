@@ -6,7 +6,7 @@ function CustomerNameCell({
   customerName,
 }: {
   customerID: number;
-  customerName: string;
+  customerName: string | undefined;
 }) {
   const navigate = useNavigate();
 
