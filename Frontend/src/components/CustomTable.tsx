@@ -80,8 +80,10 @@ export function BodyTableCell({
 
 function Body<T>({ data, render, resourceName, isLoading }: BodyProps<T>) {
   if (isLoading) return <LoadingSpinner />;
-  if (data == undefined || data == null || data.length == 0)
-    return <Empty resource={resourceName || "table"} />;
+  if (data == undefined || data == null || data.length == 0) return;
+  <tbody>
+    <Empty resource={resourceName || "table"} as={"tr"} />;
+  </tbody>;
 
   return (
     <Tbody margin='0.4rem 0' minHeight='85vh'>
