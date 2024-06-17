@@ -14,6 +14,7 @@ import { useUpdateServiceContract } from "../../../service-renews/hooks/useUpdat
 import {
   PeriodType,
   RenewServiceContract,
+  ServiceRenewRecord,
 } from "../../../service-renews/serviceRenews";
 
 function AddEditServiceContractForm({
@@ -22,7 +23,7 @@ function AddEditServiceContractForm({
   onSubmit,
 }: {
   submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
-  serviceRenewToEdit?: RenewServiceContract | Record<string, never>;
+  serviceRenewToEdit?: ServiceRenewRecord | Record<string, never>;
   onSubmit?: () => void;
 }) {
   const {
@@ -37,7 +38,7 @@ function AddEditServiceContractForm({
   const { addServiceContract } = useAddServiceContract();
   const { updateServiceContract } = useUpdateServiceContract();
   const { register, handleSubmit, formState, reset } =
-    useForm<RenewServiceContract>();
+    useForm<ServiceRenewRecord>();
   const { errors } = formState;
   const periodToMonths = {
     MONTHLY: 1,
