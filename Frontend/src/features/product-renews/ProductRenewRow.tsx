@@ -2,6 +2,7 @@ import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
+import CustomerNameCell from "../../components/CustomerNameCell";
 import ProductRenewFormModal from "./ProductRenewFormModal";
 
 interface ProductRenewRowProps {
@@ -29,9 +30,10 @@ function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
       />
       <CustomTable.Row height='5.6rem'>
         <Cell>{systemDetailID}</Cell>
-        <Cell onClick={() => navigate(`/customers/${customerID}`)}>
-          {custShortName}
-        </Cell>
+        <CustomerNameCell
+          customerID={customerID}
+          customerName={custShortName}
+        />
         <Cell>{productDetailDescription}</Cell>
         <Cell>{new Date(validityTill).toLocaleDateString("en-GB")}</Cell>
         <Cell>
