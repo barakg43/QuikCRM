@@ -82,13 +82,12 @@ export async function getAllServiceRenewForPeriodTime_API({
     //     customers: data.listSubset,
     //     totalItems: data.totalAmountInDataBase,
     //   };
-    const { data } = await httpClient.get(`/contract-service/reminders`, {
+    return await httpClient.get(`/contract-service/reminders`, {
       params: {
         daysBeforeExpiration,
         monthsAfterExpiration,
       },
     });
-    return data;
   } catch (error: unknown) {
     console.log(error);
   }
