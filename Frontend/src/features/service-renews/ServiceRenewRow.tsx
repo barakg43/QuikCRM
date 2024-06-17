@@ -2,6 +2,7 @@ import { Button, Tag } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
+import CustomerNameCell from "../../components/CustomerNameCell";
 import { ServiceRenewRecord } from "./serviceRenews";
 
 const periodColors = {
@@ -40,9 +41,10 @@ function ServiceRenewRow({
   }
   return (
     <CustomTable.Row height='5.6rem'>
-      <Cell onClick={() => navigate(`/customers/${customerID}`)}>
-        {customerShortName}
-      </Cell>
+      <CustomerNameCell
+        customerID={customerID}
+        customerName={customerShortName}
+      />
       <Cell>{new Date(startDateOfContract).toLocaleDateString("en-GB")}</Cell>
       <Cell>{new Date(finishDateOfContract).toLocaleDateString("en-GB")}</Cell>
       <Cell>
