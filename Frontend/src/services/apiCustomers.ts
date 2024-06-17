@@ -18,15 +18,17 @@ export async function getCustomersSubset_API({
   signal?: GenericAbortSignal | undefined;
 }): Promise<CustomersListType | undefined> {
   try {
-    const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
-      await httpClient.get(`/customers`, {
+    const data: SubsetListType<CustomerSlimDetailsProps> = await httpClient.get(
+      `/customers`,
+      {
         params: {
           pageNumber: page,
           pageSize: ITEMS_AMOUNT_PER_PAGE,
           query: querySearch,
         },
         signal,
-      });
+      }
+    );
     return {
       customers: data.listSubset,
       totalItems: data.totalAmountInDataBase,
@@ -38,10 +40,7 @@ export async function getCustomersSubset_API({
 export async function getCustomerDataByID_API(
   customerId: number
 ): Promise<CustomerFullDataType> {
-  const { data }: { data: CustomerFullDataType } = await httpClient.get(
-    `/customers/${customerId}`
-  );
-  return data;
+  return await httpClient.get(`/customers/${customerId}`);
 }
 export async function addNewCustomer_API({
   customerShortName,
