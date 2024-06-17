@@ -3,7 +3,6 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { getAllProductReminderForPeriodTime_API } from "../../../services/apiProductRenew";
-import { ProductReminderRecord } from "../productRenew";
 
 export function useProductRenews() {
   const toast = useToast();
