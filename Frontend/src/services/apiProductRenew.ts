@@ -54,10 +54,7 @@ export async function updateProductReminder_API({
 export async function getProductRemindersByCustomerId_API(
   customerID: number
 ): Promise<ProductReminderRecord[] | never[] | undefined> {
-  const { data } = await httpClient.get(
-    `/product-renews/customer/${customerID}`
-  );
-  return data;
+  return await httpClient.get(`/product-renews/customer/${customerID}`);
 }
 export async function renewProductReminder_API({
   systemDetailID,
@@ -85,11 +82,12 @@ export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration: number;
 }): Promise<ProductReminderRecord[] | never[] | undefined> {
   try {
-    const { data } = await httpClient.get(`/product-renews/reminders`, {
-      params: {
-        daysBeforeExpiration,
-      },
-    });
+    const data: ProductReminderRecord[] | never[] | undefined =
+      await httpClient.get(`/product-renews/reminders`, {
+        params: {
+          daysBeforeExpiration,
+        },
+      });
     return data;
   } catch (error: unknown) {
     console.log(error);
