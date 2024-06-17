@@ -1,6 +1,5 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
 import CustomerNameCell from "../../components/CustomerNameCell";
 import ProductRenewFormModal from "./ProductRenewFormModal";
@@ -16,7 +15,6 @@ function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
     systemDetailID,
     validityTill,
   } = productToRenew;
-  const navigate = useNavigate();
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const Cell = CustomTable.Row.Cell;
