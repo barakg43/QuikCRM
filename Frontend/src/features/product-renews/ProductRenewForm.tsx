@@ -3,6 +3,7 @@ import { LegacyRef } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
 import ProductRenewPanel from "./ProductRenewPanel";
+import { useRenewProductReminder } from "./hooks/useRenewProductReminder";
 
 function ProductRenewForm({
   submitButtonRef,
@@ -13,6 +14,8 @@ function ProductRenewForm({
   productRenew?: ProductReminderRecord | Record<string, never>;
   onSubmit?: () => void;
 }) {
+  const { renewProductReminder } = useRenewProductReminder();
+
   const {
     custShortName,
     systemDetailID,
@@ -24,7 +27,10 @@ function ProductRenewForm({
     notes4,
   } = productRenew;
   const { t } = useTranslation("productRenews");
-
+  function handleRenew(data: RenewProductRecord) {
+    renewProductReminder(data);
+    onSubmit?.();
+  }
   return (
     <Stack divider={<StackDivider />} spacing='3'>
       <HStack divider={<StackDivider />}>
@@ -52,7 +58,7 @@ function ProductRenewForm({
         notes3={notes3}
         notes4={notes4}
         submitButtonRef={submitButtonRef}
-        onSubmit={onSubmit}
+        onSubmit={handleRenew}
       />
     </Stack>
   );

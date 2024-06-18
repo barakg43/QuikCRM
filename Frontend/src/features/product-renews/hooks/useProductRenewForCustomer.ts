@@ -1,25 +1,20 @@
 import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
-import { getAllProductReminderForPeriodTime_API } from "../../../services/apiProductRenew";
+import { useParams } from "react-router-dom";
+import { getProductRemindersByCustomerId_API } from "../../../services/apiProductRenew";
 
-export function useProductRenews() {
+export function useProductRenewForCustomer() {
   const toast = useToast();
-  const [searchParams] = useSearchParams();
+  const customerId = Number(useParams()["customerId"]);
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
-  const daysBeforeExpiration =
-    Number(searchParams.get("daysBeforeExpiration")) || 21;
   const {
     data: productRenews = [],
     isLoading,
     error,
   }: UseQueryResult<ProductReminderRecord[] | never[]> = useQuery({
-    queryKey: ["product-renews", daysBeforeExpiration],
-    queryFn: () =>
-      getAllProductReminderForPeriodTime_API({
-        daysBeforeExpiration,
-      }),
+    queryKey: ["product-renews-for-customer", customerId],
+    queryFn: () => getProductRemindersByCustomerId_API(customerId),
   });
   if (error) {
     toast({

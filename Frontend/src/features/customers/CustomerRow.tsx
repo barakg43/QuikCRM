@@ -13,7 +13,11 @@ function CustomerRow({
   const navigate = useNavigate();
 
   return (
-    <Table.Row onClick={() => navigate(`${customerID}`)} height='5.6rem'>
+    <Table.Row
+      onClick={() => navigate(`${customerID}`)}
+      height='5.6rem'
+      sx={{ cursor: "pointer" }}
+    >
       <Table.Row.Cell>{customerID} </Table.Row.Cell>
       <Table.Row.Cell>{customerShortName} </Table.Row.Cell>
       <Table.Row.Cell>{address}</Table.Row.Cell>

@@ -13,6 +13,7 @@ public record ProductReminderRecord(Short customerID,
 									String notes2,
 									String notes3,
 									String notes4,
+									BigDecimal price,
 									Timestamp validityTill) {
 	public static ProductReminderRecord convertFromEntity(ProductReminderEntity productReminderEntity) {
 		return new ProductReminderRecord(productReminderEntity.getCustomer().getCustomerID(),
@@ -23,6 +24,7 @@ public record ProductReminderRecord(Short customerID,
 				productReminderEntity.getNotes2(),
 				productReminderEntity.getNotes3(),
 				productReminderEntity.getNotes4(),
+				productReminderEntity.getPrice(),
 				productReminderEntity.getValidityTill());
 
 

@@ -8,6 +8,7 @@
   "notes3": "הערות 3",
   "notes4": " הערות 4",
   "validityTill": "תוקף",
+  "price": "מחיר",
   "renew-table": {
     "header": "תזכורת לחידוש מוצר",
     "renew-button": "חידוש"

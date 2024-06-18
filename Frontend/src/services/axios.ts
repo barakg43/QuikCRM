@@ -8,4 +8,8 @@ const BASE_URL = isDevEnv
 // const BASE_URL = "http://barak-pc:8080/quik/api";
 export const httpClient = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
+httpClient.interceptors.response.use((response) => response.data);

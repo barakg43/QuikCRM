@@ -9,7 +9,6 @@ import main.server.uilities.UtilityFunctions;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,27 +23,38 @@ public class ProductRenewService {
 		this.productReminderRepository = productReminderRepository;
 	}
 
+	private static ProductReminderEntity getProductReminderEntity(ProductReminderRecord productReminderRecord,
+																  Short customerID) {
+		ProductReminderEntity newReminder = new ProductReminderEntity();
+		newReminder.setCustomerID(customerID);
+		newReminder.setProductDetailDescription(productReminderRecord.productDetailDescription());
+		newReminder.setNotes1(productReminderRecord.notes1());
+		newReminder.setNotes2(productReminderRecord.notes2());
+		newReminder.setNotes3(productReminderRecord.notes3());
+		newReminder.setNotes4(productReminderRecord.notes4());
+		newReminder.setValidityTill(productReminderRecord.validityTill());
+		return newReminder;
+	}
+
 	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
 		List<ProductReminderEntity> productReminderEntityList =
 				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
+	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID) {
+		return productReminderRepository.findAllByCustomer_CustomerID(customerID);
+	}
+
 	@Transactional
-	public void renewProductForPeriodTime(BigDecimal reminderId, LocalDate newValidityDate) throws IndexOutOfBoundsException {
+	public void renewProductForPeriodTime(BigDecimal reminderId, ProductReminderRecord productReminderRecord) throws IndexOutOfBoundsException {
 		Optional<ProductReminderEntity> productReminderEntityToRenewOptional =
 				productReminderRepository.findById(reminderId);
 
 		if (productReminderEntityToRenewOptional.isPresent()) {
 			ProductReminderEntity currentProductReminder = productReminderEntityToRenewOptional.get();
-			ProductReminderEntity newReminder = new ProductReminderEntity();
-			newReminder.setCustomerID(currentProductReminder.getCustomerID());
-			newReminder.setNotes4(currentProductReminder.getNotes4());
-			newReminder.setNotes2(currentProductReminder.getNotes2());
-			newReminder.setProductDetailDescription(currentProductReminder.getProductDetailDescription());
-			newReminder.setNotes1(currentProductReminder.getNotes1());
-			newReminder.setNotes3(currentProductReminder.getNotes3());
-			newReminder.setValidityTill(Timestamp.valueOf(newValidityDate.atStartOfDay()));
+			ProductReminderEntity newReminder = getProductReminderEntity(productReminderRecord,
+					currentProductReminder.getCustomerID());
 			currentProductReminder.setValidityTill(null);
 			validAndSaveToRepository(currentProductReminder);
 			validAndSaveToRepository(newReminder);
@@ -66,6 +76,7 @@ public class ProductRenewService {
 		else
 			throw new IndexOutOfBoundsException();
 	}
+
 
 	@Transactional
 	public void updateProductReminderData(BigDecimal reminderId, ProductReminderRecord productReminderRecord) throws IndexOutOfBoundsException {

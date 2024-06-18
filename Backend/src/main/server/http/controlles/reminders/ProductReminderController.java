@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
@@ -33,6 +32,13 @@ public class ProductReminderController {
 				"/product-renews", HttpMethod.GET);
 	}
 
+	@GetMapping("/customer/{customerID}")
+	public List<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getProductRemindersForCustomer
+				(customerID), "/product-renews" +
+				"/reminders/customer/" + customerID, HttpMethod.GET);
+	}
+
 	@PostMapping
 	public BigDecimal addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
 		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
@@ -41,17 +47,17 @@ public class ProductReminderController {
 
 	@PatchMapping("{reminderId}/renew")
 	public void renewProductForPeriodTime(@PathVariable BigDecimal reminderId,
-										  @RequestBody LocalDate newValidityDate) {
+										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
-						newValidityDate),
-				"/api/reminders/product/renew", HttpMethod.PATCH);
+						productReminderRecord),
+				String.format("/api/product-renews/%s/renew", reminderId), HttpMethod.PATCH);
 	}
 
 	@DeleteMapping("{reminderId}")
 	public void removeProductReminder(@PathVariable BigDecimal reminderId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
-					"/api/reminders/product", HttpMethod.DELETE);
+					"/api/product-renews/" + reminderId, HttpMethod.DELETE);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id " +
 					"of" +
@@ -65,6 +71,6 @@ public class ProductReminderController {
 										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(reminderId,
 						productReminderRecord),
-				"/api/reminders/product", HttpMethod.PATCH);
+				"/api/product-renews/" + reminderId, HttpMethod.PATCH);
 	}
 }

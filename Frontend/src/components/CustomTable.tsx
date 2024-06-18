@@ -1,6 +1,7 @@
 import {
   LayoutProps,
   ResponsiveValue,
+  SystemStyleObject,
   Table,
   Tbody,
   Td,
@@ -51,15 +52,18 @@ type fontSizeProp =
       | "smaller"
     >
   | undefined;
+type BodyTableCellProps = {
+  onClick?: MouseEventHandler<HTMLTableCellElement> | undefined;
+  fontSize?: fontSizeProp | undefined;
+  children: ReactNode | undefined;
+  sx?: SystemStyleObject | undefined;
+};
 export function BodyTableCell({
   children,
   onClick,
   fontSize = "medium",
-}: {
-  onClick?: MouseEventHandler<HTMLTableCellElement> | undefined;
-  fontSize?: fontSizeProp | undefined;
-  children: ReactNode | undefined;
-}) {
+  sx,
+}: BodyTableCellProps) {
   return (
     <Td
       textAlign='center'
@@ -67,6 +71,7 @@ export function BodyTableCell({
       onClick={onClick}
       fontSize={fontSize}
       border='none'
+      sx={sx}
     >
       {children}
     </Td>
@@ -75,8 +80,10 @@ export function BodyTableCell({
 
 function Body<T>({ data, render, resourceName, isLoading }: BodyProps<T>) {
   if (isLoading) return <LoadingSpinner />;
-  if (data == undefined || data == null || data.length == 0)
-    return <Empty resource={resourceName || "table"} />;
+  if (data == undefined || data == null || data.length == 0) return;
+  <tbody>
+    <Empty resource={resourceName || "table"} as={"tr"} />;
+  </tbody>;
 
   return (
     <Tbody margin='0.4rem 0' minHeight='85vh'>
@@ -140,9 +147,10 @@ type RowType = {
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;
   height?: React.PropsWithoutRef<LayoutProps["height"]> | undefined;
+  sx?: SystemStyleObject | undefined;
 };
 
-function Row({ onClick, height, children }: RowType) {
+function Row({ onClick, height, sx, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
     <Tr
@@ -154,6 +162,7 @@ function Row({ onClick, height, children }: RowType) {
       _notLast={{ borderBottom: "1px var(--color-primary-300) solid" }}
       alignContent='center'
       alignItems='center'
+      sx={sx}
     >
       {children}
     </Tr>

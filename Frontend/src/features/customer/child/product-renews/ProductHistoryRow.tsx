@@ -1,38 +1,23 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import CustomTable from "../../components/CustomTable";
-import CustomerNameCell from "../../components/CustomerNameCell";
-import ProductRenewFormModal from "./ProductRenewFormModal";
+import CustomTable from "../../../../components/CustomTable";
 
-interface ProductRenewRowProps {
+interface ProductHistoryRowProps {
   productToRenew: ProductReminderRecord;
 }
-function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
-  const {
-    custShortName,
-    customerID,
-    productDetailDescription,
-    systemDetailID,
-    validityTill,
-  } = productToRenew;
+function ProductHistoryRow({ productToRenew }: ProductHistoryRowProps) {
+  const { productDetailDescription, systemDetailID, price, validityTill } =
+    productToRenew;
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const Cell = CustomTable.Row.Cell;
   return (
     <>
-      <ProductRenewFormModal
-        isOpen={isOpen}
-        onClose={onClose}
-        title={t("header")}
-        productRenew={productToRenew}
-      />
+      {/* <AddEditProductReminderModal productRenew={productToRenew} /> */}
       <CustomTable.Row height='5.6rem'>
         <Cell>{systemDetailID}</Cell>
-        <CustomerNameCell
-          customerID={customerID}
-          customerName={custShortName}
-        />
         <Cell>{productDetailDescription}</Cell>
+        <Cell>{price}</Cell>
         <Cell>{new Date(validityTill).toLocaleDateString("en-GB")}</Cell>
         <Cell>
           <Button
@@ -50,4 +35,4 @@ function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
   );
 }
 
-export default ProductRenewRow;
+export default ProductHistoryRow;

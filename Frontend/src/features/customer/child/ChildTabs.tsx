@@ -1,6 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import ProductHistoryTable from "./product-renews/ProductHistoryTable";
 import ServiceRenewsHistoryTable from "./service-renews/ServiceRenewsHistoryTable";
 function ChildTabs() {
   const { t } = useTranslation("customers", { keyPrefix: "child" });
@@ -24,7 +25,7 @@ function ChildTabs() {
           <ServiceRenewsHistoryTable />
         </TabPanel>
         <TabPanel>
-          <p>three!</p>
+          <ProductHistoryTable />
         </TabPanel>
       </TabPanels>
     </Tabs>

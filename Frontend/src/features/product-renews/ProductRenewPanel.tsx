@@ -2,17 +2,18 @@ import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useForm } from "react-hook-form";
 import ExtendFormRow from "../../components/ExtendFormRow";
-import { useRenewProductReminder } from "./hooks/useRenewProductReminder";
 
 export type ProductRenewPanelProps = {
-  systemDetailID: number;
-  productDetailDescription: string;
-  notes1: string | undefined;
-  notes2: string | undefined;
-  notes3: string | undefined;
-  notes4: string | undefined;
+  systemDetailID?: number;
+  productDetailDescription?: string;
+  notes1?: string;
+  notes2?: string;
+  notes3?: string;
+  notes4?: string;
+  price?: number;
+  validityTill?: Date;
   submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
-  onSubmit?: () => void;
+  onSubmit?: (productData: RenewProductRecord) => void;
 };
 function ProductRenewPanel({
   systemDetailID,
@@ -21,34 +22,19 @@ function ProductRenewPanel({
   notes2,
   notes3,
   notes4,
+  price,
+  validityTill,
   submitButtonRef,
   onSubmit,
 }: ProductRenewPanelProps) {
-  const { renewProductReminder } = useRenewProductReminder();
   // const {} = useRadioGroup();
   const { register, handleSubmit, formState, reset } =
     useForm<RenewProductRecord>();
   const { errors } = formState;
-  function onRenew({
-    productDetailDescription,
-    notes1,
-    notes2,
-    notes3,
-    notes4,
-    validityTill,
-  }: RenewProductRecord) {
+  function onRenew(data: RenewProductRecord) {
     if (errors && Object.keys(errors).length > 0) return;
-    renewProductReminder({
-      systemDetailID,
-      productDetailDescription,
-      notes1,
-      notes2,
-      notes3,
-      notes4,
-      validityTill,
-    });
     reset();
-    onSubmit?.();
+    onSubmit?.({ ...data, systemDetailID: systemDetailID || 0 });
   }
 
   return (
@@ -67,17 +53,27 @@ function ProductRenewPanel({
           type='textarea'
           defaultValue={productDetailDescription}
           isRequired
+          sx={{ gridColumn: "span 2" }}
         />
 
         <ExtendFormRow
           label='validityTill'
           register={register}
           error={errors?.validityTill}
+          defaultValue={validityTill?.toLocaleDateString("en-CA")}
           type='date'
           isRequired
           translationNS='productRenews'
         />
-
+        <ExtendFormRow
+          label='price'
+          register={register}
+          error={errors?.validityTill}
+          defaultValue={price}
+          type='number'
+          isRequired
+          translationNS='productRenews'
+        />
         <ExtendFormRow
           label='notes1'
           register={register}
@@ -110,12 +106,7 @@ function ProductRenewPanel({
           error={errors?.notes4}
           type='textarea'
         />
-        <Button
-          ref={submitButtonRef}
-          onClick={() => console.log("click submit")}
-          display='none'
-          type='submit'
-        />
+        <Button ref={submitButtonRef} display='none' type='submit' />
       </Grid>
     </form>
   );
