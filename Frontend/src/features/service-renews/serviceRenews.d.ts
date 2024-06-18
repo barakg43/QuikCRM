@@ -6,7 +6,7 @@ export type ServiceRenewRecord = {
 } & RenewServiceContract;
 
 export interface RenewServiceContract {
-  contactDescription: string;
+  contractDescription: string;
   contractID?: number | undefined;
   contractPrice: number;
   periodKind: PeriodType;
