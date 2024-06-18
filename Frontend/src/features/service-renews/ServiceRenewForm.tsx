@@ -14,7 +14,7 @@ function ServiceRenewForm({
   onSubmit?: () => void;
 }) {
   const {
-    contactDescription,
+    contractDescription,
     contractID,
     contractPrice,
     finishDateOfContract,
@@ -39,7 +39,10 @@ function ServiceRenewForm({
       </HStack>
       <HStack divider={<StackDivider />}>
         <DetailRow label={t("contractPrice")} value={contractPrice} />
-        <DetailRow label={t("contactDescription")} value={contactDescription} />
+        <DetailRow
+          label={t("contractDescription")}
+          value={contractDescription}
+        />
       </HStack>
       <RenewServicePanel
         contractID={contractID}

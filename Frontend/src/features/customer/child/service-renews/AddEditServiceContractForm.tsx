@@ -26,7 +26,7 @@ function AddEditServiceContractForm({
   onSubmit?: () => void;
 }) {
   const {
-    contactDescription,
+    contractDescription
     contractID,
     contractPrice,
     periodKind,
@@ -103,10 +103,10 @@ function AddEditServiceContractForm({
           sx={{ gridArea: "price" }}
         />
         <ExtendFormRow
-          label='contactDescription'
+          label='contractDescription'
           register={register}
-          error={errors?.contactDescription}
-          defaultValue={contactDescription}
+          error={errors?.contractDescription}
+          defaultValue={contractDescription}
           type='textarea'
           translationNS='serviceRenews'
           sx={{ gridArea: "description" }}

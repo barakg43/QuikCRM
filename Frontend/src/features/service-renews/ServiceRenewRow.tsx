@@ -17,7 +17,7 @@ function ServiceRenewRow({
   contractID,
   customerID,
   customerShortName,
-  contactDescription,
+  contractDescription,
   finishDateOfContract,
   startDateOfContract,
   contractPrice,
@@ -36,7 +36,7 @@ function ServiceRenewRow({
       finishDateOfContract,
       contractPrice,
       periodKind,
-      contactDescription,
+      contractDescription,
     });
   }
   return (

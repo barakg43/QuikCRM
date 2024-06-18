@@ -27,14 +27,14 @@ function RenewServicePanel({
   function onRenew({
     contractPrice,
     periodKind,
-    contactDescription,
+    contractDescription,
   }: RenewServiceContract) {
     console.log(
       "test",
       contractID,
       contractPrice,
       periodKind,
-      contactDescription
+      contractDescription
     );
 
     if (errors && Object.keys(errors).length > 0) return;
@@ -42,7 +42,7 @@ function RenewServicePanel({
       contractID,
       contractPrice,
       periodKind,
-      contactDescription,
+      contractDescription,
     });
     reset();
     onSubmit?.();
@@ -53,10 +53,10 @@ function RenewServicePanel({
       <Flex grow={1} gap={6} fontSize='2xl'>
         <VStack>
           <ExtendFormRow
-            label='contactDescription'
+            label='contractDescription'
             register={register}
             translationNS='serviceRenews'
-            error={errors?.contactDescription}
+            error={errors?.contractDescription}
             type='textarea'
           />
           <ExtendFormRow
