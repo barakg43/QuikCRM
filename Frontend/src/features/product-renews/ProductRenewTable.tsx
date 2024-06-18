@@ -21,7 +21,10 @@ function ProductRenewTable() {
         isLoading={isLoading}
         resourceName={t("title")}
         render={(productReminder) => (
-          <ProductRenewRow productToRenew={productReminder} />
+          <ProductRenewRow
+            productToRenew={productReminder}
+            key={productReminder.systemDetailID}
+          />
         )}
       />
 
