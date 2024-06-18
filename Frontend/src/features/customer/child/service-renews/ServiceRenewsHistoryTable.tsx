@@ -37,7 +37,7 @@ function ServiceRenewsHistoryTable() {
           <CustomTable.Header.Cell label={t("contractID")} />
           <CustomTable.Header.Cell label={t("startDateOfContract")} />
           <CustomTable.Header.Cell label={t("finishDateOfContract")} />
-          <CustomTable.Header.Cell label={t("contactDescription")} />
+          <CustomTable.Header.Cell label={t("contractDescription")} />
           <CustomTable.Header.Cell label={t("contractPrice")} />
         </CustomTable.Header>
 
@@ -51,7 +51,7 @@ function ServiceRenewsHistoryTable() {
               startDateOfContract={serviceReminder.startDateOfContract}
               finishDateOfContract={serviceReminder.finishDateOfContract}
               contractPrice={serviceReminder.contractPrice}
-              contactDescription={serviceReminder.contactDescription}
+              contractDescription={serviceReminder.contractDescription}
               periodKind={serviceReminder.periodKind}
               isActiveContract={serviceReminder.contractID === activeContractID}
               key={serviceReminder.contractID}

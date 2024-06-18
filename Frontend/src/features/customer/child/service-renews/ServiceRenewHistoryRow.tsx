@@ -3,16 +3,15 @@ import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../components/CustomTable";
 import DeleteAlertDialog from "../../../../components/DeleteAlertDialog";
 import { useDeleteServiceContract } from "../../../service-renews/hooks/useDeleteServiceContract";
-import { RenewServiceContract } from "../../../service-renews/serviceRenews";
+import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
-interface ServiceRenewHistoryProps extends RenewServiceContract {
+interface ServiceRenewHistoryProps extends ServiceRenewRecord {
   isActiveContract?: boolean | undefined;
-  finishDateOfContract: Date;
 }
 function ServiceRenewHistoryRow({
   contractID,
-  contactDescription,
+  contractDescription,
   finishDateOfContract,
   startDateOfContract,
   contractPrice,
@@ -35,7 +34,7 @@ function ServiceRenewHistoryRow({
       <Cell fontSize={fontSize}>
         {new Date(finishDateOfContract).toLocaleDateString("en-GB")}
       </Cell>
-      <Cell fontSize={fontSize}>{contactDescription}</Cell>
+      <Cell fontSize={fontSize}>{contractDescription}</Cell>
       <Cell fontSize={fontSize}>{contractPrice}</Cell>
       <Cell>
         {isActiveContract && (
@@ -54,7 +53,7 @@ function ServiceRenewHistoryRow({
 
             <AddEditServiceContractModal
               serviceRenewToEdit={{
-                contactDescription,
+                contractDescription,
                 contractID,
                 contractPrice,
                 periodKind,

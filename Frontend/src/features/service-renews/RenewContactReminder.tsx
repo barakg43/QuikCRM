@@ -23,7 +23,7 @@ function RenewContactReminder({
   customerID,
   finishDateOfContract,
   startDateOfContract,
-  contactDescription,
+  contractDescription,
   contractPrice,
   customerShortName,
   periodKind,
@@ -51,7 +51,10 @@ function RenewContactReminder({
           <HStack>
             <DetailRow label={"ContractPrice"} value={contractPrice} />
           </HStack>
-          <DetailRow label={"ContactDescription"} value={contactDescription} />
+          <DetailRow
+            label={"ContractDescription"}
+            value={contractDescription}
+          />
         </Stack>
       </CardBody>
       <CardFooter>

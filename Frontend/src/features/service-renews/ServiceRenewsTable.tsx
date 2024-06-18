@@ -49,7 +49,7 @@ function ServiceRenewsTable() {
               finishDateOfContract={serviceReminder.finishDateOfContract}
               contractPrice={serviceReminder.contractPrice}
               periodKind={serviceReminder.periodKind}
-              contactDescription={serviceReminder.contactDescription}
+              contractDescription={serviceReminder.contractDescription}
               key={serviceReminder.contractID}
               onRenew={handleRenew}
             />

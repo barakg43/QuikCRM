@@ -4,23 +4,20 @@ import {
 } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
 
-interface AddNewServiceProps extends RenewServiceContract {
-  customerID: number | undefined;
-}
 export async function addNewServicesRenew_API({
   customerID,
   startDateOfContract,
   contractPrice,
   periodKind,
-  contactDescription,
-}: AddNewServiceProps) {
+  contractDescription,
+}: ServiceRenewRecord) {
   try {
     await httpClient.post(`/contract-service`, {
       customerID,
       startDateOfContract,
       contractPrice,
       periodKind,
-      contactDescription,
+      contractDescription,
     });
   } catch (error: unknown) {
     console.log(error);
@@ -32,14 +29,14 @@ export async function updateServiceRenewDetails_API({
   startDateOfContract,
   contractPrice,
   periodKind,
-  contactDescription,
-}: RenewServiceContract) {
+  contractDescription,
+}: ServiceRenewRecord) {
   try {
     httpClient.patch(`/contract-service/${contractID}`, {
       startDateOfContract,
       contractPrice,
       periodKind,
-      contactDescription,
+      contractDescription,
     });
   } catch (error: unknown) {
     console.log(error);
@@ -54,13 +51,13 @@ export async function renewService_API({
   contractID,
   contractPrice,
   periodKind,
-  contactDescription,
+  contractDescription,
 }: RenewServiceContract) {
   try {
     httpClient.patch(`/contract-service/${contractID}/renew`, {
       contractPrice,
       periodKind,
-      contactDescription,
+      contractDescription,
     });
   } catch (error: unknown) {
     console.log(error);
@@ -82,13 +79,12 @@ export async function getAllServiceRenewForPeriodTime_API({
     //     customers: data.listSubset,
     //     totalItems: data.totalAmountInDataBase,
     //   };
-    const { data } = await httpClient.get(`/contract-service/reminders`, {
+    return await httpClient.get(`/contract-service/reminders`, {
       params: {
         daysBeforeExpiration,
         monthsAfterExpiration,
       },
     });
-    return data;
   } catch (error: unknown) {
     console.log(error);
   }
