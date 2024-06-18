@@ -3,17 +3,16 @@ import { LegacyRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { DetailRow } from "../../../../components/DetailRow";
+import ExtendFormRow from "../../../../components/ExtendFormRow";
 import {
   calculateForwardDateByMonthsAndDays,
   getStringDate,
 } from "../../../../services/utils";
 import PeriodSelector from "../../../service-renews/PeriodSelector";
-import ServiceFormRow from "../../../service-renews/ServiceFormRow";
 import { useAddServiceContract } from "../../../service-renews/hooks/useAddServiceContract";
 import { useUpdateServiceContract } from "../../../service-renews/hooks/useUpdateServiceContract";
 import {
   PeriodType,
-  RenewServiceContract,
   ServiceRenewRecord,
 } from "../../../service-renews/serviceRenews";
 
@@ -45,7 +44,7 @@ function AddEditServiceContractForm({
     QUARTERLY: 3,
     YEARLY: 12,
   };
-  function onSubmitForm(data: RenewServiceContract) {
+  function onSubmitForm(data: ServiceRenewRecord) {
     console.log("test", data);
     if (serviceRenewToEdit) {
       updateServiceContract({ ...data, contractID });
@@ -73,12 +72,13 @@ function AddEditServiceContractForm({
                             "price contact"
                             "child description"`}
       >
-        <ServiceFormRow
+        <ExtendFormRow
           label='startDateOfContract'
           register={register}
           defaultValue={startDate.toLocaleDateString("en-CA")}
           error={errors?.startDateOfContract}
           type='date'
+          translationNS='serviceRenews'
           sx={{ gridArea: "start" }}
         />
 
@@ -93,20 +93,22 @@ function AddEditServiceContractForm({
           value={finishDateDefaultValue}
           sx={{ gridArea: "finish" }}
         />
-        <ServiceFormRow
+        <ExtendFormRow
           label='contractPrice'
           register={register}
           error={errors?.contractPrice}
           defaultValue={contractPrice}
           type='number'
+          translationNS='serviceRenews'
           sx={{ gridArea: "price" }}
         />
-        <ServiceFormRow
+        <ExtendFormRow
           label='contactDescription'
           register={register}
           error={errors?.contactDescription}
           defaultValue={contactDescription}
           type='textarea'
+          translationNS='serviceRenews'
           sx={{ gridArea: "description" }}
         />
       </Grid>
