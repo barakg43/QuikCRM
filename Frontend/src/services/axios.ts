@@ -12,6 +12,4 @@ export const httpClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-httpClient.interceptors.response.use(function (response) {
-  return response.data;
-});
+httpClient.interceptors.response.use((response) => response.data);
