@@ -120,12 +120,7 @@ function ProductRenewPanel({
           error={errors?.notes4}
           type='textarea'
         />
-        <Button
-          ref={submitButtonRef}
-          onClick={() => console.log("click submit")}
-          display='none'
-          type='submit'
-        />
+        <Button ref={submitButtonRef} display='none' type='submit' />
       </Grid>
     </form>
   );

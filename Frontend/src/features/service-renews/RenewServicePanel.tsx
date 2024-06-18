@@ -72,12 +72,7 @@ function RenewServicePanel({
           defaultValue={defaultPeriodKind}
           register={register("periodKind")}
         />
-        <Button
-          ref={submitButtonRef}
-          onClick={() => console.log("click submit")}
-          display='none'
-          type='submit'
-        />
+        <Button ref={submitButtonRef} display='none' type='submit' />
       </Flex>
     </form>
   );
