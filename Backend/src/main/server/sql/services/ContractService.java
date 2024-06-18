@@ -123,18 +123,18 @@ public class ContractService {
 		if (currentContract == null)
 			throw new IndexOutOfBoundsException();
 		currentContract.setRenewed(true);
-		currentContract.setContractPrice(contractRecord.contractPrice());
-		currentContract.setContractDescription(contractRecord.contractDescription());
+//		currentContract.setContractPrice(contractRecord.contractPrice());
+//		currentContract.setContractDescription(contractRecord.contractDescription());
 		//create new contract
 		ServiceContractEntity newContract = new ServiceContractEntity();
 		newContract.setCustomerID(currentContract.getCustomerID());
-//		newContract.setCustomer(currentContract.getCustomer());
 		Timestamp startDateForNewContract =
 				UtilityFunctions.postDateByDaysAmount(currentContract.getFinishDateOfContract(), 1);
 		newContract.setStartDateOfContract(startDateForNewContract);
 		setContactFinishDateBaseOnStartDayForContract(contractRecord.periodKind(), newContract,
 				startDateForNewContract);
 		newContract.setContractPrice(contractRecord.contractPrice());
+		newContract.setContractDescription(contractRecord.contractDescription());
 		newContract.setPeriodKind(contractRecord.periodKind());
 		UtilityFunctions.validEntityValidations(currentContract);
 		validAndSaveToRepository(currentContract);
