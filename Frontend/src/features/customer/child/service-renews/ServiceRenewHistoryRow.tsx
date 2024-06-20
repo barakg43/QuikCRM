@@ -6,22 +6,25 @@ import { useDeleteServiceContract } from "../../../service-renews/hooks/useDelet
 import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
-interface ServiceRenewHistoryProps extends ServiceRenewRecord {
+interface ServiceRenewHistoryProps {
+  serviceReminder: ServiceRenewRecord;
   isActiveContract?: boolean | undefined;
 }
 function ServiceRenewHistoryRow({
-  contractID,
-  contractDescription,
-  finishDateOfContract,
-  startDateOfContract,
-  contractPrice,
-  periodKind,
+  serviceReminder,
   isActiveContract = false,
 }: ServiceRenewHistoryProps) {
   const { t } = useTranslation("serviceRenews");
   const { deleteServiceContract, isPending } = useDeleteServiceContract();
   const fontSize = "small";
   const Cell = CustomTable.Row.Cell;
+  const {
+    contractID,
+    contractDescription,
+    finishDateOfContract,
+    startDateOfContract,
+    contractPrice,
+  } = serviceReminder;
   function handleDelete() {
     deleteServiceContract(contractID || -1);
   }
@@ -51,15 +54,7 @@ function ServiceRenewHistoryRow({
               resourceName={t("title")}
             />
 
-            <AddEditServiceContractModal
-              serviceRenewToEdit={{
-                contractDescription,
-                contractID,
-                contractPrice,
-                periodKind,
-                startDateOfContract,
-              }}
-            />
+            <AddEditServiceContractModal serviceRenewToEdit={serviceReminder} />
           </Flex>
         )}
         {/* <Button
