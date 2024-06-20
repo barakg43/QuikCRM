@@ -29,7 +29,7 @@ function AddEditProductReminderForm({
   const { updateProductReminder, isPending: isUpdating } =
     useUpdateProductRenew();
   const isLoading = isAdding || isUpdating;
-  function onSubmitForm(data: ProductReminderRecord) {
+  function onSubmitForm(data: RenewProductRecord) {
     console.log("test", data);
     if (productRenewToEdit) {
       //   updateProductReminder({ ...data, systemDetailID });
@@ -48,7 +48,9 @@ function AddEditProductReminderForm({
       notes2={notes2}
       notes3={notes3}
       notes4={notes4}
+      validityTill={validityTill}
       submitButtonRef={submitButtonRef}
+      onSubmit={onSubmitForm}
     />
   );
 }
