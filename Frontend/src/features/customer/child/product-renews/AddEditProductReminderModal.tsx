@@ -38,7 +38,7 @@ function AddEditProductReminderModal({
         title={isEditing ? t("update.title") : t("add.title")}
         renderBody={(submitButtonRef) => (
           <AddEditProductReminderForm
-            serviceRenewToEdit={serviceRenewToEdit}
+            productRenewToEdit={productRenewToEdit}
             submitButtonRef={submitButtonRef}
             onSubmit={onClose}
           />
