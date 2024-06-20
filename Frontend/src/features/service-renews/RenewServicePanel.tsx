@@ -6,7 +6,7 @@ import PeriodSelector from "./PeriodSelector";
 import { useRenewServiceContract } from "./hooks/useRenewServiceContract";
 import { PeriodType, RenewServiceContract } from "./serviceRenews";
 export type RenewPanelProps = {
-  contractID: number;
+  contractID?: number;
   defaultPeriodKind: PeriodType;
   submitButtonRef: LegacyRef<HTMLButtonElement> | undefined;
   contractPrice: number;
