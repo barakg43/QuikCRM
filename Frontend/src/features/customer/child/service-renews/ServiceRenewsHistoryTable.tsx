@@ -47,12 +47,7 @@ function ServiceRenewsHistoryTable() {
           resourceName={t("title")}
           render={(serviceReminder: ServiceRenewRecord) => (
             <ServiceRenewHistoryRow
-              contractID={serviceReminder.contractID}
-              startDateOfContract={serviceReminder.startDateOfContract}
-              finishDateOfContract={serviceReminder.finishDateOfContract}
-              contractPrice={serviceReminder.contractPrice}
-              contractDescription={serviceReminder.contractDescription}
-              periodKind={serviceReminder.periodKind}
+              serviceReminder={serviceReminder}
               isActiveContract={serviceReminder.contractID === activeContractID}
               key={serviceReminder.contractID}
             />
