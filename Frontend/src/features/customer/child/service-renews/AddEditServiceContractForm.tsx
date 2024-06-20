@@ -26,7 +26,7 @@ function AddEditServiceContractForm({
   onSubmit?: () => void;
 }) {
   const {
-    contractDescription
+    contractDescription,
     contractID,
     contractPrice,
     periodKind,
