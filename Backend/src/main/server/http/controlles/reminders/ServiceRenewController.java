@@ -2,6 +2,7 @@ package main.server.http.controlles.reminders;
 
 import jakarta.persistence.EntityNotFoundException;
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.services.ContractService;
 import org.springframework.http.HttpMethod;
@@ -27,9 +28,11 @@ public class ServiceRenewController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
-														  @RequestParam int monthsAfterExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
+	public ListSubset<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
+																@RequestParam int monthsAfterExpiration,
+																@RequestParam(required = false) Integer pageNumber,
+																@RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration, pageNumber, pageSize), "/api/reminders" +
 						"/renews",
 				HttpMethod.GET);
 
