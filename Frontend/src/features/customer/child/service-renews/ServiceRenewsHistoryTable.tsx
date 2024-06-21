@@ -36,7 +36,7 @@ function ServiceRenewsHistoryTable() {
           <AddEditServiceContractModal />
         </Flex>
       )}
-      <CustomTable columns={"1fr ".repeat(6)}>
+      <CustomTable columns={"0.5fr 1fr 1fr 5fr 1fr"}>
         <CustomTable.Header>
           <CustomTable.Header.Cell label={t("contractID")} />
           <CustomTable.Header.Cell label={t("startDateOfContract")} />
