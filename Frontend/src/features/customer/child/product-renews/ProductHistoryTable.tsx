@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import CustomTable from "../../../../components/CustomTable";
 import { useProductRenewForCustomer } from "../../../product-renews/hooks/useProductRenewForCustomer";
 import ProductHistoryRow from "./ProductHistoryRow";
@@ -8,7 +7,6 @@ import ProductHistoryRow from "./ProductHistoryRow";
 function ProductHistoryTable() {
   const { productRenews, isLoading } = useProductRenewForCustomer();
   const { t } = useTranslation("productRenews");
-  console.log("productRenews", productRenews);
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
       <CustomTable.Header>
