@@ -14,7 +14,7 @@ export async function addNewServicesRenew_API({
   contractDescription,
 }: ServiceRenewRecord) {
   try {
-    await httpClient.post(`/contract-service`, {
+    await httpClient.post("/contract-service", {
       customerID,
       startDateOfContract,
       contractPrice,
@@ -78,18 +78,29 @@ export async function getAllServiceRenewForPeriodTime_API({
   page: number;
 }): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
   try {
-    //   const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
-    //     await httpClient.get(`/customers`, {
-    //       params: { pageNumber: page - 1, pageSize: ITEMS_AMOUNT_PER_PAGE },
-    //     });
-    //   return {
-    //     customers: data.listSubset,
-    //     totalItems: data.totalAmountInDataBase,
-    //   };
-    return await httpClient.get(`/contract-service/reminders`, {
+    return await httpClient.get("/contract-service/reminders", {
       params: {
         daysBeforeExpiration,
         monthsAfterExpiration,
+        pageNumber: page,
+        pageSize: ITEMS_AMOUNT_PER_PAGE,
+      },
+    });
+  } catch (error: unknown) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function getAllServiceContractHistoryCustomer({
+  customerId,
+  page,
+}: {
+  customerId: number;
+  page: number;
+}): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
+  try {
+    return await httpClient.get(`/contract-service/customer/${customerId}`, {
+      params: {
         pageNumber: page,
         pageSize: ITEMS_AMOUNT_PER_PAGE,
       },
