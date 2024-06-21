@@ -1,24 +1,28 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 
-import { useParams } from "react-router-dom";
 import CustomTable from "../../../../components/CustomTable.tsx";
-import { useServiceContractRenews } from "../../../service-renews/hooks/useServiceContractRenews.ts";
+import Pagination from "../../../../components/Pagination.tsx";
+import { useServiceContractHistoryCustomer } from "../../../service-renews/hooks/useServiceContractHistoryCustomer.ts";
 import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import { useCustomer } from "../../hooks/useCustomer.ts";
+import { useCustomerIdParam } from "../../hooks/useCustomerIdParam.ts";
 import AddEditServiceContractModal from "./AddEditServiceContractModal.tsx";
 import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";
 function ServiceRenewsHistoryTable() {
-  const { serviceContractRenews, isLoading: isLoadingHistory } =
-    useServiceContractRenews();
-  const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
-  const { customerId } = useParams();
-  // console.log("customerId", customerId);\
+  const customerId = useCustomerIdParam();
+
+  const {
+    serviceContractRenews,
+    isLoading: isLoadingHistory,
+    totalItems,
+  } = useServiceContractHistoryCustomer(customerId);
+  const { t } = useTranslation("serviceRenews");
 
   const {
     customer: { activeContractID },
     isLoading: isLoadingCustomer,
-  } = useCustomer(Number(customerId));
+  } = useCustomer(customerId);
   const isLoading = isLoadingCustomer || isLoadingHistory;
   return (
     <>
@@ -55,8 +59,7 @@ function ServiceRenewsHistoryTable() {
         />
 
         <CustomTable.Footer>
-          <Box as='td'>{""}</Box>
-          {/* <Pagination totalItemsAmount={totalItems} /> */}
+          <Pagination totalItemsAmount={totalItems} />
         </CustomTable.Footer>
       </CustomTable>
     </>
