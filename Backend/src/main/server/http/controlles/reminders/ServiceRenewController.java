@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
 @CrossOrigin(origins = SERVER_CROSS_ORIGIN)
@@ -41,9 +39,11 @@ public class ServiceRenewController {
 
 
 	@GetMapping("/customer/{customerId}")
-	public List<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId) {
+	public ListSubset<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId,
+																		   @RequestParam(required = false) Integer pageNumber,
+																		   @RequestParam(required = false) Integer pageSize) {
 		try {
-			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId), "/api/contract-service" +
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId, pageNumber, pageSize), "/api/contract-service" +
 							"/customer/" + customerId,
 					HttpMethod.GET);
 		} catch (EntityNotFoundException e) {
