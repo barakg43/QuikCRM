@@ -1,8 +1,10 @@
+import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
 import {
   RenewServiceContract,
   ServiceRenewRecord,
 } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
+import { SubsetListType } from "./globalTypes";
 
 export async function addNewServicesRenew_API({
   customerID,
@@ -21,6 +23,7 @@ export async function addNewServicesRenew_API({
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -40,6 +43,7 @@ export async function updateServiceRenewDetails_API({
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -61,15 +65,18 @@ export async function renewService_API({
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 export async function getAllServiceRenewForPeriodTime_API({
   daysBeforeExpiration,
   monthsAfterExpiration,
+  page,
 }: {
   daysBeforeExpiration: number;
   monthsAfterExpiration: number;
-}): Promise<ServiceRenewRecord[] | never[] | undefined> {
+  page: number;
+}): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
   try {
     //   const { data }: { data: SubsetListType<CustomerSlimDetailsProps> } =
     //     await httpClient.get(`/customers`, {
@@ -83,10 +90,13 @@ export async function getAllServiceRenewForPeriodTime_API({
       params: {
         daysBeforeExpiration,
         monthsAfterExpiration,
+        pageNumber: page,
+        pageSize: ITEMS_AMOUNT_PER_PAGE,
       },
     });
   } catch (error: unknown) {
     console.log(error);
+    throw error;
   }
 }
 export async function deleteServiceRenew_API(contractID: number) {
