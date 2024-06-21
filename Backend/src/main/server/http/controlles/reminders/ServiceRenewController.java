@@ -2,14 +2,13 @@ package main.server.http.controlles.reminders;
 
 import jakarta.persistence.EntityNotFoundException;
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.services.ContractService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
@@ -27,9 +26,11 @@ public class ServiceRenewController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
-														  @RequestParam int monthsAfterExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
+	public ListSubset<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
+																@RequestParam int monthsAfterExpiration,
+																@RequestParam(required = false) Integer pageNumber,
+																@RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration, pageNumber, pageSize), "/api/reminders" +
 						"/renews",
 				HttpMethod.GET);
 
@@ -38,9 +39,11 @@ public class ServiceRenewController {
 
 
 	@GetMapping("/customer/{customerId}")
-	public List<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId) {
+	public ListSubset<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId,
+																		   @RequestParam(required = false) Integer pageNumber,
+																		   @RequestParam(required = false) Integer pageSize) {
 		try {
-			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId), "/api/contract-service" +
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId, pageNumber, pageSize), "/api/contract-service" +
 							"/customer/" + customerId,
 					HttpMethod.GET);
 		} catch (EntityNotFoundException e) {

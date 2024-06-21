@@ -1,7 +1,6 @@
 import { Button, Grid } from "@chakra-ui/react";
 import { LegacyRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { DetailRow } from "../../../../components/DetailRow";
 import ExtendFormRow from "../../../../components/ExtendFormRow";
 import {
@@ -15,6 +14,7 @@ import {
   PeriodType,
   ServiceRenewRecord,
 } from "../../../service-renews/serviceRenews";
+import { useCustomerIdParam } from "../../hooks/useCustomerIdParam";
 
 function AddEditServiceContractForm({
   submitButtonRef,
@@ -32,7 +32,7 @@ function AddEditServiceContractForm({
     periodKind,
     startDateOfContract,
   } = serviceRenewToEdit;
-  const { customerId } = useParams();
+  const customerID = useCustomerIdParam();
   const [period, setPeriod] = useState<PeriodType>(periodKind);
   const { addServiceContract } = useAddServiceContract();
   const { updateServiceContract } = useUpdateServiceContract();
@@ -49,7 +49,7 @@ function AddEditServiceContractForm({
     if (serviceRenewToEdit) {
       updateServiceContract({ ...data, contractID });
     } else {
-      addServiceContract({ ...data, customerID: Number(customerId) });
+      addServiceContract({ ...data, customerID });
     }
     onSubmit?.();
     reset();

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DeleteAlertDialog from "../../components/DeleteAlertDialog";
 import { DetailRow } from "../../components/DetailRow";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -18,15 +18,15 @@ import { CustomerFullDataType } from "../customers/customers";
 import CustomerFormModal from "./CustomerFormModal";
 import ChildTabs from "./child/ChildTabs";
 import { useCustomer } from "./hooks/useCustomer";
+import { useCustomerIdParam } from "./hooks/useCustomerIdParam";
 import { useDeleteCustomer } from "./hooks/useDeleteCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {
-  const { customerId } = useParams();
-  // console.log("customerId", customerId);\
+  const customerId = useCustomerIdParam();
   const toast = useToast();
 
-  const { customer, isLoading, error } = useCustomer(Number(customerId));
+  const { customer, isLoading, error } = useCustomer(customerId);
   const {
     customerID,
     customerShortName,

@@ -1,6 +1,5 @@
 import { Button, Tag } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/CustomTable";
 import CustomerNameCell from "../../components/CustomerNameCell";
 import { ServiceRenewRecord } from "./serviceRenews";
@@ -24,7 +23,6 @@ function ServiceRenewRow({
   periodKind,
   onRenew,
 }: ServiceRowProps) {
-  const navigate = useNavigate();
   const { t } = useTranslation("serviceRenews");
   const Cell = CustomTable.Row.Cell;
   function handleRenew() {

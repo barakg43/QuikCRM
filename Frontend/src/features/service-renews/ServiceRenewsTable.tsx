@@ -1,13 +1,15 @@
-import { Box, Flex, useDisclosure } from "@chakra-ui/react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../components/Pagination.tsx";
 import CustomTable from "./../../components/CustomTable.tsx";
 import ServiceRenewFormModal from "./ServiceRenewFormModal.tsx";
 import ServiceRenewRow from "./ServiceRenewRow.tsx";
 import { useServiceContractRenews } from "./hooks/useServiceContractRenews";
 import { ServiceRenewRecord } from "./serviceRenews";
 function ServiceRenewsTable() {
-  const { serviceContractRenews, isLoading } = useServiceContractRenews();
+  const { serviceContractRenews, totalItems, isLoading } =
+    useServiceContractRenews();
   const { t } = useTranslation("serviceRenews");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [serviceToRenew, setServiceToRenew] = useState<ServiceRenewRecord>();
@@ -57,8 +59,7 @@ function ServiceRenewsTable() {
         />
 
         <CustomTable.Footer>
-          <Box as='td'>{""}</Box>
-          {/* <Pagination totalItemsAmount={totalItems} /> */}
+          <Pagination totalItemsAmount={totalItems} />
         </CustomTable.Footer>
       </CustomTable>
     </>

@@ -2,6 +2,7 @@ package main.server.sql.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.dto.reminder.ePeriodKind;
 import main.server.sql.entities.CustomerEntity;
@@ -9,12 +10,15 @@ import main.server.sql.entities.ServiceContractEntity;
 import main.server.sql.repositories.CustomerRepository;
 import main.server.sql.repositories.ServiceContractRepository;
 import main.server.uilities.UtilityFunctions;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static main.server.uilities.UtilityFunctions.getPageObject;
 
 @Service
 public class ContractService {
@@ -30,23 +34,40 @@ public class ContractService {
 	}
 
 
-	public List<ContractRecord> getServiceRenewRemindersInPeriodTime(int monthsAfterExpiration,
-																	 int daysBeforeExpiration) {
-		return serviceContractRepository.getAllContractsRenewReminderInPeriodTime(
-				UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration),
-				UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration)
-		);
+	public ListSubset<ContractRecord> getServiceRenewRemindersInPeriodTime(int monthsAfterExpiration,
+																		   int daysBeforeExpiration,
+																		   Integer pageNumber,
+																		   Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration);
+		List<ServiceContractEntity> serviceContractEntities =
+				serviceContractRepository
+						.findAllByRenewedIsFalseAndFinishDateOfContractBetweenOrderByFinishDateOfContractAsc(
+								startDate,
+								finishDate,
+								page
+						);
+		long totalItemInPeriod = serviceContractRepository.countByRenewedFalseAndFinishDateOfContractBetween(startDate,
+				finishDate);
+		List<ContractRecord> subsetListRecords = serviceContractEntities.stream().map(ContractRecord::new).toList();
+
+		return new ListSubset<>(subsetListRecords, totalItemInPeriod);
 	}
 
-	public List<ContractRecord> getServiceRenewRemindersForCustomer(short customerID) {
+	public ListSubset<ContractRecord> getServiceRenewRemindersForCustomer(short customerID, Integer pageNumber,
+																		  Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+
 		Optional<CustomerEntity> customerToFind = customerRepository.findById(customerID);
 		if (customerToFind.isEmpty())
 			throw new EntityNotFoundException("cannot find customer with id of " + customerID);
 
 		List<ServiceContractEntity> serviceContractListAllByCustomer =
-				serviceContractRepository.findAllByCustomerOrderByStartDateOfContract(customerToFind.get());
-		return serviceContractListAllByCustomer.
-				stream().map(ContractRecord::new).toList();
+				serviceContractRepository.findAllByCustomerOrderByStartDateOfContract(customerToFind.get(), page);
+		long totalItem = serviceContractRepository.countByCustomer(customerToFind.get());
+		return new ListSubset<>(serviceContractListAllByCustomer.
+				stream().map(ContractRecord::new).toList(), totalItem);
 	}
 
 	@Transactional

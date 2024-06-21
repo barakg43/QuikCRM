@@ -3,6 +3,7 @@ package main.server.sql.repositories;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.entities.CustomerEntity;
 import main.server.sql.entities.ServiceContractEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,8 +24,17 @@ public interface ServiceContractRepository extends JpaRepository<ServiceContract
 			+ " ORDER BY c.finishDateOfContract ASC")
 	List<ContractRecord> getAllContractsRenewReminderInPeriodTime(Timestamp minimumDate, Timestamp expirationDate);
 
+	List<ServiceContractEntity> findAllByRenewedIsFalseAndFinishDateOfContractBetweenOrderByFinishDateOfContractAsc(Timestamp startDate,
+																													Timestamp endDate,
+																													Pageable pageable);
+
 	void deleteByContractID(Long contactID);
 
-	List<ServiceContractEntity> findAllByCustomerOrderByStartDateOfContract(CustomerEntity customer);
+	List<ServiceContractEntity> findAllByCustomerOrderByStartDateOfContract(CustomerEntity customer,
+																			Pageable pageable);
 
+	long countByRenewedFalseAndFinishDateOfContractBetween(Timestamp finishDateOfContractStart,
+														   Timestamp finishDateOfContractEnd);
+
+	long countByCustomer(CustomerEntity customer);
 }

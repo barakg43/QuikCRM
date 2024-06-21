@@ -10,7 +10,7 @@ function ChildTabs() {
     setTabIndex(index);
   };
   return (
-    <Tabs isLazy height={"100vh"}>
+    <Tabs isLazy height={"100vh"} onChange={handleTabsChange}>
       <TabList>
         <Tab fontSize='large'>{t("activities")}</Tab>
         <Tab fontSize='large'>{t("service-contracts")}</Tab>

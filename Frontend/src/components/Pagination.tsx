@@ -9,10 +9,10 @@ export const getPagesAmount = (totalItemsAmount: number) =>
 export const ITEMS_AMOUNT_PER_PAGE = 10;
 function Pagination({
   totalItemsAmount = 0,
-  as,
+  as = "td",
 }: {
   totalItemsAmount: number;
-  as: As | undefined;
+  as?: As | undefined;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("components", { keyPrefix: "pagination" });

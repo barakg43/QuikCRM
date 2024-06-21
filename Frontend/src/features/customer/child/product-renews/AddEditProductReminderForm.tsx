@@ -1,8 +1,8 @@
 import { LegacyRef } from "react";
-import { useParams } from "react-router-dom";
 import ProductRenewPanel from "../../../product-renews/ProductRenewPanel";
 import { useAddProductRenew } from "../../../product-renews/hooks/useAddProductRenew";
 import { useUpdateProductRenew } from "../../../product-renews/hooks/useUpdateProductRenew";
+import { useCustomerIdParam } from "../../hooks/useCustomerIdParam";
 
 function AddEditProductReminderForm({
   submitButtonRef,
@@ -23,8 +23,7 @@ function AddEditProductReminderForm({
     validityTill,
     systemDetailID,
   } = productRenewToEdit;
-  const { customerId } = useParams();
-
+  const customerID = useCustomerIdParam();
   const { addNewProductReminder, isPending: isAdding } = useAddProductRenew();
   const { updateProductReminder, isPending: isUpdating } =
     useUpdateProductRenew();
@@ -34,7 +33,7 @@ function AddEditProductReminderForm({
     if (productRenewToEdit) {
       //   updateProductReminder({ ...data, systemDetailID });
     } else {
-      //   addNewProductReminder({ ...data, customerID: Number(customerId) });
+      //   addNewProductReminder({ ...data, customerID });
     }
     onSubmit?.();
   }

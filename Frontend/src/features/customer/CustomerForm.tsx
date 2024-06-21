@@ -8,12 +8,12 @@ import {
 import { LegacyRef } from "react";
 import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import StyledSelect, { Option } from "../../components/StyledSelect.tsx";
 import { customerStatuses } from "../customers/CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers/customers";
 import FormRowCustomer from "./FormRowCustomer.tsx";
 import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
+import { useCustomerIdParam } from "./hooks/useCustomerIdParam.ts";
 import { useUpdateCustomer } from "./hooks/useUpdateCustomer.ts";
 
 function CustomerForm({
@@ -28,10 +28,9 @@ function CustomerForm({
   const { register, handleSubmit, formState, reset } =
     useForm<CustomerFullDataType>(); // reset, getValues
   const { errors } = formState;
-  const { customerId } = useParams();
-  const { isPending: isUpdating, updateCustomerDetails } = useUpdateCustomer(
-    Number(customerId)
-  );
+  const customerID = useCustomerIdParam();
+  const { isPending: isUpdating, updateCustomerDetails } =
+    useUpdateCustomer(customerID);
   const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
   const isSubmiting = isAdding || isUpdating;
 
@@ -56,8 +55,8 @@ function CustomerForm({
   function onSubmit(data: CustomerFullDataType) {
     if (errors && Object.keys(errors).length > 0) return;
 
-    if (customerId) {
-      updateCustomerDetails({ ...data, customerID: Number(customerId) });
+    if (customerID) {
+      updateCustomerDetails({ ...data, customerID });
     } else {
       addNewCustomer(data);
     }
