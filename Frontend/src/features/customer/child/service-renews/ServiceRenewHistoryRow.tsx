@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../components/CustomTable";
 import DeleteAlertDialog from "../../../../components/DeleteAlertDialog";
@@ -37,7 +37,19 @@ function ServiceRenewHistoryRow({
       <Cell fontSize={fontSize}>
         {new Date(finishDateOfContract).toLocaleDateString("en-GB")}
       </Cell>
-      <Cell fontSize={fontSize}>{contractDescription}</Cell>
+      <Cell fontSize={fontSize} sx={{ w: "60.5%" }}>
+        <Tooltip label={contractDescription} fontSize='lg'>
+          <Text
+            wordBreak='break-word'
+            whiteSpace='normal'
+            overflow='hidden'
+            noOfLines={2}
+            textOverflow='ellipsis'
+          >
+            {contractDescription}
+          </Text>
+        </Tooltip>
+      </Cell>
       <Cell fontSize={fontSize}>{contractPrice}</Cell>
       <Cell>
         {isActiveContract && (
