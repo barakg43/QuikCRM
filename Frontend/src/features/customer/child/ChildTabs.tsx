@@ -10,14 +10,14 @@ function ChildTabs() {
     setTabIndex(index);
   };
   return (
-    <Tabs isLazy height={"100vh"} onChange={handleTabsChange}>
+    <Tabs isLazy onChange={handleTabsChange}>
       <TabList>
         <Tab fontSize='large'>{t("activities")}</Tab>
         <Tab fontSize='large'>{t("service-contracts")}</Tab>
         <Tab fontSize='large'>{t("product-renews")}</Tab>
       </TabList>
 
-      <TabPanels overflow='scroll'>
+      <TabPanels>
         <TabPanel>
           <p>Activities</p>
         </TabPanel>
