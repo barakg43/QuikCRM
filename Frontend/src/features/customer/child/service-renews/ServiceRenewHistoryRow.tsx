@@ -29,28 +29,33 @@ function ServiceRenewHistoryRow({
     deleteServiceContract(contractID || -1);
   }
   return (
-    <CustomTable.Row height='5.6rem'>
-      <Cell fontSize={fontSize}>{contractID}</Cell>
-      <Cell fontSize={fontSize}>
+    <CustomTable.Row height={"100%"} sx={{ textAlign: "center" }}>
+      <Cell sx={{ padding: 0 }} fontSize={fontSize}>
+        {contractID}
+      </Cell>
+      <Cell sx={{ padding: 0 }} fontSize={fontSize}>
         {new Date(startDateOfContract).toLocaleDateString("en-GB")}
       </Cell>
-      <Cell fontSize={fontSize}>
+      <Cell sx={{ padding: 0 }} fontSize={fontSize}>
         {new Date(finishDateOfContract).toLocaleDateString("en-GB")}
       </Cell>
-      <Cell fontSize={fontSize} sx={{ w: "60.5%" }}>
-        <Tooltip label={contractDescription} fontSize='lg'>
+      <Cell fontSize={fontSize} sx={{ w: "60.5%", padding: 0 }}>
+        <Tooltip label={contractDescription} fontSize='lg' p={1}>
           <Text
             wordBreak='break-word'
             whiteSpace='normal'
             overflow='hidden'
             noOfLines={2}
             textOverflow='ellipsis'
+            // padding={1}
           >
             {contractDescription}
           </Text>
         </Tooltip>
       </Cell>
-      <Cell fontSize={fontSize}>{contractPrice}</Cell>
+      <Cell sx={{ padding: 1 }} fontSize={fontSize}>
+        {contractPrice}
+      </Cell>
       <Cell>
         {isActiveContract && (
           <Flex
