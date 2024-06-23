@@ -15,7 +15,7 @@ function CustomerRow({
   return (
     <Table.Row
       onClick={() => navigate(`${customerID}`)}
-      height='5.6rem'
+      height='5rem'
       sx={{ cursor: "pointer" }}
     >
       <Table.Row.Cell>{customerID} </Table.Row.Cell>
