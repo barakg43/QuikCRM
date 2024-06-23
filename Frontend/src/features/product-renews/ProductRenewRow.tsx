@@ -26,7 +26,7 @@ function ProductRenewRow({ productToRenew }: ProductRenewRowProps) {
         title={t("header")}
         productRenew={productToRenew}
       />
-      <CustomTable.Row height='5.6rem'>
+      <CustomTable.Row>
         <Cell>{systemDetailID}</Cell>
         <CustomerNameCell
           customerID={customerID}
