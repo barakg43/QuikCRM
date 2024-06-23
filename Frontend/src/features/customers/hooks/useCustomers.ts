@@ -6,9 +6,9 @@ import {
 } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getPagesAmount } from "../../../components/Pagination";
 import useDebounce from "../../../hooks/useDebounce";
 import { getCustomersSubset_API } from "../../../services/apiCustomers";
+import { getPagesAmount } from "../../../services/utils";
 import { CustomersListType } from "../customers";
 
 export function useCustomers() {
