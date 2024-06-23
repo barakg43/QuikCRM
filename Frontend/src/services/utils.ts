@@ -19,3 +19,7 @@ export function getStringDate(date: Date) {
   const year = localDate.getFullYear();
   return `${day}-${month}-${year}`;
 }
+export const getPagesAmount = (
+  totalItemsAmount: number,
+  itemsPerPage: number
+) => Math.ceil(totalItemsAmount / itemsPerPage);
