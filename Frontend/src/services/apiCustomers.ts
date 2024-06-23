@@ -1,12 +1,11 @@
 import { GenericAbortSignal } from "axios";
-import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
 import {
   CustomerFullDataType,
   CustomerSlimDetailsProps,
   CustomersListType,
 } from "../features/customers/customers";
 import { httpClient } from "./axios";
-import { SubsetListType } from "./globalTypes";
+import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "./globalTypes";
 
 export async function getCustomersSubset_API({
   page,
