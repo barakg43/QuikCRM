@@ -3,22 +3,23 @@ import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
 import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
+import { ITEMS_AMOUNT_PER_PAGE } from "../services/globalTypes";
+import { getPagesAmount } from "../services/utils";
 
-export const getPagesAmount = (totalItemsAmount: number) =>
-  Math.ceil(totalItemsAmount / ITEMS_AMOUNT_PER_PAGE);
-export const ITEMS_AMOUNT_PER_PAGE = 10;
 function Pagination({
   totalItemsAmount = 0,
+  itemsPerPage = ITEMS_AMOUNT_PER_PAGE,
   as = "td",
 }: {
   totalItemsAmount: number;
+  itemsPerPage?: number;
   as?: As | undefined;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("components", { keyPrefix: "pagination" });
 
   const currentPage = Number(searchParams.get("page")) || 1;
-  const pagesCount = getPagesAmount(totalItemsAmount);
+  const pagesCount = getPagesAmount(totalItemsAmount, itemsPerPage);
   if (pagesCount <= 1) return null;
   const isRTL = document.dir === "rtl";
   const updatePageQuery = (pageNumber: number) => {
@@ -37,11 +38,9 @@ function Pagination({
       updatePageQuery(currentPage - 1);
     }
   }
-  const currentFrom = (currentPage - 1) * ITEMS_AMOUNT_PER_PAGE + 1;
+  const currentFrom = (currentPage - 1) * itemsPerPage + 1;
   const currentTo =
-    currentPage < pagesCount
-      ? currentPage * ITEMS_AMOUNT_PER_PAGE
-      : totalItemsAmount;
+    currentPage < pagesCount ? currentPage * itemsPerPage : totalItemsAmount;
   return (
     <Flex alignItems='center' justifyContent='space-around' as={as}>
       <PaginationButton onClick={previousPage} disabled={currentPage === 1}>

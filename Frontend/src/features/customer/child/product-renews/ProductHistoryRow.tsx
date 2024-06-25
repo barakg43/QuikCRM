@@ -14,12 +14,14 @@ function ProductHistoryRow({ productToRenew }: ProductHistoryRowProps) {
   return (
     <>
       {/* <AddEditProductReminderModal productRenew={productToRenew} /> */}
-      <CustomTable.Row height='5.6rem'>
-        <Cell>{systemDetailID}</Cell>
-        <Cell>{productDetailDescription}</Cell>
-        <Cell>{price}</Cell>
-        <Cell>{new Date(validityTill).toLocaleDateString("en-GB")}</Cell>
-        <Cell>
+      <CustomTable.Row height='100%'>
+        <Cell sx={{ padding: 1 }}>{systemDetailID}</Cell>
+        <Cell sx={{ padding: 1 }}>{productDetailDescription}</Cell>
+        <Cell sx={{ padding: 1 }}>{price}</Cell>
+        <Cell sx={{ padding: 1 }}>
+          {new Date(validityTill).toLocaleDateString("en-GB")}
+        </Cell>
+        <Cell sx={{ padding: 1 }}>
           <Button
             _focus={{ outline: "none", boxShadow: "none" }}
             _hover={{ backgroundColor: "teal.500", color: "white" }}

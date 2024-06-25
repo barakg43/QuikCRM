@@ -38,7 +38,7 @@ function ServiceRenewRow({
     });
   }
   return (
-    <CustomTable.Row height='5.6rem'>
+    <CustomTable.Row>
       <CustomerNameCell
         customerID={customerID}
         customerName={customerShortName}

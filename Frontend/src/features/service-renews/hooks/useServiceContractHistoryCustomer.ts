@@ -5,7 +5,10 @@ import { useSearchParams } from "react-router-dom";
 import { getAllServiceContractHistoryCustomer } from "../../../services/apiServiceRenew";
 import { SubsetListType } from "../../../services/globalTypes";
 import { ServiceRenewRecord } from "../serviceRenews";
-export function useServiceContractHistoryCustomer(customerId: number) {
+export function useServiceContractHistoryCustomer(
+  customerId: number,
+  itemsPerPage: number
+) {
   const toast = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -22,11 +25,12 @@ export function useServiceContractHistoryCustomer(customerId: number) {
     isLoading,
     error,
   }: UseQueryResult<SubsetListType<ServiceRenewRecord> | undefined> = useQuery({
-    queryKey: ["services-contracts-for-customer", page],
+    queryKey: ["services-contracts-for-customer", page, customerId],
     queryFn: () =>
       getAllServiceContractHistoryCustomer({
         customerId,
         page,
+        itemsPerPage,
       }),
   });
   if (error) {

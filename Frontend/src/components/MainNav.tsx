@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import {
   TbAlarm,
+  TbAlarmPlus,
   TbClipboardList,
   TbReportAnalytics,
   TbSettings,
@@ -70,7 +71,7 @@ function MainNav() {
         label={t("product-renews")}
       />
       <NavLinkItem
-        icon={<TbAlarm />}
+        icon={<TbAlarmPlus />}
         path='/service-renews'
         label={t("service-renews")}
       />

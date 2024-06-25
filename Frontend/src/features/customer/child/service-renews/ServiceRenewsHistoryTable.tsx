@@ -1,14 +1,15 @@
 import { Flex } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-
 import CustomTable from "../../../../components/CustomTable.tsx";
 import Pagination from "../../../../components/Pagination.tsx";
+import { ITEMS_AMOUNT_PER_TAB } from "../../../../services/globalTypes";
 import { useServiceContractHistoryCustomer } from "../../../service-renews/hooks/useServiceContractHistoryCustomer.ts";
 import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import { useCustomer } from "../../hooks/useCustomer.ts";
 import { useCustomerIdParam } from "../../hooks/useCustomerIdParam.ts";
 import AddEditServiceContractModal from "./AddEditServiceContractModal.tsx";
 import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";
+
 function ServiceRenewsHistoryTable() {
   const customerId = useCustomerIdParam();
 
@@ -16,7 +17,7 @@ function ServiceRenewsHistoryTable() {
     serviceContractRenews,
     isLoading: isLoadingHistory,
     totalItems,
-  } = useServiceContractHistoryCustomer(customerId);
+  } = useServiceContractHistoryCustomer(customerId, ITEMS_AMOUNT_PER_TAB);
   const { t } = useTranslation("serviceRenews");
 
   const {
@@ -36,13 +37,28 @@ function ServiceRenewsHistoryTable() {
           <AddEditServiceContractModal />
         </Flex>
       )}
-      <CustomTable columns={"0.5fr 1fr 1fr 5fr 1fr"}>
+      <CustomTable columns={"0.5fr 1fr 1fr 5fr 1fr 1.5fr"}>
         <CustomTable.Header>
-          <CustomTable.Header.Cell label={t("contractID")} />
-          <CustomTable.Header.Cell label={t("startDateOfContract")} />
-          <CustomTable.Header.Cell label={t("finishDateOfContract")} />
-          <CustomTable.Header.Cell label={t("contractDescription")} />
-          <CustomTable.Header.Cell label={t("contractPrice")} />
+          <CustomTable.Header.Cell
+            sx={{ fontSize: "small" }}
+            label={t("contractID")}
+          />
+          <CustomTable.Header.Cell
+            sx={{ fontSize: "small" }}
+            label={t("startDateOfContract")}
+          />
+          <CustomTable.Header.Cell
+            sx={{ fontSize: "small" }}
+            label={t("finishDateOfContract")}
+          />
+          <CustomTable.Header.Cell
+            sx={{ fontSize: "small" }}
+            label={t("contractDescription")}
+          />
+          <CustomTable.Header.Cell
+            sx={{ fontSize: "small" }}
+            label={t("contractPrice")}
+          />
         </CustomTable.Header>
 
         <CustomTable.Body
@@ -59,7 +75,10 @@ function ServiceRenewsHistoryTable() {
         />
 
         <CustomTable.Footer>
-          <Pagination totalItemsAmount={totalItems} />
+          <Pagination
+            totalItemsAmount={totalItems}
+            itemsPerPage={ITEMS_AMOUNT_PER_TAB}
+          />
         </CustomTable.Footer>
       </CustomTable>
     </>

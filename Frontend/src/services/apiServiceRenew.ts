@@ -1,10 +1,9 @@
-import { ITEMS_AMOUNT_PER_PAGE } from "../components/Pagination";
 import {
   RenewServiceContract,
   ServiceRenewRecord,
 } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
-import { SubsetListType } from "./globalTypes";
+import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "./globalTypes";
 
 export async function addNewServicesRenew_API({
   customerID,
@@ -94,15 +93,17 @@ export async function getAllServiceRenewForPeriodTime_API({
 export async function getAllServiceContractHistoryCustomer({
   customerId,
   page,
+  itemsPerPage,
 }: {
   customerId: number;
   page: number;
+  itemsPerPage: number;
 }): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
   try {
     return await httpClient.get(`/contract-service/customer/${customerId}`, {
       params: {
         pageNumber: page,
-        pageSize: ITEMS_AMOUNT_PER_PAGE,
+        pageSize: itemsPerPage,
       },
     });
   } catch (error: unknown) {

@@ -13,6 +13,23 @@ import { MouseEventHandler, ReactNode, createContext, useContext } from "react";
 import Empty from "./Empty";
 import LoadingSpinner from "./LoadingSpinner";
 
+function CustomTable({ columns, children, variant }: TableProps) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <Table
+        fontSize='xl'
+        w='95%'
+        paddingTop='var(--scale-3)'
+        variant={variant}
+      >
+        {children}
+      </Table>
+    </TableContext.Provider>
+  );
+}
+type ValueType = {
+  columns: string;
+};
 const TableContext = createContext<ValueType>({ columns: "" });
 
 function Footer({ children }: { children: ReactNode }) {
@@ -58,7 +75,7 @@ type BodyTableCellProps = {
   children: ReactNode | undefined;
   sx?: SystemStyleObject | undefined;
 };
-export function BodyTableCell({
+function BodyTableCell({
   children,
   onClick,
   fontSize = "medium",
@@ -97,30 +114,20 @@ type TableProps = {
   children: ReactNode;
   variant?: ResponsiveValue<string> | undefined;
 };
-function CustomTable({ columns, children, variant }: TableProps) {
+function HeaderCell({
+  label,
+  sx,
+}: {
+  label: string;
+  sx?: SystemStyleObject | undefined;
+}) {
   return (
-    <TableContext.Provider value={{ columns }}>
-      <Table
-        fontSize='xl'
-        w='95%'
-        paddingTop='var(--scale-3)'
-        variant={variant}
-      >
-        {children}
-      </Table>
-    </TableContext.Provider>
-  );
-}
-function HeaderCell({ label }: { label: string }) {
-  return (
-    <Td border='none' as={"th"} textAlign='center'>
+    <Td border='none' as={"th"} textAlign='center' sx={sx}>
       {label}
     </Td>
   );
 }
-type ValueType = {
-  columns: string;
-};
+
 function Header({ children }: { children: ReactNode }) {
   const { columns } = useContext(TableContext);
   return (
@@ -129,10 +136,10 @@ function Header({ children }: { children: ReactNode }) {
         display='grid'
         gridTemplateColumns={columns}
         fontSize='1.6rem'
-        columnGap='var(--scale-000)'
+        // columnGap='var(--scale-000)'
         alignItems='center'
         textAlign='center'
-        padding='var(--scale-0)'
+        // padding='var(--scale-0)'
         borderRadius='var(--radius-md) var(--radius-md) 0 0'
         background='var(--color-primary-300)'
       >
@@ -150,7 +157,7 @@ type RowType = {
   sx?: SystemStyleObject | undefined;
 };
 
-function Row({ onClick, height, sx, children }: RowType) {
+function Row({ onClick, height = "5rem", sx, children }: RowType) {
   const { columns } = useContext(TableContext);
   return (
     <Tr

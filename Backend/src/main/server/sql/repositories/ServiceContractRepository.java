@@ -30,8 +30,8 @@ public interface ServiceContractRepository extends JpaRepository<ServiceContract
 
 	void deleteByContractID(Long contactID);
 
-	List<ServiceContractEntity> findAllByCustomerOrderByStartDateOfContract(CustomerEntity customer,
-																			Pageable pageable);
+	List<ServiceContractEntity> findAllByCustomerOrderByStartDateOfContractDesc(CustomerEntity customer,
+																				Pageable pageable);
 
 	long countByRenewedFalseAndFinishDateOfContractBetween(Timestamp finishDateOfContractStart,
 														   Timestamp finishDateOfContractEnd);

@@ -64,7 +64,7 @@ public class ContractService {
 			throw new EntityNotFoundException("cannot find customer with id of " + customerID);
 
 		List<ServiceContractEntity> serviceContractListAllByCustomer =
-				serviceContractRepository.findAllByCustomerOrderByStartDateOfContract(customerToFind.get(), page);
+				serviceContractRepository.findAllByCustomerOrderByStartDateOfContractDesc(customerToFind.get(), page);
 		long totalItem = serviceContractRepository.countByCustomer(customerToFind.get());
 		return new ListSubset<>(serviceContractListAllByCustomer.
 				stream().map(ContractRecord::new).toList(), totalItem);
