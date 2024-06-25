@@ -2,6 +2,7 @@ package main.server.sql.repositories;
 
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.entities.ProductReminderEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,8 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 ////	WHERE     (ValidityTill < DATEADD(month, 2, @Date))
 ////	ORDER BY ValidityTill
 
-	List<ProductReminderEntity> findAllByValidityTillBeforeOrderByValidityTillAsc(Timestamp maxValidityTill);
+	List<ProductReminderEntity> findAllByValidityTillBeforeOrderByValidityTillAsc(Timestamp maxValidityTill,
+																				  Pageable pageable);
 
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
 			" p.customer.customerShortName, " +
@@ -29,7 +31,7 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 			" p.notes3, " +
 			" p.price, " +
 			" p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
-	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID);
+	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID, Pageable pageable);
 
 
 }

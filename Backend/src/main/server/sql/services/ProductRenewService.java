@@ -6,12 +6,15 @@ import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.entities.ProductReminderEntity;
 import main.server.sql.repositories.ProductReminderRepository;
 import main.server.uilities.UtilityFunctions;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static main.server.uilities.UtilityFunctions.getPageObject;
 
 @Service
 public class ProductRenewService {
@@ -36,14 +39,19 @@ public class ProductRenewService {
 		return newReminder;
 	}
 
-	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
+	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, Integer pageNumber,
+														   Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+
 		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
+				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration), page);
 		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
 	}
 
-	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID) {
-		return productReminderRepository.findAllByCustomer_CustomerID(customerID);
+	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID, Integer pageNumber,
+																	  Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+		return productReminderRepository.findAllByCustomer_CustomerID(customerID, page);
 	}
 
 	@Transactional
