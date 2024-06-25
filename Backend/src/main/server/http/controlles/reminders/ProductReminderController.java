@@ -27,13 +27,17 @@ public class ProductReminderController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration), "/api/reminders" +
+	public List<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration,
+														   @RequestParam(required = false) Integer pageNumber,
+														   @RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration, pageNumber, pageSize), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
 
 	@GetMapping("/customer/{customerID}")
-	public List<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID) {
+	public List<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID,
+																	  @RequestParam(required = false) Integer pageNumber,
+																	  @RequestParam(required = false) Integer pageSize) {
 		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getProductRemindersForCustomer
 				(customerID), "/product-renews" +
 				"/reminders/customer/" + customerID, HttpMethod.GET);
