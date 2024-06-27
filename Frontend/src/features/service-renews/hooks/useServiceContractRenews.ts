@@ -1,11 +1,11 @@
 import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { usePageNumber } from "../../../hooks/usePageNumber";
+import { usePeriodExpirationParams } from "../../../hooks/usePeriodExpirationParams";
 import { getAllServiceRenewForPeriodTime_API } from "../../../services/apiServiceRenew";
 import { SubsetListType } from "../../../services/globalTypes";
 import { ServiceRenewRecord } from "../serviceRenews";
-import { useServiceRenewPeriodParams } from "./useServiceRenewPeriodParams";
-import { usePageNumber } from "../../../hooks/usePageNumber";
 
 export function useServiceContractRenews() {
   const toast = useToast();
@@ -13,7 +13,7 @@ export function useServiceContractRenews() {
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
 
   const { daysBeforeExpiration, monthsAfterExpiration } =
-    useServiceRenewPeriodParams();
+    usePeriodExpirationParams();
   const {
     data: {
       listSubset: serviceContractRenews,

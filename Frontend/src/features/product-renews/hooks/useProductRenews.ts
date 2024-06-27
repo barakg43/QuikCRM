@@ -1,18 +1,18 @@
 import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
 import { usePageNumber } from "../../../hooks/usePageNumber";
+import { usePeriodExpirationParams } from "../../../hooks/usePeriodExpirationParams";
 import { getAllProductReminderForPeriodTime_API } from "../../../services/apiProductRenew";
 import { SubsetListType } from "../../../services/globalTypes";
 
 export function useProductRenews() {
   const toast = useToast();
-  const [searchParams] = useSearchParams();
   const { t } = useTranslation("productRenews", { keyPrefix: "renew-table" });
   const page = usePageNumber();
-  const daysBeforeExpiration =
-    Number(searchParams.get("daysBeforeExpiration")) || 21;
+
+  const { daysBeforeExpiration, monthsAfterExpiration } =
+    usePeriodExpirationParams();
   const {
     data: { listSubset: productRenews, totalAmountInDataBase: totalItems } = {
       listSubset: [],
