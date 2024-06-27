@@ -34,5 +34,8 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID, Pageable pageable);
 
 
+	long countAllByValidityTillBefore(Timestamp timestamp);
+
+	long countAllByCustomer_CustomerID(Short customerID);
 }
 
