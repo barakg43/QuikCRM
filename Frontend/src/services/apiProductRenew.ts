@@ -1,4 +1,10 @@
+import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
 import { httpClient } from "./axios";
+import {
+  ITEMS_AMOUNT_PER_PAGE,
+  ITEMS_AMOUNT_PER_TAB,
+  SubsetListType,
+} from "./globalTypes";
 
 export async function addNewProductReminder_API({
   customerID,
@@ -51,10 +57,19 @@ export async function updateProductReminder_API({
   }
 }
 
-export async function getProductRemindersByCustomerId_API(
-  customerID: number
-): Promise<ProductReminderRecord[] | never[] | undefined> {
-  return await httpClient.get(`/product-renews/customer/${customerID}`);
+export async function getProductRemindersByCustomerId_API({
+  customerID,
+  page,
+}: {
+  customerID: number;
+  page: number;
+}): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
+  return await httpClient.get(`/product-renews/customer/${customerID}`, {
+    params: {
+      pageNumber: page,
+      pageSize: ITEMS_AMOUNT_PER_TAB,
+    },
+  });
 }
 export async function renewProductReminder_API({
   systemDetailID,
@@ -78,17 +93,22 @@ export async function renewProductReminder_API({
 }
 export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
+  monthsAfterExpiration,
+  page,
 }: {
   daysBeforeExpiration: number;
-}): Promise<ProductReminderRecord[] | never[] | undefined> {
+  monthsAfterExpiration: number;
+  page: number;
+}): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
   try {
-    const data: ProductReminderRecord[] | never[] | undefined =
-      await httpClient.get(`/product-renews/reminders`, {
-        params: {
-          daysBeforeExpiration,
-        },
-      });
-    return data;
+    return await httpClient.get(`/product-renews/reminders`, {
+      params: {
+        daysBeforeExpiration,
+        monthsAfterExpiration,
+        pageNumber: page,
+        pageSize: ITEMS_AMOUNT_PER_PAGE,
+      },
+    });
   } catch (error: unknown) {
     console.log(error);
     throw error;

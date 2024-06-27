@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { usePageNumber } from "../../../hooks/usePageNumber";
 import { getAllServiceContractHistoryCustomer } from "../../../services/apiServiceRenew";
 import { SubsetListType } from "../../../services/globalTypes";
 import { ServiceRenewRecord } from "../serviceRenews";
@@ -10,9 +10,8 @@ export function useServiceContractHistoryCustomer(
   itemsPerPage: number
 ) {
   const toast = useToast();
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = Number(searchParams.get("page")) || 1;
+  const page = usePageNumber();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "renew-table" });
   const {
     data: {

@@ -1,6 +1,7 @@
 package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.services.ProductRenewService;
 import org.springframework.http.HttpMethod;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
@@ -27,15 +27,20 @@ public class ProductReminderController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration), "/api/reminders" +
+	public ListSubset<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration,
+																 @RequestParam(required = false) Integer pageNumber,
+																 @RequestParam int monthsAfterExpiration,
+																 @RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration, monthsAfterExpiration, pageNumber, pageSize), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
 
 	@GetMapping("/customer/{customerID}")
-	public List<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID) {
+	public ListSubset<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID,
+																			@RequestParam(required = false) Integer pageNumber,
+																			@RequestParam(required = false) Integer pageSize) {
 		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getProductRemindersForCustomer
-				(customerID), "/product-renews" +
+				(customerID, pageNumber, pageSize), "/product-renews" +
 				"/reminders/customer/" + customerID, HttpMethod.GET);
 	}
 

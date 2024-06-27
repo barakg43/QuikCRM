@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 
-export function useServiceRenewPeriodParams() {
+export function usePeriodExpirationParams() {
   const [searchParams] = useSearchParams();
   const daysBeforeExpiration =
-    Number(searchParams.get("daysBeforeExpiration")) || 15;
+    Number(searchParams.get("daysBeforeExpiration")) || 21;
   const monthsAfterExpiration =
     Number(searchParams.get("monthsAfterExpiration")) || 4;
 

@@ -7,13 +7,15 @@ import {
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "../../../hooks/useDebounce";
+import { usePageNumber } from "../../../hooks/usePageNumber";
 import { getCustomersSubset_API } from "../../../services/apiCustomers";
+import { ITEMS_AMOUNT_PER_PAGE } from "../../../services/globalTypes";
 import { getPagesAmount } from "../../../services/utils";
 import { CustomersListType } from "../customers";
 
 export function useCustomers() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
+  const page = usePageNumber();
   const toast = useToast();
   const querySearch = searchParams.get("query") || undefined;
 
@@ -41,7 +43,7 @@ export function useCustomers() {
       isClosable: true,
     });
   }
-  const pageCount = getPagesAmount(totalItems);
+  const pageCount = getPagesAmount(totalItems, ITEMS_AMOUNT_PER_PAGE);
   if (page < pageCount)
     queryClient.prefetchQuery({
       queryKey: ["customers", page + 1],

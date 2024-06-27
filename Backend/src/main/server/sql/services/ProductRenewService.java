@@ -2,16 +2,21 @@ package main.server.sql.services;
 
 
 import jakarta.transaction.Transactional;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.entities.ProductReminderEntity;
 import main.server.sql.repositories.ProductReminderRepository;
 import main.server.uilities.UtilityFunctions;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static main.server.uilities.UtilityFunctions.getPageObject;
 
 @Service
 public class ProductRenewService {
@@ -36,14 +41,31 @@ public class ProductRenewService {
 		return newReminder;
 	}
 
-	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration) {
-		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
-		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
+	public ListSubset<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, int monthsAfterExpiration,
+																 Integer pageNumber,
+																 Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration);
+		List<ProductReminderRecord> productReminderEntityList =
+				productReminderRepository
+						.findAllByValidityTillBetweenOrderByValidityTillAsc(startDate, finishDate, page)
+						.stream()
+						.map(ProductReminderRecord::convertFromEntity)
+						.toList();
+		long totalAmountInDataBase =
+				productReminderRepository.countAllByValidityTillBetween(startDate, finishDate);
+		return new ListSubset<>(productReminderEntityList, totalAmountInDataBase);
 	}
 
-	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID) {
-		return productReminderRepository.findAllByCustomer_CustomerID(customerID);
+	public ListSubset<ProductReminderRecord> getProductRemindersForCustomer(Short customerID, Integer pageNumber,
+																			Integer pageSize) {
+		Pageable page = getPageObject(pageNumber, pageSize);
+
+		List<ProductReminderRecord> productReminderEntityList =
+				productReminderRepository.findAllByCustomer_CustomerID(customerID, page);
+		long totalAmountInDataBase = productReminderRepository.countAllByCustomer_CustomerID(customerID);
+		return new ListSubset<>(productReminderEntityList, totalAmountInDataBase);
 	}
 
 	@Transactional
