@@ -1,11 +1,12 @@
-import { Box } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../components/CustomTable";
+import Pagination from "../../../../components/Pagination";
+import { ITEMS_AMOUNT_PER_TAB } from "../../../../services/globalTypes";
 import { useProductRenewForCustomer } from "../../../product-renews/hooks/useProductRenewForCustomer";
 import ProductHistoryRow from "./ProductHistoryRow";
 
 function ProductHistoryTable() {
-  const { productRenews, isLoading } = useProductRenewForCustomer();
+  const { productRenews, isLoading, totalItems } = useProductRenewForCustomer();
   const { t } = useTranslation("productRenews");
   return (
     <CustomTable columns={"1fr ".repeat(5)}>
@@ -27,8 +28,10 @@ function ProductHistoryTable() {
         )}
       />
       <CustomTable.Footer>
-        <Box as='td'>{""}</Box>
-        {/* <Pagination totalItemsAmount={totalItems} /> */}
+        <Pagination
+          totalItemsAmount={totalItems}
+          itemsPerPage={ITEMS_AMOUNT_PER_TAB}
+        />
       </CustomTable.Footer>
     </CustomTable>
   );
