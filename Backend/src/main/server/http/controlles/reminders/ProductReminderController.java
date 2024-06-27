@@ -29,8 +29,9 @@ public class ProductReminderController {
 	@GetMapping("/reminders")
 	public ListSubset<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration,
 																 @RequestParam(required = false) Integer pageNumber,
+																 @RequestParam int monthsAfterExpiration,
 																 @RequestParam(required = false) Integer pageSize) {
-		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration, pageNumber, pageSize), "/api/reminders" +
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration, monthsAfterExpiration, pageNumber, pageSize), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
 
