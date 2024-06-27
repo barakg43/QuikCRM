@@ -18,8 +18,9 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 ////	WHERE     (ValidityTill < DATEADD(month, 2, @Date))
 ////	ORDER BY ValidityTill
 
-	List<ProductReminderEntity> findAllByValidityTillBeforeOrderByValidityTillAsc(Timestamp maxValidityTill,
-																				  Pageable pageable);
+	List<ProductReminderEntity> findAllByValidityTillBetweenOrderByValidityTillAsc(Timestamp minValidityTill,
+																				   Timestamp maxValidityTill,
+																				   Pageable pageable);
 
 	@Query("SELECT new main.server.sql.dto.reminder.ProductReminderRecord(p.customerID, " +
 			" p.customer.customerShortName, " +
@@ -34,7 +35,7 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID, Pageable pageable);
 
 
-	long countAllByValidityTillBefore(Timestamp timestamp);
+	long countAllByValidityTillBetween(Timestamp minValidityTill, Timestamp maxValidityTill);
 
 	long countAllByCustomer_CustomerID(Short customerID);
 }
