@@ -2,6 +2,7 @@ package main.server.sql.services;
 
 
 import jakarta.transaction.Transactional;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.entities.ProductReminderEntity;
 import main.server.sql.repositories.ProductReminderRepository;
@@ -39,19 +40,26 @@ public class ProductRenewService {
 		return newReminder;
 	}
 
-	public List<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, Integer pageNumber,
-														   Integer pageSize) {
+	public ListSubset<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, Integer pageNumber,
+																 Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
 
-		List<ProductReminderEntity> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration), page);
-		return productReminderEntityList.stream().map(ProductReminderRecord::convertFromEntity).toList();
+		List<ProductReminderRecord> productReminderEntityList =
+				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration), page)
+						.stream().map(ProductReminderRecord::convertFromEntity).toList();
+		long totalAmountInDataBase =
+				productReminderRepository.countAllByValidityTillBefore(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
+		return new ListSubset<>(productReminderEntityList, totalAmountInDataBase);
 	}
 
-	public List<ProductReminderRecord> getProductRemindersForCustomer(Short customerID, Integer pageNumber,
-																	  Integer pageSize) {
+	public ListSubset<ProductReminderRecord> getProductRemindersForCustomer(Short customerID, Integer pageNumber,
+																			Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
-		return productReminderRepository.findAllByCustomer_CustomerID(customerID, page);
+
+		List<ProductReminderRecord> productReminderEntityList =
+				productReminderRepository.findAllByCustomer_CustomerID(customerID, page);
+		long totalAmountInDataBase = productReminderRepository.countAllByCustomer_CustomerID(customerID);
+		return new ListSubset<>(productReminderEntityList, totalAmountInDataBase);
 	}
 
 	@Transactional
