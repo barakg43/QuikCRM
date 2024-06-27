@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -40,15 +41,20 @@ public class ProductRenewService {
 		return newReminder;
 	}
 
-	public ListSubset<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, Integer pageNumber,
+	public ListSubset<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, int monthsAfterExpiration,
+																 Integer pageNumber,
 																 Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
-
+		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration);
 		List<ProductReminderRecord> productReminderEntityList =
-				productReminderRepository.findAllByValidityTillBeforeOrderByValidityTillAsc(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration), page)
-						.stream().map(ProductReminderRecord::convertFromEntity).toList();
+				productReminderRepository
+						.findAllByValidityTillBetweenOrderByValidityTillAsc(startDate, finishDate, page)
+						.stream()
+						.map(ProductReminderRecord::convertFromEntity)
+						.toList();
 		long totalAmountInDataBase =
-				productReminderRepository.countAllByValidityTillBefore(UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration));
+				productReminderRepository.countAllByValidityTillBetween(startDate, finishDate);
 		return new ListSubset<>(productReminderEntityList, totalAmountInDataBase);
 	}
 
