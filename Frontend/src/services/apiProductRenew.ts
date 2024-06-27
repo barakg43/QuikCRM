@@ -93,15 +93,18 @@ export async function renewProductReminder_API({
 }
 export async function getAllProductReminderForPeriodTime_API({
   daysBeforeExpiration,
+  monthsAfterExpiration,
   page,
 }: {
   daysBeforeExpiration: number;
+  monthsAfterExpiration: number;
   page: number;
 }): Promise<SubsetListType<ServiceRenewRecord> | never | undefined> {
   try {
     return await httpClient.get(`/product-renews/reminders`, {
       params: {
         daysBeforeExpiration,
+        monthsAfterExpiration,
         pageNumber: page,
         pageSize: ITEMS_AMOUNT_PER_PAGE,
       },
