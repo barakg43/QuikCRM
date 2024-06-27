@@ -23,10 +23,16 @@ export function useProductRenews() {
   }: UseQueryResult<
     SubsetListType<ProductReminderRecord> | never | undefined
   > = useQuery({
-    queryKey: ["product-renews", daysBeforeExpiration, page],
+    queryKey: [
+      "product-renews",
+      daysBeforeExpiration,
+      monthsAfterExpiration,
+      page,
+    ],
     queryFn: () =>
       getAllProductReminderForPeriodTime_API({
         daysBeforeExpiration,
+        monthsAfterExpiration,
         page,
       }),
   });
