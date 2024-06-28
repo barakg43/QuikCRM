@@ -40,7 +40,7 @@ public class ContractService {
 																		   Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
 		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
-		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration);
 		List<ServiceContractEntity> serviceContractEntities =
 				serviceContractRepository
 						.findAllByRenewedIsFalseAndFinishDateOfContractBetweenOrderByFinishDateOfContractAsc(

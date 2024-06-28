@@ -46,7 +46,7 @@ public class ProductRenewService {
 																 Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
 		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
-		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), -daysBeforeExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration);
 		List<ProductReminderRecord> productReminderEntityList =
 				productReminderRepository
 						.findAllByValidityTillBetweenOrderByValidityTillAsc(startDate, finishDate, page)
