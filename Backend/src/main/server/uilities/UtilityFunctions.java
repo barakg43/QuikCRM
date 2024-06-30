@@ -46,6 +46,18 @@ public class UtilityFunctions {
 
 	}
 
+	public static Timestamp postDateByDaysAmountFromToday(int periodToAdd) {
+
+		return postDateByDaysAmount(LocalDate.now(), periodToAdd);
+
+	}
+
+	public static Timestamp postDateByMonthAmountFromToday(int periodToAdd) {
+
+		return postDateByMonthAmount(LocalDate.now(), periodToAdd);
+
+	}
+
 	public static <T> void validEntityValidations(T entityObject) throws IllegalArgumentException {
 
 		Validator validator = factory.getValidator();
