@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +44,8 @@ public class ProductRenewService {
 																 Integer pageNumber,
 																 Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
-		Timestamp startDate = UtilityFunctions.postDateByMonthAmount(LocalDate.now(), -monthsAfterExpiration);
-		Timestamp finishDate = UtilityFunctions.postDateByDaysAmount(LocalDate.now(), daysBeforeExpiration);
+		Timestamp startDate = UtilityFunctions.postDateByMonthAmountFromToday(-monthsAfterExpiration);
+		Timestamp finishDate = UtilityFunctions.postDateByDaysAmountFromToday(daysBeforeExpiration);
 		List<ProductReminderRecord> productReminderEntityList =
 				productReminderRepository
 						.findAllByValidityTillBetweenOrderByValidityTillAsc(startDate, finishDate, page)
