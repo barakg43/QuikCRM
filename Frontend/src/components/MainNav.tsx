@@ -10,6 +10,7 @@ import {
   TbUsers,
 } from "react-icons/tb";
 import { NavLink as ReactRouterLink } from "react-router-dom";
+import BadgeIcon from "./BadgeIcon";
 
 type NavLinkItemProps = {
   path: string;
@@ -66,12 +67,12 @@ function MainNav() {
         label={t("customers")}
       />
       <NavLinkItem
-        icon={<TbAlarm />}
+        icon={<BadgeIcon icon={<TbAlarm />} amountNotification={100} />}
         path='/product-renews'
         label={t("product-renews")}
       />
       <NavLinkItem
-        icon={<TbAlarmPlus />}
+        icon={<BadgeIcon icon={<TbAlarmPlus />} />}
         path='/service-renews'
         label={t("service-renews")}
       />
