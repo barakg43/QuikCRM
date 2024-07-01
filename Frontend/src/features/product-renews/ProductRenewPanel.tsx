@@ -68,7 +68,7 @@ function ProductRenewPanel({
         <ExtendFormRow
           label='price'
           register={register}
-          error={errors?.validityTill}
+          error={errors?.price}
           defaultValue={price}
           type='number'
           isRequired
