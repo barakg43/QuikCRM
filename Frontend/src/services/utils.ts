@@ -17,7 +17,7 @@ export function getStringDate(date: Date) {
   const day = String(localDate.getDate()).padStart(2, "0");
   const month = String(localDate.getMonth() + 1).padStart(2, "0"); // Months are zero based
   const year = localDate.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${day}/${month}/${year}`;
 }
 export const getPagesAmount = (
   totalItemsAmount: number,
