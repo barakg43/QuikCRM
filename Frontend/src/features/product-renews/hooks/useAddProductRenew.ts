@@ -20,9 +20,9 @@ export function useAddProductRenew() {
         title: t("toast-message-error"),
         status: "error",
       });
-      queryClient.invalidateQueries({
-        queryKey: ["customer"],
-      });
+      //   queryClient.invalidateQueries({
+      //     queryKey: ["customer"],
+      //   });
     },
   });
   return { addNewProductReminder, isPending };
