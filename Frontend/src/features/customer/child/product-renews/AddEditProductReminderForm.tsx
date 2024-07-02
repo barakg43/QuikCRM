@@ -29,11 +29,10 @@ function AddEditProductReminderForm({
     useUpdateProductRenew();
   const isLoading = isAdding || isUpdating;
   function onSubmitForm(data: RenewProductRecord) {
-    console.log("test", data);
-    if (productRenewToEdit) {
-      //   updateProductReminder({ ...data, systemDetailID });
+    if (productRenewToEdit.systemDetailID) {
+      updateProductReminder({ ...data, systemDetailID });
     } else {
-      //   addNewProductReminder({ ...data, customerID });
+      addNewProductReminder({ ...data, customerID });
     }
     onSubmit?.();
   }
