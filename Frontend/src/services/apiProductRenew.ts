@@ -6,27 +6,11 @@ import {
   SubsetListType,
 } from "./globalTypes";
 
-export async function addNewProductReminder_API({
-  customerID,
-  productDetailDescription,
-  systemDetailID,
-  notes1,
-  notes2,
-  notes3,
-  notes4,
-  validityTill,
-}: ProductReminderRecord): Promise<number | undefined> {
+export async function addNewProductReminder_API(
+  data: ProductReminderRecord
+): Promise<number | undefined> {
   try {
-    return await httpClient.post(`/product-renews`, {
-      customerID,
-      productDetailDescription,
-      systemDetailID,
-      notes1,
-      notes2,
-      notes3,
-      notes4,
-      validityTill,
-    });
+    return await httpClient.post("/product-renews", data);
   } catch (error: unknown) {
     console.log(error);
     throw error;
@@ -34,14 +18,15 @@ export async function addNewProductReminder_API({
 }
 
 export async function updateProductReminder_API({
-  productDetailDescription,
   systemDetailID,
+  productDetailDescription,
   notes1,
   notes2,
   notes3,
   notes4,
+  price,
   validityTill,
-}: ProductReminderRecord) {
+}: RenewProductRecord) {
   try {
     httpClient.patch(`/product-renews/${systemDetailID}`, {
       productDetailDescription,
@@ -49,6 +34,7 @@ export async function updateProductReminder_API({
       notes2,
       notes3,
       notes4,
+      price,
       validityTill,
     });
   } catch (error: unknown) {
