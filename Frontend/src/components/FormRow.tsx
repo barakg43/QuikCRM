@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -37,7 +38,37 @@ function FormRow({
       <FormLabel width='12rem' fontSize='1.25rem' fontWeight={600}>
         {label}
       </FormLabel>
-      {type === "textarea" ? (
+
+      {ReactComponentInput({ type, label, defaultValue, register })}
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
+    </FormControl>
+  );
+}
+
+function ReactComponentInput({
+  type,
+  label,
+  defaultValue,
+  register,
+}: {
+  label: string;
+  type?: HTMLInputTypeAttribute | undefined;
+  defaultValue?: string | number | readonly string[] | undefined;
+  register?: UseFormRegisterReturn<string> | undefined;
+}) {
+  switch (type) {
+    case "checkbox":
+      return (
+        <Checkbox
+          placeholder={label}
+          variant='flushed'
+          defaultValue={defaultValue || ""}
+          fontSize='1.1rem'
+          {...register}
+        />
+      );
+    case "textarea":
+      return (
         <Textarea
           placeholder={label}
           variant='flushed'
@@ -45,7 +76,9 @@ function FormRow({
           fontSize='1.1rem'
           {...register}
         />
-      ) : (
+      );
+    default:
+      return (
         <Input
           type={type}
           defaultValue={defaultValue || ""}
@@ -54,9 +87,7 @@ function FormRow({
           fontSize='1.1rem'
           {...register}
         />
-      )}
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
-    </FormControl>
-  );
+      );
+  }
 }
 export default FormRow;
