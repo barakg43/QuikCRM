@@ -23,13 +23,16 @@ function AddEditProductReminderModal({
         padding=' 0 1rem 0 1rem'
       >
         {productRenewToEdit.systemDetailID ? (
-          <TbEdit size='5rem' />
+          <>
+            <TbEdit size='1.5rem' />
+            {t("update.button")}
+          </>
         ) : (
-          <TbPencilCheck />
+          <>
+            <TbPencilCheck />
+            {t("add.button")}
+          </>
         )}
-        {productRenewToEdit.systemDetailID
-          ? t("update.button")
-          : t("add.button")}
       </Button>
       <StyledModal
         isOpen={isOpen}
