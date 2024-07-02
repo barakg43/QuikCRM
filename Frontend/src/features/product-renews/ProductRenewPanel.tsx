@@ -60,7 +60,9 @@ function ProductRenewPanel({
           label='validityTill'
           register={register}
           error={errors?.validityTill}
-          defaultValue={validityTill?.toLocaleDateString("en-CA")}
+          defaultValue={new Date(validityTill || Date.now()).toLocaleDateString(
+            "en-CA"
+          )}
           type='date'
           isRequired
           translationNS='productRenews'
