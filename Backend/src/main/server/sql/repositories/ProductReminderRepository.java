@@ -31,8 +31,10 @@ public interface ProductReminderRepository extends JpaRepository<ProductReminder
 			" p.notes3, " +
 			" p.notes3, " +
 			" p.price, " +
-			" p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID")
-	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID, Pageable pageable);
+			" p.validityTill) FROM ProductReminderEntity p WHERE p.customerID = :customerID" +
+			" ORDER BY p.validityTill DESC NULLS LAST")
+	List<ProductReminderRecord> findAllByCustomer_CustomerID(Short customerID,
+															 Pageable pageable);
 
 
 	long countAllByValidityTillBetween(Timestamp minValidityTill, Timestamp maxValidityTill);
