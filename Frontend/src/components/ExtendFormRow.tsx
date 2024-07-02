@@ -43,6 +43,7 @@ function ExtendFormRow<T extends FieldValues>({
       error={error?.message}
       register={register(label, {
         required: isRequired ? t("form.required") : undefined,
+        valueAsNumber: type === "number",
         maxLength:
           maxLength != undefined
             ? {
