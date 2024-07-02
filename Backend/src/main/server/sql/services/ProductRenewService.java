@@ -60,7 +60,6 @@ public class ProductRenewService {
 	public ListSubset<ProductReminderRecord> getProductRemindersForCustomer(Short customerID, Integer pageNumber,
 																			Integer pageSize) {
 		Pageable page = getPageObject(pageNumber, pageSize);
-
 		List<ProductReminderRecord> productReminderEntityList =
 				productReminderRepository.findAllByCustomer_CustomerID(customerID, page);
 		long totalAmountInDataBase = productReminderRepository.countAllByCustomer_CustomerID(customerID);
@@ -126,7 +125,9 @@ public class ProductRenewService {
 		targetEntity.setNotes2(sourceRecord.notes2());
 		targetEntity.setProductDetailDescription(sourceRecord.productDetailDescription());
 		targetEntity.setNotes3(sourceRecord.notes3());
-		targetEntity.setCustomerID(sourceRecord.customerID());
+		targetEntity.setPrice(sourceRecord.price());
+		if (sourceRecord.customerID() != null)
+			targetEntity.setCustomerID(sourceRecord.customerID());
 
 
 	}
