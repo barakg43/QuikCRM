@@ -19,11 +19,8 @@ export function useCustomer(customerId: number): useCustomerReturnType {
   });
   if (error) {
     if (axios.isAxiosError(error)) {
-      console.log(error.status);
       console.error(error.response);
     }
   }
-  // console.log("useCustomer");
-
   return { customer, isLoading, error };
 }

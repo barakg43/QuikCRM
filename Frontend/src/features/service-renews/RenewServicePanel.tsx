@@ -29,14 +29,6 @@ function RenewServicePanel({
     periodKind,
     contractDescription,
   }: RenewServiceContract) {
-    console.log(
-      "test",
-      contractID,
-      contractPrice,
-      periodKind,
-      contractDescription
-    );
-
     if (errors && Object.keys(errors).length > 0) return;
     renewServiceContract({
       contractID,
