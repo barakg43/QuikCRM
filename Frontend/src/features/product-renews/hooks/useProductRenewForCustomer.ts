@@ -2,8 +2,8 @@ import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { usePageNumber } from "../../../hooks/usePageNumber";
-import { getProductRemindersByCustomerId_API } from "../../../services/apiProductRenew";
 import { SubsetListType } from "../../../services/globalTypes";
+import { getProductRemindersByCustomerId_API } from "../../../services/redux/api/apiProductRenew";
 import { useCustomerIdParam } from "../../customer/hooks/useCustomerIdParam";
 
 export function useProductRenewForCustomer() {

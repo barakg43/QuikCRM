@@ -3,8 +3,8 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { usePageNumber } from "../../../hooks/usePageNumber";
 import { usePeriodExpirationParams } from "../../../hooks/usePeriodExpirationParams";
-import { getAllProductReminderForPeriodTime_API } from "../../../services/apiProductRenew";
 import { SubsetListType } from "../../../services/globalTypes";
+import { getAllProductReminderForPeriodTime_API } from "../../../services/redux/api/apiProductRenew";
 
 export function useProductRenews() {
   const toast = useToast();

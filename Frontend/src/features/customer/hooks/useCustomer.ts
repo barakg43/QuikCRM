@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getCustomerDataByID_API } from "../../../services/apiCustomers";
+import { getCustomerDataByID_API } from "../../../services/redux/api/apiCustomers";
 import { CustomerFullDataType } from "../../customers/customers";
 
 type useCustomerReturnType = {

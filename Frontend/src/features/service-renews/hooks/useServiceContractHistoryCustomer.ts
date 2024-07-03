@@ -2,8 +2,8 @@ import { useToast } from "@chakra-ui/react";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { usePageNumber } from "../../../hooks/usePageNumber";
-import { getAllServiceContractHistoryCustomer } from "../../../services/apiServiceRenew";
 import { SubsetListType } from "../../../services/globalTypes";
+import { getAllServiceContractHistoryCustomer } from "../../../services/redux/api/apiServiceRenew";
 import { ServiceRenewRecord } from "../serviceRenews";
 export function useServiceContractHistoryCustomer(
   customerId: number,

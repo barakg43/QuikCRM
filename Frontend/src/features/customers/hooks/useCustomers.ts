@@ -8,8 +8,8 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "../../../hooks/useDebounce";
 import { usePageNumber } from "../../../hooks/usePageNumber";
-import { getCustomersSubset_API } from "../../../services/apiCustomers";
 import { ITEMS_AMOUNT_PER_PAGE } from "../../../services/globalTypes";
+import { getCustomersSubset_API } from "../../../services/redux/api/apiCustomers";
 import { getPagesAmount } from "../../../services/utils";
 import { CustomersListType } from "../customers";
 

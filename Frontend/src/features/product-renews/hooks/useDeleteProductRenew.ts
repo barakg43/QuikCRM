@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { deleteProductReminder_API } from "../../../services/apiProductRenew";
+import { deleteProductReminder_API } from "../../../services/redux/api/apiProductRenew";
 export function useDeleteProductReminder() {
   const toast = useToast();
   //   const { createInfinityToast, updateToast } = useUpdatableToaster(

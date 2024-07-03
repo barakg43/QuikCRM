@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { addNewCustomer_API } from "../../../services/apiCustomers";
+import { addNewCustomer_API } from "../../../services/redux/api/apiCustomers";
 export function useAddNewCustomer() {
   const toast = useToast();
 

@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { usePeriodExpirationParams } from "../../../hooks/usePeriodExpirationParams";
-import { renewService_API } from "../../../services/apiServiceRenew";
+import { renewService_API } from "../../../services/redux/api/apiServiceRenew";
 
 export function useRenewServiceContract() {
   const toast = useToast();

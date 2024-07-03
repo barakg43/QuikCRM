@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { updateServiceRenewDetails_API } from "../../../services/apiServiceRenew";
+import { updateServiceRenewDetails_API } from "../../../services/redux/api/apiServiceRenew";
 export function useUpdateServiceContract() {
   const toast = useToast();
   const { t } = useTranslation("serviceRenews", { keyPrefix: "update" });

@@ -1,9 +1,9 @@
 import {
   RenewServiceContract,
   ServiceRenewRecord,
-} from "../features/service-renews/serviceRenews";
-import { httpClient } from "./axios";
-import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "./globalTypes";
+} from "../../../features/service-renews/serviceRenews";
+import { httpClient } from "../../axios";
+import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "../../globalTypes";
 
 export async function addNewServicesRenew_API({
   customerID,

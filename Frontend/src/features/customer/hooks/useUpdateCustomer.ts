@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { updateCustomerDetails_API } from "../../../services/apiCustomers";
+import { updateCustomerDetails_API } from "../../../services/redux/api/apiCustomers";
 export function useUpdateCustomer(customerId: number) {
   const toast = useToast();
   const { t } = useTranslation("customers", { keyPrefix: "update" });

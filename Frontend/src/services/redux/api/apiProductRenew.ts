@@ -1,10 +1,10 @@
-import { ServiceRenewRecord } from "../features/service-renews/serviceRenews";
-import { httpClient } from "./axios";
+import { ServiceRenewRecord } from "../../../features/service-renews/serviceRenews";
+import { httpClient } from "../../axios";
 import {
   ITEMS_AMOUNT_PER_PAGE,
   ITEMS_AMOUNT_PER_TAB,
   SubsetListType,
-} from "./globalTypes";
+} from "../../globalTypes";
 
 export async function addNewProductReminder_API(
   data: ProductReminderRecord
