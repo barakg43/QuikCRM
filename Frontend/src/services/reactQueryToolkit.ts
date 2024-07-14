@@ -65,15 +65,15 @@ function buildDefinition<
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
     hookName = `use${capitalize(endpointName)}Query`;
-    hookFn = BuildQueryHook(baseQuery, definition);
+    hookFn = buildQueryHook(baseQuery, definition);
   } else if (isMutationDefinition(definition)) {
     hookName = `use${capitalize(endpointName)}Mutation`;
-    hookFn = BuildMutationHook(endpointName, baseQuery, definition);
+    hookFn = buildMutationHook(endpointName, baseQuery, definition);
   }
 
   return { hookName, hookFn };
 }
-function BuildQueryHook<
+function buildQueryHook<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType,
@@ -97,7 +97,7 @@ function BuildQueryHook<
     }
   };
 }
-function BuildMutationHook<
+function buildMutationHook<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType,
