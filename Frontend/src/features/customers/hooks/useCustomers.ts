@@ -1,8 +1,8 @@
 import { useToast } from "@chakra-ui/react";
 import {
-  UseQueryResult,
   useQuery,
   useQueryClient,
+  UseQueryResult,
 } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -25,6 +25,15 @@ export function useCustomers() {
     setSearchParams(searchParams);
   }, [debouncedQuery]);
   const queryClient = useQueryClient();
+  //   const {
+  //     data: { customers, totalItems } = { customers: [], totalItems: 0 },
+  //     isLoading,
+  //     error,
+  //   } = useCustomerDetailsQuery({
+  //     page,
+  //     querySearch: debouncedQuery,
+  //   });
+
   const {
     data: { customers, totalItems } = { customers: [], totalItems: 0 },
     isLoading,
