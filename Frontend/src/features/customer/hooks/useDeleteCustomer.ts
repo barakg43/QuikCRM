@@ -6,7 +6,11 @@ export function useDeleteCustomer() {
   const toast = useToast();
   const { t } = useTranslation("customers", { keyPrefix: "delete" });
   const queryClient = useQueryClient();
-  const { mutate: deleteCustomer, isPending } = useMutation({
+  const {
+    mutate: deleteCustomer,
+    isPending,
+    data,
+  } = useMutation({
     mutationFn: deleteCustomer_API,
     onSuccess: () => {
       toast({
