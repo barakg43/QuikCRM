@@ -1,16 +1,22 @@
-import type { BaseQueryFn } from "@reduxjs/toolkit/query";
-import { createApi } from "@reduxjs/toolkit/query/react";
+// import { BaseQueryFn, createApi } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
-import { AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig, GenericAbortSignal } from "axios";
 import { httpClient } from "../axios";
-import { logout, setAuth } from "./slices/authSlice";
+import { createApi } from "../reactQueryToolkit";
+import { BaseQueryFn } from "../reactQueryToolkitType";
 // create a new mutex
 const mutex = new Mutex();
-const baseQueryWithReauth: BaseQueryFn<
-  axiosBaseQueryProps | string,
+
+export type AxiosBaseQuery = BaseQueryFn<
+  AxiosBaseQueryProps | string,
   unknown,
   unknown
-> = async (args, api, extraOptions) => {
+>;
+export const baseQueryWithReauth: AxiosBaseQuery = async (
+  args,
+  //   api,
+  extraOptions
+) => {
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
 
@@ -25,11 +31,11 @@ const baseQueryWithReauth: BaseQueryFn<
           method: "POST",
         });
         if (refreshResult.data) {
-          api.dispatch(setAuth());
+          //   api.dispatch(setAuth());
           // retry the initial query
           result = await axiosBaseQuery(args);
         } else {
-          api.dispatch(logout());
+          //   api.dispatch(logout());
         }
       } finally {
         // release must be called once the mutex should be released again.
@@ -43,22 +49,21 @@ const baseQueryWithReauth: BaseQueryFn<
   }
   return result;
 };
-export const baseApi = createApi({
-  reducerPath: "api",
-  baseQuery: baseQueryWithReauth,
-  endpoints: () => ({}),
-});
 
-type axiosBaseQueryProps =
+export type AxiosBaseQueryProps =
   | {
       url: string;
       method?: AxiosRequestConfig["method"];
       body?: AxiosRequestConfig["data"];
       params?: AxiosRequestConfig["params"];
       headers?: AxiosRequestConfig["headers"];
+      autoCancellation?: boolean;
     }
   | string;
-const axiosBaseQuery = async (params: axiosBaseQueryProps) => {
+const axiosBaseQuery = async (
+  params: AxiosBaseQueryProps,
+  signal?: GenericAbortSignal
+) => {
   try {
     const requestParams =
       typeof params === "string"
@@ -66,11 +71,12 @@ const axiosBaseQuery = async (params: axiosBaseQueryProps) => {
         : {
             data: params.body,
             url: params.url,
-            method: params.method,
+            method: params.method || "GET",
             params: params.params,
             headers: params.headers,
           };
-    const result = await httpClient(requestParams);
+
+    const result = await httpClient({ ...requestParams, signal });
     return { data: result.data };
   } catch (axiosError) {
     const err = axiosError as AxiosError;
@@ -82,3 +88,5 @@ const axiosBaseQuery = async (params: axiosBaseQueryProps) => {
     };
   }
 };
+
+export const baseApi = createApi({ baseQuery: baseQueryWithReauth });
