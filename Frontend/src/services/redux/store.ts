@@ -1,28 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./slices/userSlice";
-import itemsSlice from "./slices/itemsSlice";
-import generalSlice from "./slices/generalSlice";
 import authSlice from "./slices/authSlice";
-import { baseApi } from "./baseApi";
-import fileUploadSlice from "./slices/fileUploadSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      [baseApi.reducerPath]: baseApi.reducer,
-      user: userSlice,
-      items: itemsSlice,
-      general: generalSlice,
+      //   [baseApi.reducerPath]: baseApi.reducer,
+
       auth: authSlice,
-      fileUpload: fileUploadSlice,
     },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: ["fileUpload/setFile"],
-          ignoredPaths: ["fileUpload.file"],
-        },
-      }).concat(baseApi.middleware),
+    // middleware: (getDefaultMiddleware) =>
+    //   getDefaultMiddleware({
+    //     serializableCheck: {
+    //       ignoredActions: ["fileUpload/setFile"],
+    //       ignoredPaths: ["fileUpload.file"],
+    //     },
+    //   }).concat(baseApi.middleware),
 
     devTools: process.env.NODE_ENV !== "production",
   });
