@@ -19,7 +19,7 @@ i18n
       loadPath: "locales/{{lng}}/{{ns}}.json",
     },
     fallbackLng: "he",
-    debug: true,
+    debug: false,
     load: "currentOnly",
     preload: ["he", "en"],
     defaultNS: "he",
