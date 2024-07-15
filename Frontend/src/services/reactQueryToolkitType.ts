@@ -1,3 +1,4 @@
+import { UseMutateFunction } from "@tanstack/react-query";
 import { HasRequiredProps, OmitFromUnion, UnwrapPromise } from "./tsHelpers";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export enum DefinitionType {
@@ -6,6 +7,8 @@ export enum DefinitionType {
 }
 declare const resultType: unique symbol;
 declare const baseQuery: unique symbol;
+export const reactHooksModuleName = /* @__PURE__ */ Symbol();
+export type ReactHooksModule = typeof reactHooksModuleName;
 type QueryKey = import("@tanstack/react-query").QueryKey;
 
 export type QueryDefinition<
@@ -133,9 +136,35 @@ import { CastAny, HasRequiredProps } from './tsHelpers';
       arg: QueryArg
     ): unknown;
 }
+
+export type UsedQueryHookFn<QueryArg,ResultType>=(args:QueryArg)=>{
+    isLoading: boolean;
+    error: any;
+    data?: undefined;
+} | {
+    data: {
+        error: unknown;
+        data?: undefined;
+        isLoading?: boolean;
+    } | {
+        error?: undefined;
+        data: unknown;
+        isLoading?: boolean;
+    } | undefined;
+    isLoading: boolean;
+    error?: undefined;
+}
+
+export type UsedMutationHookFn<QueryArg,ResultType>=(args:QueryArg)=> {
+    [mutateFnName: string]: boolean | UseMutateFunction<QueryReturnValue<unknown, unknown>, Error, QueryArg, unknown>;
+    isPending: boolean;
+}
+export type ToolkitHookFunction<QueryArg,ResultType>=UsedQueryHookFn<QueryArg,ResultType> | UsedMutationHookFn<QueryArg,ResultType>
   /**
    
 }
+
+
 // interface EndpointDefinitionWithQueryFn<
 //   QueryArg,
 //   BaseQuery extends BaseQueryFn,
@@ -552,3 +581,73 @@ import { UnwrapPromise } from './redux/query/tsHelpers';
 //         ReturnType<NonUndefined<NewDefinitions[K]["transformResponse"]>>
 //       >
 //   : ResultType;
+
+
+
+export type UseMutation<D extends MutationDefinition<any, any, any, any>> = <
+  R extends Record<string, any> = MutationResultSelectorResult<D>,
+>(
+  options?: UseMutationStateOptions<D, R>,
+) => readonly [MutationTrigger<D>, UseMutationStateResult<D, R>]
+
+
+export interface ApiModules<
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+BaseQuery extends BaseQueryFn,
+Definitions extends EndpointDefinitions,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ReducerPath extends string,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+TagTypes extends string,
+> {
+[reactHooksModuleName]: {
+  /**
+   *  Endpoints based on the input endpoints provided to `createApi`, containing `select`, `hooks` and `action matchers`.
+   */
+  endpoints: {
+    [K in keyof Definitions]: Definitions[K] extends QueryDefinition<
+      any,
+      any,
+      any,
+      any
+    >
+      ? QueryHooks<Definitions[K]>
+      : Definitions[K] extends MutationDefinition<any, any, any, any, any>
+        ? MutationHooks<Definitions[K]>
+        : never
+  }
+
+} & HooksWithUniqueNames<Definitions>
+}
+
+
+export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
+  QueryHookNames<Definitions> &
+    MutationHookNames<Definitions>
+
+
+type QueryHookNames<Definitions extends EndpointDefinitions> = {
+        [K in keyof Definitions as Definitions[K] extends {
+          type: DefinitionType.query
+        }
+          ? `use${Capitalize<K & string>}Query`
+          : never]: UseQuery<
+          Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+        >
+      }
+      
+
+
+    
+  
+      
+type MutationHookNames<Definitions extends EndpointDefinitions> = {
+        [K in keyof Definitions as Definitions[K] extends {
+          type: DefinitionType.mutation
+        }
+          ? `use${Capitalize<K & string>}Mutation`
+          : never]: UseMutation<
+          Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+        >
+      }
+      
