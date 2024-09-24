@@ -37,17 +37,6 @@ export type MutationDefinition<
   TQueryKey extends QueryKey = QueryKey
 > = BaseEndpointDefinition<QueryArg, BaseQuery, ResultType> &
   MutationExtraOptions<TQueryKey, QueryArg>;
-export type QueryReturnValue<TData = unknown, E = unknown> =
-  | {
-      error: E;
-      //   data?: undefined;
-      isLoading?: boolean;
-    }
-  | {
-      //   error?: undefined;
-      data: TData;
-      isLoading?: boolean;
-    };
 
 export type BaseQueryResult<BaseQuery extends BaseQueryFn> = UnwrapPromise<
   ReturnType<BaseQuery>
@@ -58,10 +47,10 @@ export type BaseQueryResult<BaseQuery extends BaseQueryFn> = UnwrapPromise<
 //     : never
 //   : never;
 
-export type BaseQueryError<BaseQuery extends BaseQueryFn> = Exclude<
-  UnwrapPromise<ReturnType<BaseQuery>>,
-  { error?: undefined }
->["error"];
+// export type BaseQueryError<BaseQuery extends BaseQueryFn> = Exclude<
+//   UnwrapPromise<ReturnType<BaseQuery>>,
+//   { error?: undefined }
+// >["error"];
 
 //   | ([CastAny<BaseQueryResult<BaseQuery>, {}>] extends [NEVER]
 //     ? never
@@ -156,15 +145,29 @@ type QueryArgFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<infer QA, any, any> ? QA : unknown;
 type ResultTypeFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown;
-export type UsedQueryHookFn<QueryArg, ResultType> = (args: QueryArg) =>
+export type UsedQueryHookFn<QueryArg, ResultType, TError> = (args: QueryArg) =>
   | {
       isLoading: boolean;
-      data: ResultType | undefined;
+      data: ResultType | unknown;
+      error?: undefined;
     }
   | {
       isLoading: boolean;
-      error: undefined;
+      data?: undefined;
+      error: TError;
     };
+export type QueryReturnValue<TData = unknown, E = unknown> =
+  | {
+      error: E;
+      data?: undefined;
+      isLoading: boolean;
+    }
+  | {
+      error?: undefined;
+      data: TData;
+      isLoading: boolean;
+    };
+
 export type EndpointName = keyof Omit<
   BuildMutationHook<any, any, any, any>,
   "baseQuery"
@@ -384,13 +387,17 @@ export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
 //     >,
 //     boolean
 //   ];
-export type UsedMutationHookFn<QueryArg, ResultType> = () => readonly [
-  UseMutateFunction<ResultType, Error, QueryArg, unknown>,
+export type UsedMutationHookFn<
+  QueryArg,
+  ResultType,
+  TError = Error
+> = () => readonly [
+  UseMutateFunction<ResultType, TError, QueryArg, unknown>,
   boolean
 ];
-export type ToolkitHookFunction<QueryArg, ResultType> =
-  | UsedQueryHookFn<QueryArg, ResultType>
-  | UsedMutationHookFn<QueryArg, ResultType>;
+export type ToolkitHookFunction<QueryArg, ResultType, TError> =
+  | UsedQueryHookFn<QueryArg, ResultType, TError>
+  | UsedMutationHookFn<QueryArg, ResultType, TError>;
 /**
    
 }
@@ -472,7 +479,6 @@ export type ToolkitHookFunction<QueryArg, ResultType> =
 export type BaseQueryFn<
   Args = any,
   Result = unknown,
-  Error = unknown,
   DefinitionExtraOptions = Record<string, never> | unknown
 > = (
   args: Args,
