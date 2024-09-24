@@ -1,53 +1,210 @@
-import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import axios from "axios";
 import {
   Api,
   BaseQueryFn,
+  BuildMutationHook,
   CreateApiOptions,
   DefinitionType,
   EndpointDefinition,
   EndpointDefinitions,
+  HooksWithUniqueNames,
+  MutationDefinition,
+  MutationHookName,
+  QueryHookName,
+  QueryReturnValue,
+  ToolkitHookFunction,
+  UseMutation,
 } from "./reactQueryToolkitType";
-// import { isQueryDefinition } from "./reactQueryToolkit_copy.d copy";
-import axios from "axios";
 import { AxiosBaseQuery } from "./redux/baseApi";
+import { safeAssign } from "./tsHelpers";
 import { capitalize } from "./utils";
 
-export function createApi(options: CreateApiOptions<AxiosBaseQuery>) {
-  const api: Api<AxiosBaseQuery, QueryKey> = {
-    buildEndpoints,
-  };
+export const createApi = /* @__PURE__ */ createApiCallback();
 
-  function buildEndpoints(
-    inject: Parameters<typeof api.buildEndpoints>[0]
-  ): EndpointDefinitions {
-    console.log("before:", inject);
-    const evaluatedEndpoints = inject.endpoints({
-      query: (x) => ({ ...x, type: DefinitionType.query } as never),
-      mutation: (x) => ({ ...x, type: DefinitionType.mutation } as never),
-    });
-    console.log("after:", evaluatedEndpoints);
-    const apiHooks: EndpointDefinitions = {};
+export function createApiCallback() {
+  //   options: CreateApiOptions<AxiosBaseQuery, EndpointDefinitions, QueryKey>
+  return function baseCreateApi(
+    options: CreateApiOptions<AxiosBaseQuery, EndpointDefinitions, QueryKey>
+  ) {
     const { baseQuery } = options;
-    if (evaluatedEndpoints) {
+    // const extractRehydrationInfo = weakMapMemoize((action: UnknownAction) =>
+    //   options.extractRehydrationInfo?.(action, {
+    //     reducerPath: (options.reducerPath ?? "api") as any,
+    //   })
+    // );
+
+    // const optionsWithDefaults: CreateApiOptions<any, any, any, any> = {
+    //   reducerPath: "api",
+    //   keepUnusedDataFor: 60,
+    //   refetchOnMountOrArgChange: false,
+    //   refetchOnFocus: false,
+    //   refetchOnReconnect: false,
+    //   invalidationBehavior: "delayed",
+    //   ...options,
+    // //   extractRehydrationInfo,
+    //   serializeQueryArgs(queryArgsApi) {
+    //     let finalSerializeQueryArgs = defaultSerializeQueryArgs;
+    //     if ("serializeQueryArgs" in queryArgsApi.endpointDefinition) {
+    //       const endpointSQA =
+    //         queryArgsApi.endpointDefinition.serializeQueryArgs!;
+    //       finalSerializeQueryArgs = (queryArgsApi) => {
+    //         const initialResult = endpointSQA(queryArgsApi);
+    //         if (typeof initialResult === "string") {
+    //           // If the user function returned a string, use it as-is
+    //           return initialResult;
+    //         } else {
+    //           // Assume they returned an object (such as a subset of the original
+    //           // query args) or a primitive, and serialize it ourselves
+    //           return defaultSerializeQueryArgs({
+    //             ...queryArgsApi,
+    //             queryArgs: initialResult,
+    //           });
+    //         }
+    //       };
+    //     } else if (options.serializeQueryArgs) {
+    //       finalSerializeQueryArgs = options.serializeQueryArgs;
+    //     }
+
+    //     return finalSerializeQueryArgs(queryArgsApi);
+    //   },
+    //   tagTypes: [...(options.tagTypes || [])],
+    // };
+
+    // const context: ApiContext<EndpointDefinitions> = {
+    //   endpointDefinitions: {},
+    //   batch(fn) {
+    //     // placeholder "batch" method to be overridden by plugins, for example with React.unstable_batchedUpdate
+    //     fn();
+    //   },
+    //   apiUid: nanoid(),
+    //   extractRehydrationInfo,
+    //   hasRehydrationInfo: weakMapMemoize(
+    //     (action) => extractRehydrationInfo(action) != null
+    //   ),
+    // };
+
+    const api = {
+      injectEndpoints,
+      endpoints: {},
+
+      //   enhanceEndpoints({ addTagTypes, endpoints }) {
+      // if (addTagTypes) {
+      //   for (const eT of addTagTypes) {
+      //     if (!optionsWithDefaults.tagTypes!.includes(eT as any)) {
+      //       (optionsWithDefaults.tagTypes as any[]).push(eT);
+      //     }
+      //   }
+      // }
+      // if (endpoints) {
+      //   for (const [endpointName, partialDefinition] of Object.entries(
+      //     endpoints
+      //   )) {
+      //     if (typeof partialDefinition === "function") {
+      //       partialDefinition(context.endpointDefinitions[endpointName]);
+      //     } else {
+      //       Object.assign(
+      //         context.endpointDefinitions[endpointName] || {},
+      //         partialDefinition
+      //       );
+      //     }
+      //   }
+      // }
+      // return api;
+    } as Api<BaseQueryFn, QueryKey, EndpointDefinitions>;
+
+    // const initializedModules = modules.map((m) =>
+    //   m.init(api as any, optionsWithDefaults as any, context)
+    // );
+    // const anyApi = api as any as Api<
+    //   BaseQueryFn,
+    //   QueryKey,
+    //   EndpointDefinitions
+    // >;
+    function injectEndpoints(
+      inject: Parameters<typeof api.injectEndpoints>[0]
+    ) {
+      const evaluatedEndpoints = inject.endpoints({
+        query: (x) => ({ ...x, type: DefinitionType.query } as any),
+        mutation: (x) => ({ ...x, type: DefinitionType.mutation } as any),
+      });
+      const endpointsHook: HooksWithUniqueNames<EndpointDefinitions> = {};
       for (const [endpointName, definition] of Object.entries(
         evaluatedEndpoints
       )) {
-        const { hookName, hookFn } = buildDefinition({
-          endpointName,
-          definition,
-          baseQuery,
-        });
-        apiHooks[hookName] = hookFn;
+        if (inject.overrideExisting !== true && endpointName in api.endpoints) {
+          if (inject.overrideExisting === "throw") {
+            throw new Error(
+              `called \`injectEndpoints\` to override already-existing endpointName ${endpointName} without specifying \`overrideExisting: true\``
+            );
+          } else if (
+            typeof process !== "undefined" &&
+            process.env.NODE_ENV === "development"
+          ) {
+            console.error(
+              `called \`injectEndpoints\` to override already-existing endpointName ${endpointName} without specifying \`overrideExisting: true\``
+            );
+          }
+
+          continue;
+        }
+        api.endpoints[endpointName] ??= {} as any;
+        if (isQueryDefinition(definition) || isMutationDefinition(definition)) {
+          safeAssign(api.endpoints[endpointName], definition);
+          const { hookName, hookFn } = buildHook({
+            endpointName,
+            definition,
+            baseQuery,
+          });
+          (endpointsHook as any)[hookName] = hookFn;
+        }
       }
+      console.log("endpointsHook", endpointsHook);
+      return { ...api, ...endpointsHook };
     }
+    return api;
+  };
 
-    return apiHooks;
-  }
+  //   return api;
+  //     const api: Api<AxiosBaseQuery, QueryKey,EndpointDefinitions> = {
+  //         endpointDefinitions:{},
+  //         buildEndpoints,
+  //       };
 
-  return api;
+  //   function buildEndpoints(inject: Parameters<typeof api.buildEndpoints>[0]): {
+  //     // console.log("before:", inject);
+  //     const evaluatedEndpoints = inject.endpoints({
+  //       query: (x) => ({ ...x, type: DefinitionType.query } as never),
+  //       mutation: (x) => ({ ...x, type: DefinitionType.mutation } as never),
+  //     });
+  //     console.log("after:", evaluatedEndpoints);
+  //     const apiHooks:EndpointDefinitions = {};
+  //     const { baseQuery } = options;
+  //     if (evaluatedEndpoints) {
+  //       for (const [endpointName, definition] of Object.entries(
+  //         evaluatedEndpoints
+  //       )) {
+  //         const { hookName, hookFn } = buildDefinition({
+  //           endpointName,
+  //           definition,
+  //           baseQuery,
+  //         });
+  //         apiHooks[hookName] = hookFn as any;
+  //       }
+  //     }
+
+  //     return apiHooks;
+  //   }
+
+  //   return api;
 }
 
-function buildDefinition<
+function buildHook<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType,
@@ -60,18 +217,32 @@ function buildDefinition<
   endpointName: string;
   definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>;
   baseQuery: BaseQuery;
-}): EndpointDefinition<QueryArg, BaseQueryFn, QueryKey> {
-  let hookName = "";
+}): {
+  hookName: QueryHookName<string> | MutationHookName<string>;
+  hookFn: ToolkitHookFunction<QueryArg, ResultType>;
+} {
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
-    hookName = `use${capitalize(endpointName)}Query`;
+    const hookName = `use${capitalize(
+      endpointName
+    )}Query` as QueryHookName<string>;
     hookFn = buildQueryHook(baseQuery, definition);
+    return { hookName, hookFn };
   } else if (isMutationDefinition(definition)) {
-    hookName = `use${capitalize(endpointName)}Mutation`;
-    hookFn = buildMutationHook(endpointName, baseQuery, definition);
+    const hookName = `use${capitalize(
+      endpointName
+    )}Mutation` as MutationHookName<string>;
+    hookFn = buildMutationHook<QueryArg, BaseQuery, ResultType, TQueryKey>({
+      baseQuery,
+      definition,
+    });
+    return { hookName, hookFn };
+  } else {
+    throw new Error("invalid endpoint definition");
   }
-
-  return { hookName, hookFn };
+}
+function defaultTransformResponse(baseQueryReturnValue: unknown) {
+  return baseQueryReturnValue;
 }
 function buildQueryHook<
   QueryArg,
@@ -82,45 +253,122 @@ function buildQueryHook<
   baseQuery: BaseQuery,
   definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
 ) {
-  return function useQuery(queryArgs: QueryArg) {
-    const { query, providesTags, transformResponse } = definition;
+  return function useQueryHook(
+    queryArgs: QueryArg
+  ): QueryReturnValue<QueryArg, ResultType> {
+    const { query } = definition;
+    const transformedResponse =
+      definition.transformResponse ?? defaultTransformResponse;
     const args = query(queryArgs);
     const { data, isLoading, error } = useQuery({
-      queryKey: providesTags?.(args) as TQueryKey,
-      queryFn: () => baseQuery(args, {}),
+      queryKey: ["test"],
+      //   providesTags?.(args) as TQueryKey,
+      queryFn: () => baseQuery(args, {}, {}),
     });
     if (error) {
       if (axios.isAxiosError(error)) {
         console.error(error.response);
-        throw error.message;
+        return { isLoading, error: error.response?.data?.error };
       }
     }
+    let data1 = transformedResponse(data, queryArgs);
+    return {
+      data: data ?? transformedResponse(data, queryArgs),
+      isLoading,
+    };
   };
 }
-function buildMutationHook<
+export function buildMutationHook<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType,
   TQueryKey extends QueryKey
->(
-  endpointName: string,
-  baseQuery: BaseQuery,
-  definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
-) {
+>({
+  baseQuery,
+  definition,
+}: BuildMutationHook<QueryArg, BaseQuery, ResultType, TQueryKey>): UseMutation<
+  MutationDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
+> {
+  //
+  //   const triggerMutation = useCallback(
+  //     function (arg: Parameters<typeof initiate>["0"]) {
+  //       const promise = dispatch(initiate(arg, { fixedCacheKey }));
+  //       setPromise(promise);
+  //       return promise;
+  //     },
+  //     [dispatch, initiate, fixedCacheKey]
+  //   );
+  //   const finalState = useMemo(
+  //     () => ({ ...currentState, originalArgs, reset }),
+  //     [currentState, originalArgs, reset],
+  //   )
+
+  //   return useMemo(
+  //     () => [triggerMutation, finalState] as const,
+  //     [triggerMutation, finalState],
+  //   )
+  return function useMutationHook() {
+    // const queryClient = useQueryClient();
+    const { query } = definition;
+    const { mutate, isPending } =
+      // {
+      //   mutate: (arg: QueryArg) => {
+      //     console.log(arg);
+      //   },
+      //   isPending: false,
+      // };
+
+      useMutation({
+        mutationFn: async (queryArgs: QueryArg) => {
+          const args = query(queryArgs);
+          return baseQuery(args, {}, {});
+        },
+        // onMutate: () => createInfinityToast("pending text", "loading"),
+        // onSuccess: () => {
+        //   toast({
+        //     description: t("toast-title"),
+        //     title: t("toast-message-success"),
+        //     status: "success",
+        //   });
+        //   queryClient.invalidateQueries({
+        //     queryKey: ["product-renews"],
+        //   });
+      });
+    // onError: () =>
+    //   toast({
+    //     description: t("toast-title"),
+    //     title: t("toast-message-error"),
+    //     status: "error",
+    //   }),
+    //   });
+    //   async function deleteServiceContract(id: number) {
+    //     toast.promise(new Promise(() => deleteServiceContract1(id)), {
+    //       success: { title: "Promise resolved", description: "Looks great" },
+    //       error: { title: "Promise rejected", description: "Something wrong" },
+    //       loading: { title: "Promise pending", description: "Please wait" },
+    //     });
+    //   }
+    // return [mutate, isPending] as const;
+    return [mutate, isPending] as const;
+    // return useMemo(() => [mutate, isPending] as const, [mutate, isPending]);
+  };
+}
+
+export function useUpdateCustomer(customerId: number) {
+  const toast = useToast();
+  const { t } = useTranslation("customers", { keyPrefix: "update" });
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (queryArgs: QueryArg) => {
-      return baseQuery(queryArgs, {});
-    },
-    // onMutate: () => createInfinityToast("pending text", "loading"),
+  const { mutate: updateCustomerDetails, isPending } = useMutation({
+    mutationFn: updateCustomerDetails_API,
     onSuccess: () => {
+      // queryClient.setQueryData(["user"], user);
       toast({
         description: t("toast-title"),
         title: t("toast-message-success"),
         status: "success",
       });
-      queryClient.invalidateQueries({
-        queryKey: ["product-renews"],
+      queryClient.refetchQueries({
+        queryKey: ["customer", customerId],
       });
     },
     onError: () =>
@@ -130,15 +378,183 @@ function buildMutationHook<
         status: "error",
       }),
   });
-  //   async function deleteServiceContract(id: number) {
-  //     toast.promise(new Promise(() => deleteServiceContract1(id)), {
-  //       success: { title: "Promise resolved", description: "Looks great" },
-  //       error: { title: "Promise rejected", description: "Something wrong" },
-  //       loading: { title: "Promise pending", description: "Please wait" },
-  //     });
-  //   }
-  return { deleteProductReminder, isPending };
+  return { updateCustomerDetails, isPending };
 }
+
+export const coreModule = ({
+  createSelector = _createSelector,
+}: CoreModuleOptions = {}): Module<CoreModule> => ({
+  name: coreModuleName,
+  init(
+    api,
+    {
+      baseQuery,
+      tagTypes,
+      reducerPath,
+      serializeQueryArgs,
+      keepUnusedDataFor,
+      refetchOnMountOrArgChange,
+      refetchOnFocus,
+      refetchOnReconnect,
+      invalidationBehavior,
+    },
+    context
+  ) {
+    enablePatches();
+
+    assertCast<InternalSerializeQueryArgs>(serializeQueryArgs);
+
+    const assertTagType: AssertTagTypes = (tag) => {
+      if (
+        typeof process !== "undefined" &&
+        process.env.NODE_ENV === "development"
+      ) {
+        if (!tagTypes.includes(tag.type as any)) {
+          console.error(
+            `Tag type '${tag.type}' was used, but not specified in \`tagTypes\`!`
+          );
+        }
+      }
+      return tag;
+    };
+
+    Object.assign(api, {
+      reducerPath,
+      endpoints: {},
+      internalActions: {
+        onOnline,
+        onOffline,
+        onFocus,
+        onFocusLost,
+      },
+      util: {},
+    });
+
+    const {
+      queryThunk,
+      mutationThunk,
+      patchQueryData,
+      updateQueryData,
+      upsertQueryData,
+      prefetch,
+      buildMatchThunkActions,
+    } = buildThunks({
+      baseQuery,
+      reducerPath,
+      context,
+      api,
+      serializeQueryArgs,
+      assertTagType,
+    });
+
+    const { reducer, actions: sliceActions } = buildSlice({
+      context,
+      queryThunk,
+      mutationThunk,
+      reducerPath,
+      assertTagType,
+      config: {
+        refetchOnFocus,
+        refetchOnReconnect,
+        refetchOnMountOrArgChange,
+        keepUnusedDataFor,
+        reducerPath,
+        invalidationBehavior,
+      },
+    });
+
+    safeAssign(api.util, {
+      patchQueryData,
+      updateQueryData,
+      upsertQueryData,
+      prefetch,
+      resetApiState: sliceActions.resetApiState,
+    });
+    safeAssign(api.internalActions, sliceActions);
+
+    const { middleware, actions: middlewareActions } = buildMiddleware({
+      reducerPath,
+      context,
+      queryThunk,
+      mutationThunk,
+      api,
+      assertTagType,
+    });
+    safeAssign(api.util, middlewareActions);
+
+    safeAssign(api, { reducer: reducer as any, middleware });
+
+    const {
+      buildQuerySelector,
+      buildMutationSelector,
+      selectInvalidatedBy,
+      selectCachedArgsForQuery,
+    } = buildSelectors({
+      serializeQueryArgs: serializeQueryArgs as any,
+      reducerPath,
+      createSelector,
+    });
+
+    safeAssign(api.util, { selectInvalidatedBy, selectCachedArgsForQuery });
+
+    const {
+      buildInitiateQuery,
+      buildInitiateMutation,
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueriesThunk,
+      getRunningQueryThunk,
+    } = buildInitiate({
+      queryThunk,
+      mutationThunk,
+      api,
+      serializeQueryArgs: serializeQueryArgs as any,
+      context,
+    });
+
+    safeAssign(api.util, {
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueryThunk,
+      getRunningQueriesThunk,
+    });
+
+    return {
+      name: coreModuleName,
+      injectEndpoint(endpointName, definition) {
+        const anyApi = api as any as Api<
+          any,
+          Record<string, any>,
+          string,
+          string
+          //   CoreModule
+        >;
+        anyApi.endpoints[endpointName] ??= {} as any;
+        if (isQueryDefinition(definition)) {
+          safeAssign(
+            anyApi.endpoints[endpointName],
+            {
+              name: endpointName,
+              select: buildQuerySelector(endpointName, definition),
+              initiate: buildInitiateQuery(endpointName, definition),
+            },
+            buildMatchThunkActions(queryThunk, endpointName)
+          );
+        } else if (isMutationDefinition(definition)) {
+          safeAssign(
+            anyApi.endpoints[endpointName],
+            {
+              name: endpointName,
+              select: buildMutationSelector(),
+              initiate: buildInitiateMutation(endpointName),
+            },
+            buildMatchThunkActions(mutationThunk, endpointName)
+          );
+        }
+      },
+    };
+  },
+});
 
 // export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
 //   ...modules: Modules
