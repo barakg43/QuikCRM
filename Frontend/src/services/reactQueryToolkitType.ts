@@ -1,17 +1,12 @@
 import { UseMutateFunction } from "@tanstack/react-query";
-import { BaseQueryApi } from "./redux/rtk_query/query";
 import {
   //   MutationHooks,
   //   QueryHooks,
   QueryStateSelector,
 } from "./redux/rtk_query/query/react/buildHooks";
-import {
-  HasRequiredProps,
-  OmitFromUnion,
-  UnwrapPromise,
-} from "./redux/rtk_query/query/tsHelpers";
-import { SafePromise } from "./tsHelpers";
 
+import { SafePromise } from "./tsHelpers";
+import { HasRequiredProps, OmitFromUnion, UnwrapPromise } from "./tsHelpers.d";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export enum DefinitionType {
   query = "query",
@@ -69,6 +64,25 @@ export type BaseEndpointDefinition<
     { extraOptions: BaseQueryExtraOptions<BaseQuery> },
     { extraOptions?: BaseQueryExtraOptions<BaseQuery> }
   >;
+
+export interface BaseQueryApi {
+  signal: AbortSignal;
+  abort: (reason?: string) => void;
+  dispatch: (a: unknown, b: unknown, c: unknown) => void;
+  getState: () => unknown;
+  extra: unknown;
+  endpoint: string;
+  type: "query" | "mutation";
+  /**
+   * Only available for queries: indicates if a query has been forced,
+   * i.e. it would have been fetched even if there would already be a cache entry
+   * (this does not mean that there is already a cache entry though!)
+   *
+   * This can be used to for example add a `Cache-Control: no-cache` header for
+   * invalidated queries.
+   */
+  forced?: boolean;
+}
 
 export type QueryArgFn<QueryArg, BaseQuery extends BaseQueryFn> = (
   queryArg: QueryArg
@@ -129,11 +143,6 @@ import { CastAny, HasRequiredProps } from './tsHelpers';
   /**
    * A function to manipulate the data returned by a failed query or mutation.
    */
-  transformErrorResponse?(
-    baseQueryReturnValue: BaseQueryError<BaseQuery>,
-    //   meta: BaseQueryMeta<BaseQuery>,
-    arg: QueryArg
-  ): unknown;
 }
 interface SerializedError {
   name?: string;
@@ -792,7 +801,7 @@ export type Api<
      * If set to `false` (or unset), will not override existing endpoints with the new definition, and log a warning in development.
      */
     overrideExisting?: boolean | "throw";
-  }): Api<BaseQueryFn, QueryKey, EndpointDefinitions> &
+  }): Api<BaseQueryFn, TQueryKey, EndpointDefinitions> &
     HooksWithUniqueNames<NewDefinitions>;
   /**
    *A function to enhance a generated API with additional information. Useful with code-generation.
@@ -816,10 +825,10 @@ export type Api<
 // };
 
 export interface CreateApiOptions<
-  BaseQuery extends BaseQueryFn,
-  Definitions extends EndpointDefinitions,
+  BaseQuery extends BaseQueryFn
+  //   Definitions extends EndpointDefinitions,
   //   ReducerPath extends string = "api",
-  TQueryKey extends QueryKey
+  //   TQueryKey extends QueryKey
 > {
   /**
    * The base query used by each endpoint if no `queryFn` option is specified. RTK Query exports a utility called [fetchBaseQuery](./fetchBaseQuery) as a lightweight wrapper around `fetch` for common use-cases. See [Customizing Queries](../../rtk-query/usage/customizing-queries) if `fetchBaseQuery` does not handle your requirements.
@@ -871,31 +880,28 @@ export type BuildMutationHook<
   definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>;
 };
 
-export interface ApiModules<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  BaseQuery extends BaseQueryFn,
-  Definitions extends EndpointDefinitions,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ReducerPath extends string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  TagTypes extends string
-> {
-  /**
-   *  Endpoints based on the input endpoints provided to `createApi`, containing `select`, `hooks` and `action matchers`.
-   */
-  endpoints: {
-    [K in keyof Definitions]: Definitions[K] extends QueryDefinition<
-      any,
-      any,
-      any,
-      any
-    >
-      ? QueryHooks<Definitions[K]>
-      : Definitions[K] extends MutationDefinition<any, any, any, any>
-      ? MutationHooks<Definitions[K]>
-      : never;
-  } & HooksWithUniqueNames<Definitions>;
-}
+// export interface ApiModules<
+//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   BaseQuery extends BaseQueryFn,
+//   Definitions extends EndpointDefinitions,
+
+// > {
+//   /**
+//    *  Endpoints based on the input endpoints provided to `createApi`, containing `select`, `hooks` and `action matchers`.
+//    */
+//   endpoints: {
+//     [K in keyof Definitions]: Definitions[K] extends QueryDefinition<
+//       any,
+//       any,
+//       any,
+//       any
+//     >
+//       ? QueryHooks<Definitions[K]>
+//       : Definitions[K] extends MutationDefinition<any, any, any, any>
+//       ? MutationHooks<Definitions[K]>
+//       : never;
+//   } & HooksWithUniqueNames<Definitions>;
+// }
 
 export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
   QueryHookNames<Definitions> & MutationHookNames<Definitions>;
