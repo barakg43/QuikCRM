@@ -3,6 +3,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  UseQueryResult,
 } from "@tanstack/react-query";
 import axios from "axios";
 import {
@@ -17,8 +18,8 @@ import {
   MutationDefinition,
   MutationHookName,
   QueryHookName,
-  QueryReturnValue,
   ToolkitHookFunction,
+  UsedQueryHookFn,
   UseMutation,
 } from "./reactQueryToolkitType";
 import { AxiosBaseQuery } from "./redux/baseApi";
@@ -219,7 +220,7 @@ function buildHook<
   baseQuery: BaseQuery;
 }): {
   hookName: QueryHookName<string> | MutationHookName<string>;
-  hookFn: ToolkitHookFunction<QueryArg, ResultType>;
+  hookFn: ToolkitHookFunction<QueryArg, ResultType, string>;
 } {
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
@@ -252,15 +253,23 @@ function buildQueryHook<
 >(
   baseQuery: BaseQuery,
   definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
-) {
-  return function useQueryHook(
-    queryArgs: QueryArg
-  ): QueryReturnValue<QueryArg, ResultType> {
+): UsedQueryHookFn<QueryArg, ResultType, string> {
+  return function useQueryHook(queryArgs: QueryArg) {
     const { query } = definition;
     const transformedResponse =
       definition.transformResponse ?? defaultTransformResponse;
     const args = query(queryArgs);
-    const { data, isLoading, error } = useQuery({
+    // <TQueryFnData = unknown, TError = DefaultError, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(
+    // const {
+    //   data: { customers, totalItems } = { customers: [], totalItems: 0 },
+    //   isLoading,
+    //   error,
+    // }: UseQueryResult<CustomersListType> = useQuery({
+    //   queryKey: ["customers", page, debouncedQuery],
+    //   queryFn: ({ signal }) =>
+    //     getCustomersSubset_API({ page, querySearch: debouncedQuery, signal }),
+    // });
+    const { data, isLoading, error }: UseQueryResult<any> = useQuery({
       queryKey: ["test"],
       //   providesTags?.(args) as TQueryKey,
       queryFn: () => baseQuery(args, {}, {}),
@@ -271,9 +280,15 @@ function buildQueryHook<
         return { isLoading, error: error.response?.data?.error };
       }
     }
-    let data1 = transformedResponse(data, queryArgs);
+    console.log("data before", data);
+
+    const transformData = data
+      ? transformedResponse(data, queryArgs)
+      : undefined;
+    console.log("transform", transformData);
+
     return {
-      data: data ?? transformedResponse(data, queryArgs),
+      data: transformData,
       isLoading,
     };
   };
