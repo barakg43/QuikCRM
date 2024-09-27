@@ -1,9 +1,4 @@
 import { UseMutateFunction } from "@tanstack/react-query";
-import {
-  //   MutationHooks,
-  //   QueryHooks,
-  QueryStateSelector,
-} from "./redux/rtk_query/query/react/buildHooks";
 
 import { SafePromise } from "./tsHelpers";
 import { HasRequiredProps, OmitFromUnion, UnwrapPromise } from "./tsHelpers.d";
@@ -24,14 +19,14 @@ export type QueryDefinition<
   ResultType,
   TQueryKey extends QueryKey = QueryKey
 > = BaseEndpointDefinition<QueryArg, BaseQuery, ResultType> &
-  QueryExtraOptions<TQueryKey, QueryArg>;
+  QueryExtraOptions<TQueryKey, ResultType, QueryArg>;
 export type MutationDefinition<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType,
   TQueryKey extends QueryKey = QueryKey
 > = BaseEndpointDefinition<QueryArg, BaseQuery, ResultType> &
-  MutationExtraOptions<TQueryKey, QueryArg>;
+  MutationExtraOptions<TQueryKey, ResultType, QueryArg>;
 
 export type BaseQueryResult<BaseQuery extends BaseQueryFn> = UnwrapPromise<
   ReturnType<BaseQuery>
@@ -66,13 +61,13 @@ export type BaseEndpointDefinition<
   >;
 
 export interface BaseQueryApi {
-  signal: AbortSignal;
-  abort: (reason?: string) => void;
-  dispatch: (a: unknown, b: unknown, c: unknown) => void;
-  getState: () => unknown;
-  extra: unknown;
-  endpoint: string;
-  type: "query" | "mutation";
+  signal?: AbortSignal;
+  //   abort: (reason?: string) => void;
+  //   dispatch: (a: unknown, b: unknown, c: unknown) => void;
+  //   getState: () => unknown;
+  //   extra: unknown;
+  //   endpoint: string;
+  //   type: "query" | "mutation";
   /**
    * Only available for queries: indicates if a query has been forced,
    * i.e. it would have been fetched even if there would already be a cache entry
@@ -81,7 +76,7 @@ export interface BaseQueryApi {
    * This can be used to for example add a `Cache-Control: no-cache` header for
    * invalidated queries.
    */
-  forced?: boolean;
+  //   forced?: boolean;
 }
 
 export type QueryArgFn<QueryArg, BaseQuery extends BaseQueryFn> = (
@@ -136,13 +131,9 @@ import { CastAny, HasRequiredProps } from './tsHelpers';
   /**
    * A function to manipulate the data returned by a query or mutation.
    */
-  transformResponse?(
-    baseQueryReturnValue: BaseQueryResult<BaseQuery>,
-    arg: QueryArg
-  ): ResultType | Promise<ResultType>;
-  /**
-   * A function to manipulate the data returned by a failed query or mutation.
-   */
+  transformResponse?: TransformedResponse<QueryArg, BaseQuery, ResultType>;
+  //    * A function to manipulate the data returned by a failed query or mutation.
+  //    */
 }
 interface SerializedError {
   name?: string;
@@ -154,17 +145,35 @@ type QueryArgFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<infer QA, any, any> ? QA : unknown;
 type ResultTypeFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown;
-export type UsedQueryHookFn<QueryArg, ResultType, TError> = (args: QueryArg) =>
+
+type QueryKeyTypeFrom<D extends EndpointDefinition<any, any, any, any>> =
+  D extends EndpointDefinition<any, any, any, infer QK> ? QK : unknown;
+
+// export type UseQuery<D extends QueryDefinition<any, any, any, any>> = <
+//   R extends Record<string, any> = UseQueryStateDefaultResult<D>
+// >(
+//   arg: QueryArgFrom<D>
+// ) => UseQueryHookResult<D, R>;
+
+export type UseQuery<QueryArg, ResultType, TQueryKey extends QueryKey> = (
+  args: QueryArg
+) => (
   | {
-      isLoading: boolean;
-      data: ResultType | unknown;
+      data: ResultType;
       error?: undefined;
     }
   | {
-      isLoading: boolean;
       data?: undefined;
-      error: TError;
-    };
+      error: unknown;
+    }
+) & {
+  isLoading: boolean;
+  prefetchQuery: ({
+    args,
+    queryKey,
+  }: PrefetchQueryType<QueryArg, TQueryKey>) => void;
+};
+
 export type QueryReturnValue<TData = unknown, E = unknown> =
   | {
       error: E;
@@ -256,6 +265,9 @@ interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    */
   refetchOnMountOrArgChange?: boolean | number;
 }
+export type BaseQueryMeta<BaseQuery extends BaseQueryFn> = UnwrapPromise<
+  ReturnType<BaseQuery>
+>["meta"];
 
 type MutationActionCreatorResult<
   D extends MutationDefinition<any, any, any, any>
@@ -396,17 +408,25 @@ export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
 //     >,
 //     boolean
 //   ];
-export type UsedMutationHookFn<
-  QueryArg,
-  ResultType,
-  TError = Error
-> = () => readonly [
-  UseMutateFunction<ResultType, TError, QueryArg, unknown>,
+
+interface Register {}
+type DefaultError = Register extends {
+  defaultError: infer TError;
+}
+  ? TError
+  : Error;
+
+export type UseMutation<QueryArg, ResultType, TQueryKey> = () => readonly [
+  UseMutateFunction<unknown, unknown, QueryArg, unknown>,
   boolean
 ];
-export type ToolkitHookFunction<QueryArg, ResultType, TError> =
-  | UsedQueryHookFn<QueryArg, ResultType, TError>
-  | UsedMutationHookFn<QueryArg, ResultType, TError>;
+export type ToolkitHookFunction<
+  QueryArg,
+  ResultType,
+  TQueryKey extends QueryKey
+> =
+  | UseQuery<QueryArg, ResultType, TQueryKey>
+  | UseMutation<QueryArg, ResultType, TQueryKey>;
 /**
    
 }
@@ -504,23 +524,32 @@ export type BaseQueryExtraOptions<BaseQuery extends BaseQueryFn> =
 declare const _NEVER: unique symbol;
 export type NEVER = typeof _NEVER;
 
+export type PrefetchQueryType<QueryArg, TQueryKey extends QueryKey> = {
+  args: QueryArg;
+  queryKey: TQueryKey;
+};
 export interface QueryExtraOptions<
   TQueryKey extends QueryKey,
-  //   ResultType,
+  ResultType,
   QueryArg
   //   BaseQuery extends BaseQueryFn,
   //   ReducerPath extends string = string
 > {
   type: DefinitionType.query;
   /**
-   * Used by `query` endpoints. Determines which 'tag' is attached to the cached data returned by the query.
+   * Used by `query` endpoints. Determines which 'key' is attached to the cached data returned by the query.
    * Expects an array of tag type strings, an array of objects of tag types with ids, or a function that returns such an array.
-   * 1.  `['Post']` - equivalent to `2`
-   * 2.  `[{ type: 'Post' }]` - equivalent to `1`
-   * 3.  `[{ type: 'Post', id: 1 }]`
-   * 4.  `(result, error, arg) => ['Post']` - equivalent to `5`
-   * 5.  `(result, error, arg) => [{ type: 'Post' }]` - equivalent to `4`
-   * 6.  `(result, error, arg) => [{ type: 'Post', id: 1 }]`
+   *
+   * Simple Query Keys:
+   * 1. `['Post']`
+   * 2. `['something', 'special']`
+   *
+   *  Array Keys with variables:
+   * 1.  `() => ['todo', 5]`
+   * 2.  `() => ['todo', 5, { preview: true }]`
+   * 3.  `(arg:{ status, page }) =>  ['todos', { status, page }]` - equivalent to `4`
+   * 4.  `(arg:{ status, page }) =>  ['todos', { page, status }]` - equivalent to `3`
+   * 5.  `(arg:{ status, page }) =>  ['todos', { page, status, other: undefined }]` - equivalent to `3`,`4`
    *
    * @example
    *
@@ -536,34 +565,30 @@ export interface QueryExtraOptions<
    *
    * const api = createApi({
    *   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-   *   tagTypes: ['Posts'],
    *   endpoints: (build) => ({
    *     getPosts: build.query<PostsResponse, void>({
-   *       query: () => 'posts',
+   *       query: ({page}) => `posts&page=${page}`,
    *       // highlight-start
-   *       providesTags: (result) =>
-   *         result
-   *           ? [
-   *               ...result.map(({ id }) => ({ type: 'Posts' as const, id })),
-   *               { type: 'Posts', id: 'LIST' },
-   *             ]
-   *           : [{ type: 'Posts', id: 'LIST' }],
+   *       providesQueryKeys: (args:{page}) =>
+   *         ["posts",{ type: 'Posts'},page],
    *       // highlight-end
    *     })
    *   })
    * })
    * ```
    */
-  providesTags?: (args: QueryArg) => TQueryKey;
-
-  /**
-   * Not to be used. A query should not invalidate tags in the cache.
-   */
-  invalidatesQuery?: never;
+  providesQueryKeys: (args: QueryArg) => TQueryKey;
+  additionalRefetchQueries?: (
+    args: QueryArg,
+    result: ResultType
+  ) =>
+    | PrefetchQueryType<QueryArg, TQueryKey>
+    | PrefetchQueryType<QueryArg, TQueryKey>[];
+  autoCancellation?: boolean;
 }
 export interface MutationExtraOptions<
   TQueryKey extends QueryKey,
-  //   ResultType,
+  ResultType,
   QueryArg
   //   BaseQuery extends BaseQueryFn,
 > {
@@ -613,7 +638,7 @@ export interface MutationExtraOptions<
    * })
    * ```
    */
-  invalidatesTags?: (args: QueryArg) => TQueryKey;
+  invalidatesKeys?: (args: QueryArg, result: ResultType) => TQueryKey;
 }
 export type EndpointBuilder<
   BaseQuery extends BaseQueryFn,
@@ -840,10 +865,11 @@ export interface CreateApiOptions<
 import { QueryKeys } from './redux/query/core/apiState';
 import { QueryKey } from '@tanstack/react-query';
 import { UnwrapPromise } from './redux/query/tsHelpers';
-import { QueryArgFrom } from '../../node/query/endpointDefinitions';
+import { QueryArgFrom, ResultTypeFrom } from '../../node/query/endpointDefinitions';
 import { Query } from '../../node/query';
 import type { UseMutation from '@internal/query/react/buildHooks';
 import type {EndpointDefinition from '@reduxjs/toolkit/query';
+import { original } from 'immer';
    *
    * const api = createApi({
    *   // highlight-start
@@ -858,17 +884,16 @@ import type {EndpointDefinition from '@reduxjs/toolkit/query';
   baseQuery: BaseQuery;
 }
 
-// export type TransformedResponse<
-//   NewDefinitions extends EndpointDefinitions,
-//   K,
-//   ResultType
-// > = K extends keyof NewDefinitions
-//   ? NewDefinitions[K]["transformResponse"] extends undefined
-//     ? ResultType
-//     : UnwrapPromise<
-//         ReturnType<NonUndefined<NewDefinitions[K]["transformResponse"]>>
-//       >
-//   : ResultType;
+export type TransformedResponse<
+  QueryArg,
+  BaseQuery extends BaseQueryFn,
+  ResultType
+> =
+  | ((baseQueryReturnValue: unknown) => unknown)
+  | ((
+      baseQueryReturnValue: UnwrapPromise<ReturnType<BaseQuery>>,
+      arg: QueryArg
+    ) => ResultType | Promise<ResultType>);
 
 export type BuildMutationHook<
   QueryArg,
@@ -1056,12 +1081,6 @@ type UseQueryStateBaseResult<D extends QueryDefinition<any, any, any, any>> =
     isError: false;
   };
 
-export type UseQuery<D extends QueryDefinition<any, any, any, any>> = <
-  R extends Record<string, any> = UseQueryStateDefaultResult<D>
->(
-  arg: QueryArgFrom<D>,
-  options?: UseQuerySubscriptionOptions & UseQueryStateOptions<D, R>
-) => UseQueryHookResult<D, R>;
 export type UseQueryHookResult<
   D extends QueryDefinition<any, any, any, any>,
   R = UseQueryStateDefaultResult<D>
@@ -1162,7 +1181,15 @@ type QueryHookNames<Definitions extends EndpointDefinitions> = {
   }
     ? QueryHookName<K>
     : never]: UseQuery<
-    Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+    // QueryArg, ResultType, TQueryKey extends QueryKey
+
+    QueryArgFrom<Extract<Definitions[K], QueryDefinition<any, any, any, any>>>,
+    ResultTypeFrom<
+      Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+    >,
+    QueryKeyTypeFrom<
+      Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+    >
   >;
 };
 type RequestStatusFlags =
@@ -1204,12 +1231,12 @@ type MutationHookNames<Definitions extends EndpointDefinitions> = {
     Extract<Definitions[K], MutationDefinition<any, any, any, any>>
   >;
 };
-export type UseMutation<D extends MutationDefinition<any, any, any, any>> =
-  () => //   options?: UseMutationStateOptions<D, R>
-  readonly [
-    arg: any, // MutationTrigger<D> TODO:fix in the future
-    boolean
-  ];
+// export type UseMutation<D extends MutationDefinition<any, any, any, any>> =
+//   () => //   options?: UseMutationStateOptions<D, R>
+//   readonly [
+//     arg: any, // MutationTrigger<D> TODO:fix in the future
+//     boolean
+//   ];
 // type MutationResultSelectorResult<
 //   Definition extends MutationDefinition<any, any, any, any>
 // > = MutationSubState<Definition> & RequestStatusFlags;
