@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import {
   Api,
+  BaseQueryArg,
   BaseQueryFn,
   BuildMutationHook,
   CreateApiOptions,
@@ -15,12 +16,14 @@ import {
   EndpointDefinition,
   EndpointDefinitions,
   HooksWithUniqueNames,
-  MutationDefinition,
   MutationHookName,
+  PrefetchQueryType,
+  QueryDefinition,
   QueryHookName,
   ToolkitHookFunction,
-  UsedQueryHookFn,
+  TransformedResponse,
   UseMutation,
+  UseQuery,
 } from "./reactQueryToolkitType";
 import { AxiosBaseQuery } from "./redux/baseApi";
 import { safeAssign } from "./tsHelpers";
@@ -220,7 +223,7 @@ function buildHook<
   baseQuery: BaseQuery;
 }): {
   hookName: QueryHookName<string> | MutationHookName<string>;
-  hookFn: ToolkitHookFunction<QueryArg, ResultType, string>;
+  hookFn: ToolkitHookFunction<QueryArg, ResultType, TQueryKey>;
 } {
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
@@ -252,13 +255,30 @@ function buildQueryHook<
   TQueryKey extends QueryKey
 >(
   baseQuery: BaseQuery,
-  definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
-): UsedQueryHookFn<QueryArg, ResultType, string> {
+  definition: QueryDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
+): UseQuery<QueryArg, ResultType, TQueryKey> {
   return function useQueryHook(queryArgs: QueryArg) {
-    const { query } = definition;
-    const transformedResponse =
-      definition.transformResponse ?? defaultTransformResponse;
-    const args = query(queryArgs);
+    const queryClient = useQueryClient();
+
+    const {
+      query,
+      transformResponse = defaultTransformResponse,
+      autoCancellation,
+      providesQueryKeys,
+      additionalRefetchQueries,
+    } = definition;
+    function prefetchQuery({
+      args,
+      queryKey,
+    }: PrefetchQueryType<QueryArg, TQueryKey>) {
+      queryClient.prefetchQuery({
+        queryKey,
+        queryFn: ({ signal }) =>
+          fetchData(autoCancellation, args, query, transformResponse, signal),
+      });
+    }
+    // const transformedResponse = definition.transformResponse;
+
     // <TQueryFnData = unknown, TError = DefaultError, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(
     // const {
     //   data: { customers, totalItems } = { customers: [], totalItems: 0 },
@@ -269,29 +289,77 @@ function buildQueryHook<
     //   queryFn: ({ signal }) =>
     //     getCustomersSubset_API({ page, querySearch: debouncedQuery, signal }),
     // });
+    console.log(
+      "query",
+      queryArgs,
+      query(queryArgs),
+      providesQueryKeys(queryArgs)
+    );
+
     const { data, isLoading, error }: UseQueryResult<any> = useQuery({
-      queryKey: ["test"],
-      //   providesTags?.(args) as TQueryKey,
-      queryFn: () => baseQuery(args, {}, {}),
+      queryKey: providesQueryKeys(queryArgs),
+      queryFn: ({ signal }) =>
+        fetchData(
+          autoCancellation,
+          queryArgs,
+          query,
+          transformResponse,
+          signal
+        ),
     });
     if (error) {
       if (axios.isAxiosError(error)) {
-        console.error(error.response);
-        return { isLoading, error: error.response?.data?.error };
+        console.error("error useQueryHook:", error.response);
+        return { isLoading, error: error.response?.data?.error, prefetchQuery };
       }
     }
-    console.log("data before", data);
 
-    const transformData = data
-      ? transformedResponse(data, queryArgs)
-      : undefined;
-    console.log("transform", transformData);
+    // const additionalRefetch = additionalRefetchQueries?.(args, data);
+    // if (additionalRefetch) {
+    //   if (Array.isArray(additionalRefetch)) {
+    //     additionalRefetch.forEach((element) => {
+    //       queryClient.prefetchQuery({
+    //         queryKey: element.providesQueryKeys,
+    //         queryFn: ({ signal }) =>
+    //           fetchData(autoCancellation, element.refetchArgs, signal),
+    //       });
+    //     });
+    //   } else {
+    //     queryClient.prefetchQuery({
+    //       queryKey: additionalRefetch.providesQueryKeys,
+    //       queryFn: ({ signal }) =>
+    //         fetchData(autoCancellation, additionalRefetch.refetchArgs, signal),
+    //     });
+    //   }
+    // }
+
+    console.log("useQueryHook after", data);
 
     return {
-      data: transformData,
+      data,
       isLoading,
+      prefetchQuery,
     };
   };
+
+  async function fetchData(
+    autoCancellation: boolean | undefined,
+    queryArgs: QueryArg,
+    query: (arg: QueryArg) => BaseQueryArg<BaseQuery>,
+    transformResponse: TransformedResponse<QueryArg, BaseQuery, ResultType>,
+    signal: AbortSignal
+  ) {
+    let rawData;
+    const args = query(queryArgs);
+    if (autoCancellation) {
+      rawData = await baseQuery(args, { signal }, {});
+    } else {
+      rawData = await baseQuery(args, {}, {});
+    }
+    if (rawData && Object.entries(rawData).length > 0)
+      return transformResponse(rawData as any, queryArgs);
+    else return rawData;
+  }
 }
 export function buildMutationHook<
   QueryArg,
@@ -302,7 +370,9 @@ export function buildMutationHook<
   baseQuery,
   definition,
 }: BuildMutationHook<QueryArg, BaseQuery, ResultType, TQueryKey>): UseMutation<
-  MutationDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
+  QueryArg,
+  ResultType,
+  TQueryKey
 > {
   //
   //   const triggerMutation = useCallback(
