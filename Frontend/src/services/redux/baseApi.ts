@@ -77,16 +77,45 @@ const axiosBaseQuery = async (
           };
 
     const result = await httpClient({ ...requestParams, signal });
+    // console.log("result axiosBaseQuery", result);
     return { data: result.data };
   } catch (axiosError) {
     const err = axiosError as AxiosError;
+    console.log("Query error ", err);
     return {
       error: {
         status: err.response?.status,
-        data: err.response?.data || err.message,
+        message: err.response?.data || err.message,
       },
     };
   }
-};
+}
+export class BaseQueryError extends Error {
+  readonly status: number | undefined;
+  readonly error: string | {};
 
-export const baseApi = createApi({ baseQuery: baseQueryWithReauth });
+  // base constructor only accepts string message as an argument
+  // we extend it here to accept an object, allowing us to pass other data
+  constructor({
+    status,
+    message,
+  }: {
+    status: number | undefined;
+    message: string | {};
+  }) {
+    if (typeof message === "string") {
+      super(message);
+    } else {
+      super(JSON.stringify(message));
+    }
+
+    this.error = message;
+    this.status = status; // this property is defined in parent
+  }
+}
+export const baseApi = createApi({
+  //   reducerPath: "api",
+  baseQuery: baseQueryWithAuth,
+  //   tagTypes: ["Customer", "ProductReminder", "ServiceContract"],
+  //   endpoints: () => ({}),
+});
