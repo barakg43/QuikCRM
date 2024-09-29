@@ -12,12 +12,13 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import DeleteAlertDialog from "../../components/DeleteAlertDialog";
 import { DetailRow } from "../../components/DetailRow";
+import Empty from "../../components/Empty";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusTag from "../../components/StatusTag";
+import { useCustomerDetailsQuery } from "../../services/redux/api/apiCustomers";
 import { CustomerFullDataType } from "../customers/customers";
 import CustomerFormModal from "./CustomerFormModal";
 import ChildTabs from "./child/ChildTabs";
-import { useCustomer } from "./hooks/useCustomer";
 import { useCustomerIdParam } from "./hooks/useCustomerIdParam";
 import { useDeleteCustomer } from "./hooks/useDeleteCustomer";
 export default CustomerDetails;
@@ -26,23 +27,12 @@ function CustomerDetails() {
   const customerId = useCustomerIdParam();
   const toast = useToast();
 
-  const { customer, isLoading, error } = useCustomer(customerId);
   const {
-    customerID,
-    customerShortName,
-    customerStatus,
-    customerName,
-    customerIdentificationNumber,
-    customerMainPhone,
-    customerMainEMail,
-    remarks,
-    address,
-    city,
-    postalCode,
-    addressRemarks,
-    contactPersonName,
-    contactPersonMobilePhone,
-  } = customer;
+    data: customer,
+    isLoading,
+    error,
+  } = useCustomerDetailsQuery(customerId);
+
   const navigate = useNavigate();
   if (error) {
     console.error("Error customer", error);
@@ -60,7 +50,23 @@ function CustomerDetails() {
   const { deleteCustomer, isPending: isDeleting } = useDeleteCustomer();
   if (isLoading || isDeleting)
     return <LoadingSpinner callerName='CustomerDetails' />;
-
+  if (!customer) return <Empty resource={`${customerId}`} />;
+  const {
+    customerID,
+    customerShortName,
+    customerStatus,
+    customerName,
+    customerIdentificationNumber,
+    customerMainPhone,
+    customerMainEMail,
+    remarks,
+    address,
+    city,
+    postalCode,
+    addressRemarks,
+    contactPersonName,
+    contactPersonMobilePhone,
+  } = customer;
   return (
     <Grid
       gridTemplateAreas={`"header header header"
