@@ -1,41 +1,41 @@
-// import { BaseQueryFn, createApi } from "@reduxjs/toolkit/query";
+// import { createApi } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
-import { AxiosError, AxiosRequestConfig, GenericAbortSignal } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { httpClient } from "../axios";
 import { createApi } from "../reactQueryToolkit";
 import { BaseQueryFn } from "../reactQueryToolkitType";
+
 // create a new mutex
 const mutex = new Mutex();
 
-export type AxiosBaseQuery = BaseQueryFn<
-  AxiosBaseQueryProps | string,
-  unknown,
-  unknown
->;
-export const baseQueryWithReauth: AxiosBaseQuery = async (
-  args,
-  //   api,
-  extraOptions
-) => {
+export type AxiosBaseQuery = BaseQueryFn<AxiosBaseQueryProps | string, unknown>;
+
+export const baseQueryWithAuth: AxiosBaseQuery = async (args, api) => {
+  //   let abortController;
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
+  //   console.log("before:", api);
+  const { signal } = api;
+  let result = await axiosBaseQuery(args, signal);
 
-  let result = await axiosBaseQuery(args);
   if (result.error && result.error.status === 401) {
     // checking whether the mutex is locked
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const refreshResult = await axiosBaseQuery({
-          url: "/auth/jwt/refresh",
-          method: "POST",
-        });
-        if (refreshResult.data) {
+        const refreshResult = await axiosBaseQuery(
+          {
+            url: "/auth/jwt/refresh",
+            method: "POST",
+          },
+          undefined
+        );
+        if (refreshResult) {
           //   api.dispatch(setAuth());
           // retry the initial query
-          result = await axiosBaseQuery(args);
+          result = await axiosBaseQuery(args, signal);
         } else {
-          //   api.dispatch(logout());
+          //   api.dispatch(logout(5));
         }
       } finally {
         // release must be called once the mutex should be released again.
@@ -44,26 +44,28 @@ export const baseQueryWithReauth: AxiosBaseQuery = async (
     } else {
       // wait until the mutex is available without locking it
       await mutex.waitForUnlock();
-      result = await axiosBaseQuery(args);
+      result = await axiosBaseQuery(args, signal);
     }
+  } else if (result.error) {
+    throw new BaseQueryError(result.error);
   }
-  return result;
+
+  return result.data;
 };
 
-export type AxiosBaseQueryProps =
-  | {
-      url: string;
-      method?: AxiosRequestConfig["method"];
-      body?: AxiosRequestConfig["data"];
-      params?: AxiosRequestConfig["params"];
-      headers?: AxiosRequestConfig["headers"];
-      autoCancellation?: boolean;
-    }
-  | string;
-const axiosBaseQuery = async (
+type AxiosParamProps = {
+  url: string;
+  method?: AxiosRequestConfig["method"];
+  body?: AxiosRequestConfig["data"];
+  params?: AxiosRequestConfig["params"];
+  headers?: AxiosRequestConfig["headers"];
+};
+export type AxiosBaseQueryProps = AxiosParamProps | string;
+
+async function axiosBaseQuery(
   params: AxiosBaseQueryProps,
-  signal?: GenericAbortSignal
-) => {
+  signal: AbortSignal | undefined
+) {
   try {
     const requestParams =
       typeof params === "string"
@@ -114,8 +116,5 @@ export class BaseQueryError extends Error {
   }
 }
 export const baseApi = createApi({
-  //   reducerPath: "api",
   baseQuery: baseQueryWithAuth,
-  //   tagTypes: ["Customer", "ProductReminder", "ServiceContract"],
-  //   endpoints: () => ({}),
 });
