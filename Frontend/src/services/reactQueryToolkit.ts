@@ -17,7 +17,6 @@ import {
   EndpointDefinitions,
   HooksWithUniqueNames,
   MutationHookName,
-  PrefetchQueryType,
   QueryDefinition,
   QueryHookName,
   ToolkitHookFunction,
@@ -33,9 +32,7 @@ export const createApi = /* @__PURE__ */ createApiCallback();
 
 export function createApiCallback() {
   //   options: CreateApiOptions<AxiosBaseQuery, EndpointDefinitions, QueryKey>
-  return function baseCreateApi(
-    options: CreateApiOptions<AxiosBaseQuery, EndpointDefinitions, QueryKey>
-  ) {
+  return function baseCreateApi(options: CreateApiOptions<AxiosBaseQuery>) {
     const { baseQuery } = options;
     // const extractRehydrationInfo = weakMapMemoize((action: UnknownAction) =>
     //   options.extractRehydrationInfo?.(action, {
@@ -223,7 +220,7 @@ function buildHook<
   baseQuery: BaseQuery;
 }): {
   hookName: QueryHookName<string> | MutationHookName<string>;
-  hookFn: ToolkitHookFunction<QueryArg, ResultType, TQueryKey>;
+  hookFn: ToolkitHookFunction<QueryArg, ResultType>;
 } {
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
@@ -256,7 +253,7 @@ function buildQueryHook<
 >(
   baseQuery: BaseQuery,
   definition: QueryDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
-): UseQuery<QueryArg, ResultType, TQueryKey> {
+): UseQuery<QueryArg, ResultType> {
   return function useQueryHook(queryArgs: QueryArg) {
     const queryClient = useQueryClient();
 
@@ -265,16 +262,20 @@ function buildQueryHook<
       transformResponse = defaultTransformResponse,
       autoCancellation,
       providesQueryKeys,
-      additionalRefetchQueries,
     } = definition;
-    function prefetchQuery({
-      args,
-      queryKey,
-    }: PrefetchQueryType<QueryArg, TQueryKey>) {
+
+    function prefetchQuery(args: QueryArg) {
       queryClient.prefetchQuery({
-        queryKey,
+        queryKey: providesQueryKeys(args),
         queryFn: ({ signal }) =>
-          fetchData(autoCancellation, args, query, transformResponse, signal),
+          fetchQueryData(
+            autoCancellation,
+            args,
+            query,
+            baseQuery,
+            transformResponse,
+            signal
+          ),
       });
     }
     // const transformedResponse = definition.transformResponse;
@@ -299,10 +300,11 @@ function buildQueryHook<
     const { data, isLoading, error }: UseQueryResult<any> = useQuery({
       queryKey: providesQueryKeys(queryArgs),
       queryFn: ({ signal }) =>
-        fetchData(
+        fetchQueryData(
           autoCancellation,
           queryArgs,
           query,
+          baseQuery,
           transformResponse,
           signal
         ),
@@ -314,52 +316,38 @@ function buildQueryHook<
       }
     }
 
-    // const additionalRefetch = additionalRefetchQueries?.(args, data);
-    // if (additionalRefetch) {
-    //   if (Array.isArray(additionalRefetch)) {
-    //     additionalRefetch.forEach((element) => {
-    //       queryClient.prefetchQuery({
-    //         queryKey: element.providesQueryKeys,
-    //         queryFn: ({ signal }) =>
-    //           fetchData(autoCancellation, element.refetchArgs, signal),
-    //       });
-    //     });
-    //   } else {
-    //     queryClient.prefetchQuery({
-    //       queryKey: additionalRefetch.providesQueryKeys,
-    //       queryFn: ({ signal }) =>
-    //         fetchData(autoCancellation, additionalRefetch.refetchArgs, signal),
-    //     });
-    //   }
-    // }
-
-    console.log("useQueryHook after", data);
-
     return {
       data,
       isLoading,
       prefetchQuery,
     };
   };
+}
+async function fetchQueryData<
+  QueryArg,
+  BaseQuery extends BaseQueryFn,
+  ResultType
+>(
+  autoCancellation: boolean | undefined,
+  queryArgs: QueryArg,
+  query: (arg: QueryArg) => BaseQueryArg<BaseQuery>,
+  baseQuery: BaseQuery,
+  transformResponse:
+    | TransformedResponse<QueryArg, BaseQuery, ResultType>
+    | ((baseQueryReturnValue: unknown) => unknown),
 
-  async function fetchData(
-    autoCancellation: boolean | undefined,
-    queryArgs: QueryArg,
-    query: (arg: QueryArg) => BaseQueryArg<BaseQuery>,
-    transformResponse: TransformedResponse<QueryArg, BaseQuery, ResultType>,
-    signal: AbortSignal
-  ) {
-    let rawData;
-    const args = query(queryArgs);
-    if (autoCancellation) {
-      rawData = await baseQuery(args, { signal }, {});
-    } else {
-      rawData = await baseQuery(args, {}, {});
-    }
-    if (rawData && Object.entries(rawData).length > 0)
-      return transformResponse(rawData as any, queryArgs);
-    else return rawData;
+  signal: AbortSignal
+) {
+  let rawData;
+  const args = query(queryArgs);
+  if (autoCancellation) {
+    rawData = await baseQuery(args, { signal }, {});
+  } else {
+    rawData = await baseQuery(args, {}, {});
   }
+  if (rawData && Object.entries(rawData).length > 0)
+    return transformResponse(rawData as any, queryArgs);
+  else return rawData;
 }
 export function buildMutationHook<
   QueryArg,
@@ -371,8 +359,7 @@ export function buildMutationHook<
   definition,
 }: BuildMutationHook<QueryArg, BaseQuery, ResultType, TQueryKey>): UseMutation<
   QueryArg,
-  ResultType,
-  TQueryKey
+  ResultType
 > {
   //
   //   const triggerMutation = useCallback(
