@@ -120,7 +120,7 @@ export async function deleteCustomer_API(customerID: number) {
 
 const customerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    customerDetails: builder.query({
+    customersList: builder.query({
       query: ({
         page,
         querySearch,
@@ -150,7 +150,15 @@ const customerApi = baseApi.injectEndpoints({
         };
       },
     }),
+    customerDetails: builder.query({
+      query: (customerID: number) => `/customers/${customerID}`,
+      providesQueryKeys: (customerID) => ["customer", customerID],
+
+      transformResponse: (data: CustomerFullDataType) => {
+        return data;
+      },
+    }),
   }),
   overrideExisting: "throw",
 });
-export const { useCustomerDetailsQuery } = customerApi;
+export const { useCustomersListQuery, useCustomerDetailsQuery } = customerApi;
