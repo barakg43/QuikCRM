@@ -1,28 +1,31 @@
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
-import { usePathChange } from "../hooks/usePathChange";
 type SearchbarProps = {
   paramKey?: string;
 };
 function SearchBar({ paramKey = "query" }: SearchbarProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
-  usePathChange(() => {
-    searchParams.delete(paramKey);
-    setQuery("");
-  });
+  useEffect(() => {
+    setQuery(searchParams.get(paramKey) || "");
+  }, [searchParams, paramKey]);
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const newQuery = event.target.value;
     setQuery(newQuery);
-    if (newQuery.length > 0) {
-      searchParams.set(paramKey, newQuery);
-      setSearchParams(searchParams);
-    } else {
+    searchParams.set(paramKey, newQuery);
+    if (searchParams.get(paramKey)?.length == 0) {
       searchParams.delete(paramKey);
-      setSearchParams(searchParams);
     }
+    setSearchParams(searchParams);
+
+    // if (newQuery.length > 0) {
+    //   searchParams.set(paramKey, newQuery);
+    //   setSearchParams(searchParams);
+    // } else {
+    //   setSearchParams(searchParams);
+    // }
   }
 
   return (
