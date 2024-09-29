@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import useDebounce from "../../../hooks/useDebounce";
 import { usePageNumber } from "../../../hooks/usePageNumber";
 import { ITEMS_AMOUNT_PER_PAGE } from "../../../services/globalTypes";
-import { useCustomerDetailsQuery } from "../../../services/redux/api/apiCustomers";
+import { useCustomersListQuery } from "../../../services/redux/api/apiCustomers";
 import { getPagesAmount } from "../../../services/utils";
 
 export function useCustomers() {
@@ -24,7 +24,7 @@ export function useCustomers() {
     isLoading,
     error,
     prefetchQuery,
-  } = useCustomerDetailsQuery({
+  } = useCustomersListQuery({
     page,
     querySearch: debouncedQuery,
   });
