@@ -5,7 +5,6 @@ import {
   useQueryClient,
   UseQueryResult,
 } from "@tanstack/react-query";
-import axios from "axios";
 import {
   Api,
   BaseQueryArg,
@@ -24,7 +23,7 @@ import {
   UseMutation,
   UseQuery,
 } from "./reactQueryToolkitType";
-import { AxiosBaseQuery } from "./redux/baseApi";
+import { AxiosBaseQuery, BaseQueryError } from "./redux/baseApi";
 import { safeAssign } from "./tsHelpers";
 import { capitalize } from "./utils";
 
@@ -290,12 +289,12 @@ function buildQueryHook<
     //   queryFn: ({ signal }) =>
     //     getCustomersSubset_API({ page, querySearch: debouncedQuery, signal }),
     // });
-    console.log(
-      "query",
-      queryArgs,
-      query(queryArgs),
-      providesQueryKeys(queryArgs)
-    );
+    // console.log(
+    //   "query",
+    //   queryArgs,
+    //   query(queryArgs),
+    //   providesQueryKeys(queryArgs)
+    // );
 
     const { data, isLoading, error }: UseQueryResult<any> = useQuery({
       queryKey: providesQueryKeys(queryArgs),
@@ -309,11 +308,9 @@ function buildQueryHook<
           signal
         ),
     });
-    if (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("error useQueryHook:", error.response);
-        return { isLoading, error: error.response?.data?.error, prefetchQuery };
-      }
+    if (error instanceof BaseQueryError) {
+      console.error("error useQueryHook:", error.message);
+      return { isLoading, error: error.message, prefetchQuery };
     }
 
     return {
