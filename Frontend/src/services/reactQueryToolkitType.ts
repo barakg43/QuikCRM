@@ -159,9 +159,7 @@ type QueryKeyTypeFrom<D extends EndpointDefinition<any, any, any, any>> =
 //   arg: QueryArgFrom<D>
 // ) => UseQueryHookResult<D, R>;
 
-export type UseQuery<QueryArg, ResultType, TQueryKey extends QueryKey> = (
-  args: QueryArg
-) => (
+export type UseQuery<QueryArg, ResultType> = (args: QueryArg) => (
   | {
       data: ResultType;
       error?: undefined;
@@ -402,24 +400,13 @@ export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
 //     boolean
 //   ];
 
-interface Register {}
-type DefaultError = Register extends {
-  defaultError: infer TError;
-}
-  ? TError
-  : Error;
-
-export type UseMutation<QueryArg, ResultType, TQueryKey> = () => readonly [
+export type UseMutation<QueryArg, ResultType> = () => readonly [
   UseMutateFunction<unknown, unknown, QueryArg, unknown>,
   boolean
 ];
-export type ToolkitHookFunction<
-  QueryArg,
-  ResultType,
-  TQueryKey extends QueryKey
-> =
-  | UseQuery<QueryArg, ResultType, TQueryKey>
-  | UseMutation<QueryArg, ResultType, TQueryKey>;
+export type ToolkitHookFunction<QueryArg, ResultType> =
+  | UseQuery<QueryArg, ResultType>
+  | UseMutation<QueryArg, ResultType>;
 /**
    
 }
@@ -570,12 +557,6 @@ export interface QueryExtraOptions<
    * ```
    */
   providesQueryKeys: (args: QueryArg) => TQueryKey;
-  additionalRefetchQueries?: (
-    args: QueryArg,
-    result: ResultType
-  ) =>
-    | PrefetchQueryType<QueryArg, TQueryKey>
-    | PrefetchQueryType<QueryArg, TQueryKey>[];
   autoCancellation?: boolean;
 }
 export interface MutationExtraOptions<
@@ -876,16 +857,30 @@ import { original } from 'immer';
   baseQuery: BaseQuery;
 }
 
+// export type TransformedResponse<
+//   NewDefinitions extends EndpointDefinitions,
+//   K,
+//   ResultType
+// > = K extends keyof NewDefinitions
+//   ? NewDefinitions[K]["transformResponse"] extends undefined
+//     ? ResultType
+//     : UnwrapPromise<
+//         ReturnType<NonUndefined<NewDefinitions[K]["transformResponse"]>>
+//       >
+//   : ResultType;
 export type TransformedResponse<
   QueryArg,
   BaseQuery extends BaseQueryFn,
   ResultType
-> =
-  | ((baseQueryReturnValue: unknown) => unknown)
-  | ((
-      baseQueryReturnValue: UnwrapPromise<ReturnType<BaseQuery>>,
-      arg: QueryArg
-    ) => ResultType | Promise<ResultType>);
+> = (
+  baseQueryReturnValue: BaseQueryResult<BaseQuery>,
+  arg: QueryArg
+) => ResultType | Promise<ResultType>;
+
+//  (
+//   baseQueryReturnValue: BaseQueryResult<BaseQuery>,
+//   arg: QueryArg
+// ) => ResultType | Promise<ResultType>;
 
 export type BuildMutationHook<
   QueryArg,
@@ -1176,12 +1171,7 @@ type QueryHookNames<Definitions extends EndpointDefinitions> = {
     // QueryArg, ResultType, TQueryKey extends QueryKey
 
     QueryArgFrom<Extract<Definitions[K], QueryDefinition<any, any, any, any>>>,
-    ResultTypeFrom<
-      Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-    >,
-    QueryKeyTypeFrom<
-      Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-    >
+    ResultTypeFrom<Extract<Definitions[K], QueryDefinition<any, any, any, any>>>
   >;
 };
 type RequestStatusFlags =
