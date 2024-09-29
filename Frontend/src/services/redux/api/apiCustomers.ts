@@ -120,7 +120,7 @@ export async function deleteCustomer_API(customerID: number) {
   await httpClient.delete(`customers/${customerID}`);
 }
 
-const customerApi = baseApi.buildEndpoints({
+const customerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     customerDetails: builder.query({
       query: ({
