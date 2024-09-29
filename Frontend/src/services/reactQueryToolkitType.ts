@@ -172,23 +172,12 @@ export type UseQuery<QueryArg, ResultType, TQueryKey extends QueryKey> = (
     }
 ) & {
   isLoading: boolean;
-  prefetchQuery: ({
-    args,
-    queryKey,
-  }: PrefetchQueryType<QueryArg, TQueryKey>) => void;
+  prefetchQuery: (args: QueryArg) => void;
 };
 
-export type QueryReturnValue<TData = unknown, E = unknown> =
-  | {
-      error: E;
-      data?: undefined;
-      isLoading: boolean;
-    }
-  | {
-      error?: undefined;
-      data: TData;
-      isLoading: boolean;
-    };
+export type QueryReturnValue<TData = unknown> = {
+  data: TData;
+};
 
 export type EndpointName = keyof Omit<
   BuildMutationHook<any, any, any, any>,
@@ -528,9 +517,8 @@ export type BaseQueryExtraOptions<BaseQuery extends BaseQueryFn> =
 declare const _NEVER: unique symbol;
 export type NEVER = typeof _NEVER;
 
-export type PrefetchQueryType<QueryArg, TQueryKey extends QueryKey> = {
+export type PrefetchQueryType<QueryArg> = {
   args: QueryArg;
-  queryKey: TQueryKey;
 };
 export interface QueryExtraOptions<
   TQueryKey extends QueryKey,
