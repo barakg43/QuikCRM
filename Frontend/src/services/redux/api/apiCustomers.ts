@@ -6,9 +6,7 @@ import {
 } from "../../../features/customers/customers";
 import { httpClient } from "../../axios";
 import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "../../globalTypes";
-import { createApi } from "../../reactQueryToolkit";
-import { baseQueryWithReauth } from "../baseApi";
-import { baseApi } from "../baseApi copy";
+import { baseApi } from "../baseApi";
 
 export async function getCustomersSubset_API({
   page,
@@ -137,28 +135,22 @@ const customerApi = baseApi.injectEndpoints({
           query: querySearch,
         },
       }),
+      autoCancellation: true,
 
-      //   transformResponse: (data: SubsetListType<CustomerSlimDetailsProps>) => ({
-      //     customers: data.listSubset,
-      //     totalItems: data.totalAmountInDataBase,
-      //   }),
+      providesQueryKeys: ({ page, querySearch }) => [
+        "customers",
+        page,
+        querySearch,
+      ],
+
+      transformResponse: (data: SubsetListType<CustomerSlimDetailsProps>) => {
+        return {
+          customers: data.listSubset,
+          totalItems: data.totalAmountInDataBase,
+        };
+      },
     }),
   }),
+  overrideExisting: "throw",
 });
-
 export const { useCustomerDetailsQuery } = customerApi;
-
-const test = createApi({ baseQuery: baseQueryWithReauth });
-const api = test.buildEndpoints({
-  endpoints: (build) => ({
-    test: build.query({
-      query: ({ id }: { id: number }) => ({ url: "test" }),
-      providesTags: ({ id }) => ["test1"],
-      //   transformErrorResponse: (data: unknown) => data,
-    }),
-    mutateTest: build.mutation({
-      query: (yosii: number) => ({ url: "mutate" }),
-      invalidatesTags: (test) => ["test1", "test2", test],
-    }),
-  }),
-});
