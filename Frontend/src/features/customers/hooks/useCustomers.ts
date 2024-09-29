@@ -1,17 +1,12 @@
 import { useToast } from "@chakra-ui/react";
-import {
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "../../../hooks/useDebounce";
 import { usePageNumber } from "../../../hooks/usePageNumber";
 import { ITEMS_AMOUNT_PER_PAGE } from "../../../services/globalTypes";
-import { getCustomersSubset_API } from "../../../services/redux/api/apiCustomers";
+import { useCustomerDetailsQuery } from "../../../services/redux/api/apiCustomers";
 import { getPagesAmount } from "../../../services/utils";
-import { CustomersListType } from "../customers";
 
 export function useCustomers() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,25 +19,24 @@ export function useCustomers() {
     searchParams.set("page", "1");
     setSearchParams(searchParams);
   }, [debouncedQuery]);
-  const queryClient = useQueryClient();
-  //   const {
-  //     data: { customers, totalItems } = { customers: [], totalItems: 0 },
-  //     isLoading,
-  //     error,
-  //   } = useCustomerDetailsQuery({
-  //     page,
-  //     querySearch: debouncedQuery,
-  //   });
-
   const {
     data: { customers, totalItems } = { customers: [], totalItems: 0 },
     isLoading,
     error,
-  }: UseQueryResult<CustomersListType> = useQuery({
-    queryKey: ["customers", page, debouncedQuery],
-    queryFn: ({ signal }) =>
-      getCustomersSubset_API({ page, querySearch: debouncedQuery, signal }),
+    prefetchQuery,
+  } = useCustomerDetailsQuery({
+    page,
+    querySearch: debouncedQuery,
   });
+  //   const {
+  //     data: { customers, totalItems } = { customers: [], totalItems: 0 },
+  //     isLoading,
+  //     error,
+  //   }: UseQueryResult<CustomersListType> = useQuery({
+  //     queryKey: ["customers", page, debouncedQuery],
+  //     queryFn: ({ signal }) =>
+  //       getCustomersSubset_API({ page, querySearch: debouncedQuery, signal }),
+  //   });
   if (error) {
     toast({
       title: "Error occurred",
@@ -53,16 +47,9 @@ export function useCustomers() {
     });
   }
   const pageCount = getPagesAmount(totalItems, ITEMS_AMOUNT_PER_PAGE);
-  if (page < pageCount)
-    queryClient.prefetchQuery({
-      queryKey: ["customers", page + 1],
-      queryFn: () => getCustomersSubset_API({ page: page + 1 }),
-    });
+  if (page < pageCount) prefetchQuery({ page: page + 1, querySearch });
 
-  if (page > 1)
-    queryClient.prefetchQuery({
-      queryKey: ["customers", page - 1],
-      queryFn: () => getCustomersSubset_API({ page: page - 1 }),
-    });
+  if (page > 1) prefetchQuery({ page: page - 1, querySearch });
+
   return { customers, totalItems, isLoading, error };
 }
