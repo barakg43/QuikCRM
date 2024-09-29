@@ -21,7 +21,6 @@ function AppProviders({ children }: AppProvidersType) {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
-        {/* <StoreProvider> */}
         <ReactQueryDevtools initialIsOpen={false} />
         <GlobalStyle />
         <ChakraProvider theme={theme}>
@@ -49,7 +48,6 @@ function AppProviders({ children }: AppProvidersType) {
                 /> */}
           {children}
         </ChakraProvider>
-        {/* </StoreProvider> */}
       </I18nextProvider>
     </QueryClientProvider>
   );
