@@ -131,7 +131,11 @@ import { CastAny, HasRequiredProps } from './tsHelpers';
   /**
    * A function to manipulate the data returned by a query or mutation.
    */
-  transformResponse?: TransformedResponse<QueryArg, BaseQuery, ResultType>;
+  transformResponse?(
+    baseQueryReturnValue: BaseQueryResult<BaseQuery>,
+    arg: QueryArg
+  ): ResultType | Promise<ResultType>;
+  //   a: TransformedResponse<QueryArg, BaseQuery, ResultType>;
   //    * A function to manipulate the data returned by a failed query or mutation.
   //    */
 }
