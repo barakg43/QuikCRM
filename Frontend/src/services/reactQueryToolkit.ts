@@ -23,7 +23,7 @@ import {
   UseMutation,
   UseQuery,
 } from "./reactQueryToolkitType";
-import { AxiosBaseQuery, BaseQueryError } from "./redux/baseApi";
+import { AxiosBaseQuery } from "./redux/baseApi";
 import { safeAssign } from "./tsHelpers";
 import { capitalize } from "./utils";
 
@@ -252,7 +252,7 @@ function buildQueryHook<
 >(
   baseQuery: BaseQuery,
   definition: QueryDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>
-): UseQuery<QueryArg, ResultType> {
+): UseQuery<QueryArg, ResultType, string> {
   return function useQueryHook(queryArgs: QueryArg) {
     const queryClient = useQueryClient();
 
@@ -266,6 +266,7 @@ function buildQueryHook<
     function prefetchQuery(args: QueryArg) {
       queryClient.prefetchQuery({
         queryKey: providesQueryKeys(args),
+
         queryFn: ({ signal }) =>
           fetchQueryData(
             autoCancellation,
@@ -296,7 +297,7 @@ function buildQueryHook<
     //   providesQueryKeys(queryArgs)
     // );
 
-    const { data, isLoading, error }: UseQueryResult<any> = useQuery({
+    const { data, error, status }: UseQueryResult<ResultType> = useQuery({
       queryKey: providesQueryKeys(queryArgs),
       queryFn: ({ signal }) =>
         fetchQueryData(
@@ -308,18 +309,56 @@ function buildQueryHook<
           signal
         ),
     });
-    if (error instanceof BaseQueryError) {
-      console.error("error useQueryHook:", error.message);
-      return { isLoading, error: error.message, prefetchQuery };
-    }
 
-    return {
-      data,
-      isLoading,
-      prefetchQuery,
-    };
+    switch (status) {
+      case "success":
+        return {
+          data,
+          error: undefined,
+          isLoading: false,
+          isError: false,
+          //   status: "success",
+          prefetchQuery,
+        };
+        break;
+      case "error":
+        console.error("error useQueryHook:", error.message);
+        return {
+          data: undefined,
+          isLoading: false,
+          isError: true,
+          error: error.message,
+          //   status,
+          prefetchQuery,
+        };
+      default:
+        return {
+          data: undefined,
+          isLoading: true,
+          isError: false,
+          error: null,
+          prefetchQuery,
+
+          //   status,
+        };
+    }
   };
 }
+
+/**
+ * Performs a query using the provided baseQuery and endpoint definition.
+ * If autoCancellation is true, the query will be automatically cancelled
+ * if the component is unmounted before the query completes or new request invoked before the previous one completes.
+ * If transformResponse is provided, the response will be passed through it
+ * before being returned.
+ * @param autoCancellation
+ * @param queryArgs
+ * @param query
+ * @param baseQuery
+ * @param transformResponse
+ * @param signal
+ * @returns The result of the query, or undefined if the response is empty.
+ */
 async function fetchQueryData<
   QueryArg,
   BaseQuery extends BaseQueryFn,
@@ -333,7 +372,7 @@ async function fetchQueryData<
     | TransformedResponse<QueryArg, BaseQuery, ResultType>
     | ((baseQueryReturnValue: unknown) => unknown),
 
-  signal: AbortSignal
+  signal: AbortSignal | undefined
 ) {
   let rawData;
   const args = query(queryArgs);

@@ -1,4 +1,4 @@
-import { UseMutateFunction } from "@tanstack/react-query";
+import { DefaultError, UseMutateFunction } from "@tanstack/react-query";
 
 import { SafePromise } from "./tsHelpers";
 import { HasRequiredProps, OmitFromUnion, UnwrapPromise } from "./tsHelpers.d";
@@ -158,20 +158,6 @@ type QueryKeyTypeFrom<D extends EndpointDefinition<any, any, any, any>> =
 // >(
 //   arg: QueryArgFrom<D>
 // ) => UseQueryHookResult<D, R>;
-
-export type UseQuery<QueryArg, ResultType> = (args: QueryArg) => (
-  | {
-      data: ResultType;
-      error?: undefined;
-    }
-  | {
-      data?: undefined;
-      error: unknown;
-    }
-) & {
-  isLoading: boolean;
-  prefetchQuery: (args: QueryArg) => void;
-};
 
 export type QueryReturnValue<TData = unknown> = {
   data: TData;
@@ -643,7 +629,7 @@ export type EndpointBuilder<
    *});
    *```
    */
-  query<ResultType, QueryArg>(
+  query<ResultType, QueryArg = unknown>(
     definition: OmitFromUnion<
       QueryDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>,
       "type"
@@ -1235,4 +1221,46 @@ export interface QueryHooks<
   //   useQuerySubscription: UseQuerySubscription<Definition>
   //   useLazyQuerySubscription: UseLazyQuerySubscription<Definition>
   //   useQueryState: UseQueryState<Definition>
+}
+export type UseQuery<QueryArg, ResultType, TError = string> = (
+  args: QueryArg
+) => QueryResult<QueryArg, ResultType, TError>;
+type QueryResult<QueryArg = unknown, TData = unknown, TError = DefaultError> =
+  | QueryErrorResult<QueryArg, TData, TError>
+  | QuerySuccessResult<QueryArg, TData, TError>
+  | QueryLoadingResult<QueryArg, TData, TError>;
+
+export interface QueryLoadingResult<QueryArg, ResultType, TError = DefaultError>
+  extends QueryObserverBaseResult<ResultType, QueryArg, TError> {
+  data: undefined;
+  error: null | undefined;
+  isError: false;
+  isLoading: true;
+  //   status: "pending";
+}
+export interface QuerySuccessResult<QueryArg, ResultType, TError = DefaultError>
+  extends QueryObserverBaseResult<ResultType, QueryArg, TError> {
+  data: ResultType;
+  error: undefined;
+  isError: false;
+  isLoading: false;
+  //   status: "success";
+}
+
+export interface QueryErrorResult<QueryArg, ResultType, TError = DefaultError>
+  extends QueryObserverBaseResult<ResultType, QueryArg, TError> {
+  data: undefined;
+  error: TError;
+  isError: true;
+  isLoading: false;
+  //   status: "error";
+}
+
+interface QueryObserverBaseResult<ResultType, QueryArg, TError = DefaultError> {
+  data: ResultType | undefined;
+  error: TError | null | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  //   status: QueryStatus;
+  prefetchQuery: (args: QueryArg) => void;
 }
