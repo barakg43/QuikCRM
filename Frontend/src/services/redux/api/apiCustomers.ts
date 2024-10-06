@@ -150,13 +150,9 @@ const customerApi = baseApi.injectEndpoints({
         };
       },
     }),
-    customerDetails: builder.query({
+    customerDetails: builder.query<CustomerFullDataType>({
       query: (customerID: number) => `/customers/${customerID}`,
       providesQueryKeys: (customerID) => ["customer", customerID],
-
-      transformResponse: (data: CustomerFullDataType) => {
-        return data;
-      },
     }),
   }),
   overrideExisting: "throw",
