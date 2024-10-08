@@ -20,18 +20,21 @@ import {
   QueryHookName,
   ToolkitHookFunction,
   TransformedResponse,
+  TranslateToast,
   UseMutation,
   UseQuery,
 } from "./reactQueryToolkitType";
-import { AxiosBaseQuery } from "./redux/baseApi";
 import { safeAssign } from "./tsHelpers";
 import { capitalize } from "./utils";
 
 export const createApi = /* @__PURE__ */ createApiCallback();
 
-export function createApiCallback() {
+export function createApiCallback(): CreateApi {
   //   options: CreateApiOptions<AxiosBaseQuery, EndpointDefinitions, QueryKey>
-  return function baseCreateApi(options: CreateApiOptions<AxiosBaseQuery>) {
+  return function baseCreateApi<
+    BaseQuery extends BaseQueryFn,
+    Definitions extends EndpointDefinitions
+  >(options: CreateApiOptions<BaseQuery>) {
     const { baseQuery } = options;
     // const extractRehydrationInfo = weakMapMemoize((action: UnknownAction) =>
     //   options.extractRehydrationInfo?.(action, {
@@ -91,7 +94,7 @@ export function createApiCallback() {
 
     const api = {
       injectEndpoints,
-      endpoints: {},
+      endpoints: {} as Definitions,
 
       //   enhanceEndpoints({ addTagTypes, endpoints }) {
       // if (addTagTypes) {
@@ -116,7 +119,7 @@ export function createApiCallback() {
       //   }
       // }
       // return api;
-    } as Api<BaseQueryFn, QueryKey, EndpointDefinitions>;
+    } as Api<BaseQueryFn, QueryKey, Definitions>;
 
     // const initializedModules = modules.map((m) =>
     //   m.init(api as any, optionsWithDefaults as any, context)
@@ -153,7 +156,7 @@ export function createApiCallback() {
 
           continue;
         }
-        api.endpoints[endpointName] ??= {} as any;
+        // api.endpoints[endpointName] = {} as any;
         if (isQueryDefinition(definition) || isMutationDefinition(definition)) {
           safeAssign(api.endpoints[endpointName], definition);
           const { hookName, hookFn } = buildHook({
@@ -211,8 +214,8 @@ function buildHook<
   TQueryKey extends QueryKey
 >({
   endpointName,
-  baseQuery,
   definition,
+  baseQuery,
 }: {
   endpointName: string;
   definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>;
