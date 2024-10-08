@@ -8,7 +8,7 @@ import { BaseQueryFn } from "../reactQueryToolkitType";
 // create a new mutex
 const mutex = new Mutex();
 
-export type AxiosBaseQuery = BaseQueryFn<AxiosBaseQueryProps | string, unknown>;
+export type AxiosBaseQuery = BaseQueryFn<AxiosBaseQueryProps>;
 
 export const baseQueryWithAuth: AxiosBaseQuery = async (args, api) => {
   //   let abortController;
