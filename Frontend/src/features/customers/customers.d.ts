@@ -4,7 +4,7 @@ export type CustomerFullDataType = {
   activeContractID: number;
   customerShortName: string;
   customerName: string;
-  customerStatus: customerStatuses;
+  customerStatus: CustomerStatus;
   customerIdentificationNumber: string;
   customerMainPhone: string;
   customerMainEMail: string;
@@ -24,10 +24,7 @@ export type CustomersListType = {
   totalItems: number;
 };
 export type CustomerStatus = (typeof customerStatuses)[number] | undefined;
-export type CustomerSlimDetailsProps = {
-  customerID: number;
-  customerShortName: string;
-  address: string;
-  city: string;
-  customerStatus: CustomerStatus;
-};
+export type CustomerSlimDetailsProps = Pick<
+  CustomerFullDataType,
+  "customerID" | "customerShortName" | "address" | "city" | "customerStatus"
+>;
