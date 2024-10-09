@@ -875,7 +875,7 @@ export type BuildMutationHook<
   TQueryKey extends QueryKey
 > = {
   baseQuery: BaseQuery;
-  definition: EndpointDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>;
+  definition: MutationDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>;
 };
 
 // export interface ApiModules<
@@ -1196,7 +1196,12 @@ type MutationHookNames<Definitions extends EndpointDefinitions> = {
   }
     ? MutationHookName<K>
     : never]: UseMutation<
-    Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+    QueryArgFrom<
+      Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+    >,
+    ResultTypeFrom<
+      Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+    >
   >;
 };
 // export type UseMutation<D extends MutationDefinition<any, any, any, any>> =
