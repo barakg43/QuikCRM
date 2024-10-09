@@ -426,37 +426,57 @@ export function buildMutationHook<
   //   )
   return function useMutationHook() {
     // const queryClient = useQueryClient();
-    const { query } = definition;
-    const { mutate, isPending } =
-      // {
-      //   mutate: (arg: QueryArg) => {
-      //     console.log(arg);
-      //   },
-      //   isPending: false,
-      // };
+    const {
+      query,
+      invalidatesKeys,
+      transformResponse = defaultTransformResponse,
+      onError,
+      onSuccess,
+    } = definition;
+    const queryClient = useQueryClient();
 
-      useMutation({
-        mutationFn: async (queryArgs: QueryArg) => {
-          const args = query(queryArgs);
-          return baseQuery(args, {}, {});
-        },
-        // onMutate: () => createInfinityToast("pending text", "loading"),
-        // onSuccess: () => {
+    const { mutate, isPending } = useMutation<
+      unknown,
+      Error,
+      QueryArg,
+      ResultType
+    >({
+      mutationFn: async (queryArgs: QueryArg) => {
+        return fetchQueryData(
+          false,
+          queryArgs,
+          query,
+          baseQuery,
+          transformResponse,
+          undefined
+        );
+      },
+      // onMutate: () => createInfinityToast("pending text", "loading"),
+      onSuccess: (data, originalArgs) => {
+        const typedData = data as ResultType;
         //   toast({
         //     description: t("toast-title"),
         //     title: t("toast-message-success"),
         //     status: "success",
         //   });
-        //   queryClient.invalidateQueries({
-        //     queryKey: ["product-renews"],
-        //   });
-      });
-    // onError: () =>
-    //   toast({
-    //     description: t("toast-title"),
-    //     title: t("toast-message-error"),
-    //     status: "error",
-    //   }),
+        onSuccess?.(originalArgs, typedData);
+
+        if (invalidatesKeys)
+          queryClient.invalidateQueries({
+            queryKey: invalidatesKeys(originalArgs, typedData),
+          });
+      },
+
+      onError: (error, args) => {
+        onError?.(args, error);
+
+        //   toast({
+        //     description: t("toast-title"),
+        //     title: t("toast-message-error"),
+        //     status: "error",
+        //   }),
+      },
+    });
     //   });
     //   async function deleteServiceContract(id: number) {
     //     toast.promise(new Promise(() => deleteServiceContract1(id)), {
@@ -464,10 +484,12 @@ export function buildMutationHook<
     //       error: { title: "Promise rejected", description: "Something wrong" },
     //       loading: { title: "Promise pending", description: "Please wait" },
     //     });
-    //   }
+
     // return [mutate, isPending] as const;
-    return [mutate, isPending] as const;
-    // return useMemo(() => [mutate, isPending] as const, [mutate, isPending]);
+    // let result = { isLoading: isPending, [endpointName]: mutate };
+    // result[endpointName] = mutate;
+    // return result;
+    return useMemo(() => [mutate, isPending] as const, [mutate, isPending]);
   };
 }
 
