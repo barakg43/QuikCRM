@@ -156,7 +156,13 @@ export function createApiCallback(): CreateApi {
 
           continue;
         }
-        // api.endpoints[endpointName] = {} as any;
+        api.endpoints[endpointName] = {} as EndpointDefinition<
+          any,
+          any,
+          any,
+          any
+        >;
+
         if (isQueryDefinition(definition) || isMutationDefinition(definition)) {
           safeAssign(api.endpoints[endpointName], definition);
           const { hookName, hookFn } = buildHook({
