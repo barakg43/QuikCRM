@@ -20,7 +20,6 @@ import {
   QueryHookName,
   ToolkitHookFunction,
   TransformedResponse,
-  TranslateToast,
   UseMutation,
   UseQuery,
 } from "./reactQueryToolkitType";

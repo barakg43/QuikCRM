@@ -1,5 +1,4 @@
 import type { Middleware, StoreEnhancer } from "redux";
-import type { Tuple } from "./redux/rtk_query/utils";
 
 export function safeAssign<T extends object>(
   target: T,
@@ -102,14 +101,6 @@ type ExtractDispatchFromMiddlewareTuple<
     >
   : Acc;
 
-export type ExtractDispatchExtensions<M> = M extends Tuple<
-  infer MiddlewareTuple
->
-  ? ExtractDispatchFromMiddlewareTuple<MiddlewareTuple, {}>
-  : M extends ReadonlyArray<Middleware>
-  ? ExtractDispatchFromMiddlewareTuple<[...M], {}>
-  : never;
-
 type ExtractStoreExtensionsFromEnhancerTuple<
   EnhancerTuple extends readonly any[],
   Acc extends {}
@@ -119,18 +110,6 @@ type ExtractStoreExtensionsFromEnhancerTuple<
       Acc & (Head extends StoreEnhancer<infer Ext> ? IsAny<Ext, {}, Ext> : {})
     >
   : Acc;
-
-export type ExtractStoreExtensions<E> = E extends Tuple<infer EnhancerTuple>
-  ? ExtractStoreExtensionsFromEnhancerTuple<EnhancerTuple, {}>
-  : E extends ReadonlyArray<StoreEnhancer>
-  ? UnionToIntersection<
-      E[number] extends StoreEnhancer<infer Ext>
-        ? Ext extends {}
-          ? IsAny<Ext, {}, Ext>
-          : {}
-        : {}
-    >
-  : never;
 
 type ExtractStateExtensionsFromEnhancerTuple<
   EnhancerTuple extends readonly any[],

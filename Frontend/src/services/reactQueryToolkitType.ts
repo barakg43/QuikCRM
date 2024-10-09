@@ -385,11 +385,18 @@ export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
 //     >,
 //     boolean
 //   ];
+// `use${Capitalize<K & string>}Mutation`;
 
+type MutateFunc<MutateName extends string | number | symbol, QueryArg> = {
+  [Name in MutateName]: UseMutateFunction<unknown, unknown, QueryArg, unknown>;
+};
 export type UseMutation<QueryArg, ResultType> = () => readonly [
   UseMutateFunction<unknown, unknown, QueryArg, unknown>,
   boolean
-];
+] & {
+  /* phantom type */
+  [resultType]?: ResultType;
+};
 export type ToolkitHookFunction<QueryArg, ResultType> =
   | UseQuery<QueryArg, ResultType>
   | UseMutation<QueryArg, ResultType>;
@@ -1016,14 +1023,14 @@ type UseQueryStateDefaultResult<D extends QueryDefinition<any, any, any, any>> =
      * Please use the `isLoading`, `isFetching`, `isSuccess`, `isError`
      * and `isUninitialized` flags instead
      */
-    status: QueryStatus;
+    // status: QueryStatus;
   };
-declare enum QueryStatus {
-  uninitialized = "uninitialized",
-  pending = "pending",
-  fulfilled = "fulfilled",
-  rejected = "rejected",
-}
+// declare enum QueryStatus {
+//   uninitialized = "uninitialized",
+//   pending = "pending",
+//   fulfilled = "fulfilled",
+//   rejected = "rejected",
+// }
 type UseQueryStateBaseResult<D extends QueryDefinition<any, any, any, any>> =
   QuerySubState<D> & {
     /**
