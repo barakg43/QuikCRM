@@ -40,3 +40,7 @@ i18n
   });
 
 export default i18n;
+
+export function isRtlLang() {
+  return document.dir === "rtl";
+}

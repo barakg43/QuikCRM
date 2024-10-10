@@ -3,6 +3,7 @@ import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
 import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
+import { isRtlLang } from "../i18n/i18n";
 import { ITEMS_AMOUNT_PER_PAGE } from "../services/globalTypes";
 import { getPagesAmount } from "../services/utils";
 
@@ -21,7 +22,7 @@ function Pagination({
   const currentPage = Number(searchParams.get("page")) || 1;
   const pagesCount = getPagesAmount(totalItemsAmount, itemsPerPage);
   if (pagesCount <= 1) return null;
-  const isRTL = document.dir === "rtl";
+  const isRTL = isRtlLang();
   const updatePageQuery = (pageNumber: number) => {
     searchParams.set("page", pageNumber.toString());
     setSearchParams(searchParams);
