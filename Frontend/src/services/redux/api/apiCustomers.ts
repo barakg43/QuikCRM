@@ -161,7 +161,25 @@ const customerApi = baseApi.injectEndpoints({
         method: "POST",
         body: customerData,
       }),
-      onSuccess: () => {},
+      onSuccess: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "add",
+          status: "success",
+          titleKey: "toast-message-success",
+          descriptionKey: "toast-title",
+        });
+      },
+      onError: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "add",
+          status: "error",
+          titleKey: "toast-message-error",
+          descriptionKey: "toast-title",
+        });
+      },
+      invalidatesKeys: () => ["customers"],
     }),
     deleteCustomer: builder.mutation<void, number>({
       query: (customerId: number) => ({
@@ -188,6 +206,33 @@ const customerApi = baseApi.injectEndpoints({
       },
       invalidatesKeys: () => ["customers"],
     }),
+    updateCustomer: builder.mutation({
+      query: ({ customerID, ...customerData }: CustomerFullDataType) => ({
+        url: `/customers/${customerID}`,
+        method: "PATCH",
+        body: customerData,
+      }),
+
+      onSuccess: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "update",
+          status: "success",
+          titleKey: "toast-message-success",
+          descriptionKey: "toast-title",
+        });
+      },
+      onError: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "update",
+          status: "error",
+          titleKey: "toast-message-error",
+          descriptionKey: "toast-title",
+        });
+      },
+      invalidatesKeys: ({ customerID }) => ["customer", customerID],
+    }),
   }),
   overrideExisting: "throw",
 });
@@ -195,4 +240,6 @@ export const {
   useCustomersListQuery,
   useCustomerDetailsQuery,
   useDeleteCustomerMutation,
+  useUpdateCustomerMutation,
+  useAddNewCustomerMutation,
 } = customerApi;
