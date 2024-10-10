@@ -820,6 +820,27 @@ export type Api<
 //   ): Api<BaseQuery, Definitions, ReducerPath, TagTypes, Modules>;
 // };
 
+export type CreateApi = {
+  /**
+   * Creates a service to use in your application. Contains only the basic redux logic (the core module).
+   *
+   * @link https://rtk-query-docs.netlify.app/api/createApi
+   */
+  <
+    BaseQuery extends BaseQueryFn,
+    Definitions extends EndpointDefinitions,
+    TQueryKey extends QueryKey
+  >(
+    options: CreateApiOptions<BaseQuery>
+  ): Api<BaseQuery, TQueryKey, Definitions>;
+};
+//   Api<
+//   BaseQuery extends BaseQueryFn,
+//   //   ReducerPath extends string,
+//   TQueryKey extends QueryKey,
+//   Definitions extends EndpointDefinitions
+//   //   Enhancers extends ModuleName = CoreModule
+// >
 export interface CreateApiOptions<
   BaseQuery extends BaseQueryFn
   //   Definitions extends EndpointDefinitions,
