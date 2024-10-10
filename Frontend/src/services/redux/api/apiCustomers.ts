@@ -4,6 +4,7 @@ import {
   CustomerSlimDetailsProps,
   CustomersListType,
 } from "../../../features/customers/customers";
+import { translateToast } from "../../../hooks/useTranslateToast";
 import { httpClient } from "../../axios";
 import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "../../globalTypes";
 import { baseApi } from "../baseApi";
@@ -154,7 +155,44 @@ const customerApi = baseApi.injectEndpoints({
       query: (customerID: number) => `/customers/${customerID}`,
       providesQueryKeys: (customerID) => ["customer", customerID],
     }),
+    addNewCustomer: builder.mutation<void, CustomerFullDataType>({
+      query: (customerData) => ({
+        url: "/customers",
+        method: "POST",
+        body: customerData,
+      }),
+      onSuccess: () => {},
+    }),
+    deleteCustomer: builder.mutation<void, number>({
+      query: (customerId: number) => ({
+        url: `/customers/${customerId}`,
+        method: "DELETE",
+      }),
+      onSuccess: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "delete",
+          status: "success",
+          titleKey: "toast-message-success",
+          descriptionKey: "toast-title",
+        });
+      },
+      onError: () => {
+        translateToast({
+          translationNS: "customers",
+          keyPrefix: "delete",
+          status: "error",
+          titleKey: "toast-message-error",
+          descriptionKey: "toast-title",
+        });
+      },
+      invalidatesKeys: () => ["customers"],
+    }),
   }),
   overrideExisting: "throw",
 });
-export const { useCustomersListQuery, useCustomerDetailsQuery } = customerApi;
+export const {
+  useCustomersListQuery,
+  useCustomerDetailsQuery,
+  useDeleteCustomerMutation,
+} = customerApi;
