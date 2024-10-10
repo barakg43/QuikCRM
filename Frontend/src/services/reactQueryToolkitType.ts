@@ -673,7 +673,7 @@ export type EndpointBuilder<
    * });
    * ```
    */
-  mutation<ResultType, QueryArg>(
+  mutation<ResultType, QueryArg = unknown>(
     definition: OmitFromUnion<
       MutationDefinition<QueryArg, BaseQuery, ResultType, TQueryKey>,
       "type"
