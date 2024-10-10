@@ -4,9 +4,9 @@ import {
   CustomerSlimDetailsProps,
   CustomersListType,
 } from "../../../features/customers/customers";
-import { translateToast } from "../../../hooks/useTranslateToast";
 import { httpClient } from "../../axios";
 import { ITEMS_AMOUNT_PER_PAGE, SubsetListType } from "../../globalTypes";
+import { translateToast } from "../../utils";
 import { baseApi } from "../baseApi";
 
 export async function getCustomersSubset_API({
