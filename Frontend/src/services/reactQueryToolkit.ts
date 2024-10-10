@@ -157,12 +157,7 @@ export function createApiCallback(): CreateApi {
 
           continue;
         }
-        api.endpoints[endpointName] = {} as EndpointDefinition<
-          any,
-          any,
-          any,
-          any
-        >;
+        (api.endpoints as any)[endpointName] = {};
 
         if (isQueryDefinition(definition) || isMutationDefinition(definition)) {
           safeAssign(api.endpoints[endpointName], definition);
