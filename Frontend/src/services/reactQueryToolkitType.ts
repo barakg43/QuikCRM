@@ -605,6 +605,11 @@ export interface MutationExtraOptions<
    * ```
    */
   invalidatesKeys?: (args: QueryArg, result: ResultType) => TQueryKey;
+  onSuccess?: (
+    originalArgs: QueryArg,
+    result: ResultType
+  ) => MaybePromise<unknown>;
+  onError?: (originalArgs: QueryArg, error: Error) => MaybePromise<unknown>;
 }
 export type EndpointBuilder<
   BaseQuery extends BaseQueryFn,
