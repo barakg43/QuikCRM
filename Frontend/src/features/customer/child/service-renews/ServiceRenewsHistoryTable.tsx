@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../components/CustomTable.tsx";
 import Pagination from "../../../../components/Pagination.tsx";
 import { ITEMS_AMOUNT_PER_TAB } from "../../../../services/globalTypes";
+import { useCustomerDetailsQuery } from "../../../../services/redux/api/apiCustomers.ts";
 import { useServiceContractHistoryCustomer } from "../../../service-renews/hooks/useServiceContractHistoryCustomer.ts";
 import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
-import { useCustomer } from "../../hooks/useCustomer.ts";
 import { useCustomerIdParam } from "../../hooks/useCustomerIdParam.ts";
 import AddEditServiceContractModal from "./AddEditServiceContractModal.tsx";
 import ServiceRenewHistoryRow from "./ServiceRenewHistoryRow.tsx";
@@ -21,9 +21,9 @@ function ServiceRenewsHistoryTable() {
   const { t } = useTranslation("serviceRenews");
 
   const {
-    customer: { activeContractID },
+    data: { activeContractID },
     isLoading: isLoadingCustomer,
-  } = useCustomer(customerId);
+  } = useCustomerDetailsQuery(customerId);
   const isLoading = isLoadingCustomer || isLoadingHistory;
   return (
     <>

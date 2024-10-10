@@ -15,12 +15,14 @@ import { DetailRow } from "../../components/DetailRow";
 import Empty from "../../components/Empty";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusTag from "../../components/StatusTag";
-import { useCustomerDetailsQuery } from "../../services/redux/api/apiCustomers";
-import { CustomerFullDataType } from "../customers/customers";
+import {
+  useCustomerDetailsQuery,
+  useDeleteCustomerMutation,
+} from "../../services/redux/api/apiCustomers";
+import { CustomerFullDataType, CustomerStatus } from "../customers/customers";
 import CustomerFormModal from "./CustomerFormModal";
 import ChildTabs from "./child/ChildTabs";
 import { useCustomerIdParam } from "./hooks/useCustomerIdParam";
-import { useDeleteCustomer } from "./hooks/useDeleteCustomer";
 export default CustomerDetails;
 
 function CustomerDetails() {
@@ -47,7 +49,7 @@ function CustomerDetails() {
     navigate(-1);
   }
 
-  const { deleteCustomer, isPending: isDeleting } = useDeleteCustomer();
+  const [deleteCustomer, isDeleting] = useDeleteCustomerMutation();
   if (isLoading || isDeleting)
     return <LoadingSpinner callerName='CustomerDetails' />;
   if (!customer) return <Empty resource={`${customerId}`} />;
@@ -119,7 +121,7 @@ function Header({
   customerID: number;
   customerShortName: string | undefined;
   customerData: CustomerFullDataType | Record<string, never>;
-  deleteCustomerApi: UseMutateFunction<void, Error, number, unknown>;
+  deleteCustomerApi: UseMutateFunction<unknown, unknown, number, unknown>;
 }) {
   const { t } = useTranslation("components", { keyPrefix: "buttons" });
   const navigate = useNavigate();

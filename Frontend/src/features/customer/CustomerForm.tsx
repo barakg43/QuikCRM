@@ -9,12 +9,14 @@ import { LegacyRef } from "react";
 import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import StyledSelect, { Option } from "../../components/StyledSelect.tsx";
+import {
+  useAddNewCustomerMutation,
+  useUpdateCustomerMutation,
+} from "../../services/redux/api/apiCustomers.ts";
 import { customerStatuses } from "../customers/CustomersTable.tsx";
 import { CustomerFullDataType } from "../customers/customers";
 import FormRowCustomer from "./FormRowCustomer.tsx";
-import { useAddNewCustomer } from "./hooks/useAddNewCustomer.ts";
 import { useCustomerIdParam } from "./hooks/useCustomerIdParam.ts";
-import { useUpdateCustomer } from "./hooks/useUpdateCustomer.ts";
 
 function CustomerForm({
   submitRef,
@@ -29,9 +31,8 @@ function CustomerForm({
     useForm<CustomerFullDataType>(); // reset, getValues
   const { errors } = formState;
   const customerID = useCustomerIdParam();
-  const { isPending: isUpdating, updateCustomerDetails } =
-    useUpdateCustomer(customerID);
-  const { isPending: isAdding, addNewCustomer } = useAddNewCustomer();
+  const [updateCustomerDetails, isUpdating] = useUpdateCustomerMutation();
+  const [addNewCustomer, isAdding] = useAddNewCustomerMutation();
   const isSubmiting = isAdding || isUpdating;
 
   const {
