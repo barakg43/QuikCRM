@@ -163,7 +163,7 @@ function Header({
   );
 }
 type HeaderProps = {
-  customerStatus: string;
+  customerStatus: CustomerStatus;
   customerName: string | undefined;
   customerIdentificationNumber: string | undefined;
 };
