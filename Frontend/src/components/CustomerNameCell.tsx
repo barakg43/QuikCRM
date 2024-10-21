@@ -5,16 +5,20 @@ function CustomerNameCell({
   customerID,
   customerName,
 }: {
-  customerID: number;
+  customerID: number | null;
   customerName: string | undefined;
 }) {
   const navigate = useNavigate();
-
+  const isCustomerSelected = customerID !== null;
   return (
     <CustomTable.Row.Cell
-      onClick={() => navigate(`/customers/${customerID}`)}
+      onClick={
+        isCustomerSelected
+          ? () => navigate(`/customers/${customerID}`)
+          : undefined
+      }
       sx={{
-        cursor: "pointer",
+        cursor: isCustomerSelected ? "pointer" : "not-allowed",
         _hover: { color: "teal.500", textDecoration: "underline" },
       }}
     >
