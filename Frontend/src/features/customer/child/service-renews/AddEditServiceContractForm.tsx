@@ -4,12 +4,14 @@ import { useForm } from "react-hook-form";
 import { DetailRow } from "../../../../components/DetailRow";
 import ExtendFormRow from "../../../../components/ExtendFormRow";
 import {
+  useAddServicesRenewMutation,
+  useUpdateServiceRenewMutation,
+} from "../../../../services/redux/api/apiServiceRenew";
+import {
   calculateForwardDateByMonthsAndDays,
   getStringDate,
 } from "../../../../services/utils";
 import PeriodSelector from "../../../service-renews/PeriodSelector";
-import { useAddServiceContract } from "../../../service-renews/hooks/useAddServiceContract";
-import { useUpdateServiceContract } from "../../../service-renews/hooks/useUpdateServiceContract";
 import {
   PeriodType,
   ServiceRenewRecord,
@@ -32,10 +34,12 @@ function AddEditServiceContractForm({
     periodKind,
     startDateOfContract,
   } = serviceRenewToEdit;
+  console.log("ser", serviceRenewToEdit);
+
   const customerID = useCustomerIdParam();
   const [period, setPeriod] = useState<PeriodType>(periodKind);
-  const { addServiceContract } = useAddServiceContract();
-  const { updateServiceContract } = useUpdateServiceContract();
+  const [addServiceContract] = useAddServicesRenewMutation();
+  const [updateServiceContract] = useUpdateServiceRenewMutation();
   const { register, handleSubmit, formState, reset } =
     useForm<ServiceRenewRecord>();
   const { errors } = formState;
@@ -45,7 +49,7 @@ function AddEditServiceContractForm({
     YEARLY: 12,
   };
   function onSubmitForm(data: ServiceRenewRecord) {
-    if (serviceRenewToEdit) {
+    if (contractID) {
       updateServiceContract({ ...data, contractID });
     } else {
       addServiceContract({ ...data, customerID });

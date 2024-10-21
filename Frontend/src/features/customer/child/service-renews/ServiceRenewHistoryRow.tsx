@@ -2,7 +2,7 @@ import { Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CustomTable from "../../../../components/CustomTable";
 import DeleteAlertDialog from "../../../../components/DeleteAlertDialog";
-import { useDeleteServiceContract } from "../../../service-renews/hooks/useDeleteServiceContract";
+import { useDeleteServiceContractMutation } from "../../../../services/redux/api/apiServiceRenew";
 import { ServiceRenewRecord } from "../../../service-renews/serviceRenews";
 import AddEditServiceContractModal from "./AddEditServiceContractModal";
 
@@ -15,7 +15,8 @@ function ServiceRenewHistoryRow({
   isActiveContract = false,
 }: ServiceRenewHistoryProps) {
   const { t } = useTranslation("serviceRenews");
-  const { deleteServiceContract, isPending } = useDeleteServiceContract();
+  const [deleteServiceContract, isDeleting] =
+    useDeleteServiceContractMutation();
   const fontSize = "small";
   const Cell = CustomTable.Row.Cell;
   const {
@@ -66,7 +67,7 @@ function ServiceRenewHistoryRow({
             w='95%'
           >
             <DeleteAlertDialog
-              isPending={isPending}
+              isPending={isDeleting}
               onConfirm={handleDelete}
               resourceName={t("title")}
             />

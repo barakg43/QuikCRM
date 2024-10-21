@@ -20,10 +20,8 @@ function ServiceRenewsHistoryTable() {
   } = useServiceContractHistoryCustomer(customerId, ITEMS_AMOUNT_PER_TAB);
   const { t } = useTranslation("serviceRenews");
 
-  const {
-    data: { activeContractID },
-    isLoading: isLoadingCustomer,
-  } = useCustomerDetailsQuery(customerId);
+  const { data: { activeContractID } = {}, isLoading: isLoadingCustomer } =
+    useCustomerDetailsQuery(customerId);
   const isLoading = isLoadingCustomer || isLoadingHistory;
   return (
     <>

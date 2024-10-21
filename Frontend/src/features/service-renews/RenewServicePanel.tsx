@@ -2,8 +2,8 @@ import { Button, Flex, VStack } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useForm } from "react-hook-form";
 import ExtendFormRow from "../../components/ExtendFormRow";
+import { useRenewServiceReminderMutation } from "../../services/redux/api/apiServiceRenew";
 import PeriodSelector from "./PeriodSelector";
-import { useRenewServiceContract } from "./hooks/useRenewServiceContract";
 import { PeriodType, RenewServiceContract } from "./serviceRenews";
 export type RenewPanelProps = {
   contractID?: number;
@@ -19,7 +19,7 @@ function RenewServicePanel({
   submitButtonRef,
   onSubmit,
 }: RenewPanelProps) {
-  const { renewServiceContract } = useRenewServiceContract();
+  const [renewServiceContract] = useRenewServiceReminderMutation();
   // const {} = useRadioGroup();
   const { register, handleSubmit, formState, reset } =
     useForm<RenewServiceContract>();
