@@ -94,7 +94,7 @@ async function axiosBaseQuery(
 }
 export class BaseQueryError extends Error {
   readonly status: number | undefined;
-  readonly error: string | {};
+  readonly error: string | object;
 
   // base constructor only accepts string message as an argument
   // we extend it here to accept an object, allowing us to pass other data
@@ -103,7 +103,7 @@ export class BaseQueryError extends Error {
     message,
   }: {
     status: number | undefined;
-    message: string | {};
+    message: string | object;
   }) {
     if (typeof message === "string") {
       super(message);

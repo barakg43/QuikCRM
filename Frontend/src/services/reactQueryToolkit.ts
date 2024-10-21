@@ -45,7 +45,9 @@ function createApiCallback(): CreateApi {
       inject: Parameters<typeof api.injectEndpoints>[0]
     ) {
       const evaluatedEndpoints = inject.endpoints({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         query: (x) => ({ ...x, type: DefinitionType.query } as any),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         mutation: (x) => ({ ...x, type: DefinitionType.mutation } as any),
       });
       const endpointsHook: HooksWithUniqueNames<EndpointDefinitions> = {};
@@ -68,6 +70,7 @@ function createApiCallback(): CreateApi {
 
           continue;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (api.endpoints as any)[endpointName] = {};
 
         if (isQueryDefinition(definition) || isMutationDefinition(definition)) {
@@ -77,6 +80,7 @@ function createApiCallback(): CreateApi {
             definition,
             baseQuery,
           });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (endpointsHook as any)[hookName] = hookFn;
         }
       }
@@ -246,6 +250,7 @@ async function fetchQueryData<
     {}
   );
   if (rawData && Object.entries(rawData).length > 0)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return transformResponse(rawData as any, queryArgs);
   else return rawData;
 }
