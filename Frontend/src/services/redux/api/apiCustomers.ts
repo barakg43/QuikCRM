@@ -144,12 +144,10 @@ const customerApi = baseApi.injectEndpoints({
         querySearch,
       ],
 
-      transformResponse: (data: SubsetListType<CustomerSlimDetailsProps>) => {
-        return {
-          customers: data.listSubset,
-          totalItems: data.totalAmountInDataBase,
-        };
-      },
+      transformResponse: (data: SubsetListType<CustomerSlimDetailsProps>) => ({
+        customers: data.listSubset,
+        totalItems: data.totalAmountInDataBase,
+      }),
     }),
     customerDetails: builder.query<CustomerFullDataType>({
       query: (customerID: number) => `/customers/${customerID}`,

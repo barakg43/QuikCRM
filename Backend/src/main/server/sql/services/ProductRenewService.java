@@ -43,6 +43,7 @@ public class ProductRenewService {
 	public ListSubset<ProductReminderRecord> getRenewalReminders(int daysBeforeExpiration, int monthsAfterExpiration,
 																 Integer pageNumber,
 																 Integer pageSize) {
+
 		Pageable page = getPageObject(pageNumber, pageSize);
 		Timestamp startDate = UtilityFunctions.postDateByMonthAmountFromToday(-monthsAfterExpiration);
 		Timestamp finishDate = UtilityFunctions.postDateByDaysAmountFromToday(daysBeforeExpiration);
