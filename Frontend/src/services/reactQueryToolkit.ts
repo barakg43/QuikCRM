@@ -20,7 +20,6 @@ import {
   MutationHookName,
   QueryDefinition,
   QueryHookName,
-  ToolkitHookFunction,
   TransformedResponse,
   UseMutation,
   UseQuery,
@@ -224,7 +223,7 @@ function buildHook<
   baseQuery: BaseQuery;
 }): {
   hookName: QueryHookName<string> | MutationHookName<string>;
-  hookFn: ToolkitHookFunction<QueryArg, ResultType>;
+  hookFn: UseQuery<QueryArg, ResultType> | UseMutation<QueryArg, ResultType>;
 } {
   let hookFn = undefined;
   if (isQueryDefinition(definition)) {
@@ -379,13 +378,12 @@ async function fetchQueryData<
 
   signal: AbortSignal | undefined
 ) {
-  let rawData;
   const args = query(queryArgs);
-  if (autoCancellation) {
-    rawData = await baseQuery(args, { signal }, {});
-  } else {
-    rawData = await baseQuery(args, {}, {});
-  }
+  const rawData = await baseQuery(
+    args,
+    { signal: autoCancellation ? signal : undefined },
+    {}
+  );
   if (rawData && Object.entries(rawData).length > 0)
     return transformResponse(rawData as any, queryArgs);
   else return rawData;

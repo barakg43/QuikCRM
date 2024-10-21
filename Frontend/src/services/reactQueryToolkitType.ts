@@ -163,10 +163,6 @@ export type QueryReturnValue<TData = unknown> = {
   data: TData;
 };
 
-export type EndpointName = keyof Omit<
-  BuildMutationHook<any, any, any, any>,
-  "baseQuery"
->;
 type SubscriptionOptions = {
   /**
    * How frequently to automatically re-fetch data (in milliseconds). Defaults to `0` (off).
@@ -862,6 +858,7 @@ import { Query } from '../../node/query';
 import type { UseMutation from '@internal/query/react/buildHooks';
 import type {EndpointDefinition from '@reduxjs/toolkit/query';
 import { original } from 'immer';
+import { QueryStatus } from '../../node/query/core/apiState';
    *
    * const api = createApi({
    *   // highlight-start
