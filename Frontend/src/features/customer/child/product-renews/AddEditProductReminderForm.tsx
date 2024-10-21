@@ -1,7 +1,9 @@
 import { LegacyRef } from "react";
+import {
+  useAddNewProductReminderMutation,
+  useUpdateProductReminderMutation,
+} from "../../../../services/redux/api/apiProductRenew";
 import ProductRenewPanel from "../../../product-renews/ProductRenewPanel";
-import { useAddProductRenew } from "../../../product-renews/hooks/useAddProductRenew";
-import { useUpdateProductRenew } from "../../../product-renews/hooks/useUpdateProductRenew";
 import { useCustomerIdParam } from "../../hooks/useCustomerIdParam";
 
 function AddEditProductReminderForm({
@@ -24,9 +26,9 @@ function AddEditProductReminderForm({
     systemDetailID,
   } = productRenewToEdit;
   const customerID = useCustomerIdParam();
-  const { addNewProductReminder, isPending: isAdding } = useAddProductRenew();
-  const { updateProductReminder, isPending: isUpdating } =
-    useUpdateProductRenew();
+  const [addNewProductReminder, isAdding] = useAddNewProductReminderMutation();
+  const [updateProductReminder, isUpdating] =
+    useUpdateProductReminderMutation();
   const isLoading = isAdding || isUpdating;
   function onSubmitForm(data: RenewProductRecord) {
     if (productRenewToEdit.systemDetailID) {

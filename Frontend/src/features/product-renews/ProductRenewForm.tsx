@@ -2,8 +2,8 @@ import { HStack, Stack, StackDivider } from "@chakra-ui/react";
 import { LegacyRef } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailRow } from "../../components/DetailRow";
+import { useRenewProductReminderMutation } from "../../services/redux/api/apiProductRenew";
 import ProductRenewPanel from "./ProductRenewPanel";
-import { useRenewProductReminder } from "./hooks/useRenewProductReminder";
 
 function ProductRenewForm({
   submitButtonRef,
@@ -14,7 +14,7 @@ function ProductRenewForm({
   productRenew?: ProductReminderRecord | Record<string, never>;
   onSubmit?: () => void;
 }) {
-  const { renewProductReminder } = useRenewProductReminder();
+  const [renewProductReminder] = useRenewProductReminderMutation();
 
   const {
     custShortName,
