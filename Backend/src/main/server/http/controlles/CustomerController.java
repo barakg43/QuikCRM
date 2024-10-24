@@ -2,7 +2,6 @@ package main.server.http.controlles;
 
 import main.server.http.HttpRequestExecutor;
 import main.server.sql.dto.ListSubset;
-import main.server.sql.dto.TaskRecord;
 import main.server.sql.dto.customer.CustomerFullDetailsRecord;
 import main.server.sql.dto.customer.CustomerSlimDetailsRecord;
 import main.server.sql.services.CustomerService;
@@ -11,11 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.time.Instant;
-import java.util.List;
+import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = SERVER_CROSS_ORIGIN)
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -25,37 +22,16 @@ public class CustomerController {
 
 	public CustomerController(HttpRequestExecutor httpRequestExecutor, CustomerService customerService) {
 		this.httpRequestExecutor = httpRequestExecutor;
-//        sqlClient = new SqlClient(SQL_YAML_CONFIG_LOCATION, logManager);
 		this.customerService = customerService;
-	}
-
-	//    @PostConstruct //start sql connection after CustomerHttpService ctor
-	private void startSqlConnection() {
-//        sqlClient.createSqlConnection();
-	}
-
-	@GetMapping("/test")
-	public String getTest() {
-		System.out.println("test!");
-		return printPWD();
-	}
-
-	private String printPWD() {
-		String currentPath = null;
-		try {
-			currentPath = new java.io.File(".").getCanonicalPath();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return "Current dir:" + currentPath;
 	}
 
 	@GetMapping("")
 	public ListSubset<CustomerSlimDetailsRecord> getSubsetCustomersList(@RequestParam(required = false) Integer pageNumber,
-																		@RequestParam(required = false) Integer pageSize) {
+																		@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String query) {
 
 		ListSubset<CustomerSlimDetailsRecord> test =
-				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(pageNumber, pageSize)
+				httpRequestExecutor.executeHttpRequest(() -> customerService.getSubsetOfCustomers(pageNumber, pageSize
+								, query)
 						, "api/customers",
 						HttpMethod.GET);
 		System.out.println(test.getListSubset());
@@ -64,23 +40,12 @@ public class CustomerController {
 	}
 
 
-	@GetMapping("/customer/name")
-	public String getCostumerNameByID(@RequestParam int id) {
-		return httpRequestExecutor.executeHttpRequest(() -> customerService.getCustomerNameByID(id), "api" +
-				"/customers" +
-				"/name", HttpMethod.GET);
-//        return clientSqlExecutor.getClientNameByID(id);
-	}
-
 	@GetMapping("/{id}")
 	public CustomerFullDetailsRecord getFullCustomerDetailsForId(@PathVariable("id") int id) {
 		try {
-			CustomerFullDetailsRecord test =
-					httpRequestExecutor.executeHttpRequest(() -> customerService.getFullCustomerDetailsForId(id),
-							"api/customers/" + id
-							, HttpMethod.GET);
-			System.out.println("getFullCustomerDetailsForId" + test);
-			return test;
+			return httpRequestExecutor.executeHttpRequest(() -> customerService.getFullCustomerDetailsForId(id),
+					"api/customers/" + id
+					, HttpMethod.GET);
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant find customer with id of " + id, exception);
@@ -88,26 +53,27 @@ public class CustomerController {
 	}
 
 	@PostMapping("")
-	public void addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
-
-		httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
-				"api/customers/"
-				, HttpMethod.POST);
-
-
+	public Short addNewCustomer(@RequestBody CustomerFullDetailsRecord customerDetails) {
+		try {
+			return httpRequestExecutor.executeHttpRequest(() -> customerService.addNewCustomer(customerDetails),
+					"api/customers/"
+					, HttpMethod.POST);
+		} catch (IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 
-	@PatchMapping("/{id}")
-	public void updateCustomerDetails(@PathVariable("id") int id,
+	@PatchMapping("/{customerId}")
+	public void updateCustomerDetails(@PathVariable("customerId") short customerId,
 									  @RequestBody CustomerFullDetailsRecord customerDetails) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerDetails),
-					"api/customers/" + id
+			httpRequestExecutor.executeHttpRequest(() -> customerService.updateCustomerDetails(customerId,
+							customerDetails),
+					"api/customers/" + customerId
 					, HttpMethod.PATCH);
-
 		} catch (IndexOutOfBoundsException exception) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"Cant update customer with id of " + id, exception);
+					"Cant update customer with id of " + customerId, exception);
 		}
 	}
 
@@ -122,21 +88,5 @@ public class CustomerController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Cant delete customer with id of " + id, exception);
 		}
-	}
-
-
-	@GetMapping("/customer/closed-tasks")
-	public List<TaskRecord> getClosedTaskForCustomer(@RequestParam int id) {
-//        return sqlClient.getClosedTaskForCustomer(id);
-		return null;
-	}
-
-	@GetMapping("/supplier/name")
-	public String getSupplierNameByID(@RequestParam int id) {
-		String result = "";
-		Instant startTime = Instant.now();
-//        result = sqlClient.getSupplierNameByID(id);
-		Instant endTime = Instant.now();
-		return result;
 	}
 }

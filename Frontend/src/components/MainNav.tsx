@@ -3,20 +3,14 @@ import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import {
   TbAlarm,
+  TbAlarmPlus,
   TbClipboardList,
   TbReportAnalytics,
   TbSettings,
   TbUsers,
 } from "react-icons/tb";
 import { NavLink as ReactRouterLink } from "react-router-dom";
-
-// const StyledMainNav = styled.menu`
-//   justify-content: center;
-//   padding: 0 var(--scale-3) var(--scale-3) var(--scale-3) !important;
-//   display: flex;
-//   flex-direction: column;
-//   gap: var(--scale-3);
-// `;
+import BadgeIcon from "./BadgeIcon";
 
 type NavLinkItemProps = {
   path: string;
@@ -63,7 +57,6 @@ function MainNav() {
       display='flex'
       flexDir={"column"}
       gap='1rem'
-      // justifyContent='center'
       alignItems={"start"}
       w='100%'
       padding='0 2rem'
@@ -74,10 +67,16 @@ function MainNav() {
         label={t("customers")}
       />
       <NavLinkItem
-        icon={<TbAlarm />}
-        path='/reminders'
-        label={t("reminders")}
+        icon={<BadgeIcon icon={<TbAlarm />} amountNotification={100} />}
+        path='/product-renews'
+        label={t("product-renews")}
       />
+      <NavLinkItem
+        icon={<BadgeIcon icon={<TbAlarmPlus />} />}
+        path='/service-renews'
+        label={t("service-renews")}
+      />
+
       <NavLinkItem
         icon={<TbClipboardList />}
         path='/activities'

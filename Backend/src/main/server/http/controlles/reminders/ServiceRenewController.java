@@ -1,6 +1,8 @@
 package main.server.http.controlles.reminders;
 
+import jakarta.persistence.EntityNotFoundException;
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ContractRecord;
 import main.server.sql.services.ContractService;
 import org.springframework.http.HttpMethod;
@@ -8,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
 
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = SERVER_CROSS_ORIGIN)
 @RestController
-@RequestMapping("/api/contact-service")
+@RequestMapping("/api/contract-service")
 public class ServiceRenewController {
 	private final HttpRequestExecutor httpRequestExecutor;
 	private final ContractService contractService;
@@ -24,9 +26,11 @@ public class ServiceRenewController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
-														  @RequestParam int monthsAfterExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration), "/api/reminders" +
+	public ListSubset<ContractRecord> getServiceRenewsReminders(@RequestParam int daysBeforeExpiration,
+																@RequestParam int monthsAfterExpiration,
+																@RequestParam(required = false) Integer pageNumber,
+																@RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersInPeriodTime(monthsAfterExpiration, daysBeforeExpiration, pageNumber, pageSize), "/api/reminders" +
 						"/renews",
 				HttpMethod.GET);
 
@@ -34,11 +38,25 @@ public class ServiceRenewController {
 	}
 
 
-	@PostMapping
-	public void addNewContract(@RequestBody ContractRecord contractRecord) {
+	@GetMapping("/customer/{customerId}")
+	public ListSubset<ContractRecord> getContractServiceHistoryForCustomer(@PathVariable short customerId,
+																		   @RequestParam(required = false) Integer pageNumber,
+																		   @RequestParam(required = false) Integer pageSize) {
 		try {
-			httpRequestExecutor.executeHttpRequest(() -> contractService.addNewContract(contractRecord),
-					"/api/reminders/service", HttpMethod.POST);
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.getServiceRenewRemindersForCustomer(customerId, pageNumber, pageSize), "/api/contract-service" +
+							"/customer/" + customerId,
+					HttpMethod.GET);
+		} catch (EntityNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+
+
+	@PostMapping
+	public Short addNewContract(@RequestBody ContractRecord contractRecord) {
+		try {
+			return httpRequestExecutor.executeHttpRequest(() -> contractService.addNewContract(contractRecord),
+					"/api/contract-service/", HttpMethod.POST);
 		} catch (IllegalStateException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 		} catch (IllegalArgumentException e) {
@@ -47,12 +65,12 @@ public class ServiceRenewController {
 
 	}
 
-	@PatchMapping("{contractId}/renew/")
+	@PatchMapping("{contractId}/renew")
 	public void renewContractForPeriodTime(@PathVariable Long contractId, @RequestBody ContractRecord contractRecord) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> contractService.renewContractForPeriod(contractId,
 							contractRecord),
-					"/api/reminders/service/renew/" + contractId, HttpMethod.PATCH);
+					String.format("/api/contract-service/%d/renew/", contractId) + contractId, HttpMethod.PATCH);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"cannot find contract to renew with id of " + contractId);
@@ -63,7 +81,7 @@ public class ServiceRenewController {
 	public void removeContract(@PathVariable Long contractId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> contractService.deleteContractByID(contractId),
-					"/api/reminders/service", HttpMethod.DELETE);
+					String.format("/api/contract-service/%d", contractId), HttpMethod.DELETE);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"cannot find contract to delete with id of " + contractId);
@@ -75,7 +93,7 @@ public class ServiceRenewController {
 	public void updateContactData(@PathVariable Long contractId, @RequestBody ContractRecord contractRecord) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> contractService.updateContract(contractId, contractRecord),
-					"/api/reminders/service", HttpMethod.PATCH);
+					String.format("/api/contract-service/%d", contractId), HttpMethod.PATCH);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"cannot find contract to update with id of " + contractRecord.contractID());

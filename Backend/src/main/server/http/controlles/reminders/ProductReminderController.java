@@ -1,6 +1,7 @@
 package main.server.http.controlles.reminders;
 
 import main.server.http.HttpRequestExecutor;
+import main.server.sql.dto.ListSubset;
 import main.server.sql.dto.reminder.ProductReminderRecord;
 import main.server.sql.services.ProductRenewService;
 import org.springframework.http.HttpMethod;
@@ -9,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:5173"})
+import static main.server.ServerConstants.SERVER_CROSS_ORIGIN;
+
+@CrossOrigin(origins = SERVER_CROSS_ORIGIN)
 @RestController
 @RequestMapping("/api/product-renews")
 public class ProductReminderController {
@@ -26,30 +27,42 @@ public class ProductReminderController {
 	}
 
 	@GetMapping("/reminders")
-	public List<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration) {
-		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration), "/api/reminders" +
+	public ListSubset<ProductReminderRecord> getInvoiceReminders(@RequestParam int daysBeforeExpiration,
+																 @RequestParam(required = false) Integer pageNumber,
+																 @RequestParam int monthsAfterExpiration,
+																 @RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getRenewalReminders(daysBeforeExpiration, monthsAfterExpiration, pageNumber, pageSize), "/api/reminders" +
 				"/product-renews", HttpMethod.GET);
 	}
 
+	@GetMapping("/customer/{customerID}")
+	public ListSubset<ProductReminderRecord> getProductRemindersForCustomer(@PathVariable Short customerID,
+																			@RequestParam(required = false) Integer pageNumber,
+																			@RequestParam(required = false) Integer pageSize) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.getProductRemindersForCustomer
+				(customerID, pageNumber, pageSize), "/product-renews" +
+				"/reminders/customer/" + customerID, HttpMethod.GET);
+	}
+
 	@PostMapping
-	public void addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
-		httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
+	public BigDecimal addNewProductReminder(@RequestBody ProductReminderRecord productReminderRecord) {
+		return httpRequestExecutor.executeHttpRequest(() -> productRenewService.addNewProductReminder(productReminderRecord),
 				"/api/reminders/product", HttpMethod.POST);
 	}
 
 	@PatchMapping("{reminderId}/renew")
 	public void renewProductForPeriodTime(@PathVariable BigDecimal reminderId,
-										  @RequestBody LocalDate newValidityDate) {
+										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.renewProductForPeriodTime(reminderId,
-						newValidityDate),
-				"/api/reminders/product/renew", HttpMethod.PATCH);
+						productReminderRecord),
+				String.format("/api/product-renews/%s/renew", reminderId), HttpMethod.PATCH);
 	}
 
 	@DeleteMapping("{reminderId}")
 	public void removeProductReminder(@PathVariable BigDecimal reminderId) {
 		try {
 			httpRequestExecutor.executeHttpRequest(() -> productRenewService.removeProductReminder(reminderId),
-					"/api/reminders/product", HttpMethod.DELETE);
+					"/api/product-renews/" + reminderId, HttpMethod.DELETE);
 		} catch (IndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cannot find product reminder to delete with id " +
 					"of" +
@@ -63,6 +76,6 @@ public class ProductReminderController {
 										  @RequestBody ProductReminderRecord productReminderRecord) {
 		httpRequestExecutor.executeHttpRequest(() -> productRenewService.updateProductReminderData(reminderId,
 						productReminderRecord),
-				"/api/reminders/product", HttpMethod.PATCH);
+				"/api/product-renews/" + reminderId, HttpMethod.PATCH);
 	}
 }

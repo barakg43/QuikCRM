@@ -17,7 +17,6 @@ function AppRoutes() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route index element={<Navigate replace to='/customers' />} />
-        {/* <Route path='/reminders' element={<Reminders />} /> */}
         <Route path='/product-renews' element={<ProductRenews />} />
         <Route path='/service-renews' element={<ServiceRenews />} />
         <Route path='/activities' element={<Activities />} />
